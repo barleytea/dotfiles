@@ -60,7 +60,13 @@ ZSH_THEME="bullet-train"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   git
+  osx
+  zsh-syntax-highlighting
+  zsh-completions
 )
+
+# setting of zsh-completions
+autoload -U compinit && compinit -u
 
 source $ZSH/oh-my-zsh.sh
 
