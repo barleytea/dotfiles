@@ -1,48 +1,137 @@
-export ZSH=/Users/miyoshi_s/.oh-my-zsh
-export PATH="$HOME/.jenv/bin:$PATH"
-eval "$(jenv init -)"
-export M2_HOME=/usr/local/Cellar/maven/3.5.2/
-export M2=$M2_HOME/bin
-export PATH=$M2:$JAVA_HOME:$PATH
+# GENERAL {{{
 
-ZSH_THEME="bullet-train"
+  setopt no_beep
+  bindkey -v
 
-plugins=(
-  git
-  osx
-  zsh-syntax-highlighting
-  zsh-completions
-)
+  setopt share_history
+  setopt hist_reduce_blanks
+  setopt hist_ignore_all_dups
 
-autoload -U compinit && compinit -u
+# }}}
 
-source $ZSH/oh-my-zsh.sh
+# ENVIRONMENT VALUES {{{
 
-if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='vim'
-else
-  export EDITOR='mvim'
-fi
+  # zsh
+  export ZSH="$HOME/.oh-my-zsh"
+  ZSH_THEME="bullet-train"
 
-alias dd='cd ../'
-alias ls='ls -G'
-alias ll='ls -alG'
+  # maven
+  export M2_HOME=/usr/local/Cellar/maven/3.5.2/
+  export M2=$M2_HOME/bin
+  export PATH=$M2:$JAVA_HOME:$PATH
 
-alias mvim=/Applications/MacVim.app/Contents/bin/mvim "$@"
-if [ -f $(brew --prefix)/etc/brew-wrap ];then
-  source $(brew --prefix)/etc/brew-wrap
-fi
+  # editor
+  if [[ -n $SSH_CONNECTION ]]; then
+    export EDITOR="vim"
+  else
+    export EDITOR="mvim"
+  fi
 
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+  #jenv
+  export PATH="$HOME/.jenv/bin:$PATH"
+  eval "$(jenv init -)"
 
-export PATH="$PYENV_ROOT/bin:$PATH"
-export PYENV_ROOT="$HOME/.pyenv"
-eval "$(pyenv init -)"
-export PATH="$HOME/.anyenv/bin:$PATH"
-eval "$(anyenv init -)"
-for D in `ls $HOME/.anyenv/envs`
-do
+  # pyenv
+  export PATH="$PYENV_ROOT/bin:$PATH"
+  export PYENV_ROOT="$HOME/.pyenv"
+  eval "$(pyenv init -)"
+
+  # anyenv
+  export PATH="$HOME/.anyenv/bin:$PATH"
+  eval "$(anyenv init -)"
+  for D in `ls $HOME/.anyenv/envs`
+  do
     export PATH="$HOME/.anyenv/envs/$D/shims:$PATH"
-done
+  done
 
-setopt NO_BEEP
+  # command history
+  HISTFILE=$HOME/.zsh-history
+  HISTSIZE=100000
+  SAVEHIST=100000
+
+# }}}
+
+# PLUGINS {{{
+
+  # zpugins
+  plugins=(
+    igit
+    osx
+    zsh-syntax-highlighting
+    zsh-completions
+  )
+
+# }}}
+
+# COMPLEMENT {{{
+
+  autoload -U compinit
+  compinit -u
+  setopt correct
+  setopt correct_all
+  setopt hist_expand
+  setopt list_types
+  setopt auto_list
+  setopt auto_menu
+  setopt list_packed
+  setopt auto_param_keys
+  setopt auto_param_slash
+  setopt mark_dirs
+  setopt auto_cd
+  setopt nolistbeep
+  zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+
+# }}}
+
+# IMPORTS {{{
+
+  source $ZSH/oh-my-zsh.sh
+  if [ -f $(brew --prefix)/etc/brew-wrap ];then
+    source $(brew --prefix)/etc/brew-wrap
+  fi
+
+# }}}
+
+# FUNCTIONS {{{
+
+  function mkcd() {
+    if [[ -d $1 ]]; then
+      echo "It already exsits! Cd to the directory."
+      cd $1
+    else
+      mkdir -p $1 && cd $1
+    fi
+  }
+
+  function  fgrep() {
+    find . -type f -print | xargs grep -n --binary-files=without-match $@
+  }
+
+  function chpwd() { ls }
+
+# }}}
+
+# ALIAS {{{
+
+  alias dd="cd ../"
+  alias ls="ls -G"
+  alias ll="ls -alG"
+
+  alias mvim=/Applications/MacVim.app/Contents/bin/mvim "$@"
+  alias reload="source ~/.zshrc"
+
+# }}}
+
+# COLORS {{{
+
+  autoload -Uz add-zsh-hook
+  autoload -U colors
+  colors
+
+# }}}
+
+# LOAD .zshrc_local {{{
+
+  [ -f ~/.zshrc.local ] && source ~/.zshrc_local
+
+# }}}
