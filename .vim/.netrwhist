@@ -1,0 +1,6 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =4
+let g:netrw_dirhist_1='~.vim'
+let g:netrw_dirhist_2='/Users/miyoshi_s/dotfiles/.git'
+let g:netrw_dirhist_3='/Users/miyoshi_s/.config/brewfile/barleytea_Brewfile'
+let g:netrw_dirhist_4='/Users/miyoshi_s/.oh-my-zsh'

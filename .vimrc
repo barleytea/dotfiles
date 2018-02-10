@@ -20,7 +20,6 @@ filetype plugin indent off
 
   call dein#add('Shougo/neocomplete.vim')
   call dein#add('Shougo/neomru.vim')
-  call dein#add('Shougo/neosnippet')
   call dein#add('tomasr/molokai')
   call dein#add('Shougo/unite.vim')
   call dein#add('Shougo/neomru.vim')
