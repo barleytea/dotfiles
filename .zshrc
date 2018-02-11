@@ -13,20 +13,6 @@
 
   # zsh
   export ZPLUG_HOME=/usr/local/opt/zplug
-  POWERLEVEL9K_MODE='nerdfont-complete'
-  POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(time dir vcs)
-  POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=()
-  POWERLEVEL9K_DISABLE_RPROMPT=true
-  POWERLEVEL9K_TIME_FORMAT="%D{%m\/%d %H:%M}"
-  POWERLEVEL9K_TIME_FOREGROUND='white'
-  POWERLEVEL9K_TIME_BACKGROUND='background'
-  POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
-  POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-  POWERLEVEL9K_RPROMPT_ON_NEWLINE=false
-  POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=""
-  POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="\u25B8 "
-  POWERLEVEL9K_LEFT_SEGMENT_SEPARATOR=''
-  POWERLEVEL9K_RIGHT_SEGMENT_SEPARATOR=''
 
   # maven
   export M2_HOME=/usr/local/Cellar/maven/3.5.2/
@@ -76,6 +62,10 @@
 
 # PLUGINS {{{
 
+  zplug "plugins/git", from:oh-my-zsh
+  zplug "zsh-users/zsh-completions"
+
+  zplug load --verbose
 
 # }}}
 
@@ -121,8 +111,10 @@
 # ALIAS {{{
 
   alias dd="cd ../"
-  alias ls="ls -G"
-  alias ll="ls -alG"
+  alias ls="colorls -l --sd"
+  alias ll="colorls -lA --sd"
+  alias lgs="colorls -lA --sd --gs"
+  alias lgst="colorls -lA --sd --gs --tree"
 
   alias mvim=/Applications/MacVim.app/Contents/bin/mvim "$@"
   alias reload="source ~/.zshrc"
