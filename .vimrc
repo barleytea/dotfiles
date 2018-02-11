@@ -39,8 +39,6 @@ filetype plugin indent off
 
 " }}}
 
-
-
 " SET {{{
 
   set fenc=utf-8
@@ -57,12 +55,6 @@ filetype plugin indent off
   set showmatch
   set laststatus=2
   set wildmode=list:longest
-
-  nnoremap j gj
-  nnoremap k gk
-  nnoremap : ;
-  nnoremap ; :
-
   set expandtab
   set tabstop=2
   set shiftwidth=2
@@ -81,7 +73,7 @@ filetype plugin indent off
 
 " }}}
 
-" unite.vim SETTING {{{
+" unite.vim setting {{{
 
   " start with insert mode
   let g:unite_enable_start_insert=1
@@ -103,10 +95,25 @@ filetype plugin indent off
 
 " }}}
 
-" NERDTree SETTING {{{
+" NERDTree Setting {{{
 
   autocmd vimenter * if !argc() | NERDTree | endif
   autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+" }}}
+
+" Key Mapping {{{
+
+  inoremap jj <Esc><Esc><Esc>
+  inoremap <C-j> <Down>
+  inoremap <C-k> <Up>
+  inoremap <C-h> <Left>
+  inoremap <C-l> <Right>
+  inoremap <C-f> <Delete>
+  nnoremap j gj
+  nnoremap k gk
+  nnoremap : ;
+  nnoremap ; :
 
 " }}}
 

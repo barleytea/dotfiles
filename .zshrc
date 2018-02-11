@@ -12,8 +12,7 @@
 # ENVIRONMENT VALUES {{{
 
   # zsh
-  export ZSH="$HOME/.oh-my-zsh"
-  ZSH_THEME="bullet-train"
+  export ZPLUG_HOME=/usr/local/opt/zplug
 
   # maven
   export M2_HOME=/usr/local/Cellar/maven/3.5.2/
@@ -51,15 +50,18 @@
 
 # }}}
 
+# IMPORTS {{{
+
+  source $ZPLUG_HOME/init.zsh
+  source ~/.powerlevel9k/powerlevel9k.zsh-theme
+  if [ -f $(brew --prefix)/etc/brew-wrap ];then
+    source $(brew --prefix)/etc/brew-wrap
+  fi
+
+# }}}
+
 # PLUGINS {{{
 
-  # zpugins
-  plugins=(
-    igit
-    osx
-    zsh-syntax-highlighting
-    zsh-completions
-  )
 
 # }}}
 
@@ -80,15 +82,6 @@
   setopt auto_cd
   setopt nolistbeep
   zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
-
-# }}}
-
-# IMPORTS {{{
-
-  source $ZSH/oh-my-zsh.sh
-  if [ -f $(brew --prefix)/etc/brew-wrap ];then
-    source $(brew --prefix)/etc/brew-wrap
-  fi
 
 # }}}
 
