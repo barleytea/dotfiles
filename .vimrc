@@ -27,6 +27,9 @@ filetype plugin indent off
   call dein#add('Townk/vim-autoclose')
   call dein#add('scrooloose/nerdtree')
   call dein#add('bronson/vim-trailing-whitespace')
+  call dein#add('plasticboy/vim-markdown')
+  call dein#add('kannokanno/previm')
+  call dein#add('tyru/open-browser.vim')
 
   call dein#end()
 
@@ -101,6 +104,15 @@ filetype plugin indent off
   autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " }}}
+
+" Markdown Setting {{{
+
+  au BufRead,BufNewFile *.md set filetype=markdown
+  let g:previm_open_cmd = 'open -a Firefox'
+  let g:vim_markdown_folding_disabled = 1
+
+" }}}
+
 
 " Key Mapping {{{
 

@@ -31,3 +31,12 @@
 [submodule ".powerlevel9k"]
 	path = .powerlevel9k
 	url = https://github.com/bhilburn/powerlevel9k.git
+[submodule ".vim/dein/repos/github.com/plasticboy/vim-markdown"]
+	path = .vim/dein/repos/github.com/plasticboy/vim-markdown
+	url = https://github.com/plasticboy/vim-markdown.git
+[submodule ".vim/dein/repos/github.com/kannokanno/previm"]
+	path = .vim/dein/repos/github.com/kannokanno/previm
+	url = https://github.com/kannokanno/previm.git
+[submodule ".vim/dein/repos/github.com/tyru/open-browser.vim"]
+	path = .vim/dein/repos/github.com/tyru/open-browser.vim
+	url = https://github.com/tyru/open-browser.vim.git
