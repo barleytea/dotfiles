@@ -31,3 +31,6 @@
 [submodule ".fonts"]
 	path = .fonts
 	url = https://github.com/powerline/fonts.git
+[submodule ".powerlevel9k.git"]
+	path = .powerlevel9k.git
+	url = https://github.com/bhilburn/powerlevel9k.git
