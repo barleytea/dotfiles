@@ -28,9 +28,6 @@
 [submodule ".vim/dein/repos/github.com/bronson/vim-trailing-whitespace"]
 	path = .vim/dein/repos/github.com/bronson/vim-trailing-whitespace
 	url = http://github.com/bronson/vim-trailing-whitespace.git
-[submodule ".fonts"]
-	path = .fonts
-	url = https://github.com/powerline/fonts.git
 [submodule ".powerlevel9k"]
 	path = .powerlevel9k
 	url = https://github.com/bhilburn/powerlevel9k.git
