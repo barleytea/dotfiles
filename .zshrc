@@ -64,6 +64,8 @@
   zplug "bhilburn/powerlevel9k", use:"powerlevel9k.zsh-theme", as:theme
   zplug "plugins/git", from:oh-my-zsh
   zplug "zsh-users/zsh-completions"
+  zplug "zsh-users/zsh-history-substring-search"
+  zplug "zsh-users/zsh-autosuggestions"
 
   zplug load --verbose
 
@@ -71,8 +73,9 @@
 
 # COMPLEMENT {{{
 
-  autoload -U compinit
-  compinit -u
+  autoload -U compinit; compinit -C
+  zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z} r:|[-_.]=**' '+m:{A-Z}={a-z} r:|[-_.]=**'
+
   setopt correct
   setopt correct_all
   setopt hist_expand
@@ -85,7 +88,6 @@
   setopt mark_dirs
   setopt auto_cd
   setopt nolistbeep
-  zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
 # }}}
 
