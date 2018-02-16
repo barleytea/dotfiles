@@ -53,7 +53,6 @@
 # IMPORTS {{{
 
   source $ZPLUG_HOME/init.zsh
-  source ~/.powerlevel9k/powerlevel9k.zsh-theme
   if [ -f $(brew --prefix)/etc/brew-wrap ];then
     source $(brew --prefix)/etc/brew-wrap
   fi
@@ -62,6 +61,7 @@
 
 # PLUGINS {{{
 
+  zplug "bhilburn/powerlevel9k", use:"powerlevel9k.zsh-theme", as:theme
   zplug "plugins/git", from:oh-my-zsh
   zplug "zsh-users/zsh-completions"
 
@@ -131,6 +131,6 @@
 
 # LOAD .zshrc_local {{{
 
-  [ -f ~/.zshrc.local ] && source ~/.zshrc_local
+  [ -f ~/.zshrc_local ] && source ~/.zshrc_local
 
 # }}}
