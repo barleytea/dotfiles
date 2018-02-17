@@ -22,7 +22,7 @@
   # editor
   if [[ -n $SSH_CONNECTION ]]; then
     export EDITOR="vim"
-  else
+  ele
     export EDITOR="mvim"
   fi
 
@@ -66,6 +66,7 @@
   zplug "zsh-users/zsh-completions"
   zplug "zsh-users/zsh-history-substring-search"
   zplug "zsh-users/zsh-autosuggestions"
+  zplug "zsh-users/zsh-syntax-highlighting"
 
   zplug load --verbose
 
@@ -128,6 +129,15 @@
   autoload -Uz add-zsh-hook
   autoload -U colors
   colors
+
+# }}}
+
+# POWERLEVEL9K {{{
+
+  POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(time context dir vcs)
+  POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=()
+  POWERLEVEL9K_TIME_FORMAT="%D{%m\/%d %H:%M}"
+  POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="\u25B8 "
 
 # }}}
 
