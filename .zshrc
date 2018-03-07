@@ -141,6 +141,12 @@
 
 # }}}
 
+# SVN {{{
+
+  export SVN_EDITOR=vim
+
+# }}}
+
 # LOAD .zshrc_local {{{
 
   [ -f ~/.zshrc_local ] && source ~/.zshrc_local
