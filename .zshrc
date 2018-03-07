@@ -43,6 +43,10 @@
     export PATH="$HOME/.anyenv/envs/$D/shims:$PATH"
   done
 
+  # rbenv
+  export PATH="$HOME/.rbenv/bin:$PATH"
+  eval "$(rbenv init -)"
+
   # command history
   HISTFILE=$HOME/.zsh-history
   HISTSIZE=100000
