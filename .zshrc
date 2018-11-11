@@ -126,6 +126,7 @@
   alias mvim=/Applications/MacVim.app/Contents/bin/mvim "$@"
   alias reload="source ~/.zshrc"
 
+  alias vsc="code"
 # }}}
 
 # COLORS {{{
