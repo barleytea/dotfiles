@@ -117,7 +117,6 @@
 
 # ALIAS {{{
 
-  alias dd="cd ../"
   alias ls="colorls -l --sd"
   alias ll="colorls -lA --sd"
   alias lgs="colorls -lA --sd --gs"
