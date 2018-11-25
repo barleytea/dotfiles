@@ -11,41 +11,43 @@
 
 # ENVIRONMENT VALUES {{{
 
-  # zsh
-  export ZPLUG_HOME=/usr/local/opt/zplug
+  if ["$(uname)"=='Darwin']; then
+    # zsh
+    export ZPLUG_HOME=/usr/local/opt/zplug
 
-  # maven
-  export M2_HOME=/usr/local/Cellar/maven/3.5.2/
-  export M2=$M2_HOME/bin
-  export PATH=$M2:$JAVA_HOME:$PATH
+    # maven
+    export M2_HOME=/usr/local/Cellar/maven/3.5.2/
+    export M2=$M2_HOME/bin
+    export PATH=$M2:$JAVA_HOME:$PATH
 
-  # editor
-  if [[ -n $SSH_CONNECTION ]]; then
-    export EDITOR="vim"
-  ele
-    export EDITOR="mvim"
+    # editor
+    if [[ -n $SSH_CONNECTION ]]; then
+      export EDITOR="vim"
+    ele
+      export EDITOR="mvim"
+    fi
+
+    #jenv
+    export PATH="$HOME/.jenv/bin:$PATH"
+    eval "$(jenv init -)"
+
+    # pyenv
+    export PATH="$PYENV_ROOT/bin:$PATH"
+    export PYENV_ROOT="$HOME/.pyenv"
+    eval "$(pyenv init -)"
+
+    # anyenv
+    export PATH="$HOME/.anyenv/bin:$PATH"
+    eval "$(anyenv init -)"
+    for D in `ls $HOME/.anyenv/envs`
+    do
+      export PATH="$HOME/.anyenv/envs/$D/shims:$PATH"
+    done
+
+    # rbenv
+    export PATH="$HOME/.rbenv/bin:$PATH"
+    eval "$(rbenv init -)"
   fi
-
-  #jenv
-  export PATH="$HOME/.jenv/bin:$PATH"
-  eval "$(jenv init -)"
-
-  # pyenv
-  export PATH="$PYENV_ROOT/bin:$PATH"
-  export PYENV_ROOT="$HOME/.pyenv"
-  eval "$(pyenv init -)"
-
-  # anyenv
-  export PATH="$HOME/.anyenv/bin:$PATH"
-  eval "$(anyenv init -)"
-  for D in `ls $HOME/.anyenv/envs`
-  do
-    export PATH="$HOME/.anyenv/envs/$D/shims:$PATH"
-  done
-
-  # rbenv
-  export PATH="$HOME/.rbenv/bin:$PATH"
-  eval "$(rbenv init -)"
 
   # command history
   HISTFILE=$HOME/.zsh-history
