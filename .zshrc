@@ -11,7 +11,8 @@
 
 # ENVIRONMENT VALUES {{{
 
-  if [ "$(uname)" == 'Darwin' ]; then
+  case ${OSTYPE} in
+    darwin*)
     # zsh
     export ZPLUG_HOME=/usr/local/opt/zplug
 
@@ -47,7 +48,7 @@
     # rbenv
     export PATH="$HOME/.rbenv/bin:$PATH"
     eval "$(rbenv init -)"
-  fi
+  esac
 
   # command history
   HISTFILE=$HOME/.zsh-history
