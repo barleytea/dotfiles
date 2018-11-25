@@ -135,9 +135,9 @@
       ;;
     linux*)
       alias ls="ls -l --sd --color=always"
-      alias lgs="colorls -lA --sd --gs --color=always"
-      alias lgs="colorls -lA --sd --gs --color=always"
-      alias lgst="colorls -lA --sd --gs --tree --color=always"
+      alias ll="ls -lA --sd --color=always"
+      alias lgs="ls -lA --sd --gs --color=always"
+      alias lgst="ls -lA --sd --gs --tree --color=always"
       ;;
   esac
   alias reload="source ~/.zshrc"
