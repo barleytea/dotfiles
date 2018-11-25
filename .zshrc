@@ -125,14 +125,22 @@
 
 # ALIAS {{{
 
-  alias ls="colorls -l --sd"
-  alias ll="colorls -lA --sd"
-  alias lgs="colorls -lA --sd --gs"
-  alias lgst="colorls -lA --sd --gs --tree"
-
-  alias mvim=/Applications/MacVim.app/Contents/bin/mvim "$@"
+  case ${OSTYPE} in
+    darwin*)
+      alias ls="colorls -l --sd"
+      alias ll="colorls -lA --sd"
+      alias lgs="colorls -lA --sd --gs"
+      alias lgst="colorls -lA --sd --gs --tree"
+      alias mvim=/Applications/MacVim.app/Contents/bin/mvim "$@"
+      ;;
+    linux*)
+      alias ls="ls -l --sd --color=always"
+      alias lgs="colorls -lA --sd --gs --color=always"
+      alias lgs="colorls -lA --sd --gs --color=always"
+      alias lgst="colorls -lA --sd --gs --tree --color=always"
+      ;;
+  esac
   alias reload="source ~/.zshrc"
-
   alias vsc="code"
 # }}}
 
