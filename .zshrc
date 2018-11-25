@@ -11,7 +11,7 @@
 
 # ENVIRONMENT VALUES {{{
 
-  if ["$(uname)"=='Darwin']; then
+  if [ "$(uname)" == 'Darwin' ]; then
     # zsh
     export ZPLUG_HOME=/usr/local/opt/zplug
 
