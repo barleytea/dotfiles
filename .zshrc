@@ -140,6 +140,9 @@
   esac
   alias reload="source ~/.zshrc"
   alias vsc="code"
+
+  alias repos='ghq list -p | peco'
+  alias g='cd $(repos)'
 # }}}
 
 # COLORS {{{
