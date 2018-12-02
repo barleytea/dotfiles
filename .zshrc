@@ -142,7 +142,7 @@
   alias vsc="code"
 
   alias repos='ghq list -p | peco'
-  alias g='cd $(repos)'
+  alias repo='cd $(repos)'
 # }}}
 
 # COLORS {{{
