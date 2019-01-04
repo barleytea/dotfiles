@@ -14,3 +14,7 @@ trim_trailing_whitespace = false
 [*.xml]
 indent_size = 2
 indent_style = space
+
+[*.rb]
+indent_size = 2
+indent_style = space
