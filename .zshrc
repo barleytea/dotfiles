@@ -48,6 +48,10 @@
       # rbenv
       export PATH="$HOME/.rbenv/shims$PATH"
       eval "$(rbenv init -)"
+
+      # grep
+      export PATH="/usr/local/opt/grep/libexec/gnubin:$PATH"
+      export MANPATH="/usr/local/opt/grep/libexec/gnuman:$MANPATH"
       ;;
     linux*)
       #zplug
@@ -143,6 +147,8 @@
 
   alias repos='ghq list -p | peco'
   alias repo='cd $(repos)'
+
+  alias rgrep='grep -r --color=always --exclude-dir={.svn,tmp,tools,docs,.buildtool} --with-filename --line-number'
 # }}}
 
 # COLORS {{{
