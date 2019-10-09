@@ -149,6 +149,7 @@
   alias repo='cd $(repos)'
 
   alias rgrep='grep -r --color=always --exclude-dir={.svn,tmp,tools,docs,.buildtool} --with-filename --line-number'
+
 # }}}
 
 # COLORS {{{
@@ -179,3 +180,19 @@
   [ -f ~/.zshrc_local ] && source ~/.zshrc_local
 
 # }}}
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/Users/miyoshi_s/.pyenv/versions/anaconda3-5.0.1/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/Users/miyoshi_s/.pyenv/versions/anaconda3-5.0.1/etc/profile.d/conda.sh" ]; then
+        . "/Users/miyoshi_s/.pyenv/versions/anaconda3-5.0.1/etc/profile.d/conda.sh"
+    else
+        export PATH="/Users/miyoshi_s/.pyenv/versions/anaconda3-5.0.1/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
