@@ -19,6 +19,9 @@ endfunction
 function! s:expand(path) abort
   return s:substitute_path_separator(expand(a:path))
 endfunction
+function! s:fnamemodify(fname, mods) abort
+  return s:substitute_path_separator(fnamemodify(a:fname, a:mods))
+endfunction
 
 " Variables
 " The version of MRU file format.
@@ -231,7 +234,7 @@ function! s:mru.append(path) abort
   endif
 endfunction
 function! s:mru.version_check(ver) abort
-  if str2float(a:ver) < self.version
+  if str2float(string(a:ver)) < str2float(string(self.version))
     call s:print_error('Sorry, the version of MRU file is too old.')
     return 0
   else
@@ -312,8 +315,17 @@ function! neomru#_append() abort
   if &l:buftype =~ 'help\|nofile' || &l:previewwindow
     return
   endif
+  call neomru#append(s:expand('%:p'))
+endfunction
+function! neomru#_gather_file_candidates() abort
+  return neomru#_get_mrus().file.gather_candidates([], {'is_redraw': 0})
+endfunction
+function! neomru#_gather_directory_candidates() abort
+  return neomru#_get_mrus().directory.gather_candidates([], {'is_redraw': 0})
+endfunction
 
-  let path = s:expand('%:p')
+function! neomru#append(filename) abort
+  let path = s:fnamemodify(a:filename, ':p')
   if path !~ '\a\+:'
     let path = s:substitute_path_separator(
           \ simplify(s:resolve(path)))
@@ -324,15 +336,15 @@ function! neomru#_append() abort
     call s:file_mru.append(path)
   endif
 
-  let filetype = getbufvar(bufnr('%'), '&filetype')
+  let filetype = getbufvar(bufnr(a:filename), '&filetype')
   if filetype ==# 'vimfiler' &&
-        \ type(getbufvar(bufnr('%'), 'vimfiler')) == type({})
-    let path = getbufvar(bufnr('%'), 'vimfiler').current_dir
+        \ type(getbufvar(bufnr(a:filename), 'vimfiler')) == type({})
+    let path = getbufvar(bufnr(a:filename), 'vimfiler').current_dir
   elseif filetype ==# 'vimshell' &&
-        \ type(getbufvar(bufnr('%'), 'vimshell')) == type({})
-    let path = getbufvar(bufnr('%'), 'vimshell').current_dir
+        \ type(getbufvar(bufnr(a:filename), 'vimshell')) == type({})
+    let path = getbufvar(bufnr(a:filename), 'vimshell').current_dir
   else
-    let path = getcwd()
+    let path = s:fnamemodify(path, ':p:h')
   endif
 
   let path = s:substitute_path_separator(simplify(s:resolve(path)))
@@ -395,7 +407,9 @@ endfunction
 function! s:is_file_exist(path) abort
   let ignore = !empty(g:neomru#file_mru_ignore_pattern)
         \ && a:path =~ g:neomru#file_mru_ignore_pattern
-  return !ignore && (getftype(a:path) ==# 'file' || a:path =~ '^\h\w\+:')
+  return !ignore && (getftype(a:path) ==# 'file' ||
+			  \ getftype(a:path) ==# 'link' ||
+			  \ a:path =~ '^\h\w\+:')
 endfunction
 function! s:is_directory_exist(path) abort
   let ignore = !empty(g:neomru#directory_mru_ignore_pattern)

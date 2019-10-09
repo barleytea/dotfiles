@@ -13,9 +13,6 @@ let g:NERDTreeCreator = s:Creator
 
 " FUNCTION: s:Creator._bindMappings() {{{1
 function! s:Creator._bindMappings()
-    "make <cr> do the same as the activate node mapping
-    nnoremap <silent> <buffer> <cr> :call nerdtree#ui_glue#invokeKeyMap(g:NERDTreeMapActivateNode)<cr>
-
     call g:NERDTreeKeyMap.BindAll()
 
     command! -buffer -nargs=? Bookmark :call nerdtree#ui_glue#bookmarkNode('<args>')
@@ -26,6 +23,7 @@ function! s:Creator._bindMappings()
     command! -buffer -nargs=0 ClearAllBookmarks call g:NERDTreeBookmark.ClearAll() <bar> call b:NERDTree.render()
     command! -buffer -nargs=0 ReadBookmarks call g:NERDTreeBookmark.CacheBookmarks(0) <bar> call b:NERDTree.render()
     command! -buffer -nargs=0 WriteBookmarks call g:NERDTreeBookmark.Write()
+    command! -buffer -nargs=0 EditBookmarks call g:NERDTreeBookmark.Edit()
 endfunction
 
 " FUNCTION: s:Creator._broadcastInitEvent() {{{1
@@ -33,7 +31,7 @@ function! s:Creator._broadcastInitEvent()
     silent doautocmd User NERDTreeInit
 endfunction
 
-" FUNCTION: s:Creator.BufNamePrefix() {{{2
+" FUNCTION: s:Creator.BufNamePrefix() {{{1
 function! s:Creator.BufNamePrefix()
     return 'NERD_tree_'
 endfunction
@@ -178,24 +176,30 @@ function! s:Creator.createMirror()
 endfunction
 
 " FUNCTION: s:Creator._createTreeWin() {{{1
-" Inits the NERD tree window. ie. opens it, sizes it, sets all the local
-" options etc
+" Initialize the NERDTree window.  Open the window, size it properly, set all
+" local options, etc.
 function! s:Creator._createTreeWin()
-    "create the nerd tree window
-    let splitLocation = g:NERDTreeWinPos ==# "left" ? "topleft " : "botright "
-    let splitSize = g:NERDTreeWinSize
+    let l:splitLocation = g:NERDTreeWinPos ==# 'left' ? 'topleft ' : 'botright '
+    let l:splitSize = g:NERDTreeWinSize
 
-    if !exists('t:NERDTreeBufName')
+    if !g:NERDTree.ExistsForTab()
         let t:NERDTreeBufName = self._nextBufferName()
-        silent! exec splitLocation . 'vertical ' . splitSize . ' new'
-        silent! exec "edit " . t:NERDTreeBufName
+        silent! execute l:splitLocation . 'vertical ' . l:splitSize . ' new'
+        silent! execute 'edit ' . t:NERDTreeBufName
+        silent! execute 'vertical resize '. l:splitSize
     else
-        silent! exec splitLocation . 'vertical ' . splitSize . ' split'
-        silent! exec "buffer " . t:NERDTreeBufName
+        silent! execute l:splitLocation . 'vertical ' . l:splitSize . ' split'
+        silent! execute 'buffer ' . t:NERDTreeBufName
     endif
 
     setlocal winfixwidth
+
     call self._setCommonBufOptions()
+
+    if has('patch-7.4.1925')
+        clearjumps
+    endif
+
 endfunction
 
 " FUNCTION: s:Creator._isBufHidden(nr) {{{1
@@ -213,14 +217,14 @@ function! s:Creator.New()
     return newCreator
 endfunction
 
-" FUNCTION: s:Creator._nextBufferName() {{{2
+" FUNCTION: s:Creator._nextBufferName() {{{1
 " returns the buffer name for the next nerd tree
 function! s:Creator._nextBufferName()
     let name = s:Creator.BufNamePrefix() . self._nextBufferNumber()
     return name
 endfunction
 
-" FUNCTION: s:Creator._nextBufferNumber() {{{2
+" FUNCTION: s:Creator._nextBufferNumber() {{{1
 " the number to add to the nerd tree buffer name to make the buf name unique
 function! s:Creator._nextBufferNumber()
     if !exists("s:Creator._NextBufNum")
@@ -280,16 +284,21 @@ endfunction
 
 " FUNCTION: s:Creator._setCommonBufOptions() {{{1
 function! s:Creator._setCommonBufOptions()
-    "throwaway buffer options
-    setlocal noswapfile
-    setlocal buftype=nofile
+
+    " Options for a non-file/control buffer.
     setlocal bufhidden=hide
-    setlocal nowrap
+    setlocal buftype=nofile
+    setlocal noswapfile
+
+    " Options for controlling buffer/window appearance.
     setlocal foldcolumn=0
     setlocal foldmethod=manual
-    setlocal nofoldenable
     setlocal nobuflisted
+    setlocal nofoldenable
+    setlocal nolist
     setlocal nospell
+    setlocal nowrap
+
     if g:NERDTreeShowLineNumbers
         setlocal nu
     else
@@ -307,6 +316,7 @@ function! s:Creator._setCommonBufOptions()
 
     call self._setupStatusline()
     call self._bindMappings()
+
     setlocal filetype=nerdtree
 endfunction
 

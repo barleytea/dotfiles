@@ -1,10 +1,12 @@
 ## Previm
 
+[![TravisCI](https://travis-ci.org/previm/previm.svg?branch=master)](https://travis-ci.org/previm/previm) [![AppVeyor](https://ci.appveyor.com/api/projects/status/r12pom6aaiom3kqy?svg=true)](https://ci.appveyor.com/project/mattn/previm)
+
 Vim plugin for preview.
 
 ### ScreenShot
 
-![previm](https://raw.github.com/wiki/kannokanno/previm/images/previm-example.gif)
+![previm](https://raw.github.com/wiki/previm/previm/images/previm-example.gif)
 
 ## Supported file formats
 
@@ -15,9 +17,11 @@ Vim plugin for preview.
     * [Pandoc style footnote](https://github.com/markdown-it/markdown-it-footnote)
     * [Pandoc style subscript](https://github.com/markdown-it/markdown-it-sub)
     * [Pandoc style superscript](https://github.com/markdown-it/markdown-it-sup)
+    * [East Asian Line Breaks](https://github.com/markdown-it/markdown-it-cjk-breaks)
     * support [mermaid](http://knsv.github.io/mermaid/index.html)
 * reStructuredText(required rst2html.py)
 * textile
+* AsciiDoc
 
 ## Dependencies
 
@@ -45,20 +49,13 @@ It can, however, be integrated with [open-browser.vim](https://github.com/tyru/o
     * `:help g:previm_open_cmd` for more details
     * You can skip this setting if you're using open-browser.
 2. Start editing the file of Markdown.(`filetype` is `markdown`)
-    * __NOTE__: In the case of `.md`, `filetype` becomes a `modula2`. If so, please describe in `.vimrc` this setting
-    ```vim
-    augroup PrevimSettings
-        autocmd!
-        autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
-    augroup END
-    ```
 3. Run `:PrevimOpen` to open browser to preview
 4. Back to Vim to edit your file
 5. Update the file, and the content for previewing will be updated automatically
 
 ### mermaid
 
-Support [mermaid](http://knsv.github.io/mermaid/index.html)
+Support [mermaid](http://knsv.github.io/mermaid/)
 
 <pre>
 ```mermaid
@@ -70,4 +67,4 @@ graph TD;
 ```
 </pre>
 
-![previm](https://raw.github.com/wiki/kannokanno/previm/images/previm-example-mermaid.png)
+![previm](https://raw.github.com/wiki/previm/previm/images/previm-example-mermaid.png)

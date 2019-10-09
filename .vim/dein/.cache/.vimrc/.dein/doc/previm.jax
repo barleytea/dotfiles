@@ -2,6 +2,7 @@
 
 Version: 1.6
 Author: kanno <akapanna@gmail.com>
+Maintainer: previm developers
 
 ==============================================================================
 目次							*previm-contents*
@@ -28,7 +29,7 @@ Vimで編集した内容をブラウザでプレビューするための機能�
 	- reStructuredText(required rst2html.py)
 
 最新版:
-http://github.com/kannokanno/previm
+http://github.com/previm/previm
 
 
 ==============================================================================
@@ -52,16 +53,6 @@ Markdownの場合を例とします。他の形式についても基本的な操
 3. |:PrevimOpen| を実行してブラウザを開きます。
 4. 元のVimバッファに戻り編集を続けます。
 5. 変更の度にブラウザの表示内容が更新されます。
-
-注意:拡張子が`.md`の場合は`markdown`ではなく`modula2`として認識されてしまいます。
-その場合は以下の設定を.vimrcに記述してください
-
-
-	" .vimrc
-	augroup PrevimSettings
-	  autocmd!
-	  autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
-	augroup END
 
 ==============================================================================
 コマンド						*previm-command*
@@ -92,10 +83,14 @@ g:previm_open_cmd					*g:previm_open_cmd*
 	いない場合はopenbrowser#openを試みます。
 	|previm-openbrowser| も参照してください。
 
-	以下の設定例は、MacにてFirefoxで開く場合です。
+	以下の設定例は、MacにてFirefox, Google Chromeで開く場合です。
 >
 	" .vimrc
+        # open with FireFox
 	let g:previm_open_cmd = 'open -a Firefox'
+
+        # open with Google Chrome
+        let g:previm_open_cmd = 'open -a Google\ Chrome'
 <
 
 g:previm_enable_realtime			*g:previm_enable_realtime*
@@ -174,6 +169,12 @@ open-browser.vimの使用					*previm-openbrowser*
 
 ==============================================================================
 更新履歴						*previm-changelog*
+
+1.8.1	2018-07-21
+        - fixes minor bugs
+
+1.8	2018-07-21
+        - support multiple previews
 
 1.7.1	2015-08-17
         - support hidden header

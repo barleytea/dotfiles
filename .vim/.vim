@@ -1,1 +1,0 @@
-/Users/Shota_Miyoshi/dotfiles/.vim

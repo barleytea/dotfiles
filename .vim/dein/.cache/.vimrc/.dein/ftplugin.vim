@@ -20,8 +20,8 @@ function! s:ftplugin()
     endif
     for ft in split(filetype, '\.')
       execute "runtime! ftplugin/" . ft . ".vim"
-      execute "runtime! ftplugin/" . ft . "_*.vim"
-      execute "runtime! ftplugin/" . ft . "/*.vim"
+      \ "ftplugin/" . ft . "_*.vim"
+      \ "ftplugin/" . ft . "/*.vim"
     endfor
   endif
   call s:after_ftplugin()

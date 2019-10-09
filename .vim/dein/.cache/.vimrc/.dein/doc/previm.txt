@@ -2,6 +2,7 @@
 
 Version: 1.6
 Author: kanno <akapanna@gmail.com>
+Maintainer: previm developers
 
 ==============================================================================
 CONTENTS						*previm-contents*
@@ -28,7 +29,7 @@ browsers. It achieves something similar to real-time previewing.
 	- reStructuredText(required rst2html.py)
 
 Latest revision:
-http://github.com/kannokanno/previm
+http://github.com/previm/previm
 
 
 ==============================================================================
@@ -53,15 +54,6 @@ open-browser.vim.
 3. Open preview on browser with |:PrevimOpen|.
 4. Go back to the buffer and edit some more.
 5. Changes are reflected on the page shown in the browser each update.
-
-Note: If `.md` files are recognized as `modula2` rather than `markdown`, add
-the following to your .vimrc.
-
-	" .vimrc
-	augroup PrevimSettings
-	  autocmd!
-	  autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
-	augroup END
 
 ==============================================================================
 COMMANDS						*previm-command*
@@ -93,11 +85,15 @@ g:previm_open_cmd					*g:previm_open_cmd*
 	is executed if no command is specified.
 	Also see |previm-openbrowser|.
 
-	The following sample configuration opens Firefox on Mac.
-
+	The following sample configuration opens with Firefox or Google Chrome on Mac.
 >
 	" .vimrc
+        # open by FireFox
 	let g:previm_open_cmd = 'open -a Firefox'
+
+        # open with Google Chrome
+        let g:previm_open_cmd = 'open -a Google\ Chrome'
+<
 
 g:previm_enable_realtime			*g:previm_enable_realtime*
 	Type:Num
@@ -110,7 +106,7 @@ g:previm_enable_realtime			*g:previm_enable_realtime*
 	If the value is 1, I can preview in near real-time.
 	It is set to 0 by default.
 
-	The case of changing this value after opening a file to preview is 
+	The case of changing this value after opening a file to preview is
 	You need to re-open the file to preview in order to reflect the setting.
 >
 	" .vimrc
@@ -176,6 +172,12 @@ Thus, |g:previm_open_cmd| need not be configured when using open-browser.vim.
 
 ==============================================================================
 CHANGELOG						*previm-changelog*
+
+1.8.1	2018-07-21
+        - fixes minor bugs
+
+1.8	2018-07-21
+        - support multiple previews
 
 1.7.1	2015-08-17
         - support hidden header

@@ -8,30 +8,30 @@ filetype plugin indent off
     set nocompatible
   endif
 
-  " Required:
   set runtimepath+=~/.vim/dein/repos/github.com/Shougo/dein.vim
 
-  " Required:
-   call dein#begin(expand('~/.vim/dein'))
+  if dein#load_state('~/.vim/dein')
+    call dein#begin('~/.vim/dein')
 
-  " Required:
-  call dein#add('Shougo/dein.vim')
-  call dein#add('Shougo/vimproc.vim', {'build': 'make'})
+    call dein#add('Shougo/dein.vim')
+    call dein#add('Shougo/vimproc.vim', {'build': 'make'})
 
-  call dein#add('Shougo/neocomplete.vim')
-  call dein#add('Shougo/neomru.vim')
-  call dein#add('tomasr/molokai')
-  call dein#add('Shougo/unite.vim')
-  call dein#add('Shougo/neomru.vim')
-  call dein#add('editorconfig/editorconfig-vim')
-  call dein#add('Townk/vim-autoclose')
-  call dein#add('scrooloose/nerdtree')
-  call dein#add('bronson/vim-trailing-whitespace')
-  call dein#add('plasticboy/vim-markdown')
-  call dein#add('kannokanno/previm')
-  call dein#add('tyru/open-browser.vim')
+    call dein#add('Shougo/neocomplete.vim')
+    call dein#add('Shougo/neomru.vim')
+    call dein#add('tomasr/molokai')
+    call dein#add('Shougo/unite.vim')
+    call dein#add('Shougo/neomru.vim')
+    call dein#add('editorconfig/editorconfig-vim')
+    call dein#add('Townk/vim-autoclose')
+    call dein#add('scrooloose/nerdtree')
+    call dein#add('bronson/vim-trailing-whitespace')
+    call dein#add('plasticboy/vim-markdown')
+    call dein#add('kannokanno/previm')
+    call dein#add('tyru/open-browser.vim')
 
-  call dein#end()
+    call dein#end()
+    call dein#save_state()
+  endif
 
   " Required:
   filetype plugin indent on
