@@ -52,6 +52,12 @@
       # grep
       export PATH="/usr/local/opt/grep/libexec/gnubin:$PATH"
       export MANPATH="/usr/local/opt/grep/libexec/gnuman:$MANPATH"
+
+      # homebrew
+      export PATH="/usr/local/sbin:$PATH"
+
+      # rust
+      export PATH="$HOME/.cargo/bin:$PATH"
       ;;
     linux*)
       #zplug
