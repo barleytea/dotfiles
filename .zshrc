@@ -155,6 +155,7 @@
   alias repo='cd $(repos)'
 
   alias rgrep='grep -r --color=always --exclude-dir={.svn,tmp,tools,docs,.buildtool} --with-filename --line-number'
+  alias emacs='emacs -nw'
 
 # }}}
 
