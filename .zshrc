@@ -11,59 +11,51 @@
 
 # ENVIRONMENT VALUES {{{
 
-  case ${OSTYPE} in
-    darwin*)
-      # zplug
-      export ZPLUG_HOME=/usr/local/opt/zplug
+  # zplug
+  export ZPLUG_HOME=/usr/local/opt/zplug
 
-      # maven
-      export M2_HOME=/usr/local/Cellar/maven/3.5.2/
-      export M2=$M2_HOME/bin
-      export PATH=$M2:$JAVA_HOME:$PATH
+  # maven
+  export M2_HOME=/usr/local/Cellar/maven/3.5.2/
+  export M2=$M2_HOME/bin
+  export PATH=$M2:$JAVA_HOME:$PATH
 
-      # editor
-      if [[ -n $SSH_CONNECTION ]]; then
-        export EDITOR="vim"
-      ele
-        export EDITOR="mvim"
-      fi
+  # editor
+  if [[ -n $SSH_CONNECTION ]]; then
+    export EDITOR="vim"
+  ele
+    export EDITOR="mvim"
+  fi
 
-      #jenv
-      export PATH="$HOME/.jenv/bin:$PATH"
-      eval "$(jenv init -)"
+  #jenv
+  export PATH="$HOME/.jenv/bin:$PATH"
+  eval "$(jenv init -)"
 
-      # pyenv
-      export PATH="$PYENV_ROOT/bin:$PATH"
-      export PYENV_ROOT="$HOME/.pyenv"
-      eval "$(pyenv init -)"
+  # pyenv
+  export PATH="$PYENV_ROOT/bin:$PATH"
+  export PYENV_ROOT="$HOME/.pyenv"
+  eval "$(pyenv init -)"
 
-      # anyenv
-      export PATH="$HOME/.anyenv/bin:$PATH"
-      eval "$(anyenv init -)"
-      for D in `ls $HOME/.anyenv/envs`
-      do
-        export PATH="$HOME/.anyenv/envs/$D/shims:$PATH"
-      done
+  # anyenv
+  export PATH="$HOME/.anyenv/bin:$PATH"
+  eval "$(anyenv init -)"
+  for D in `ls $HOME/.anyenv/envs`
+  do
+    export PATH="$HOME/.anyenv/envs/$D/shims:$PATH"
+  done
 
-      # rbenv
-      export PATH="$HOME/.rbenv/shims$PATH"
-      eval "$(rbenv init -)"
+  # rbenv
+  export PATH="$HOME/.rbenv/shims$PATH"
+  eval "$(rbenv init -)"
 
-      # grep
-      export PATH="/usr/local/opt/grep/libexec/gnubin:$PATH"
-      export MANPATH="/usr/local/opt/grep/libexec/gnuman:$MANPATH"
+  # grep
+  export PATH="/usr/local/opt/grep/libexec/gnubin:$PATH"
+  export MANPATH="/usr/local/opt/grep/libexec/gnuman:$MANPATH"
 
-      # homebrew
-      export PATH="/usr/local/sbin:$PATH"
+  # homebrew
+  export PATH="/usr/local/sbin:$PATH"
 
-      # rust
-      export PATH="$HOME/.cargo/bin:$PATH"
-      ;;
-    linux*)
-      #zplug
-      export ZPLUG_HOME=$HOME/.zplug
-      ;;
-  esac
+  # rust
+  export PATH="$HOME/.cargo/bin:$PATH"
 
   # command history
   HISTFILE=$HOME/.zsh-history
@@ -135,19 +127,11 @@
 
 # ALIAS {{{
 
-  case ${OSTYPE} in
-    darwin*)
-      alias ls="colorls -l --sd"
-      alias ll="colorls -lA --sd"
-      alias lgs="colorls -lA --sd --gs"
-      alias lgst="colorls -lA --sd --gs --tree"
-      alias mvim=/Applications/MacVim.app/Contents/bin/mvim "$@"
-      ;;
-    linux*)
-      alias ls="ls -l --color=always"
-      alias ll="ls -lA --color=always"
-      ;;
-  esac
+  alias ls="colorls -l --sd"
+  alias ll="colorls -lA --sd"
+  alias lgs="colorls -lA --sd --gs"
+  alias lgst="colorls -lA --sd --gs --tree"
+  alias mvim=/Applications/MacVim.app/Contents/bin/mvim "$@"
   alias reload="source ~/.zshrc"
   alias vsc="code"
 
@@ -187,19 +171,3 @@
   [ -f ~/.zshrc_local ] && source ~/.zshrc_local
 
 # }}}
-
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/Users/miyoshi_s/.pyenv/versions/anaconda3-5.0.1/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/Users/miyoshi_s/.pyenv/versions/anaconda3-5.0.1/etc/profile.d/conda.sh" ]; then
-        . "/Users/miyoshi_s/.pyenv/versions/anaconda3-5.0.1/etc/profile.d/conda.sh"
-    else
-        export PATH="/Users/miyoshi_s/.pyenv/versions/anaconda3-5.0.1/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
-
