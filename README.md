@@ -7,8 +7,8 @@
 1. `$ cd ~/dotfiles`
 1. `$ git submodule init`
 1. `$ git submodule update`
-1. `$ ./install.sh
+1. `$ ./install.sh`
     * anyenv
     * rbenv
-    * ruby`
+    * ruby
 1. `$ ./dotfilesLink.sh`
