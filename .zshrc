@@ -57,6 +57,17 @@
   # rust
   export PATH="$HOME/.cargo/bin:$PATH"
 
+  # flutter
+  export PATH="$PATH:$HOME/flutter_workspace/flutter/bin"
+
+  # nvm
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+  [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
+  # go
+  export GOPATH=$HOME/go
+
   # command history
   HISTFILE=$HOME/.zsh-history
   HISTSIZE=100000
@@ -127,10 +138,6 @@
 
 # ALIAS {{{
 
-  alias ls="colorls -l --sd"
-  alias ll="colorls -lA --sd"
-  alias lgs="colorls -lA --sd --gs"
-  alias lgst="colorls -lA --sd --gs --tree"
   alias mvim=/Applications/MacVim.app/Contents/bin/mvim "$@"
   alias reload="source ~/.zshrc"
   alias vsc="code"
@@ -139,7 +146,21 @@
   alias repo='cd $(repos)'
 
   alias rgrep='grep -r --color=always --exclude-dir={.svn,tmp,tools,docs,.buildtool} --with-filename --line-number'
-  alias emacs='emacs -nw'
+
+  if [[ $(command -v exa) ]]; then
+    alias e='exa --icons --git'
+    alias l=e
+    alias ls=e
+    alias ea='exa -a --icons --git'
+    alias la=ea
+    alias ee='exa -aahl --icons --git'
+    alias ll=ee
+    alias et='exa -T -L 3 -a -I "node_modules|.git|.cache" --icons'
+    alias lt=et
+    alias eta='exa -T -a -I "node_modules|.git|.cache" --color=always --icons | less -r'
+    alias lta=eta
+    alias l='clear && ls'
+  fi
 
 # }}}
 
@@ -154,6 +175,7 @@
 # POWERLEVEL9K {{{
 
   POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(time context dir vcs)
+  #POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(kubecontext)
   POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=()
   POWERLEVEL9K_TIME_FORMAT="%D{%m\/%d %H:%M}"
   POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="\u25B8 "

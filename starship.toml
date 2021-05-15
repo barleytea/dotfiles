@@ -1,0 +1,12 @@
+format = """
+[┌───────────────────](bold green)
+[│](bold green)$kubernetes$directory$git_branch$git_state$git_status$time
+[└─>](bold green) """
+scan_timeout = 10
+add_newline = false
+[kubernetes]
+format = '[⛵ $context](green) '
+disabled = false
+[directory]
+truncation_length = 100
+truncate_to_repo = false

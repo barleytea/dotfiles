@@ -18,3 +18,15 @@ indent_style = space
 [*.rb]
 indent_size = 2
 indent_style = space
+
+[*.js]
+indent_size = 2
+indent_style = space
+
+[*.yml]
+indent_size = 2
+indent_style = space
+
+[*.yaml]
+indent_size = 2
+indent_style = space

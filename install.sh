@@ -1,16 +1,17 @@
-#!/bin/sh
+# install fisher
+curl https://git.io/fisher --create-dirs -sLo ~/.config/fish/functions/fisher.fish
 
-# install anyenv
-git clone https://github.com/riywo/anyenv ~/.anyenv
+# install plugin-peco for fish
+fisher install oh-my-fish/plugin-peco
 
-# install rbenv & ruby
-anyenv install rbenv
-rbenv install 2.6.3
-rbenv global  2.6.3
-rbenv rehash
+# install z for fish
+fisher install jethrokuan/z
 
-# require Ruby
-# colorls
-gem install colorls
-rbenv rehash
-rehash
+# install fish-bd for fish
+fisher add 0rax/fish-bd
+
+# install fish-peco_select_ghq_repository for fish
+fisher add yoshiori/fish-peco_select_ghq_repository
+
+# install fish-peco_recentd
+fisher add tsu-nera/fish-peco_recentd
