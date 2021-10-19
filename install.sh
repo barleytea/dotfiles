@@ -59,4 +59,7 @@ fisher add yoshiori/fish-peco_select_ghq_repository
 # install fish-peco_recentd
 fisher add tsu-nera/fish-peco_recentd
 
+# install fish-ghq
+fisher install decors/fish-ghq
+
 #==============================#
