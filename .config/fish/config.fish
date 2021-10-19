@@ -54,4 +54,8 @@ set fish_pager_color_selected_completion   bryellow
 set fish_pager_color_selected_description  bryellow
 set fish_pager_color_selected_prefix       bryellow
 
+# path
+
+set -U fish_user_paths $fish_user_paths $HOME/.cargo/bin
+
 starship init fish | source
