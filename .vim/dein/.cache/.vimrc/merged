@@ -1,3 +1,0 @@
-{'repo': v:val.repo, 'rev': get(v:val, 'rev', '')}
-0
-[{'rev': '', 'repo': 'Shougo/dein.vim'}, {'rev': '', 'repo': 'Shougo/neocomplete.vim'}, {'rev': '', 'repo': 'Shougo/neomru.vim'}, {'rev': '', 'repo': 'Shougo/unite.vim'}, {'rev': '', 'repo': 'Shougo/vimproc.vim'}, {'rev': '', 'repo': 'Townk/vim-autoclose'}, {'rev': '', 'repo': 'bronson/vim-trailing-whitespace'}, {'rev': '', 'repo': 'editorconfig/editorconfig-vim'}, {'rev': '', 'repo': 'kannokanno/previm'}, {'rev': '', 'repo': 'plasticboy/vim-markdown'}, {'rev': '', 'repo': 'scrooloose/nerdtree'}, {'rev': '', 'repo': 'tomasr/molokai'}, {'rev': '', 'repo': 'tyru/open-browser.vim'}]

@@ -36,8 +36,7 @@ brew cleanup
 
 #============ vim =============#
 
-curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > $HOME/.vim/bundles/installer.sh
-sh $HOME/.vim/bundles/installer.sh $HOME.vim/bundles
+curl -fLo .vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 #============ fish ============#
 
