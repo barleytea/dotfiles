@@ -6,6 +6,9 @@ call plug#begin('~/.vim/plugged')
 " Japanese Help
 Plug 'vim-jp/vimdoc-ja'
 
+" fzf
+Plug 'junegunn/fzf.vim'
+
 " Customize status bar
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
