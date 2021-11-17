@@ -1,0 +1,12 @@
+[core]
+    excludesfile = /Users/miyoshi_s/.gitignore_global
+    editor = vim
+[user]
+    name = barleytea
+    email = barleytea362@gmail.com
+[ghq]
+    root = /Users/miyoshi_s/git_repos/
+[init]
+    defaultBranch = main
+
+
