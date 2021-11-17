@@ -1,5 +1,5 @@
 [core]
-    excludesfile = /Users/miyoshi_s/.gitignore_global
+    excludesfile = /Users/miyoshi_s/.gitignore
     editor = vim
 [user]
     name = barleytea
