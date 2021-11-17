@@ -2,9 +2,6 @@
 
 THIS_DIR=$(cd $(dirname $0); pwd)
 
-git submodule init
-git submodule update
-
 echo "start setup..."
 cd $HOME
 
@@ -36,18 +33,18 @@ brew cleanup
 
 #============ vim =============#
 
-curl -fLo .vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+curl -fLo $THIS_DIR/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 #============ fish ============#
 
 # install fisher
-curl https://git.io/fisher --create-dirs -sLo ~/.config/fish/functions/fisher.fish
+curl https://git.io/fisher --create-dirs -sLo $THIS_DIR/.config/fish/functions/fisher.fish
 
 # install plugin-peco for fish
-fisher install oh-my-fish/plugin-peco
+fisher add oh-my-fish/plugin-peco
 
 # install z for fish
-fisher install jethrokuan/z
+fisher add jethrokuan/z
 
 # install fish-bd for fish
 fisher add 0rax/fish-bd
@@ -59,6 +56,6 @@ fisher add yoshiori/fish-peco_select_ghq_repository
 fisher add tsu-nera/fish-peco_recentd
 
 # install fish-ghq
-fisher install decors/fish-ghq
+fisher add decors/fish-ghq
 
 #==============================#
