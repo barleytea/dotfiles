@@ -41,21 +41,21 @@ curl -fLo $THIS_DIR/.vim/autoload/plug.vim --create-dirs https://raw.githubuserc
 curl https://git.io/fisher --create-dirs -sLo $THIS_DIR/.config/fish/functions/fisher.fish
 
 # install plugin-peco for fish
-fisher add oh-my-fish/plugin-peco
+fisher install oh-my-fish/plugin-peco
 
 # install z for fish
-fisher add jethrokuan/z
+fisher install jethrokuan/z
 
 # install fish-bd for fish
-fisher add 0rax/fish-bd
+fisher install 0rax/fish-bd
 
 # install fish-peco_select_ghq_repository for fish
-fisher add yoshiori/fish-peco_select_ghq_repository
+fisher install yoshiori/fish-peco_select_ghq_repository
 
 # install fish-peco_recentd
-fisher add tsu-nera/fish-peco_recentd
+fisher install tsu-nera/fish-peco_recentd
 
 # install fish-ghq
-fisher add decors/fish-ghq
+fisher install decors/fish-ghq
 
 #==============================#
