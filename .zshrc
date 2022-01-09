@@ -56,3 +56,8 @@
 # }}}
 
 eval "$(starship init zsh)"
+
+# fish
+if [[ -o interactive ]]; then
+    exec fish
+fi
