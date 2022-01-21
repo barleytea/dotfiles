@@ -1,0 +1,38 @@
+import:
+  - '~/.config/alacritty/dracula.yml'
+
+env:
+  TERM: alacritty
+
+window:
+  padding:
+    x: 8
+    y: 4
+  decorations: full
+  startup_mode: Fullscreen
+
+font:
+  # Normal (roman) font face
+  normal:
+    family: 'Hack Nerd Font Mono'
+    style: Regular
+  bold:
+    family: 'Hack Nerd Font Mono'
+    style: Bold
+  size: 11.0
+  offset:
+    x: 0
+    y: 1
+  glyph_offset:
+    x: 0
+    y: 1
+  use_thin_strokes: true
+
+draw_bold_text_with_bright_colors: true
+
+shell:
+  program: /bin/zsh
+  args:
+    - -l
+    - -c
+    - '/opt/homebrew/bin/tmux a -t 0 || /opt/homebrew/bin/tmux -u'

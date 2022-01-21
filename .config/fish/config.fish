@@ -57,5 +57,6 @@ set fish_pager_color_selected_prefix       bryellow
 # path
 
 set -U fish_user_paths $fish_user_paths $HOME/.cargo/bin
+set -U fish_user_paths $fish_user_paths $HOME/flutter/bin
 
 starship init fish | source
