@@ -1,3 +1,9 @@
+# PATH {{{
+  if [ "$(uname)" = "Linux" ]; then
+    export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+  fi
+# }}}
+
 # GENERAL {{{
   setopt no_beep
   bindkey -v
