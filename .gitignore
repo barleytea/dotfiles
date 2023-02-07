@@ -1,3 +1,5 @@
 .vim/plugged/**
 .vim/autoload/**
 .netrwhist
+.config/fish/functions
+.config/fish/fish_variable
