@@ -5,7 +5,7 @@ DOTFILES := $(filter-out $(EXCLUSIONS), $(CANDIDATES))
 
 .DEFAULT_GOAL := help
 
-all: deploy install
+all: deploy brew vim
 
 list:
 	@$(foreach val, $(DOTFILES), /bin/ls -dF $(val);)
@@ -15,8 +15,11 @@ deploy:
 	@echo ''
 	@$(foreach val, $(DOTFILES), ln -sfnv $(abspath $(val)) $(HOME)/$(val);)
 
-install:
-	@/bin/bash install.sh
+brew:
+	@/bin/bash brew.sh
+
+vim:
+	@/bin/bash vim.sh
 
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \

@@ -2,10 +2,7 @@
 
 THIS_DIR=$(cd $(dirname $0); pwd)
 
-echo "start setup..."
 cd $HOME
-
-#============ brew ============#
 
 if [ $(uname) = Darwin ]; then
 	echo "installing Homebrew ..."
@@ -27,10 +24,6 @@ brew update
 echo "ok. run brew upgrade ..."
 brew upgrade
 
-brew bundle
+brew bundle --global
 
 brew cleanup
-
-#============ vim =============#
-
-curl -fLo $THIS_DIR/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
