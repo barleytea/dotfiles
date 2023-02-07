@@ -1,7 +1,6 @@
 eval (hub alias -s)
 
 if not functions -q fisher
-  set -q CONFIG_HOME; or set CONFIG_HOME $HOME/.config
   curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
 end
 
