@@ -1,5 +1,10 @@
 eval (hub alias -s)
 
+if not functions -q fisher
+  set -q CONFIG_HOME; or set CONFIG_HOME $HOME/.config
+  curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
+end
+
 function fish_user_key_bindings
   bind \cr 'peco_select_history (commandline -b)'
   bind \cx\ck peco_kill
