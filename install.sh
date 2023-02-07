@@ -34,28 +34,3 @@ brew cleanup
 #============ vim =============#
 
 curl -fLo $THIS_DIR/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-
-#============ fish ============#
-
-# install fisher
-curl https://git.io/fisher --create-dirs -sLo $THIS_DIR/.config/fish/functions/fisher.fish
-
-# install plugin-peco for fish
-fisher install oh-my-fish/plugin-peco
-
-# install z for fish
-fisher install jethrokuan/z
-
-# install fish-bd for fish
-fisher install 0rax/fish-bd
-
-# install fish-peco_select_ghq_repository for fish
-fisher install yoshiori/fish-peco_select_ghq_repository
-
-# install fish-peco_recentd
-fisher install tsu-nera/fish-peco_recentd
-
-# install fish-ghq
-fisher install decors/fish-ghq
-
-#==============================#

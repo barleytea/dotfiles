@@ -59,4 +59,3 @@ set fish_pager_color_selected_description  bryellow
 set fish_pager_color_selected_prefix       bryellow
 
 starship init fish | source
-zoxide init fish | source
