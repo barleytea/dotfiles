@@ -3,3 +3,10 @@
 .netrwhist
 .config/fish/functions
 .config/fish/fish_variable
+.config/fish/fish_variables
+.config/flutter/
+.config/hub
+.config/iterm2/
+.config/jgit/
+.config/neofetch/
+.config/raycast/
