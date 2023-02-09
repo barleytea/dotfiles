@@ -5,20 +5,23 @@ DOTFILES := $(filter-out $(EXCLUSIONS), $(CANDIDATES))
 
 .DEFAULT_GOAL := help
 
-all: deploy brew vim
+.PHONY: help
 
-list:
+all: ## Execute 'deploy', 'brew' and 'vim'
+	deploy brew vim
+
+list: ## List dotfiles that symbolic links will be deployed.
 	@$(foreach val, $(DOTFILES), /bin/ls -dF $(val);)
 
-deploy:
+deploy: ## Deploy dotfiles symbolic links
 	@echo '===> Start to deploy config files to home directory.'
 	@echo ''
 	@$(foreach val, $(DOTFILES), ln -sfnv $(abspath $(val)) $(HOME)/$(val);)
 
-brew:
+brew: ## Install formulae listed in Brewfile.
 	@/bin/bash brew.sh
 
-vim:
+vim: ## Set up vim.
 	@/bin/bash vim.sh
 
 help:
