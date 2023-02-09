@@ -7,8 +7,7 @@ DOTFILES := $(filter-out $(EXCLUSIONS), $(CANDIDATES))
 
 .PHONY: help
 
-all: ## Execute 'deploy', 'brew' and 'vim'
-	deploy brew vim
+all: deploy brew vim
 
 list: ## List dotfiles that symbolic links will be deployed.
 	@$(foreach val, $(DOTFILES), /bin/ls -dF $(val);)
