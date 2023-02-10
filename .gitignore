@@ -1,5 +1,8 @@
+.swp
 .vim/plugged/**
 .vim/autoload/**
+.vim/init.vim
+.vim/sessions/**
 .netrwhist
 .config/fish/functions
 .config/fish/fish_variable
@@ -10,3 +13,5 @@
 .config/jgit/
 .config/neofetch/
 .config/raycast/
+.config/coc/
+.config/nvim
