@@ -5,7 +5,7 @@
 Download installation materials.
 ```bash
 $ cd ~
-$ midir -p git_repos/github.com/barleytea
+$ mkdir -p git_repos/github.com/barleytea
 $ cd git_repos/github.com/barleytea
 $ git clone https://github.com/barleytea/dotfiles.git
 ```
