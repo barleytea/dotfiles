@@ -157,10 +157,12 @@ require('nvim-treesitter.configs').setup {
 EOF
 endif
 
+"" terminal
+if has('nvim')
+command! -nargs=* T split | wincmd j | resize 20 | terminal <args>
+autocmd TermOpen * startinsert
+endif
 
 "" rust-lang
 let g:rustfmt_autosave = 1
 
-"" terminal
-command! -nargs=* T split | wincmd j | resize 20 | terminal <args>
-autocmd TermOpen * startinsert
