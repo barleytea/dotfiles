@@ -14,10 +14,12 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'rust-lang/rust.vim'
+Plug 'lambdalisue/fern-hijack.vim'
 
 call plug#end()
 
 " set options
+set autoread
 set termguicolors
 set nocompatible
 set noautoindent
@@ -32,6 +34,7 @@ set incsearch
 set smartcase
 set laststatus=2
 set autoindent
+set smartindent
 set showcmd
 set background=dark
 set wildmenu
@@ -39,6 +42,15 @@ set ruler
 set showmatch
 set clipboard+=unnamed
 set updatetime=500
+set cursorline "現在の行を強調表示
+set cursorcolumn "現在の列を強調表示
+"タブと行末のスペースをハイライトする
+set list
+set listchars=tab:\ \ ,trail:\
+highlight SpecialKey ctermbg=235 guibg=#2c2d27
+"一行は80文字程度に。80列目の色を変更
+set colorcolumn=80
+highlight ColorColumn ctermbg=235 guibg=#2c2d27
 
 syntax on
 filetype plugin indent on
@@ -80,7 +92,7 @@ nnoremap <silent> <Leader>e <Cmd>Fern . -drawer<CR>
 nnoremap <silent> <Leader>E <Cmd>Fern . -drawer -reveal=%<CR>
 
 "" coc.nvim
-let g:coc_global_extensions = ['coc-tsserver', 'coc-eslint', 'coc-prettier', 'coc-git', 'coc-fzf-preview', 'coc-lists']
+let g:coc_global_extensions = ['coc-tsserver', 'coc-eslint', 'coc-prettier', 'coc-git', 'coc-fzf-preview', 'coc-lists', 'coc-flutter']
 
 inoremap <silent> <expr> <C-Space> coc#refresh()
 
@@ -148,3 +160,7 @@ endif
 
 "" rust-lang
 let g:rustfmt_autosave = 1
+
+"" terminal
+command! -nargs=* T split | wincmd j | resize 20 | terminal <args>
+autocmd TermOpen * startinsert
