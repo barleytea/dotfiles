@@ -8,5 +8,26 @@
     root = /Users/miyoshi_s/git_repos/
 [init]
     defaultBranch = main
+[alias]
+    ss = status
+    br = branch
+    brm = branch -m
+    brd = branch -d
+    brdd = branch -D
+    co = checkout
+    cob = checkout -b
+    cop = !"git branch --all | tr -d '* ' | grep -v -e '->' | peco | sed -e 's+remotes/[^/]*/++g' | xargs git checkout"
+    ad = add
+    adu = add -u
+    adup = add -u -p
+    ci = commit
+    mg = merge
+    cp = cherry-pick
+    lg = log
+    lgo = log --oneline
+    lgn = log --name-status --oneline
+    fi = commit --allow-empty -m \"Initial commit\"
+    delete-merged-branches = !git branch --merged | grep -vE '^\\*|^master$|^main$|^staging$|^develop$|^dev-jackfruit$' | xargs -I % git branch -d %
+
 
 

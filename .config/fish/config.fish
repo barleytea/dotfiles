@@ -26,6 +26,7 @@ alias eta='exa -T -a -I "node_modules|.git|.cache" --color=always --icons | less
 alias lta=eta
 alias l='clear && ls'
 alias vim=nvim
+alias g=git
 
 # commandline
 set fish_color_normal         brwhite
