@@ -27,6 +27,7 @@ alias lta=eta
 alias l='clear && ls'
 alias vim=nvim
 alias g=git
+alias gmc='gitmoji -c'
 
 # commandline
 set fish_color_normal         brwhite
