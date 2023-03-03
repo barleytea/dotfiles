@@ -15,6 +15,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'rust-lang/rust.vim'
 Plug 'lambdalisue/fern-hijack.vim'
+Plug 'itmammoth/doorboy.vim'
 
 call plug#end()
 
@@ -22,12 +23,14 @@ call plug#end()
 set autoread
 set termguicolors
 set nocompatible
-set noautoindent
 set backspace=indent,eol,start
 set encoding=utf-8
 set helplang=ja,en
 set number
 set expandtab
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
 set hlsearch
 set ignorecase
 set incsearch
