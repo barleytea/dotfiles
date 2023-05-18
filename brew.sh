@@ -2,11 +2,6 @@
 
 THIS_DIR=$(cd $(dirname $0); pwd)
 
-echo "THIS_DIR ..."
-echo $THIS_DIR
-echo "HOME ..."
-echo $HOME
-
 cd $HOME
 
 if [ $(uname) = Darwin ]; then
@@ -19,19 +14,18 @@ else
 fi
 
 cd $THIS_DIR
-ls -al
 
 echo "run brew doctor ..."
-# which brew >/dev/null 2>&1 && brew doctor
+which brew >/dev/null 2>&1 && brew doctor
 
 echo "run brew update ..."
-# brew update
+brew update
 
 echo "ok. run brew upgrade ..."
-# brew upgrade
+brew upgrade
 
 echo "run brew bundle ..."
-brew bundle --global
+brew bundle --file './Brewfile'
 
 echo "run brew cleanup ..."
 brew cleanup
