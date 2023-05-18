@@ -19,6 +19,7 @@ else
 fi
 
 cd $THIS_DIR
+ls -al
 
 echo "run brew doctor ..."
 # which brew >/dev/null 2>&1 && brew doctor
