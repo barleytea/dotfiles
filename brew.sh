@@ -24,6 +24,8 @@ brew update
 echo "ok. run brew upgrade ..."
 brew upgrade
 
+echo "run brew bundle ..."
 brew bundle --global
 
+echo "run brew cleanup ..."
 brew cleanup
