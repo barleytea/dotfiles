@@ -84,7 +84,7 @@ cask "skype"
 cask "slack"
 cask "the-unarchiver"
 cask "visual-studio-code"
-cask "wazterm"
+cask "wezterm"
 cask "xquartz"
 cask "zoom"
 mas "1Password 7", id: 1333542190
