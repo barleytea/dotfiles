@@ -72,7 +72,6 @@ cask "google-japanese-ime"
 cask "google-japanese-ime-dev"
 cask "iterm2"
 cask "kindle"
-cask "mactex"
 cask "notion"
 cask "plain-clip"
 cask "postman"
@@ -87,5 +86,8 @@ cask "visual-studio-code"
 cask "wezterm"
 cask "xquartz"
 cask "zoom"
-mas "1Password 7", id: 1333542190
-mas "Xcode", id: 497799835
+
+if OS.mac?
+    # mas "1Password 7", id: 1333542190
+    mas "Xcode", id: 497799835
+  end
