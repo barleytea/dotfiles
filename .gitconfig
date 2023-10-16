@@ -17,6 +17,8 @@
     co = checkout
     cob = checkout -b
     cop = !"git branch --all | tr -d '* ' | grep -v -e '->' | peco | sed -e 's+remotes/[^/]*/++g' | xargs git checkout"
+    sw = switch
+    swc = switch -c
     ad = add
     adu = add -u
     adup = add -u -p
