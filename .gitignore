@@ -15,3 +15,9 @@
 .config/raycast/
 .config/coc/
 .config/nvim
+.config/configstore/
+.config/gatsby/
+.config/github-copilot/
+.config/wireshark/
+.config/yarn/
+.config/gh/
