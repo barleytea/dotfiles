@@ -45,27 +45,30 @@
   alias reload="source ~/.zshrc"
   alias vsc="code"
   alias rgrep='grep -r --color=always --exclude-dir={.svn,tmp,tools,docs,.buildtool} --with-filename --line-number'
-  if [[ $(command -v exa) ]]; then
-    alias e='exa --icons --git'
+  if [[ $(command -v eza) ]]; then
+    alias e='eza --icons --git'
     alias l=e
     alias ls=e
-    alias ea='exa -a --icons --git'
+    alias ea='eza -a --icons --git'
     alias la=ea
-    alias ee='exa -aahl --icons --git'
+    alias ee='eza -aahl --icons --git'f
     alias ll=ee
-    alias et='exa -T -L 3 -a -I "node_modules|.git|.cache" --icons'
+    alias et='eza -T -L 3 -a -I "node_modules|.git|.cache" --icons'
     alias lt=et
-    alias eta='exa -T -a -I "node_modules|.git|.cache" --color=always --icons | less -r'
+    alias eta='eza -T -a -I "node_modules|.git|.cache" --color=always --icons | less -r'
     alias lta=eta
     alias l='clear && ls'
   fi
 # }}}
 
+# MISC {{{
+  [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# }}}
+
 eval "$(starship init zsh)"
 
-# fish
-if [[ -o interactive ]]; then
-    exec fish
-fi
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# fish {{{
+  if [[ -o interactive ]]; then
+      exec fish
+  fi
+# }}}
