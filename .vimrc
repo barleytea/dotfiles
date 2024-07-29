@@ -8,14 +8,16 @@ Plug 'lambdalisue/nerdfont.vim'
 Plug 'lambdalisue/fern-renderer-nerdfont.vim'
 Plug 'lambdalisue/glyph-palette.vim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-Plug 'junegunn/fzf.vim', {'dir': '~/.fzf_bin', 'do': './install --all'}
-Plug 'yuki-yano/fzf-preview.vim', {'branch': 'release/rpc'}
+Plug 'junegunn/fzf', {'dir': '~/.fzf_bin', 'do': { -> fzf#install() }}
+Plug 'junegunn/fzf.vim'
+Plug 'yuki-yano/fzf-preview.vim', {'branch': 'release/rpc' }
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'rust-lang/rust.vim'
 Plug 'lambdalisue/fern-hijack.vim'
 Plug 'itmammoth/doorboy.vim'
+Plug 'github/copilot.vim'
 
 call plug#end()
 
