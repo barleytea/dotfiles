@@ -12,6 +12,9 @@ all: deploy brew vim
 list: ## List dotfiles that symbolic links will be deployed.
 	@$(foreach val, $(DOTFILES), /bin/ls -dF $(val);)
 
+nix: ## Install Nix
+	@curl -L https://nixos.org/nix/install | sh
+
 deploy: ## Deploy dotfiles symbolic links
 	@echo '===> Start to deploy config files to home directory.'
 	@echo ''
