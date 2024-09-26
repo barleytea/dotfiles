@@ -17,3 +17,13 @@ Set up:
 ```bash
 $ cd dotfiles && make all
 ```
+
+## Shell Environment
+
+The default shell is zsh, but fish is launched within .zshrc
+
+```sh
+if [[ -o interactive ]]; then
+    exec fish
+fi
+```
