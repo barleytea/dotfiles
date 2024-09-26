@@ -53,8 +53,6 @@ set cursorcolumn "現在の列を強調表示
 set list
 set listchars=tab:\ \ ,trail:\
 highlight SpecialKey ctermbg=235 guibg=#2c2d27
-"一行は80文字程度に。80列目の色を変更
-set colorcolumn=80
 highlight ColorColumn ctermbg=235 guibg=#2c2d27
 
 syntax on
