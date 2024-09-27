@@ -7,13 +7,17 @@ DOTFILES := $(filter-out $(EXCLUSIONS), $(CANDIDATES))
 
 .PHONY: help
 
-all: deploy brew vim
+all: nix deploy brew vim
 
 list: ## List dotfiles that symbolic links will be deployed.
 	@$(foreach val, $(DOTFILES), /bin/ls -dF $(val);)
 
 nix: ## Install Nix
-	@curl -L https://nixos.org/nix/install | sh
+	@curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
+	@source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+	@nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager
+	@nix-channel --update
+	@nix-shell '<home-manager>' -A install
 
 deploy: ## Deploy dotfiles symbolic links
 	@echo '===> Start to deploy config files to home directory.'
