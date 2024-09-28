@@ -12,7 +12,6 @@ brew "gat"
 brew "bottom"
 brew "glib"
 brew "cairo"
-brew "circleci"
 brew "eza"
 brew "fd"
 brew "fftw"
@@ -51,7 +50,6 @@ brew "ripgrep"
 brew "socat"
 brew "starship"
 brew "tmux"
-brew "tomcat"
 brew "tree"
 brew "zplug"
 brew "zsh"
@@ -65,7 +63,6 @@ cask "caffeine"
 cask "chromium"
 cask "devutils"
 cask "docker"
-cask "dropbox"
 cask "firefox"
 cask "font-hack-nerd-font"
 cask "gfxcardstatus"
@@ -90,6 +87,6 @@ cask "xquartz"
 cask "zoom"
 
 if OS.mac?
-    # mas "1Password 7", id: 1333542190
-    mas "Xcode", id: 497799835
-  end
+  # mas "1Password 7", id: 1333542190
+  mas "Xcode", id: 497799835
+end
