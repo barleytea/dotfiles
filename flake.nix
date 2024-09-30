@@ -7,18 +7,23 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-darwin = {
+      url = "github:LnL7/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
     self, 
     nixpkgs,
     home-manager,
+    nix-darwin,
   } @ inputs: let
     system = "aarch64-darwin";
     pkgs = nixpkgs.legacyPackages.${system};
   in {
-    packages.${system}.my-packages = pkgs.buildEnv {
-      name = "my-packages-list";
+    packages.${system}.barleytea-packages = pkgs.buildEnv {
+      name = "barleytea-packages-list";
       paths = with pkgs; [];
     };
 
@@ -29,23 +34,29 @@
         echo "Updating flake..."
         nix flake update
         echo "Updating profile..."
-        nix profile upgrade my-packages
+        nix profile upgrade barleytea-packages
         echo "Updating home-manager..."
-        nix run nixpkgs#home-manager -- switch --flake .#myHomeConfig
+        nix run nixpkgs#home-manager -- switch --flake .#barleyteaHomeConfig
+        echo "Updating nix-darwin..."
+        nix run nix-darwin -- switch --flake .#barleytea-darwin
         echo "Update complete!"
       '');
     };
 
     homeConfigurations = {
-      myHomeConfig = home-manager.lib.homeManagerConfiguration {
+      barleyteaHomeConfig = home-manager.lib.homeManagerConfiguration {
         pkgs = pkgs;
         extraSpecialArgs = {
           inherit inputs;
         };
         modules = [
-          ./.config/home-manager/home.nix
+          ./.config/nix/home-manager/default.nix
         ];
       };
+    };
+    darwinConfigurations.barleytea-darwin = nix-darwin.lib.darwinSystem {
+      system = system;
+      modules = [ ./.config/nix/nix-darwin/default.nix ];
     };
   };
 }

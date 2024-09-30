@@ -18,6 +18,7 @@ nix: ## Install Nix
 	@nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager
 	@nix-channel --update
 	@nix-shell '<home-manager>' -A install
+	@nix run .#update
 
 deploy: ## Deploy dotfiles symbolic links
 	@echo '===> Start to deploy config files to home directory.'
