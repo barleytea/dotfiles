@@ -18,7 +18,7 @@ in {
     stateVersion = "24.05";
     packages = with pkgs; [
       arp-scan
-      asdf
+      asdf-vm
       curl
       gat
       bottom
