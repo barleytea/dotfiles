@@ -3,7 +3,7 @@
   pkgs,
   ...
 }: let
-  username = "miyoshi_s";
+  username = builtins.getEnv "DARWIN_USER";
 in {
 
   nixpkgs = {

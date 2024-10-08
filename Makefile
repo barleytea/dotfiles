@@ -19,7 +19,9 @@ nix: ## Install Nix
 	@nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager
 	@nix-channel --update
 	@nix-shell '<home-manager>' -A install
-	@nix run .#update
+	@nix profile install .#barleytea-packages
+	@nix run nixpkgs#home-manager -- switch --flake .#barleyteaHomeConfig
+	@nix run nix-darwin -- switch --flake .#barleytea-darwin
 
 deploy: ## Deploy dotfiles symbolic links
 	@echo '===> Start to deploy config files to home directory.'

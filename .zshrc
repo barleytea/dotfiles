@@ -1,3 +1,9 @@
+# USER {{{
+  export DARWIN_USER=$(whoami)
+  export DARWIN_HOST=$(hostname -s)
+# }}}
+
+
 # PATH {{{
   if [ "$(uname)" = "Linux" ]; then
     export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"

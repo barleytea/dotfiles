@@ -14,12 +14,12 @@
   };
 
   outputs = {
-    self, 
+    self,
     nixpkgs,
     home-manager,
     nix-darwin,
   } @ inputs: let
-    system = "aarch64-darwin";
+    system = "aarch64-darwin"; # "x86_64-darwin";
     pkgs = nixpkgs.legacyPackages.${system};
   in {
     packages.${system}.barleytea-packages = pkgs.buildEnv {
