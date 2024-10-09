@@ -47,6 +47,7 @@ in {
       mecab
       minikube
       neofetch
+      neovim
       peco
       postgresql
       protobuf
