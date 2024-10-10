@@ -24,6 +24,7 @@ in {
       bottom
       glib
       cairo
+      docker
       eza
       fd
       fftw
@@ -35,6 +36,7 @@ in {
       git
       gitflow
       go
+      google-chrome
       gnugrep
       stack
       hub
@@ -50,14 +52,20 @@ in {
       neovim
       peco
       postgresql
+      postman
       protobuf
       pyenv
       rbenv
       ripgrep
+      robo-3t
+      slack
       socat
       starship
       tmux
       tree
+      vscode
+      wezterm
+      zoom-us
       zplug
       zsh
     ];
