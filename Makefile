@@ -7,29 +7,25 @@ DOTFILES := $(filter-out $(EXCLUSIONS), $(CANDIDATES))
 
 .PHONY: help
 
-all: nix deploy brew vim
+all: brew deploy nix vim
 
 list: ## List dotfiles that symbolic links will be deployed.
 	@$(foreach val, $(DOTFILES), /bin/ls -dF $(val);)
 
-nix: ## Install Nix
-	@curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install --no-confirm
-	@source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-	nix --version
-	@nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager
-	@nix-channel --update
-	@nix-shell '<home-manager>' -A install
-	@nix profile install .#barleytea-packages
-	@nix run nixpkgs#home-manager -- switch --flake .#barleyteaHomeConfig
-	@nix run nix-darwin -- switch --flake .#barleytea-darwin
+brew: ## Install brew
+	@/bin/bash brew.sh
 
 deploy: ## Deploy dotfiles symbolic links
 	@echo '===> Start to deploy config files to home directory.'
 	@echo ''
 	@$(foreach val, $(DOTFILES), ln -sfnv $(abspath $(val)) $(HOME)/$(val);)
 
-brew: ## Install formulae listed in Brewfile.
-	@/bin/bash brew.sh
+nix: ## Install Nix
+	@curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install --no-confirm
+	@source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+	nix --version
+	@nix flake update
+	@darwin-rebuild switch --flake . --impure
 
 vim: ## Set up vim.
 	@/bin/bash vim.sh

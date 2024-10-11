@@ -3,7 +3,7 @@
   pkgs,
   ...
 }: let
-  username = builtins.getEnv "DARWIN_USER";
+  username = let envUser = builtins.getEnv "DARWIN_USER"; in if envUser == "" then "miyoshi_s" else envUser;
 in {
 
   nixpkgs = {
@@ -57,7 +57,6 @@ in {
       pyenv
       rbenv
       ripgrep
-      robo-3t
       slack
       socat
       starship

@@ -55,6 +55,7 @@
       "notion"
       "plain-clip"
       "raycast"
+      "robo3t"
       "rstudio"
       "scroll-reverser"
       "the-unarchiver"

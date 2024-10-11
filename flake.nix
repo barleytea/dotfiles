@@ -1,5 +1,5 @@
 {
-  description = "A very basic flake";
+  description = "Flake for Darwin";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
@@ -19,7 +19,7 @@
     home-manager,
     nix-darwin,
   } @ inputs: let
-    system = "aarch64-darwin"; # "x86_64-darwin";
+    system = "aarch64-darwin"; # "aarch64-darwin" | # "x86_64-darwin" | "x86_64-linux";
     pkgs = nixpkgs.legacyPackages.${system};
   in {
     packages.${system}.barleytea-packages = pkgs.buildEnv {
