@@ -6,6 +6,8 @@ default:
 nix-install:
   #!/usr/bin/env bash
   curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install --no-confirm
+  source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+  nix --version
 
 nix-apply:
   nix run . switch
