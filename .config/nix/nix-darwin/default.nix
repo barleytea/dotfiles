@@ -50,7 +50,6 @@
       "font-hack-nerd-font"
       "gfxcardstatus"
       "google-japanese-ime"
-      "google-japanese-ime-dev"
       "iterm2"
       "notion"
       "plain-clip"

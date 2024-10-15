@@ -1,8 +1,7 @@
-# dotfiles
+# Installation
 
-## Install
+Manually craete a directory that matches the ghq root.
 
-Download installation materials.
 ```bash
 $ cd ~
 $ mkdir -p git_repos/github.com/barleytea
@@ -10,7 +9,31 @@ $ cd git_repos/github.com/barleytea
 $ git clone https://github.com/barleytea/dotfiles.git
 ```
 
-Set up:
+## install just
+
+```sh
+$ bash ./just-install.sh
+```
+
+## install nix
+
+```sh
+$ just nix-install
+```
+
+## install nix-darwin
+
+```sh
+$ just nix-darwin-install
+```
+
+## apply nix config
+
+```sh
+$ just nix-apply
+$ just nix-darwin-apply
+```
+
 * Deploy dotfiles symbolic link
 * Install apps via Homebrew
 * Install vim-related stuffs
