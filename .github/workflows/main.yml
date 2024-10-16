@@ -14,6 +14,7 @@ jobs:
       - name: MacOS Setting
         run: |
           make deploy
+          export DARWIN_USER=runner
           bash ./just-install.sh
           just nix-install
           just nix-apply
