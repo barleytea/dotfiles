@@ -14,10 +14,10 @@ nix-install:
 nix-apply:
   #!/usr/bin/env bash
   source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-  echo "Updating flake..."
-  nix flake update
-  echo "Updating profile..."
-  nix profile upgrade barleytea-packages
+  # echo "Updating flake..."
+  # nix flake update
+  # echo "Updating profile..."
+  # nix profile upgrade barleytea-packages
   echo "Updating home-manager..."
   nix run nixpkgs#home-manager -- switch --flake .#barleyteaHomeConfig
 
