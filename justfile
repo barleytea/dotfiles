@@ -14,6 +14,7 @@ nix-install:
 nix-apply:
   #!/usr/bin/env bash
   source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+  source $HOME/.zshrc
   # echo "Updating flake..."
   # nix flake update
   # echo "Updating profile..."
