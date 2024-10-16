@@ -14,7 +14,12 @@ nix-install:
 nix-apply:
   #!/usr/bin/env bash
   source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-  nix run . switch
+  echo "Updating flake..."
+  nix flake update
+  echo "Updating profile..."
+  nix profile upgrade barleytea-packages
+  echo "Updating home-manager..."
+  nix run nixpkgs#home-manager -- switch --flake .#barleyteaHomeConfig
 
 nix-uninstall:
   #!/usr/bin/env bash
@@ -30,7 +35,8 @@ nix-darwin-install:
 nix-darwin-apply:
   #!/usr/bin/env bash
   source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-  darwin-rebuild switch
+  echo "Updating nix-darwin..."
+  nix run nix-darwin -- switch --flake .#barleytea-darwin
 
 nix-darwin-update:
   #!/usr/bin/env bash
