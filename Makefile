@@ -1,4 +1,4 @@
-SHELL=/bin/bash
+SHELL := /bin/bash
 
 DOTPATH := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
 CANDIDATES := $(wildcard .??*)
