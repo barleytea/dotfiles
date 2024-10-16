@@ -14,9 +14,8 @@ jobs:
       - name: MacOS Setting
         run: |
           make deploy
-          bash ./just-install.sh
-          just nix-install
-          just nix-darwin-install
-          just nix-apply
-          just nix-darwin-apply
+          make nix-install
+          make nix-darwin-install
+          make nix-apply
+          make nix-darwin-apply
           make vim
