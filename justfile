@@ -10,7 +10,8 @@ nix-install:
   nix --version
   nix-channel --add https://nixos.org/channels/nixpkgs-unstable
   nix-channel --update
-  ls -al /nix/var/nix/profiles/default/bin/
+  which nix
+  which nix-build
 
 nix-apply:
   nix run . switch
