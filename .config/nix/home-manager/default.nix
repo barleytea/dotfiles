@@ -3,7 +3,7 @@
   pkgs,
   ...
 }: let
-  username = builtins.getEnv "DARWIN_USER" or builtins.getEnv "USER" or "miyoshi_s";
+  username = builtins.getEnv "DARWIN_USER" or (builtins.getEnv "USER" or "miyoshi_s");
 in {
 
   nixpkgs = {
