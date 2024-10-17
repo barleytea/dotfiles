@@ -7,6 +7,10 @@
 .config/fish/functions
 .config/fish/fish_variable
 .config/fish/fish_variables
+.config/fish/fish_pluglins
+.config/fish/conf.d/sdk.fish
+.config/fish/completions/sdk.fish
+.config/go/
 .config/flutter/
 .config/hub
 .config/iterm2/
