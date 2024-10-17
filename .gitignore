@@ -23,4 +23,14 @@
 .config/gh/
 .vscode
 .config/wezterm/data/*.json
+.config/Code/
+.config/JetBrains/
+.config/bottom/
+.config/environment.d/
+.config/gcloud/
+.config/google-chrome/
+.config/pulse/
+node_modules/
+package-lock.json
+package.json
 result
