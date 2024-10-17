@@ -44,7 +44,6 @@ in {
       jq
       krb5
       kubectx
-      mas
       maven
       mecab
       minikube

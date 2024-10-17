@@ -35,6 +35,7 @@
       "sanemat/font"
     ];
     brews = [
+      "mas"
       "mise"
       "node"
       "nvm"
