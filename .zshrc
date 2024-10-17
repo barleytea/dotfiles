@@ -1,6 +1,5 @@
 # USER {{{
-  export DARWIN_USER=$(whoami)
-  export DARWIN_HOST=$(hostname -s)
+  export DARWIN_USER=$(whoam)
 # }}}
 
 
