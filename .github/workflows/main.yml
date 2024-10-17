@@ -15,6 +15,7 @@ jobs:
         run: |
           make deploy
           export USER=miyoshi_s
+          export HOME=/Users/runner
           bash ./just-install.sh
           just nix-install
           just nix-apply
