@@ -4,8 +4,8 @@
   ...
 }: let
   username = let
-    user = builtins.getEnv "DARWIN_USER";
-    user = if user == "" then builtins.getEnv "USER" else user;
+    darwinUser = builtins.getEnv "DARWIN_USER";
+    user = if darwinUser == "" then builtins.getEnv "USER" else darwinUser;
   in if user == "" then "miyoshi_s" else user;
 in {
 
