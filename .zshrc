@@ -79,12 +79,15 @@ eval "$(starship init zsh)"
 
 # LOAD .zshrc_local {{{
 
-  [ -f ~/.zshrc_local ] && source ~/.zshrc_local
+  if [[ -f ~/.zshrc_local ]]; then
+    echo ".zshrc_local loaded"
+    source ~/.zshrc_local
+  fi
 
 # }}}
 
 # fish {{{
   if [[ -o interactive ]]; then
-      exec fish
+    exec fish
   fi
 # }}}
