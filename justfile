@@ -99,7 +99,7 @@ nix-darwin-update:
   darwin-rebuild changelog
 
 nix-update-all:
-  #!/usr/bin/env fish
+  #!/$HOME/.nix-profile/bin/fish
   source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
   nix run .#update
 
