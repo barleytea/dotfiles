@@ -25,6 +25,7 @@ jobs:
           export USER=miyoshi_s
           export DARWIN_USER=runner
           just nix-install
+          echo $HOME
           just nix-apply
           just nix-darwin-install
           just nix-darwin-apply
