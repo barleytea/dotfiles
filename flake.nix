@@ -56,7 +56,9 @@
     };
     darwinConfigurations.barleytea-darwin = nix-darwin.lib.darwinSystem {
       system = system;
-      modules = [ ./.config/nix/nix-darwin/default.nix ];
+      modules = [ 
+        ./.config/nix/nix-darwin/default.nix
+      ];
     };
   };
 }
