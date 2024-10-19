@@ -20,13 +20,12 @@ jobs:
             ${{ runner.os }}-installed-tools-
       - name: MacOS Setting
         run: |
-          echo $SHELL
           make deploy
           bash ./just-install.sh
+          zsh
           export USER=runner
           export DARWIN_USER=runner
           just nix-install
-          echo $HOME
           just nix-apply
           just nix-darwin-install
           just nix-darwin-apply
