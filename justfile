@@ -98,6 +98,11 @@ nix-darwin-update:
   nix-channel --update darwin
   darwin-rebuild changelog
 
+nix-update-all:
+  #!/usr/bin/env fish
+  source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
+  nix run .#update
+
 set-up-vim:
   #!/usr/bin/env bash
   bash ./vim.sh
