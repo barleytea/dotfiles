@@ -3,7 +3,7 @@
   pkgs,
   ...
 }: let
-  username = if builtins.getEnv "USER" != "" then builtins.getEnv "USER" else "miyoshi_s";
+  username = if builtins.getEnv "USER" == "runner" then builtins.getEnv "USER" else "miyoshi_s";
 in {
 
   nixpkgs = {

@@ -24,9 +24,8 @@ jobs:
           bash ./just-install.sh
           just list-deploy-targets
           just deploy
-          export USER=runner
-          export DARWIN_USER=runner
           just nix-install
+          export USER=runner
           just nix-apply
           just nix-darwin-install
           just nix-darwin-apply
