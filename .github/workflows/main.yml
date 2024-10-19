@@ -16,6 +16,7 @@ jobs:
           make deploy
           bash ./just-install.sh
           export USER=miyoshi_s
+          export DARWIN_USER=runner
           just nix-install
           just nix-apply
           just nix-darwin-install
