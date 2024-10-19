@@ -19,12 +19,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-installed-tools-
       - name: MacOS Setting
+        shell: zsh {0}
         run: |
           make deploy
           bash ./just-install.sh
-          echo "===================================="
-          chsh -s /bin/zsh
-          echo "===================================="
           export USER=runner
           export DARWIN_USER=runner
           just nix-install
