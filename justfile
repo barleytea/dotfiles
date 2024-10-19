@@ -64,7 +64,11 @@ nix-install:
 nix-apply:
   #!/usr/bin/env bash
   source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-  source $HOME/.zshrc
+  echo "========================================"
+  zsh
+  echo "========================================"
+  echo $SHELL
+  echo "========================================"
   # echo "Updating flake..."
   # nix flake update
   # echo "Updating profile..."
@@ -80,7 +84,9 @@ nix-uninstall:
 nix-darwin-install:
   #!/usr/bin/env bash
   source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+  echo "========================================"
   echo $SHELL
+  echo "========================================"
   which nix
   which nix-build
   nix-build https://github.com/LnL7/nix-darwin/archive/master.tar.gz -A installer
@@ -89,18 +95,27 @@ nix-darwin-install:
 nix-darwin-apply:
   #!/usr/bin/env bash
   source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+  echo "========================================"
+  echo $SHELL
+  echo "========================================"
   echo "Updating nix-darwin..."
   nix --extra-experimental-features nix-command --extra-experimental-features flakes run nix-darwin -- switch --flake .#barleytea-darwin
 
 nix-darwin-update:
   #!/usr/bin/env bash
   source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+  echo "========================================"
+  echo $SHELL
+  echo "========================================"
   nix-channel --update darwin
   darwin-rebuild changelog
 
 nix-update-all:
   #!/$HOME/.nix-profile/bin/fish
   source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
+  echo "========================================"
+  echo $SHELL
+  echo "========================================"
   nix run .#update
 
 set-up-vim:
