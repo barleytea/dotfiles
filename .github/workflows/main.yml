@@ -11,6 +11,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - name: Cache just-install
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/just-install
+          key: ${{ runner.os }}-just-install-${{ hashFiles('just-install.sh') }}
+          restore-keys: |
+            ${{ runner.os }}-just-install-
       - name: MacOS Setting
         run: |
           make deploy
