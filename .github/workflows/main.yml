@@ -12,6 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Cache installed tools
+        uses: extractions/setup-just@v1
         uses: actions/cache@v3
         with:
           path: $HOME/.local/bin
@@ -21,7 +22,6 @@ jobs:
       - name: MacOS Setting
         shell: zsh {0}
         run: |
-          bash ./just-install.sh
           just list-deploy-targets
           just deploy
           just nix-install
