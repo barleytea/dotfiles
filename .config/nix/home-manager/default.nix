@@ -3,11 +3,8 @@
   pkgs,
   ...
 }: let
-  # username = let
-  #   darwinUser = builtins.getEnv "DARWIN_USER";
-  #   user = if darwinUser == "" then builtins.getEnv "USER" else darwinUser;
-  # in if user == "" then "miyoshi_s" else user;
-  username = "runner"; # for testing
+  username = builtins.getEnv "USER";
+  # username = "runner"; # for testing
 in {
 
   nixpkgs = {

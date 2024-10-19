@@ -1,4 +1,5 @@
 # USER {{{
+  export USER=$(whoami)
   export DARWIN_USER=$(whoami)
 # }}}
 
