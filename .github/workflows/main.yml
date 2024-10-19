@@ -33,3 +33,4 @@ jobs:
           just set-up-vim
           zsh
           ls -al $HOME
+          nix run .#update
