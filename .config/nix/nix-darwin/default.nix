@@ -29,8 +29,6 @@
     };
     taps = [
       "homebrew/bundle"
-      "homebrew/cask-fonts"
-      "homebrew/cask-versions"
       "mscharley/homebrew"
       "sanemat/font"
     ];
@@ -39,7 +37,6 @@
       "mise"
       "node"
       "nvm"
-      "sanemat/font/ricty"
     ];
     casks = [
       "devutils"
@@ -55,15 +52,14 @@
       "notion"
       "plain-clip"
       "raycast"
-      "robo3t"
       "rstudio"
       "scroll-reverser"
       "the-unarchiver"
       "xquartz"
     ];
     masApps = {
-      LINE = 539883307;
-      Xcode = 497799835;
+      # LINE = 539883307;
+      # Xcode = 497799835;
     };
   };
 }
