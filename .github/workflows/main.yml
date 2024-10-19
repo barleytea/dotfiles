@@ -23,7 +23,7 @@ jobs:
           echo $SHELL
           make deploy
           bash ./just-install.sh
-          export USER=miyoshi_s
+          export USER=runner
           export DARWIN_USER=runner
           just nix-install
           echo $HOME
