@@ -22,7 +22,9 @@ jobs:
         run: |
           make deploy
           bash ./just-install.sh
+          echo "===================================="
           zsh
+          echo "===================================="
           export USER=runner
           export DARWIN_USER=runner
           just nix-install
