@@ -20,6 +20,7 @@ jobs:
             ${{ runner.os }}-just-install-
       - name: MacOS Setting
         run: |
+          echo $SHELL
           make deploy
           bash ./just-install.sh
           export USER=miyoshi_s
