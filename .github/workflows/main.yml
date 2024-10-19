@@ -11,14 +11,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Cache installed tools
+      - name: Setup Just
         uses: extractions/setup-just@v1
-        uses: actions/cache@v3
-        with:
-          path: $HOME/.local/bin
-          key: ${{ runner.os }}-installed-tools-${{ hashFiles('just-install.sh') }}
-          restore-keys: |
-            ${{ runner.os }}-installed-tools-
       - name: MacOS Setting
         shell: zsh {0}
         run: |
