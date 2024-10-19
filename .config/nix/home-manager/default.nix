@@ -4,7 +4,6 @@
   ...
 }: let
   username = builtins.getEnv "USER";
-  # username = "runner"; # for testing
 in {
 
   nixpkgs = {

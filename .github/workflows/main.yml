@@ -21,12 +21,15 @@ jobs:
       - name: MacOS Setting
         shell: zsh {0}
         run: |
-          make deploy
           bash ./just-install.sh
+          just list-deploy-targets
+          just deploy
           export USER=runner
           export DARWIN_USER=runner
           just nix-install
           just nix-apply
           just nix-darwin-install
           just nix-darwin-apply
-          make vim
+          just set-up-vim
+          zsh
+          ls -al $HOME
