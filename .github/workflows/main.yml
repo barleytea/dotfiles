@@ -23,7 +23,7 @@ jobs:
           make deploy
           bash ./just-install.sh
           echo "===================================="
-          zsh
+          chsh -s /bin/zsh
           echo "===================================="
           export USER=runner
           export DARWIN_USER=runner
