@@ -11,13 +11,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Cache just-install
+      - name: Cache installed tools
         uses: actions/cache@v3
         with:
-          path: ~/.cache/just-install
-          key: ${{ runner.os }}-just-install-${{ hashFiles('just-install.sh') }}
+          path: $HOME/.local/bin
+          key: ${{ runner.os }}-installed-tools-${{ hashFiles('just-install.sh') }}
           restore-keys: |
-            ${{ runner.os }}-just-install-
+            ${{ runner.os }}-installed-tools-
       - name: MacOS Setting
         run: |
           echo $SHELL
