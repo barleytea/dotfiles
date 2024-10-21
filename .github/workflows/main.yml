@@ -1,7 +1,8 @@
 name: Dotfiles CI
-
 on:
   push:
+    branches: [ master ]
+  pull_request:
     branches: [ master ]
 
 jobs:
@@ -10,11 +11,22 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Setup Just
+        uses: extractions/setup-just@v1
       - name: MacOS Setting
+        shell: zsh {0}
         run: |
-          bash ./just-install.sh
+          just list-deploy-targets
+          just deploy
           just nix-install
-          just nix-darwin-install
+          export USER=runner
           just nix-apply
+          just nix-darwin-install
           just nix-darwin-apply
-          make all
+          just set-up-vim
+          zsh
+          ls -al $HOME
+          just nix-update-all
+          just nix-uninstall

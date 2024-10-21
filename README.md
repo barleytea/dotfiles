@@ -35,11 +35,7 @@ $ just nix-darwin-apply
 ```
 
 * Deploy dotfiles symbolic link
-* Install apps via Homebrew
 * Install vim-related stuffs
-```bash
-$ cd dotfiles && make all
-```
 
 ## Shell Environment
 

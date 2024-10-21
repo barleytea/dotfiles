@@ -31,5 +31,6 @@
     fi = commit --allow-empty -m \"Initial commit\"
     delete-merged-branches = !git branch --merged | grep -vE '^\\*|^master$|^main$|^staging$|^develop$|^dev-jackfruit$' | xargs -I % git branch -d %
 
-
+[includeIf "gitdir:~/workspace/"]
+    path = ~/.gitconfig_sub
 

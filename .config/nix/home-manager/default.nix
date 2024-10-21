@@ -3,7 +3,7 @@
   pkgs,
   ...
 }: let
-  username = let envUser = builtins.getEnv "DARWIN_USER"; in if envUser == "" then "miyoshi_s" else envUser;
+  username = if builtins.getEnv "USER" == "runner" then builtins.getEnv "USER" else "miyoshi_s";
 in {
 
   nixpkgs = {
@@ -44,7 +44,6 @@ in {
       jq
       krb5
       kubectx
-      mas
       maven
       mecab
       minikube
