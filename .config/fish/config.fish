@@ -70,3 +70,8 @@ set fish_pager_color_selected_description  bryellow
 set fish_pager_color_selected_prefix       bryellow
 
 starship init fish | source
+
+if test -f $HOME/.config/fish/local.fish
+    echo "local.fish loaded."
+    source $HOME/.config/fish/local.fish
+end
