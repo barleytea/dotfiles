@@ -1,9 +1,15 @@
+# editor
 .swp
+.vscode
+.netrwhist
+
+# vim
 .vim/plugged/**
 .vim/autoload/**
 .vim/init.vim
 .vim/sessions/**
-.netrwhist
+
+# fish
 .config/fish/functions
 .config/fish/fish_variable
 .config/fish/fish_variables
@@ -12,6 +18,8 @@
 .config/fish/completions/sdk.fish
 .config/fish/conf.d/rustup.fish
 .config/fish/local.fish
+
+# other configs
 .config/go/
 .config/flutter/
 .config/helm/
@@ -29,7 +37,6 @@
 .config/wireshark/
 .config/yarn/
 .config/gh/
-.vscode
 .config/wezterm/data/*.json
 .config/Code/
 .config/JetBrains/
@@ -38,6 +45,8 @@
 .config/gcloud/
 .config/google-chrome/
 .config/pulse/
+
+# projects
 node_modules/
 package-lock.json
 package.json
