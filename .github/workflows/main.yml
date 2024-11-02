@@ -8,6 +8,8 @@ on:
 jobs:
   build:
     runs-on: macos-latest
+    env:
+      NIXPKGS_GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
     steps:
       - uses: actions/checkout@v3
