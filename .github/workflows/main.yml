@@ -32,6 +32,7 @@ jobs:
           just list-deploy-targets
           just deploy
           # just nix-install
+          just nix-channel-update
           export USER=runner
           just nix-apply
           just nix-darwin-install
