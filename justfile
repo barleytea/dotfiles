@@ -111,8 +111,8 @@ nix-darwin-update:
   darwin-rebuild changelog
 
 nix-update-all:
-  #!/$HOME/.nix-profile/bin/fish
-  source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
+  #!/usr/bin/env bash
+  source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
   echo "========================================"
   echo $SHELL
   echo "========================================"
