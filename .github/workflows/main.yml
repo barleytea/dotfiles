@@ -18,10 +18,10 @@ jobs:
       - uses: actions/checkout@v3
       - name: Setup Just
         uses: extractions/setup-just@v1
-      - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@main
-      - name: Nix cache
-        uses: DeterminateSystems/magic-nix-cache-action@main
+      # - name: Install Nix
+      #   uses: DeterminateSystems/nix-installer-action@main
+      # - name: Nix cache
+      #   uses: DeterminateSystems/magic-nix-cache-action@main
       - name: Check flakes
         uses: DeterminateSystems/flake-checker-action@main
       - name: MacOS Setting
@@ -29,7 +29,7 @@ jobs:
         run: |
           just list-deploy-targets
           just deploy
-          # just nix-install
+          just nix-install
           export USER=runner
           just nix-apply
           just nix-darwin-install
