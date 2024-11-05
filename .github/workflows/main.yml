@@ -8,8 +8,11 @@ on:
 jobs:
   build:
     runs-on: macos-latest
+    permissions:
+      id-token: "write"
+      contents: "read"
     env:
-      NIXPKGS_GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+      NIXPKGS_GITHUB_TOKEN: ${{ secrets.PAT_FOR_DOT_FILES }}
 
     steps:
       - uses: actions/checkout@v3
