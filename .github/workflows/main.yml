@@ -31,7 +31,7 @@ jobs:
         run: |
           just list-deploy-targets
           just deploy
-          echo "access-tokens = github.com=${{ secrets.PERSONAL_ACCESS_TOKEN }}" >> $HOME/.config/nix/nix.conf
+          echo "access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}" >> $HOME/.config/nix/nix.conf
           # just nix-install
           just nix-channel-update
           export USER=runner
