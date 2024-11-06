@@ -19,7 +19,8 @@
     home-manager,
     nix-darwin,
   } @ inputs: let
-    system = "aarch64-darwin"; # "aarch64-darwin" | # "x86_64-darwin" | "x86_64-linux";
+    system = builtins.currentSystem;
+    # system = "aarch64-darwin"; # "aarch64-darwin" | # "x86_64-darwin" | "x86_64-linux";
     pkgs = nixpkgs.legacyPackages.${system};
   in {
     packages.${system}.barleytea-packages = pkgs.buildEnv {

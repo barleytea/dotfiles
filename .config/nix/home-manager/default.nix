@@ -4,6 +4,7 @@
   ...
 }: let
   username = if builtins.getEnv "USER" == "runner" then builtins.getEnv "USER" else "miyoshi_s";
+  home = if builtins.currentSystem == "x86_64-linux" then "/home/${username}" else "/Users/${username}";
 in {
 
   nixpkgs = {
@@ -14,7 +15,7 @@ in {
 
   home = {
     username = username;
-    homeDirectory = "/Users/${username}";
+    homeDirectory = home;
     stateVersion = "24.05";
     packages = with pkgs; [
       arp-scan
