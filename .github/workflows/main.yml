@@ -26,19 +26,40 @@ jobs:
         uses: DeterminateSystems/magic-nix-cache-action@main
       - name: Check flakes
         uses: DeterminateSystems/flake-checker-action@main
-      - name: MacOS Setting
+      - name: Deploy dotfiles
         shell: zsh {0}
         run: |
           just list-deploy-targets
           just deploy
+      - name: Prepare Nix
+        shell: zsh {0}
+        run: |
           echo "access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}" >> $HOME/.config/nix/nix.conf
           # just nix-install
           just nix-channel-update
+      - name: Apply Nix
+        shell: zsh {0}
+        run: |
           export USER=runner
           just nix-apply
+      - name: Install nix-darwin
+        shell: zsh {0}
+        run: |
           just nix-darwin-install
+      - name: Apply nix-darwin
+        shell: zsh {0}
+        run: |
           just nix-darwin-apply
+      - name: Setup Vim
+        shell: zsh {0}
+        run: |
           just set-up-vim
+      - name: List Home
+        shell: zsh {0}
+        run: |
           zsh
           ls -al $HOME
+      - name: Run nix-update-all
+        shell: zsh {0}
+        run: |
           just nix-update-all
