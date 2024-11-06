@@ -54,7 +54,7 @@ jobs:
       - name: Apply nix-darwin
         shell: zsh {0}
         run: |
-          just nix-darwin-apply
+          /Users/runner/hostedtoolcache/just/1.36.0/arm64/just nix-darwin-apply
       - name: Setup Vim
         shell: zsh {0}
         run: |
