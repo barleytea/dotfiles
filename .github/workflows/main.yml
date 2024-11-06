@@ -41,6 +41,7 @@ jobs:
         shell: zsh {0}
         run: |
           export USER=runner
+          echo $USER
           just nix-apply
       - name: Install nix-darwin
         shell: zsh {0}

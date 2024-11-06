@@ -67,8 +67,6 @@ nix-apply:
   #!/usr/bin/env bash
   source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
   echo "========================================"
-  zsh
-  echo "========================================"
   echo $SHELL
   echo "========================================"
   # echo "Updating flake..."
