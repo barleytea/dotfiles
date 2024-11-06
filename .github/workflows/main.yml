@@ -43,6 +43,9 @@ jobs:
           export USER=runner
           echo $USER
           just nix-apply
+      - name: Crear initial nix.conf
+        run: |
+          rm /etc/nix/nix.conf
       - name: Install nix-darwin
         shell: zsh {0}
         run: |
