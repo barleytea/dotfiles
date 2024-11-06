@@ -46,6 +46,7 @@ jobs:
       - name: Install nix-darwin
         shell: zsh {0}
         run: |
+          cat /etc/nix/nix.conf
           just nix-darwin-install
       - name: Apply nix-darwin
         shell: zsh {0}
