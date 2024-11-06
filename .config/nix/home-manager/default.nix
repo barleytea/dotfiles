@@ -4,9 +4,6 @@
   ...
 }: let
   username = if builtins.getEnv "USER" == "runner" then builtins.getEnv "USER" else "miyoshi_s";
-
-  builtins.trace "User: ${builtins.getEnv "USER"}";
-  builtins.trace "ユーザー名: ${username}";
 in {
 
   nixpkgs = {

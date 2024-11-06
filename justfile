@@ -74,7 +74,7 @@ nix-apply:
   # echo "Updating profile..."
   # nix profile upgrade barleytea-packages
   echo "Updating home-manager..."
-  nix run nixpkgs#home-manager -- switch --flake .#barleyteaHomeConfig
+  nix run nixpkgs#home-manager -- switch --flake .#barleyteaHomeConfig --impure
 
 nix-uninstall:
   #!/usr/bin/env bash
