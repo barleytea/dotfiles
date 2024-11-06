@@ -97,7 +97,7 @@ nix-darwin-apply:
   echo $SHELL
   echo "========================================"
   echo "Updating nix-darwin..."
-  nix --extra-experimental-features nix-command --extra-experimental-features flakes run nix-darwin -- switch --flake .#barleytea-darwin
+  nix --extra-experimental-features nix-command --extra-experimental-features flakes run nix-darwin -- switch --flake .#barleytea-darwin --impure
 
 nix-darwin-update:
   #!/usr/bin/env bash
@@ -114,7 +114,7 @@ nix-update-all:
   echo "========================================"
   echo $SHELL
   echo "========================================"
-  nix run .#update
+  nix run .#update --impure
 
 set-up-vim:
   #!/usr/bin/env bash
