@@ -16,6 +16,8 @@ jobs:
       - uses: actions/checkout@v3
       - name: Setup Just
         uses: extractions/setup-just@v1
+          run: |
+            which just
       - name: Install Nix
         uses: cachix/install-nix-action@v18
         with:
@@ -45,11 +47,10 @@ jobs:
           just nix-apply
       - name: Crear initial nix.conf
         run: |
-          sudo rm /etc/nix/nix.conf
+          sudo rm /etc/nix/nix.conf # work around
       - name: Install nix-darwin
         shell: zsh {0}
         run: |
-          cat /etc/nix/nix.conf
           just nix-darwin-install
       - name: Apply nix-darwin
         shell: zsh {0}
