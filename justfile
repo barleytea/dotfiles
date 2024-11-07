@@ -90,16 +90,7 @@ nix-darwin-apply:
   echo "Updating nix-darwin..."
   nix --extra-experimental-features nix-command --extra-experimental-features flakes run nix-darwin -- switch --flake .#barleytea-darwin --impure
 
-nix-darwin-update:
-  #!/usr/bin/env bash
-  source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-  nix-channel --update darwin
-  darwin-rebuild changelog
-
-nix-update-all:
-  #!/usr/bin/env bash
-  source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-  nix run .#update
+nix-update-all: nix-channel-update nix-apply nix-darwin-update nix-darwin-apply
 
 set-up-vim:
   #!/usr/bin/env bash

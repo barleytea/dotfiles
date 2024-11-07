@@ -18,6 +18,7 @@
     nixpkgs,
     home-manager,
     nix-darwin,
+    flake-utils,
   } @ inputs: let
     system = builtins.currentSystem;
     # system = "aarch64-darwin"; # "aarch64-darwin" | # "x86_64-darwin" | "x86_64-linux";
