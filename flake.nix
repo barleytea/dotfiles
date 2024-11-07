@@ -29,22 +29,6 @@
       paths = with pkgs; [];
     };
 
-    apps.${system}.update = {
-      type = "app";
-      program = toString (pkgs.writeShellScript "update-script" ''
-        set -e
-        echo "Updating flake..."
-        nix flake update --impure
-        echo "Updating profile..."
-        nix profile upgrade barleytea-packages --impure
-        echo "Updating home-manager..."
-        nix run nixpkgs#home-manager -- switch --flake .#barleyteaHomeConfig --impure
-        echo "Updating nix-darwin..."
-        nix run nix-darwin -- switch --flake .#barleytea-darwin --impure
-        echo "Update complete!"
-      '');
-    };
-
     homeConfigurations = {
       barleyteaHomeConfig = home-manager.lib.homeManagerConfiguration {
         pkgs = pkgs;
