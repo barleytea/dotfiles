@@ -1,6 +1,6 @@
 # USER {{{
+  export USER=$(whoami)
   export DARWIN_USER=$(whoami)
-  export DARWIN_HOST=$(hostname -s)
 # }}}
 
 
@@ -70,16 +70,26 @@
 # }}}
 
 # NIX {{{
-    export NIX_PATH=$HOME/.nix-defexpr/channels:/nix/var/nix/profiles/per-user/root/channels${NIX_PATH:+:$NIX_PATH}
-    if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
-      . $HOME/.nix-profile/etc/profile.d/nix.sh;
-    fi
+  export NIX_PATH=$HOME/.nix-defexpr/channels:/nix/var/nix/profiles/per-user/root/channels${NIX_PATH:+:$NIX_PATH}
+  if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
+    . $HOME/.nix-profile/etc/profile.d/nix.sh;
+  fi
 # }}}
 
 eval "$(starship init zsh)"
 
+# LOAD .zshrc_local {{{
+
+  if [[ -f ~/.zshrc_local ]]; then
+    echo ".zshrc_local loaded."
+    source ~/.zshrc_local
+  fi
+
+# }}}
+
 # fish {{{
   if [[ -o interactive ]]; then
-      exec fish
+    echo "fish executed."
+    exec fish
   fi
 # }}}

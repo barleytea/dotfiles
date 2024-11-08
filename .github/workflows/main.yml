@@ -1,20 +1,69 @@
 name: Dotfiles CI
-
 on:
   push:
+    branches: [ master ]
+  pull_request:
     branches: [ master ]
 
 jobs:
   build:
     runs-on: macos-latest
+    permissions:
+      id-token: "write"
+      contents: "read"
 
     steps:
       - uses: actions/checkout@v3
-      - name: MacOS Setting
+      - name: Setup Just
+        uses: extractions/setup-just@v1
+      - name: Install Nix
+        uses: cachix/install-nix-action@v18
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+          extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+      - name: Nix cache
+        uses: DeterminateSystems/magic-nix-cache-action@main
+      - name: Check flakes
+        uses: DeterminateSystems/flake-checker-action@main
+      - name: Deploy dotfiles
+        shell: zsh {0}
         run: |
-          bash ./just-install.sh
-          just nix-install
-          just nix-darwin-install
+          which just
+          just list-deploy-targets
+          just deploy
+      - name: Prepare Nix
+        shell: zsh {0}
+        run: |
+          echo "access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}" >> $HOME/.config/nix/nix.conf
+          # just nix-install
+          just nix-channel-update
+      - name: Apply Nix
+        shell: zsh {0}
+        run: |
+          export USER=runner
+          echo $USER
           just nix-apply
-          just nix-darwin-apply
-          make all
+      - name: Crear initial nix.conf
+        run: |
+          sudo rm /etc/nix/nix.conf # work around
+      - name: Install nix-darwin
+        shell: zsh {0}
+        run: |
+          just nix-darwin-install
+      - name: Apply nix-darwin
+        shell: zsh {0}
+        run: |
+          /Users/runner/hostedtoolcache/just/1.36.0/arm64/just nix-darwin-apply #FIXME
+      - name: Setup Vim
+        shell: zsh {0}
+        run: |
+          /Users/runner/hostedtoolcache/just/1.36.0/arm64/just set-up-vim #FIXME
+      - name: List Home
+        shell: zsh {0}
+        run: |
+          ls -al $HOME
+      - name: Run nix-update-all
+        shell: zsh {0}
+        run: |
+          /Users/runner/hostedtoolcache/just/1.36.0/arm64/just nix-update-all #FIXME

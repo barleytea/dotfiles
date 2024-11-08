@@ -18,29 +18,15 @@
     nixpkgs,
     home-manager,
     nix-darwin,
+    flake-utils,
   } @ inputs: let
-    system = "aarch64-darwin"; # "aarch64-darwin" | # "x86_64-darwin" | "x86_64-linux";
+    system = builtins.currentSystem;
+    # system = "aarch64-darwin"; # "aarch64-darwin" | # "x86_64-darwin" | "x86_64-linux";
     pkgs = nixpkgs.legacyPackages.${system};
   in {
     packages.${system}.barleytea-packages = pkgs.buildEnv {
       name = "barleytea-packages-list";
       paths = with pkgs; [];
-    };
-
-    apps.${system}.update = {
-      type = "app";
-      program = toString (pkgs.writeShellScript "update-script" ''
-        set -e
-        echo "Updating flake..."
-        nix flake update
-        echo "Updating profile..."
-        nix profile upgrade barleytea-packages
-        echo "Updating home-manager..."
-        nix run nixpkgs#home-manager -- switch --flake .#barleyteaHomeConfig
-        echo "Updating nix-darwin..."
-        nix run nix-darwin -- switch --flake .#barleytea-darwin
-        echo "Update complete!"
-      '');
     };
 
     homeConfigurations = {
@@ -56,7 +42,9 @@
     };
     darwinConfigurations.barleytea-darwin = nix-darwin.lib.darwinSystem {
       system = system;
-      modules = [ ./.config/nix/nix-darwin/default.nix ];
+      modules = [ 
+        ./.config/nix/nix-darwin/default.nix
+      ];
     };
   };
 }

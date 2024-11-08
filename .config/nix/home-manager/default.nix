@@ -3,7 +3,8 @@
   pkgs,
   ...
 }: let
-  username = let envUser = builtins.getEnv "DARWIN_USER"; in if envUser == "" then "miyoshi_s" else envUser;
+  username = if builtins.getEnv "USER" == "runner" then builtins.getEnv "USER" else "miyoshi_s";
+  home = if builtins.currentSystem == "x86_64-linux" then "/home/${username}" else "/Users/${username}";
 in {
 
   nixpkgs = {
@@ -14,7 +15,7 @@ in {
 
   home = {
     username = username;
-    homeDirectory = "/Users/${username}";
+    homeDirectory = home;
     stateVersion = "24.05";
     packages = with pkgs; [
       arp-scan
@@ -44,7 +45,6 @@ in {
       jq
       krb5
       kubectx
-      mas
       maven
       mecab
       minikube

@@ -70,3 +70,14 @@ set fish_pager_color_selected_description  bryellow
 set fish_pager_color_selected_prefix       bryellow
 
 starship init fish | source
+
+# asdf
+if test -f $HOME/.nix-profile/share/asdf-vm/asdf.fish
+  source $HOME/.nix-profile/share/asdf-vm/asdf.fish
+end
+
+# local.fish
+if test -f $HOME/.config/fish/local.fish
+  echo "local.fish loaded."
+  source $HOME/.config/fish/local.fish
+end
