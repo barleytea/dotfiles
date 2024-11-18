@@ -99,4 +99,5 @@ vim:
 npm-tools:
   #!/usr/bin/env bash
   sudo n latest
+  npm i -g npm
   npm i -g gitmoji-cli

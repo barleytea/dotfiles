@@ -70,4 +70,5 @@ jobs:
       - name: Run npm-tools
         shell: zsh {0}
         run: |
+          zsh -c "source $HOME/.zshrc"
           /Users/runner/hostedtoolcache/just/1.36.0/arm64/just npm-tools #FIXME
