@@ -58,7 +58,7 @@ jobs:
       - name: Setup Vim
         shell: zsh {0}
         run: |
-          /Users/runner/hostedtoolcache/just/1.36.0/arm64/just set-up-vim #FIXME
+          /Users/runner/hostedtoolcache/just/1.36.0/arm64/just vim #FIXME
       - name: List Home
         shell: zsh {0}
         run: |
@@ -67,3 +67,7 @@ jobs:
         shell: zsh {0}
         run: |
           /Users/runner/hostedtoolcache/just/1.36.0/arm64/just nix-update-all #FIXME
+      - name: Run npm-tools
+        shell: zsh {0}
+        run: |
+          /Users/runner/hostedtoolcache/just/1.36.0/arm64/just npm-tools #FIXME

@@ -92,6 +92,11 @@ nix-darwin-apply:
 
 nix-update-all: nix-channel-update nix-apply nix-darwin-apply
 
-set-up-vim:
+vim:
   #!/usr/bin/env bash
   bash ./vim.sh
+
+npm-tools:
+  #!/usr/bin/env bash
+  sudo n latest
+  npm i -g gitmoji-cli

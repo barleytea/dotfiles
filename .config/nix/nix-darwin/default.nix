@@ -12,10 +12,18 @@
   system = {
     stateVersion = 5;
     defaults = {
+      NSGlobalDomain = {
+        InitialKeyRepeat = 11;
+        KeyRepeat = 1;
+      };
       dock = {
         autohide = true;
         show-recents = false;
         orientation = "left";
+      };
+      trackpad = {
+        Clicking = true;
+        TrackpadThreeFingerDrag = true;
       };
     };
   };
@@ -35,8 +43,7 @@
     brews = [
       "mas"
       "mise"
-      "node"
-      "nvm"
+      "n"
     ];
     casks = [
       "devutils"
