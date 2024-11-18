@@ -71,4 +71,5 @@ jobs:
         shell: zsh {0}
         run: |
           zsh -c "source $HOME/.zshrc"
+          ls -al /opt/homebrew/bin
           /Users/runner/hostedtoolcache/just/1.36.0/arm64/just npm-tools #FIXME
