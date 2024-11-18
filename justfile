@@ -69,7 +69,7 @@ nix-apply:
   echo "Updating flake..."
   nix flake update
   echo "Updating profile..."
-  nix profile upgrade barleytea-packages
+  nix profile upgrade barleytea-packages --impure
   echo "Updating home-manager..."
   nix run nixpkgs#home-manager -- switch --flake .#barleyteaHomeConfig --impure
 
