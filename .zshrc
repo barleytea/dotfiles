@@ -7,6 +7,8 @@
 # PATH {{{
   if [ "$(uname)" = "Linux" ]; then
     export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+  else if [ "$(uname)" = "Darwin" ]; then
+    export PATH="/opt/homebrew/bin:$PATH"
   fi
 # }}}
 
