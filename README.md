@@ -57,7 +57,7 @@ just nix-update-all
 ### Install a new package
 
 ```sh
-nix-env --install hoge
+nix profile install nixpkgs#hoge
 ```
 
 
