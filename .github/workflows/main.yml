@@ -70,6 +70,6 @@ jobs:
       - name: Run npm-tools
         shell: zsh {0}
         run: |
-          zsh -c "source $HOME/.zshrc"
+          echo $PATH | grep -q /opt/homebrew/bin || export PATH="/opt/homebrew/bin:$PATH"
           ls -al /opt/homebrew/bin
           /Users/runner/hostedtoolcache/just/1.36.0/arm64/just npm-tools #FIXME
