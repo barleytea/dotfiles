@@ -49,8 +49,7 @@ set clipboard+=unnamed
 set updatetime=500
 set cursorline "現在の行を強調表示
 set cursorcolumn "現在の列を強調表示
-"タブと行末のスペースをハイライトする
-set list
+set list "タブと行末のスペースをハイライトする
 set listchars=tab:\ \ ,trail:\
 highlight SpecialKey ctermbg=235 guibg=#2c2d27
 highlight ColorColumn ctermbg=235 guibg=#2c2d27

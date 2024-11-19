@@ -1,0 +1,116 @@
+{
+  pkgs,
+  lib,
+  config,
+  sources,
+  ...
+}:
+let
+  vimdoc-ja = pkgs.vimUtils.buildVimPlugin {
+    inherit (sources.vimdoc-ja) pname version src;
+  };
+  winresizer-vim = pkgs.vimUtils.buildVimPlugin {
+    inherit (sources.winresizer) pname version src;
+  };
+  skkeleton = pkgs.vimUtils.buildVimPlugin {
+    inherit (sources.skkeleton) pname version src;
+  };
+  hlchunk-nvim = pkgs.vimUtils.buildVimPlugin {
+    inherit (sources.hlchunk) pname version src;
+  };
+  skkeleton_indicator-nvim = pkgs.vimUtils.buildVimPlugin {
+    inherit (sources.skkeleton_indicator) pname version src;
+  };
+in
+{
+  programs.neovim.extraLuaConfig = 
+
+    let 
+
+      plugins = with pkgs.vimPlugins; [
+        vim-closetag
+        gitsigns-nvim
+        nvim-lspconfig
+        fidget-nvim
+        vimdoc-ja
+        nvim-autopairs
+        registers-nvim
+        nvim-colorizer-lua
+        winresizer-vim
+        nvim-cmp
+        cmp-buffer
+        cmp-nvim-lsp
+        cmp-path
+        cmp-cmdline
+        cmp_luasnip
+        cmp-nvim-lsp-signature-help
+        skkeleton
+        denops-vim
+        vim-suda
+        friendly-snippets
+        lualine-nvim
+        nvim-treesitter
+        nvim-treesitter-textobjects
+        nvim-web-devicons
+        plenary-nvim
+        telescope-fzf-native-nvim
+        telescope-nvim
+        nord-nvim
+        {
+          name = "LuaSnip";
+          path = luasnip;
+        }
+        {
+          name = "hlchunk.nvim";
+          path = hlchunk-nvim;
+        }
+        {
+          name = "skkeleton_indicator.nvim";
+          path = skkeleton_indicator-nvim;
+        }
+        {
+          name = "dial.nvim";
+          path = dial-nvim;
+        }
+        {
+          name = "bufferline.nvim";
+          path = bufferline-nvim;
+        }
+        {
+          name = "telescope-file-browser.nvim";
+          path = telescope-file-browser-nvim;
+        }
+      ];
+
+      mkEntryFromDrv =
+        drv:
+        if lib.isDerivation drv then
+          {
+            name = "${lib.getName drv}";
+            path = drv;
+          }
+        else
+          drv;
+      lazyPath = pkgs.linkFarm "lazy-plugins" (builtins.map mkEntryFromDrv plugins);
+      lazyConfig = substituteStrings {
+        file = ./init.lua;
+        replacements = [
+          {
+            old = "@lazyPath@";
+            new = "${lazyPath}";
+          }
+        ];
+      };
+    in
+    ''
+      ${lazyConfig}
+    '';
+
+  xdg.dataFile = {
+    "skk/SKK-JISYO.L".source = "${pkgs.skkDictionaries.l}/share/skk/SKK-JISYO.L";
+  };
+
+  xdg.configFile."nvim/lua/plugins/" = {
+    source = config.lib.file.mkOutOfStoreSymlink "${pwd}/plugins";
+  };
+}

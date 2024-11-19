@@ -20,8 +20,8 @@
     nix-darwin,
     flake-utils,
   } @ inputs: let
-    system = builtins.currentSystem;
     # system = "aarch64-darwin"; # "aarch64-darwin" | # "x86_64-darwin" | "x86_64-linux";
+    system = builtins.currentSystem;
     pkgs = nixpkgs.legacyPackages.${system};
   in {
     packages.${system}.barleytea-packages = pkgs.buildEnv {
@@ -40,6 +40,7 @@
         ];
       };
     };
+
     darwinConfigurations.barleytea-darwin = nix-darwin.lib.darwinSystem {
       system = system;
       modules = [ 

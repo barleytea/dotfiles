@@ -3,6 +3,8 @@ dotfilesPath := "$HOME/git_repos/github.com/barleytea/dotfiles"
 default:
   @just --choose
 
+# ========== Deploying Dotfiles ==========#
+
 list-deploy-targets:
   #!/usr/bin/env bash
   CANDIDATES=($(ls -A | grep '^\..*'))
@@ -53,6 +55,8 @@ deploy:
     ln -sfnv "$(realpath "$val")" "$HOME/$val"
   done
 
+# ================== Nix =================#
+
 nix-install:
   #!/usr/bin/env bash
   curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install --no-confirm
@@ -91,6 +95,9 @@ nix-darwin-apply:
   nix --extra-experimental-features nix-command --extra-experimental-features flakes run nix-darwin -- switch --flake .#barleytea-darwin --impure
 
 nix-update-all: nix-channel-update nix-apply nix-darwin-apply
+
+
+# ================ Others ================#
 
 vim:
   #!/usr/bin/env bash

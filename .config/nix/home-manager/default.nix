@@ -49,7 +49,6 @@ in {
       mecab
       minikube
       neofetch
-      neovim
       peco
       postgresql
       postman
