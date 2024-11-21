@@ -3,8 +3,7 @@
   pkgs,
   ...
 }: let
-  username = if builtins.getEnv "USER" == "runner" then builtins.getEnv "USER" else "miyoshi_s";
-  home = if builtins.currentSystem == "x86_64-linux" then "/home/${username}" else "/Users/${username}";
+  utils = import ./utils.nix { inherit pkgs; };
 in {
 
   nixpkgs = {
@@ -14,8 +13,8 @@ in {
   };
 
   home = {
-    username = username;
-    homeDirectory = home;
+    username = utils.username;
+    homeDirectory = utils.home;
     stateVersion = "24.05";
     packages = with pkgs; [
       arp-scan
@@ -49,6 +48,7 @@ in {
       mecab
       minikube
       neofetch
+      neovim-remote
       peco
       postgresql
       postman
@@ -68,6 +68,4 @@ in {
       zsh
     ];
   };
-
-  programs.home-manager.enable = true;
 }

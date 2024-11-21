@@ -8,7 +8,7 @@ default:
 list-deploy-targets:
   #!/usr/bin/env bash
   CANDIDATES=($(ls -A | grep '^\..*'))
-  EXCLUSIONS=(".git" ".DS_Store" ".gitmodules")
+  EXCLUSIONS=(".git" ".DS_Store" ".gitmodules" ".gitignore")
   DOTFILES=()
 
   for candidate in "${CANDIDATES[@]}"; do
@@ -33,7 +33,7 @@ list-deploy-targets:
 deploy:
   #!/usr/bin/env bash
   CANDIDATES=($(ls -A | grep '^\..*'))
-  EXCLUSIONS=(".git" ".DS_Store" ".gitmodules")
+  EXCLUSIONS=(".git" ".DS_Store" ".gitmodules" ".gitignore")
   DOTFILES=()
 
   for candidate in "${CANDIDATES[@]}"; do
@@ -72,10 +72,8 @@ nix-apply:
   source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
   echo "Updating flake..."
   nix flake update
-  echo "Updating profile..."
-  nix profile upgrade barleytea-packages --impure
   echo "Updating home-manager..."
-  nix run nixpkgs#home-manager -- switch --flake .#barleyteaHomeConfig --impure
+  nix run nixpkgs#home-manager -- switch --flake .#home --impure
 
 nix-uninstall:
   #!/usr/bin/env bash
@@ -92,7 +90,7 @@ nix-darwin-apply:
   #!/usr/bin/env bash
   source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
   echo "Updating nix-darwin..."
-  nix --extra-experimental-features nix-command --extra-experimental-features flakes run nix-darwin -- switch --flake .#barleytea-darwin --impure
+  nix --extra-experimental-features nix-command --extra-experimental-features flakes run nix-darwin -- switch --flake .#darwin --impure
 
 nix-update-all: nix-channel-update nix-apply nix-darwin-apply
 

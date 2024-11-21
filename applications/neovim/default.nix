@@ -1,19 +1,25 @@
 {
-  pkgs,
   config,
+  pkgs,
   ...
-
-}:
-let
-  pwd = (import ./pwd.nix { inherit config; }).pwd;
-in
-{
+}: let
+  inherit (builtins) readFile;
+  configFile = file: {
+    "nvim/${file}".source = pkgs.substituteAll (
+      {
+        src = ./. + "/${file}";
+      }
+    );
+  };
+  configFiles = files: builtins.foldl' (x: y: x // y) { } (map configFile files);
+in {
   programs.neovim = {
     enable = true;
     defaultEditor = true;
     viAlias = true;
     vimAlias = true;
     vimdiffAlias = true;
+    coc.enable = true;
     extraPackages = with pkgs; [
       lua-language-server
       nodePackages.typescript-language-server
@@ -30,8 +36,12 @@ in
     plugins = with pkgs.vimPlugins; [ lazy-nvim ];
   };
 
-  xdg.configFile."nvim/lua/conf" = {
-    source = config.lib.file.mkOutOfStoreSymlink "${pwd}/conf";
-  };
+  xdg.configFile = configFiles [
+    "./lua/base.lua"
+  ];
 
+  imports = [
+    ./plugins.nix
+    ./treesitter-parser.nix
+  ];
 }

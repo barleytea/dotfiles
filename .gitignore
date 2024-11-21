@@ -17,7 +17,7 @@
 .config/fish/conf.d/sdk.fish
 .config/fish/completions/sdk.fish
 .config/fish/conf.d/rustup.fish
-.config/fish/local.fish
+.config/fish/conf.d/local.fish
 
 # other configs
 .config/go/
@@ -51,3 +51,5 @@ node_modules/
 package-lock.json
 package.json
 result
+
+secret

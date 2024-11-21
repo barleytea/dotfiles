@@ -38,3 +38,7 @@ indent_style = tab
 [*.dart]
 indent_size = 2
 indent_style = space
+
+[*.lua]
+indent_size = 2
+indent_style = space

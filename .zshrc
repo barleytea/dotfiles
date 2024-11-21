@@ -76,6 +76,7 @@
   if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
     . $HOME/.nix-profile/etc/profile.d/nix.sh;
   fi
+  export NIX_CONF_DIR=$HOME/.config
 # }}}
 
 eval "$(starship init zsh)"
