@@ -8,11 +8,44 @@
         paths =
           (pkgs.vimPlugins.nvim-treesitter.withPlugins (
             plugins: with plugins; [
-              go
-              nix
-              tsx
               bash
+              c
+              css
+              csv
+              dart
+              diff
+              editorconfig
+              fish
+              git_config
+              git_rebase
+              gitcommit
+              gitignore
+              go
+              gomod
+              gosum
+              helm
+              html
+              java
+              javascript
+              jq
+              jsdoc
+              json
+              just
+              lua
+              make
               markdown
+              nix
+              proto
+              regex
+              rust
+              sql
+              tmux
+              toml
+              tsv
+              tsx
+              typescript
+              vim
+              yaml
             ]
           )).dependencies;
       };
