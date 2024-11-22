@@ -3,10 +3,10 @@ return {
     "nvim-treesitter/nvim-treesitter", 
     build = ":TSUpdate", 
     main = 'nvim-treesitter.configs', 
-    opts = function(_, opts)
-      opts.highlight = { enable = true }
-      opts.ensure_installed = {}
-    end,
+    opts = {
+      highlight = { enable = true },
+      ensure_installed = {}
+    },
   },
   {
     "nvim-treesitter/nvim-treesitter-textobjects",

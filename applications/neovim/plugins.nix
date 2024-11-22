@@ -19,28 +19,26 @@ in
     let
       plugins = with pkgs.vimPlugins; [
         copilot-cmp
+        CopilotChat-nvim
+        cmp-buffer
+        cmp-nvim-lsp
+        cmp-path
+        cmp-vsnip
         copilot-lua
         copilot-vim
-        CopilotChat-nvim
-        nvim-lspconfig
-        mason-nvim
-        mason-lspconfig-nvim
-        nvim-cmp
-        cmp-nvim-lsp
-        cmp-buffer
-        cmp-path
-        vim-vsnip
-        cmp-vsnip
+        dracula-nvim
+        fidget-nvim
+        fzf-lsp-nvim
+        fzf-vim
         lspkind-nvim
         lspsaga-nvim
-        fidget-nvim
+        nvim-cmp
+        nvim-lspconfig
         nvim-treesitter
-        fzf-vim
-        fzf-lsp-nvim
+        rust-vim
         vim-airline
         vim-airline-themes
-        dracula-nvim
-        rust-vim
+        vim-vsnip
       ];
       mkEntryFromDrv =
         drv:

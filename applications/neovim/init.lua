@@ -21,7 +21,7 @@ vim.g.maplocalleader = "\\"
 
 require('lazy').setup("plugins", {
   defaults = {
-    lazy = true,
+    lazy = false,
   },
   dev = {
     path = "@lazyPath@",
