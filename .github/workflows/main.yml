@@ -55,10 +55,6 @@ jobs:
         shell: zsh {0}
         run: |
           /Users/runner/hostedtoolcache/just/1.36.0/arm64/just nix-darwin-apply #FIXME
-      - name: Setup Vim
-        shell: zsh {0}
-        run: |
-          /Users/runner/hostedtoolcache/just/1.36.0/arm64/just vim #FIXME
       - name: List Home
         shell: zsh {0}
         run: |

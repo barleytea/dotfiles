@@ -83,8 +83,9 @@ nix-uninstall:
 nix-darwin-install:
   #!/usr/bin/env bash
   source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-  nix-build https://github.com/LnL7/nix-darwin/archive/master.tar.gz -A installer
-  ./result/bin/darwin-installer
+  # nix-build https://github.com/LnL7/nix-darwin/archive/master.tar.gz -A installer
+  # ./result/bin/darwin-installer
+  nix run nix-darwin -- switch --flake ./darwin/default.nix
 
 nix-darwin-apply:
   #!/usr/bin/env bash

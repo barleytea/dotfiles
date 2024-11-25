@@ -69,6 +69,3 @@ if vim.fn.has('nvim') then
   vim.cmd('command! -nargs=* T split | wincmd j | resize 20 | terminal <args>')
   vim.cmd('autocmd TermOpen * startinsert')
 end
-
--- rust-lang
-vim.g.rustfmt_autosave = 1

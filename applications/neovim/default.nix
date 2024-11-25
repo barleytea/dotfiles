@@ -1,9 +1,11 @@
 {
   config,
+  lib,
   pkgs,
   ...
 }: let
   inherit (builtins) readFile;
+  pwd = (import ./pwd.nix { inherit config; }).pwd;
   configFile = file: {
     "nvim/${file}".source = pkgs.substituteAll (
       {
@@ -19,29 +21,55 @@ in {
     viAlias = true;
     vimAlias = true;
     vimdiffAlias = true;
-    coc.enable = true;
     extraPackages = with pkgs; [
       lua-language-server
-      nodePackages.typescript-language-server
-      bash-language-server
-      vim-language-server
-      emmet-language-server
-      gopls
       nil
-      pyright
       stylua
-      nixfmt-rfc-style
-      skkDictionaries.l
+      # TODO
     ];
     plugins = with pkgs.vimPlugins; [ lazy-nvim ];
+
+    extraLuaConfig = 
+      let
+        plugins = with pkgs.vimPlugins; [
+          # TODO  
+        ];
+        mkEntryFromDrv = drv:
+          if lib.isDerivation drv then
+            { name = "${lib.getName drv}"; path = drv; }
+          else
+            drv;
+        lazyPath = pkgs.linkFarm "lazy-plugins" (builtins.map mkEntryFromDrv plugins);
+      in
+      ''
+        require("config.base")
+        require("lazy").setup({
+          debug = true,
+          defaults = {
+            lazy = true,
+          },
+          -- dev = {
+          --   path = "${lazyPath}",
+          --   patterns = { "." },
+          --   fallback = true,
+          -- },
+          spec = {
+            { "LazyVim/LazyVim", import = "lazyvim.plugins" },
+            { "nvim-telescope/telescope-fzf-native.nvim", enabled = true },
+            -- disable mason.nvim, use programs.neovim.extraPackages
+            { "williamboman/mason-lspconfig.nvim", enabled = false },
+            { "williamboman/mason.nvim", enabled = false },
+            { import = "plugins" },
+          },
+        })
+      '';
   };
 
-  xdg.configFile = configFiles [
-    "./lua/base.lua"
-  ];
+  xdg.configFile."nvim/lua" = {
+    source = config.lib.file.mkOutOfStoreSymlink "${pwd}/lua";
+  };
 
   imports = [
-    ./plugins.nix
     ./treesitter-parser.nix
   ];
 }

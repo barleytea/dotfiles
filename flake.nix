@@ -24,7 +24,6 @@
     nix-darwin,
     neovim-nightly-overlay,
   } @ inputs: let
-    # system = "aarch64-darwin"; # "aarch64-darwin" | # "x86_64-darwin" | "x86_64-linux";
     system = builtins.currentSystem;
   in {
 
