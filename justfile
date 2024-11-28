@@ -52,7 +52,10 @@ deploy:
   echo '===> Start to deploy config files to home directory.'
   echo ''
   for val in "${DOTFILES[@]}"; do
-    ln -sfnv "$(realpath "$val")" "$HOME/$val"
+    target="$HOME/$val"
+    source="$(realpath "$val")"
+    echo "Deploying $source to $target"
+    ln -sfnv "$source" "$target"
   done
 
 # ================== Nix =================#

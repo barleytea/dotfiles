@@ -5,7 +5,7 @@
     name = barleytea
     email = barleytea362@gmail.com
 [ghq]
-    root = /Users/miyoshi_s/git_repos/
+    root = ~/git_repos/
 [init]
     defaultBranch = main
 [alias]
