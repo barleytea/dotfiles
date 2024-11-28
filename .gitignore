@@ -46,6 +46,9 @@
 .config/google-chrome/
 .config/pulse/
 
+# vim
+.vim/
+
 # projects
 node_modules/
 package-lock.json
