@@ -1,4 +1,4 @@
-dotfilesPath := "$HOME/git_repos/github.com/barleytea/dotfiles"
+dotfilesPath := env_var('DOTFILES_PATH', '$HOME/git_repos/github.com/barleytea/dotfiles')
 
 default:
   @just --choose
@@ -32,6 +32,7 @@ list-deploy-targets:
 
 deploy:
   #!/usr/bin/env bash
+  cd "$dotfilesPath"
   CANDIDATES=($(ls -A | grep '^\..*'))
   EXCLUSIONS=(".git" ".DS_Store" ".gitmodules" ".gitignore")
   DOTFILES=()
@@ -52,8 +53,8 @@ deploy:
   echo '===> Start to deploy config files to home directory.'
   echo ''
   for val in "${DOTFILES[@]}"; do
+    source="$dotfilesPath/$val"
     target="$HOME/$val"
-    source="$(realpath "$val")"
     ln -sfnv "$source" "$target"
   done
 
