@@ -1,4 +1,4 @@
-dotfilesPath := env_var('DOTFILES_PATH', '$HOME/git_repos/github.com/barleytea/dotfiles')
+dotfilesPath := `set +u; if [ -z "$DOTFILES_PATH" ]; then echo "$HOME/git_repos/github.com/barleytea/dotfiles"; else echo "$DOTFILES_PATH"; fi`
 
 default:
   @just --choose
@@ -27,7 +27,7 @@ list-deploy-targets:
   echo '===> List of config files to be deployed:'
   echo ''
   for val in "${DOTFILES[@]}"; do
-    echo "$(realpath "$val")"
+    echo "$dotfilesPath/$val"
   done
 
 deploy:
