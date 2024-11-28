@@ -27,7 +27,7 @@ list-deploy-targets:
   echo '===> List of config files to be deployed:'
   echo ''
   for val in "${DOTFILES[@]}"; do
-    echo "$val"
+    echo "$(realpath "$val")"
   done
 
 deploy:

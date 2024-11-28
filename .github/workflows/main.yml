@@ -50,6 +50,7 @@ jobs:
       - name: Install nix-darwin
         shell: zsh {0}
         run: |
+          ls -al $HOME
           export $NIX_CONF_DIR=$HOME/.config
           just nix-darwin-install
       - name: Apply nix-darwin
@@ -68,5 +69,4 @@ jobs:
         shell: zsh {0}
         run: |
           echo $PATH | grep -q /opt/homebrew/bin || export PATH="/opt/homebrew/bin:$PATH"
-          ls -al /opt/homebrew/bin
           /Users/runner/hostedtoolcache/just/1.36.0/arm64/just npm-tools #FIXME

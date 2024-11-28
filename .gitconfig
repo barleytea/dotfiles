@@ -6,7 +6,6 @@
     email = barleytea362@gmail.com
 [ghq]
     root = /Users/miyoshi_s/git_repos/
-    root = /home/miyoshi_s/git_repos/
 [init]
     defaultBranch = main
 [alias]
