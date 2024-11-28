@@ -54,7 +54,6 @@ deploy:
   for val in "${DOTFILES[@]}"; do
     target="$HOME/$val"
     source="$(realpath "$val")"
-    echo "Deploying $source to $target"
     ln -sfnv "$source" "$target"
   done
 
