@@ -8,6 +8,6 @@
 in {
   programs.zsh = {
     enable = true;
-    initExtra = readFile ./zshrc;
+    initExtra = readFile ./.zshrc;
   };
 }
