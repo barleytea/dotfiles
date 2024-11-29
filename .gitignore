@@ -10,41 +10,41 @@
 .vim/sessions/**
 
 # fish
-.config/fish/functions
-.config/fish/fish_variable
-.config/fish/fish_variables
-.config/fish/fish_pluglins
-.config/fish/conf.d/sdk.fish
-.config/fish/completions/sdk.fish
-.config/fish/conf.d/rustup.fish
-.config/fish/conf.d/local.fish
+home/config/.config/fish/functions
+home/config/.config/fish/fish_variable
+home/config/.config/fish/fish_variables
+home/config/.config/fish/fish_pluglins
+home/config/.config/fish/conf.d/sdk.fish
+home/config/.config/fish/completions/sdk.fish
+home/config/.config/fish/conf.d/rustup.fish
+home/config/.config/fish/conf.d/local.fish
 
 # other configs
-.config/go/
-.config/flutter/
-.config/helm/
-.config/hub
-.config/iterm2/
-.config/jgit/
-.config/neofetch/
-.config/raycast/
-.config/stripe/
-.config/coc/
-.config/nvim
-.config/configstore/
-.config/gatsby/
-.config/github-copilot/
-.config/wireshark/
-.config/yarn/
-.config/gh/
-.config/wezterm/data/*.json
-.config/Code/
-.config/JetBrains/
-.config/bottom/
-.config/environment.d/
-.config/gcloud/
-.config/google-chrome/
-.config/pulse/
+home/config/.config/go/
+home/config/.config/flutter/
+home/config/.config/helm/
+home/config/.config/hub
+home/config/.config/iterm2/
+home/config/.config/jgit/
+home/config/.config/neofetch/
+home/config/.config/raycast/
+home/config/.config/stripe/
+home/config/.config/coc/
+home/config/.config/nvim
+home/config/.config/configstore/
+home/config/.config/gatsby/
+home/config/.config/github-copilot/
+home/config/.config/wireshark/
+home/config/.config/yarn/
+home/config/.config/gh/
+home/config/.config/wezterm/data/*.json
+home/config/.config/Code/
+home/config/.config/JetBrains/
+home/config/.config/bottom/
+home/config/.config/environment.d/
+home/config/home/config/.config/gcloud/
+home/config/.config/google-chrome/
+home/config/.config/pulse/
 
 # vim
 .vim/

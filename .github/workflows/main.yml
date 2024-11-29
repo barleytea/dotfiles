@@ -32,7 +32,7 @@ jobs:
       #     export DOTFILES_PATH=$GITHUB_WORKSPACE
       #     just list-deploy-targets
       #     just deploy
-      - name: List Home
+      - name: List Home 1
         shell: zsh {0}
         run: |
           ls -al $HOME
@@ -49,6 +49,11 @@ jobs:
           export USER=runner
           echo $USER
           just nix-apply
+      - name: List Home 2
+        shell: zsh {0}
+        run: |
+          ls -al $HOME
+          ls -al $HOME/.config
       - name: Crear initial nix.conf
         run: |
           sudo rm /etc/nix/nix.conf # work around
