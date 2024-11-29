@@ -7,6 +7,8 @@
   
 in {
   xdg.configFile = {
-    ".config".source = "./.config";
+    ".config" = {
+      source = config.lib.file.mkOutOfStoreSymlink ./".config";
+    };
   };
 }
