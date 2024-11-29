@@ -1,5 +1,0 @@
-.local.memo.md
-.idea/
-.vscode/
-*.log
-node_modules/

@@ -1,5 +1,3 @@
-dotfilesPath := `set +u; if [ -z "$DOTFILES_PATH" ]; then echo "$HOME/git_repos/github.com/barleytea/dotfiles"; else echo "$DOTFILES_PATH"; fi`
-
 default:
   @just --choose
 

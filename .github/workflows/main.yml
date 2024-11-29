@@ -26,12 +26,12 @@ jobs:
         uses: DeterminateSystems/magic-nix-cache-action@main
       - name: Check flakes
         uses: DeterminateSystems/flake-checker-action@main
-      - name: Deploy dotfiles
-        shell: zsh {0}
-        run: |
-          export DOTFILES_PATH=$GITHUB_WORKSPACE
-          just list-deploy-targets
-          just deploy
+      # - name: Deploy dotfiles
+      #   shell: zsh {0}
+      #   run: |
+      #     export DOTFILES_PATH=$GITHUB_WORKSPACE
+      #     just list-deploy-targets
+      #     just deploy
       - name: List Home
         shell: zsh {0}
         run: |

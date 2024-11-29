@@ -8,5 +8,6 @@ in {
   imports = [ 
     ./pkgs.nix
     ../applications
+    ../shell
   ];
 }

@@ -13,8 +13,8 @@
     stateVersion = 5;
     defaults = {
       NSGlobalDomain = {
-        InitialKeyRepeat = 11;
-        KeyRepeat = 1;
+        InitialKeyRepeat = 15;
+        KeyRepeat = 2;
       };
       dock = {
         autohide = true;
