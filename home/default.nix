@@ -7,6 +7,7 @@
 in {
   imports = [ 
     ./pkgs.nix
+    ./config
     ../applications
     ../shell
   ];
