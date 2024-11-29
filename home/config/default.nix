@@ -6,5 +6,7 @@
 }: let
   
 in {
-  xdg.configFile.".config".source = config.lib.file.mkOutOfStoreSymlink ./".config";
+  xdg.configFile.".config" = {
+    source = config.lib.file.mkOutOfStoreSymlink "./.config";
+  }
 }
