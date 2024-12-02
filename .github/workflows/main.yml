@@ -62,11 +62,11 @@ jobs:
       - name: Crear initial nix.conf
         run: |
           sudo rm /etc/nix/nix.conf # work around
-      - name: Install nix-darwin
-        shell: zsh {0}
-        run: |
-          export $NIX_CONF_DIR=$HOME/.config
-          just nix-darwin-install
+      # - name: Install nix-darwin
+      #   shell: zsh {0}
+      #   run: |
+      #     export $NIX_CONF_DIR=$HOME/.config
+      #     just nix-darwin-install
       - name: Apply nix-darwin
         shell: zsh {0}
         run: |
