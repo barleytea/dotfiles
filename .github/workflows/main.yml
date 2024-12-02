@@ -58,6 +58,7 @@ jobs:
         run: |
           ls -al $HOME
           ls -al $HOME/.config
+          pwd
       - name: Crear initial nix.conf
         run: |
           sudo rm /etc/nix/nix.conf # work around

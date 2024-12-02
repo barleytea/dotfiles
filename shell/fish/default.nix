@@ -12,63 +12,24 @@ in {
     plugins = [
       { name = "z"; src = pkgs.fishPlugins.z.src; }
       { name = "fish-bd"; src = pkgs.fishPlugins.fish-bd.src; }
-      {
-        name = "plugin-peco";
-        src = pkgs.fetchFromGitHub {
-          owner = "oh-my-fish";
-          repo = "plugin-peco";
-          rev = "0a3282c9522c4e0102aaaa36f89645d17db78657";
-          sha256 = "005r6yar254hkx6cpd2g590na812mq9z9a17ghjl6sbyyxq24jhi";
-        };
-      }
-      {
-        name = "fish-peco_select_ghq_repository";
-        src = pkgs.fetchFromGitHub {
-          owner = "yoshiori";
-          repo = "fish-peco_select_ghq_repository";
-          rev = "1b0e6333e7c7963f4eaacd0092fa0051b26c9a82";
-          sha256 = "1fzmmnkk5n7zqsar9cvfm1i2f6mp4paclb8pn55f3y18xzgdbwyv";
-        };
-      }
-      {
-        name = "fish-peco_select_ghq_repository";
-        src = pkgs.fetchFromGitHub {
-          owner = "yoshiori";
-          repo = "fish-peco_select_ghq_repository";
-          rev = "1b0e6333e7c7963f4eaacd0092fa0051b26c9a82";
-          sha256 = "1fzmmnkk5n7zqsar9cvfm1i2f6mp4paclb8pn55f3y18xzgdbwyv";
-        };
-      }
-      {
-        name = "tsu-nera/fish-peco_recentd";
-        src = pkgs.fetchFromGitHub {
-          owner = "tsu-nera";
-          repo = "fish-peco_recentd";
-          rev = "d157af22e319b9fe9f859bc6f2a96dd2b3ff7b89";
-          sha256 = "18k4y5lflzlnnrmnif59l1jx5l8cg94mlvr38845blq858c9a12d";
-        };
-      }
-      {
-        name = "decors/fish-ghq";
-        src = pkgs.fetchFromGitHub {
-          owner = "decors";
-          repo = "fish-ghq";
-          rev = "cafaaabe63c124bf0714f89ec715cfe9ece87fa2";
-          sha256 = "0cv7jpvdfdha4hrnjr887jv1pc6vcrxv2ahy7z6x562y7fd77gg9";
-        };
-      }
-      {
-        name = "lilyball/nix-env.fish";
-        src = pkgs.fetchFromGitHub {
-          owner = "lilyball";
-          repo = "nix-env.fish";
-          rev = "7b65bd228429e852c8fdfa07601159130a818cfa";
-          sha256 = "069ybzdj29s320wzdyxqjhmpm9ir5815yx6n522adav0z2nz8vs4";
-        };
-      }
     ];
 
     interactiveShellInit = ''
+      # path
+      fish_add_path $HOME/.cargo/bin
+      fish_add_path $HOME/flutter/bin
+      fish_add_path $HOME/go/bin
+      fish_add_path $HOME/.local/bin
+      fish_add_path /opt/homebrew/bin
+
+      set -gx USER "miyoshi_s"
+      set -gx NIX_PATH $HOME/.nix-defexpr/channels /nix/var/nix/profiles/per-user/root/channels $NIX_PATH
+      if test -e $HOME/.nix-profile/etc/profile.d/nix.sh
+        source $HOME/.nix-profile/etc/profile.d/nix.sh
+      end
+      set -gx NIX_CONF_DIR $HOME/.config
+
+      # alias
       alias e='eza --icons --git'
       alias l=e
       alias ls=e
@@ -85,6 +46,53 @@ in {
       alias g=git
       alias gmc='gitmoji -c'
 
+      # commandline
+      set fish_color_normal         brwhite
+      set fish_color_autosuggestion brblack
+      set fish_color_cancel         brcyan
+      set fish_color_command        brgreen
+      set fish_color_comment        brblack
+      set fish_color_cwd            brred
+      set fish_color_end            brwhite
+      set fish_color_error          brred
+      set fish_color_escape         brcyan
+      set fish_color_host           brpurple
+      set fish_color_host_remote    bryellow
+      set fish_color_match          brcyan --underline
+      set fish_color_operator       brpurple
+      set fish_color_param          brred
+      set fish_color_quote          brgreen
+      set fish_color_redirection    brcyan
+      set fish_color_search_match   --background=brblack
+      set fish_color_selection      --background=brblack
+      set fish_color_user           brblue
+
+      # pager
+      set fish_pager_color_progress              brblack --italics
+      set fish_pager_color_secondary_background  # null
+      set fish_pager_color_secondary_completion  brblack
+      set fish_pager_color_secondary_description brblack
+      set fish_pager_color_secondary_prefix      brblack
+      set fish_pager_color_selected_background   --background=brblack
+      set fish_pager_color_selected_completion   bryellow
+      set fish_pager_color_selected_description  bryellow
+      set fish_pager_color_selected_prefix       bryellow
+
+      # keybindings
+      bind \cg 'ghq_repository_search'
+      if bind -M insert >/dev/null 2>/dev/null
+          bind -M insert \cg 'ghq_repository_search'
+      end
+
+      # bd
+      complete -c bd -s c --description "Classic mode : goes back to the first directory named as the string"
+      complete -c bd -s s --description "Seems mode : goes back to the first directory containing string"
+      complete -c bd -s i --description "Case insensitive move (implies seems mode)"
+      complete -c bd -s h -x --description "Display help and exit"
+      complete -c bd -A -f
+      complete -c bd -a '(__fish_bd_complete_dirs)'
+
+      # starship
       starship init fish | source
 
       # asdf
@@ -100,12 +108,26 @@ in {
     '';
 
     functions = {
-      ghq_key_bindings = ''
-        fish_deafult_key_bindings
-        bind \cg '__ghq_repository_search'
-        if bind -M insert >/dev/null 2>/dev/null
-          bind -M insert \cg '__ghq_repository_search'
+
+      fish_user_key_bindings = ''
+        bind \cr 'peco_select_history (commandline -b)'
+        bind \cx\ck peco_kill
+        bind \c] 'stty sane; peco_select_ghq_repository'
+        bind \cx\cr peco_recentd
+      '';
+
+      mkcd = ''
+        if test -d $argv[1]
+          cd $argv[1]
+        else
+          mkdir -p $argv[1]; cd $argv[1]
         end
+      '';
+
+      ghq_repository_search = ''
+        ghq list --full-path | peco | read select
+        [ -n "$select" ]; and cd "$select"
+        commandline -f repaint
       '';
     };
   };
