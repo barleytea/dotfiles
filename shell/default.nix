@@ -3,9 +3,10 @@
   pkgs,
   ...
 }: let
- 
+
 in {
-  imports = [ 
+  imports = [
     ./zsh
+    ./fish
   ];
 }

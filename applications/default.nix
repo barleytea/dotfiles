@@ -2,10 +2,11 @@
   config,
   pkgs,
   ...
-}: let 
+}: let
 
 in {
   imports = [
     ./neovim
+    ./starship
   ];
 }

@@ -32,6 +32,10 @@ jobs:
       #     export DOTFILES_PATH=$GITHUB_WORKSPACE
       #     just list-deploy-targets
       #     just deploy
+      - name: Set nix.conf
+        shell: zsh {0}
+        run : |
+          just set-nix-conf
       - name: List Home 1
         shell: zsh {0}
         run: |

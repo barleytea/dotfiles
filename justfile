@@ -3,6 +3,15 @@ default:
 
 # ========== Deploying Dotfiles ==========#
 
+set-nix-conf:
+  #!/usr/bin/env bash
+  if [ ! -d "$HOME/.config" ]; then
+    mkdir -p "$HOME/.config"
+  fi
+  if [ ! -f "$HOME/.config/nix.conf" ]; then
+    echo 'experimental-features = nix-command flakes' > "$HOME/.config/nix.conf"
+  fi
+
 list-deploy-targets:
   #!/usr/bin/env bash
   CANDIDATES=($(ls -A | grep '^\..*'))
@@ -21,7 +30,7 @@ list-deploy-targets:
       DOTFILES+=("$candidate")
     fi
   done
-  
+
   echo '===> List of config files to be deployed:'
   echo ''
   for val in "${DOTFILES[@]}"; do
@@ -47,7 +56,7 @@ deploy:
       DOTFILES+=("$candidate")
     fi
   done
-  
+
   echo '===> Start to deploy config files to home directory.'
   echo ''
   for val in "${DOTFILES[@]}"; do
