@@ -10,6 +10,10 @@
   elif [ "$(uname)" = "Darwin" ]; then
     export PATH="/opt/homebrew/bin:$PATH"
   fi
+  export PATH="$HOME/.nix-profile/bin:$PATH"
+  export PATH="$HOME/.cargo/bin:$PATH"
+  export PATH="$HOME/fultter/bin:$PATH"
+  export PATH="$HOME/go/bin:$PATH"
 # }}}
 
 # GENERAL {{{
@@ -67,10 +71,6 @@
   fi
 # }}}
 
-# MISC {{{
-  [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-# }}}
-
 # NIX {{{
   export NIX_PATH=$HOME/.nix-defexpr/channels:/nix/var/nix/profiles/per-user/root/channels${NIX_PATH:+:$NIX_PATH}
   if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
@@ -79,20 +79,22 @@
   export NIX_CONF_DIR=$HOME/.config
 # }}}
 
-eval "$(starship init zsh)"
+# MISC {{{
+  eval "$(starship init zsh)"
+# }}}
 
 # LOAD .zshrc_local {{{
-
   if [[ -f ~/.zshrc_local ]]; then
     echo ".zshrc_local loaded."
     source ~/.zshrc_local
   fi
-
 # }}}
 
 # fish {{{
   if [[ -o interactive ]]; then
     echo "fish executed."
     exec fish
+  else
+    echo "not interactive"
   fi
 # }}}

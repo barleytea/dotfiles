@@ -16,6 +16,7 @@ in {
 
     interactiveShellInit = ''
       # path
+      fish_add_path $HOME/.nix-profile/bin
       fish_add_path $HOME/.cargo/bin
       fish_add_path $HOME/flutter/bin
       fish_add_path $HOME/go/bin
@@ -23,11 +24,12 @@ in {
       fish_add_path /opt/homebrew/bin
 
       set -gx USER "miyoshi_s"
-      set -gx NIX_PATH $HOME/.nix-defexpr/channels /nix/var/nix/profiles/per-user/root/channels $NIX_PATH
+      set -gx NIX_PATH (echo $NIX_PATH:)nixpkgs=$HOME/.nix-defexpr/channels/nixpkgs
       if test -e $HOME/.nix-profile/etc/profile.d/nix.sh
         source $HOME/.nix-profile/etc/profile.d/nix.sh
       end
       set -gx NIX_CONF_DIR $HOME/.config
+
 
       # alias
       alias e='eza --icons --git'
@@ -78,12 +80,6 @@ in {
       set fish_pager_color_selected_description  bryellow
       set fish_pager_color_selected_prefix       bryellow
 
-      # keybindings
-      bind \cg 'ghq_repository_search'
-      if bind -M insert >/dev/null 2>/dev/null
-          bind -M insert \cg 'ghq_repository_search'
-      end
-
       # bd
       complete -c bd -s c --description "Classic mode : goes back to the first directory named as the string"
       complete -c bd -s s --description "Seems mode : goes back to the first directory containing string"
@@ -91,9 +87,6 @@ in {
       complete -c bd -s h -x --description "Display help and exit"
       complete -c bd -A -f
       complete -c bd -a '(__fish_bd_complete_dirs)'
-
-      # starship
-      starship init fish | source
 
       # asdf
       if test -f $HOME/.nix-profile/share/asdf-vm/asdf.fish
@@ -110,10 +103,11 @@ in {
     functions = {
 
       fish_user_key_bindings = ''
-        bind \cr 'peco_select_history (commandline -b)'
-        bind \cx\ck peco_kill
-        bind \c] 'stty sane; peco_select_ghq_repository'
-        bind \cx\cr peco_recentd
+        bind \cr 'peco_select_history'
+        bind \cg 'ghq_repository_search'
+        if bind -M insert >/dev/null 2>/dev/null
+          bind -M insert \cg 'ghq_repository_search'
+        end
       '';
 
       mkcd = ''
@@ -127,6 +121,12 @@ in {
       ghq_repository_search = ''
         ghq list --full-path | peco | read select
         [ -n "$select" ]; and cd "$select"
+        commandline -f repaint
+      '';
+
+      peco_select_history = ''
+        history | peco --query "$argv" | read -l select
+        [ -n "$select" ]; and commandline -r "$select"
         commandline -f repaint
       '';
     };

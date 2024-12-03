@@ -3,48 +3,8 @@
 .vscode
 .netrwhist
 
-# vim
-.vim/plugged/**
-.vim/autoload/**
-.vim/init.vim
-.vim/sessions/**
-
-# fish
-home/config/.config/fish/functions
-home/config/.config/fish/fish_variable
-home/config/.config/fish/fish_variables
-home/config/.config/fish/fish_pluglins
-home/config/.config/fish/conf.d/sdk.fish
-home/config/.config/fish/completions/sdk.fish
-home/config/.config/fish/conf.d/rustup.fish
-home/config/.config/fish/conf.d/local.fish
-
-# other configs
-home/config/.config/go/
-home/config/.config/flutter/
-home/config/.config/helm/
-home/config/.config/hub
-home/config/.config/iterm2/
-home/config/.config/jgit/
-home/config/.config/neofetch/
-home/config/.config/raycast/
-home/config/.config/stripe/
-home/config/.config/coc/
-home/config/.config/nvim
-home/config/.config/configstore/
-home/config/.config/gatsby/
-home/config/.config/github-copilot/
-home/config/.config/wireshark/
-home/config/.config/yarn/
-home/config/.config/gh/
-home/config/.config/wezterm/data/*.json
-home/config/.config/Code/
-home/config/.config/JetBrains/
-home/config/.config/bottom/
-home/config/.config/environment.d/
-home/config/home/config/.config/gcloud/
-home/config/.config/google-chrome/
-home/config/.config/pulse/
+# XDG_CONFIG_HOME
+.config
 
 # vim
 .vim/
@@ -54,5 +14,8 @@ node_modules/
 package-lock.json
 package.json
 result
+
+# asdf
+.tool-versions
 
 secret

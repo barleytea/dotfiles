@@ -1,12 +1,12 @@
 {
-  config,
-  pkgs,
-  ...
-}: let
-
-in {
   imports = [
+    ./asdf
+    ./editorconfig
+    ./git
+    ./just
     ./neovim
     ./starship
+    ./tmux
+    ./wezterm
   ];
 }

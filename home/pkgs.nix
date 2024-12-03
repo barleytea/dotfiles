@@ -24,6 +24,7 @@ in {
       bottom
       glib
       cairo
+      delta
       docker
       eza
       fd
@@ -38,6 +39,7 @@ in {
       go
       google-chrome
       gnugrep
+      just
       stack
       hub
       jpegoptim

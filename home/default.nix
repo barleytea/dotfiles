@@ -3,11 +3,10 @@
   pkgs,
   ...
 }: let
- 
+
 in {
-  imports = [ 
+  imports = [
     ./pkgs.nix
-    ./config
     ../applications
     ../shell
   ];

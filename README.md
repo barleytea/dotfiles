@@ -9,16 +9,39 @@ cd git_repos/github.com/barleytea
 git clone https://github.com/barleytea/dotfiles.git
 ```
 
-### Install just
-
-```sh
-bash ./just-install.sh
-```
-
 ### Install nix
 
 ```sh
-just nix-install
+mkdir -p "$HOME/.config"
+touch "$HOME/.config/nix.conf"
+echo 'experimental-features = nix-command flakes' > "$HOME/.config/nix.conf"
+```
+
+### Set up nix.conf
+
+```sh
+curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install --no-confirm
+source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+```
+
+### Update nix channel
+
+```sh
+nix-channel --add https://nixos.org/channels/nixpkgs-unstable
+nix-channel --update
+```
+
+### Apply nix config
+
+```sh
+nix flake update
+nix run nixpkgs#home-manager -- switch --flake .#home --impure
+```
+
+### Launch zsh (fish)
+
+```sh
+zsh
 ```
 
 ### Install nix-darwin
@@ -27,28 +50,27 @@ just nix-install
 just nix-darwin-install
 ```
 
-### Apply nix config
+### Apply darwin config
 
 ```sh
-just nix-apply
 just nix-darwin-apply
-```
-
-### Deploy dotfiles symbolic link
-
-```sh
-just deploy
-```
-
-### Install vim-related stuffs
-
-```sh
-just set-up-vim
 ```
 
 ## Operation
 
-### Update all packages
+### Update Home Settings
+
+```sh
+just nix-apply
+```
+
+### Update Darwin Settings
+
+```sh
+just nix-darwin-apply
+```
+
+### Update All Settings
 
 ```sh
 just nix-update-all
@@ -60,7 +82,6 @@ just nix-update-all
 nix profile install nixpkgs#hoge
 ```
 
-
 ### Rollback
 
 1. Check generations 
@@ -68,6 +89,7 @@ nix profile install nixpkgs#hoge
     ```sh
     nix-env --list-generations
     ```
+
     ```
     1   2024-10-17 10:19:29   
     2   2024-10-17 11:55:16   

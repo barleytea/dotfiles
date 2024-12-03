@@ -14,8 +14,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Setup Just
-        uses: extractions/setup-just@v1
       - name: Install Nix
         uses: cachix/install-nix-action@v18
         with:
@@ -26,57 +24,49 @@ jobs:
         uses: DeterminateSystems/magic-nix-cache-action@main
       - name: Check flakes
         uses: DeterminateSystems/flake-checker-action@main
-      # - name: Deploy dotfiles
-      #   shell: zsh {0}
-      #   run: |
-      #     export DOTFILES_PATH=$GITHUB_WORKSPACE
-      #     just list-deploy-targets
-      #     just deploy
       - name: Set nix.conf
         shell: zsh {0}
         run : |
-          just set-nix-conf
-      - name: List Home 1
-        shell: zsh {0}
-        run: |
-          ls -al $HOME
-          ls -al $HOME/.config
+          if [ ! -d "$HOME/.config" ]; then
+            mkdir -p "$HOME/.config"
+          fi
+          if [ ! -f "$HOME/.config/nix.conf" ]; then
+            echo 'experimental-features = nix-command flakes' > "$HOME/.config/nix.conf"
+          fi
       - name: Prepare Nix
         shell: zsh {0}
         run: |
           echo "access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}" >> $HOME/.config/nix.conf
-          # just nix-install
-          just nix-channel-update
+            source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+            nix-channel --add https://nixos.org/channels/nixpkgs-unstable
+            nix-channel --update
       - name: Apply Nix
         shell: zsh {0}
         run: |
           export USER=runner
           echo $USER
-          just nix-apply
-      - name: List Home 2
-        shell: zsh {0}
-        run: |
-          ls -al $HOME
-          ls -al $HOME/.config
-          pwd
+          source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+          echo "Updating flake..."
+          nix flake update
+          echo "Updating home-manager..."
+          nix run nixpkgs#home-manager -- switch --flake .#home --impure
+          just
       - name: Crear initial nix.conf
         run: |
           sudo rm /etc/nix/nix.conf # work around
-      # - name: Install nix-darwin
-      #   shell: zsh {0}
-      #   run: |
-      #     export $NIX_CONF_DIR=$HOME/.config
-      #     just nix-darwin-install
       - name: Apply nix-darwin
         shell: zsh {0}
         run: |
-          /Users/runner/hostedtoolcache/just/1.36.0/arm64/just nix-darwin-apply #FIXME
+          source $HOME/.zshrc
+          just nix-darwin-apply
       - name: Run nix-update-all
         shell: zsh {0}
         run: |
-          /Users/runner/hostedtoolcache/just/1.36.0/arm64/just nix-update-all #FIXME
+          source $HOME/.zshrc
+          just nix-update-all
       - name: Run npm-tools
         shell: zsh {0}
         run: |
+          source $HOME/.zshrc
           echo $PATH | grep -q /opt/homebrew/bin || export PATH="/opt/homebrew/bin:$PATH"
-          /Users/runner/hostedtoolcache/just/1.36.0/arm64/just npm-tools #FIXME
+          just npm-tools
