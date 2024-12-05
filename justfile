@@ -23,13 +23,12 @@ nix-uninstall:
 nix-darwin-install:
   #!/usr/bin/env bash
   source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-  nix --extra-experimental-features nix-command --extra-experimental-features flakes run nix-darwin -- switch --flake ./darwin/default.nix
+  nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake ./darwin/default.nix
 
 nix-darwin-apply:
   #!/usr/bin/env bash
   source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-  echo "Updating nix-darwin..."
-  nix --extra-experimental-features nix-command --extra-experimental-features flakes run nix-darwin -- switch --flake .#darwin --impure
+  nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake .#darwin --impure
 
 nix-update-all: nix-channel-update nix-apply nix-darwin-apply
 

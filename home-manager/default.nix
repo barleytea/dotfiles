@@ -3,7 +3,7 @@
   pkgs,
   ...
 }: let
-  utils = import ./utils.nix { inherit pkgs; };
+  utils = import ./utils/utils.nix { inherit pkgs; };
 in {
 
   nixpkgs = {
@@ -11,6 +11,20 @@ in {
       allowUnfree = true;
     };
   };
+
+  imports = [
+    ./asdf
+    ./editorconfig
+    ./git
+    ./just
+    ./k9s
+    ./neovim
+    ./shell
+    ./starship
+    ./tmux
+    ./wezterm
+    ./zellij
+  ];
 
   home = {
     username = utils.username;

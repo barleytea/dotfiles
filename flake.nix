@@ -34,14 +34,14 @@
           inherit inputs;
         };
         modules = [
-          ./home/default.nix
+          ./home-manager/default.nix
         ];
       };
     };
 
     darwinConfigurations.darwin = nix-darwin.lib.darwinSystem {
       system = system;
-      modules = [ 
+      modules = [
         ./darwin/default.nix
       ];
     };

@@ -13,7 +13,6 @@ git clone https://github.com/barleytea/dotfiles.git
 
 ```sh
 mkdir -p "$HOME/.config"
-touch "$HOME/.config/nix.conf"
 echo 'experimental-features = nix-command flakes' > "$HOME/.config/nix.conf"
 ```
 
