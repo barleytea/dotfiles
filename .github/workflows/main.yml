@@ -40,20 +40,18 @@ jobs:
             source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
             nix-channel --add https://nixos.org/channels/nixpkgs-unstable
             nix-channel --update
-      - name: Apply Nix
+      - name: Apply home-manager
         shell: zsh {0}
         run: |
           export USER=runner
           echo $USER
           source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-          echo "Updating flake..."
           nix flake update
-          echo "Updating home-manager..."
           nix run nixpkgs#home-manager -- switch --flake .#home --impure
           just
       - name: Crear initial nix.conf
         run: |
-          sudo rm /etc/nix/nix.conf # work around
+          sudo rm /etc/nix/nix.conf # FIXME: work around
       - name: Apply nix-darwin
         shell: zsh {0}
         run: |

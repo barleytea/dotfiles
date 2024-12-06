@@ -9,7 +9,7 @@ nix-channel-update:
   nix-channel --add https://nixos.org/channels/nixpkgs-unstable
   nix-channel --update
 
-nix-apply:
+home-manager-apply:
   #!/usr/bin/env bash
   source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
   nix flake update
@@ -20,17 +20,12 @@ nix-uninstall:
   source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
   /nix/nix-uninstaller uninstall
 
-nix-darwin-install:
-  #!/usr/bin/env bash
-  source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-  nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake ./darwin/default.nix
-
 nix-darwin-apply:
   #!/usr/bin/env bash
   source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
   nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake .#darwin --impure
 
-nix-update-all: nix-channel-update nix-apply nix-darwin-apply
+nix-update-all: nix-channel-update home-manager-apply nix-darwin-apply
 
 # ================ Others ================#
 
