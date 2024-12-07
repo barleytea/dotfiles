@@ -23,7 +23,22 @@ nix-uninstall:
 nix-darwin-apply:
   #!/usr/bin/env bash
   source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-  nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake .#darwin --impure
+  nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake .#all --impure
+
+nix-darwin-homebrew-apply:
+  #!/usr/bin/env bash
+  source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+  nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake .#homebrew --impure
+
+nix-darwin-system-apply:
+  #!/usr/bin/env bash
+  source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+  nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake .#system --impure
+
+nix-darwin-service-apply:
+  #!/usr/bin/env bash
+  source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+  nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake .#service --impure
 
 nix-update-all: nix-channel-update home-manager-apply nix-darwin-apply
 

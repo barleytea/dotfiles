@@ -39,11 +39,34 @@
       };
     };
 
-    darwinConfigurations.darwin = nix-darwin.lib.darwinSystem {
-      system = system;
-      modules = [
-        ./darwin/default.nix
-      ];
+    darwinConfigurations =  {
+      all = nix-darwin.lib.darwinSystem {
+        system = system;
+        modules = [
+          ./darwin/default.nix
+        ];
+      };
+
+      homebrew = nix-darwin.lib.darwinSystem {
+        system = system;
+        modules = [
+          ./darwin/homebrew/default.nix
+        ];
+      };
+
+      system = nix-darwin.lib.darwinSystem {
+        system = system;
+        modules = [
+          ./darwin/system/default.nix
+        ];
+      };
+
+      service = nix-darwin.lib.darwinSystem {
+        system = system;
+        modules = [
+          ./darwin/service/default.nix
+        ];
+      };
     };
   };
 }

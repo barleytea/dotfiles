@@ -5,7 +5,7 @@
   ...
 }: let
   inherit (builtins) readFile;
-  pwd = (import ./pwd.nix { inherit config; }).pwd;
+  pwd = (import ../pwd.nix { inherit config; }).pwd;
   configFile = file: {
     "nvim/${file}".source = pkgs.substituteAll (
       {
@@ -66,7 +66,7 @@ in {
   };
 
   xdg.configFile."nvim/lua" = {
-    source = config.lib.file.mkOutOfStoreSymlink "${pwd}/lua";
+    source = config.lib.file.mkOutOfStoreSymlink "${pwd}/neovim/lua";
   };
 
   imports = [
