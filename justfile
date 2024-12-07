@@ -49,7 +49,6 @@ nix-update-all: nix-channel-update home-manager-apply nix-darwin-apply
 vscode-apply:
   #!/usr/bin/env bash
   bash vscode/settings/index.sh
-  bash vscode/keybindings/index.sh
   bash vscode/extensions/apply.sh
 
 vscode-save:
