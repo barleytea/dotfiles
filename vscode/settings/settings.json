@@ -1,0 +1,104 @@
+{
+  "workbench.colorTheme": "Dracula",
+  "hediet.vscode-drawio.local-storage": "eyIuZHJhd2lvLWNvbmZpZyI6IntcImxhbmd1YWdlXCI6XCJcIixcImN1c3RvbUZvbnRzXCI6W10sXCJsaWJyYXJpZXNcIjpcImdlbmVyYWxcIixcImN1c3RvbUxpYnJhcmllc1wiOltcIkwuc2NyYXRjaHBhZFwiXSxcInBsdWdpbnNcIjpbXSxcInJlY2VudENvbG9yc1wiOltdLFwiZm9ybWF0V2lkdGhcIjpcIjI0MFwiLFwiY3JlYXRlVGFyZ2V0XCI6ZmFsc2UsXCJwYWdlRm9ybWF0XCI6e1wieFwiOjAsXCJ5XCI6MCxcIndpZHRoXCI6ODUwLFwiaGVpZ2h0XCI6MTEwMH0sXCJzZWFyY2hcIjp0cnVlLFwic2hvd1N0YXJ0U2NyZWVuXCI6dHJ1ZSxcImdyaWRDb2xvclwiOlwiI2QwZDBkMFwiLFwiZGFya0dyaWRDb2xvclwiOlwiIzZlNmU2ZVwiLFwiYXV0b3NhdmVcIjp0cnVlLFwicmVzaXplSW1hZ2VzXCI6bnVsbCxcIm9wZW5Db3VudGVyXCI6MCxcInZlcnNpb25cIjoxOCxcInVuaXRcIjoxLFwiaXNSdWxlck9uXCI6ZmFsc2V9In0=",
+  "security.workspace.trust.untrustedFiles": "open",
+  "editor.suggestSelection": "first",
+  "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+
+  // ---------- LaTeX Workshop ----------
+
+  // 使用パッケージのコマンドや環境の補完を有効にする
+  "latex-workshop.intellisense.package.enabled": true,
+
+  // 生成ファイルを削除するときに対象とするファイル
+  // デフォルト値に "*.synctex.gz" を追加
+  "latex-workshop.latex.clean.fileTypes": [
+      "*.aux",
+      "*.bbl",
+      "*.blg",
+      "*.idx",
+      "*.ind",
+      "*.lof",
+      "*.lot",
+      "*.out",
+      "*.toc",
+      "*.acn",
+      "*.acr",
+      "*.alg",
+      "*.glg",
+      "*.glo",
+      "*.gls",
+      "*.ist",
+      "*.fls",
+      "*.log",
+      "*.fdb_latexmk",
+      "*.snm",
+      "*.nav",
+      "*.dvi",
+      "*.synctex.gz"
+  ],
+
+  // 生成ファイルを "out" ディレクトリに吐き出す
+  "latex-workshop.latex.outDir": "out",
+
+  // ビルドのレシピ
+  "latex-workshop.latex.recipes": [
+      {
+          "name": "latexmk",
+          "tools": [
+              "latexmk"
+          ]
+      },
+  ],
+
+  // ビルドのレシピに使われるパーツ
+  "latex-workshop.latex.tools": [
+      {
+          "name": "latexmk",
+          "command": "latexmk",
+          "args": [
+              "-silent",
+              "-outdir=%OUTDIR%",
+              "%DOC%"
+          ],
+      },
+  ],
+  "latex-workshop.view.pdf.viewer": "tab",
+  "files.autoSave": "afterDelay",
+  "editor.renderWhitespace": "trailing",
+  "rust-client.rustupPath": "/Users/miyoshi_s/.cargo/bin/rustup",
+  "editor.inlineSuggest.enabled": true,
+  "terminal.integrated.env.osx": {
+      "FIG_NEW_SESSION": "1"
+  },
+  "editor.accessibilitySupport": "off",
+  "go.goroot": "/opt/homebrew/Cellar/go/1.21.5/libexec/",
+  "terminal.integrated.fontFamily": "'Hack Nerd Font Mono'",
+  "editor.fontFamily": "'Hack Nerd Font Mono', Menlo, Monaco, 'Courier New', monospace",
+  "go.toolsManagement.autoUpdate": true,
+  "json.maxItemsComputed": 50000,
+  "git.openRepositoryInParentFolders": "always",
+  "[dart]": {
+      "editor.formatOnSave": true,
+      "editor.formatOnType": true,
+      "editor.rulers": [
+          80
+      ],
+      "editor.selectionHighlight": false,
+      "editor.suggest.snippetsPreventQuickSuggestions": false,
+      "editor.suggestSelection": "first",
+      "editor.tabCompletion": "onlySnippets",
+      "editor.wordBasedSuggestions": "off"
+  },
+  "go.gopath": "/Users/miyoshi_s/go",
+  "files.associations": {
+      "*.css": "tailwindcss"
+  },
+  "workbench.startupEditor": "none",
+  "update.showReleaseNotes": false,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "markdown-preview-enhanced.codeBlockTheme": "auto.css",
+  "markdown-preview-enhanced.revealjsTheme": "none.css",
+  "markdown-preview-enhanced.previewTheme": "none.css",
+  "markdown-preview-enhanced.enablePreviewZenMode": true,
+}

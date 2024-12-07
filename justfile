@@ -1,7 +1,7 @@
 [private]
 @default: help
 
-# ================== Nix =================#
+# ================== nix ================= #
 
 nix-channel-update:
   #!/usr/bin/env bash
@@ -42,7 +42,21 @@ nix-darwin-service-apply:
 
 nix-update-all: nix-channel-update home-manager-apply nix-darwin-apply
 
-# ================ Others ================#
+# ================ vscode ================ #
+
+# ref: https://scrapbox.io/mrsekut-p/VSCode%E3%81%AE%E8%A8%AD%E5%AE%9A%E3%82%92dotfiles%E3%81%A7%E7%AE%A1%E7%90%86%E3%81%99%E3%82%8B
+
+vscode-apply:
+  #!/usr/bin/env bash
+	bash vscode/settings/index.sh
+	bash vscode/keybindings/index.sh
+	bash vscode/extensions/apply.sh
+
+vscode-save:
+  #!/usr/bin/env bash
+	bash vscode/extensions/save.sh
+
+# ================ others ================ #
 
 npm-tools:
   #!/usr/bin/env bash
