@@ -1,103 +1,61 @@
-dotfilesPath := "$HOME/git_repos/github.com/barleytea/dotfiles"
+[private]
+@default: help
 
-default:
-  @just --choose
-
-list-deploy-targets:
-  #!/usr/bin/env bash
-  CANDIDATES=($(ls -A | grep '^\..*'))
-  EXCLUSIONS=(".git" ".DS_Store" ".gitmodules")
-  DOTFILES=()
-
-  for candidate in "${CANDIDATES[@]}"; do
-    skip=false
-    for exclusion in "${EXCLUSIONS[@]}"; do
-      if [[ "$candidate" == "$exclusion" ]]; then
-        skip=true
-        break
-      fi
-    done
-    if [ "$skip" = false ]; then
-      DOTFILES+=("$candidate")
-    fi
-  done
-  
-  echo '===> List of config files to be deployed:'
-  echo ''
-  for val in "${DOTFILES[@]}"; do
-    echo "$val"
-  done
-
-deploy:
-  #!/usr/bin/env bash
-  CANDIDATES=($(ls -A | grep '^\..*'))
-  EXCLUSIONS=(".git" ".DS_Store" ".gitmodules")
-  DOTFILES=()
-
-  for candidate in "${CANDIDATES[@]}"; do
-    skip=false
-    for exclusion in "${EXCLUSIONS[@]}"; do
-      if [[ "$candidate" == "$exclusion" ]]; then
-        skip=true
-        break
-      fi
-    done
-    if [ "$skip" = false ]; then
-      DOTFILES+=("$candidate")
-    fi
-  done
-  
-  echo '===> Start to deploy config files to home directory.'
-  echo ''
-  for val in "${DOTFILES[@]}"; do
-    ln -sfnv "$(realpath "$val")" "$HOME/$val"
-  done
-
-nix-install:
-  #!/usr/bin/env bash
-  curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install --no-confirm
+# ================== Nix =================#
 
 nix-channel-update:
+  #!/usr/bin/env bash
   source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-  nix --version
   nix-channel --add https://nixos.org/channels/nixpkgs-unstable
   nix-channel --update
 
-nix-apply:
+home-manager-apply:
   #!/usr/bin/env bash
   source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-  echo "Updating flake..."
   nix flake update
-  echo "Updating profile..."
-  nix profile upgrade barleytea-packages --impure
-  echo "Updating home-manager..."
-  nix run nixpkgs#home-manager -- switch --flake .#barleyteaHomeConfig --impure
+  nix run nixpkgs#home-manager -- switch --flake .#home --impure
 
 nix-uninstall:
   #!/usr/bin/env bash
   source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
   /nix/nix-uninstaller uninstall
 
-nix-darwin-install:
-  #!/usr/bin/env bash
-  source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-  nix-build https://github.com/LnL7/nix-darwin/archive/master.tar.gz -A installer
-  ./result/bin/darwin-installer
-
 nix-darwin-apply:
   #!/usr/bin/env bash
   source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-  echo "Updating nix-darwin..."
-  nix --extra-experimental-features nix-command --extra-experimental-features flakes run nix-darwin -- switch --flake .#barleytea-darwin --impure
+  nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake .#all --impure
 
-nix-update-all: nix-channel-update nix-apply nix-darwin-apply
-
-vim:
+nix-darwin-homebrew-apply:
   #!/usr/bin/env bash
-  bash ./vim.sh
+  source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+  nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake .#homebrew --impure
+
+nix-darwin-system-apply:
+  #!/usr/bin/env bash
+  source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+  nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake .#system --impure
+
+nix-darwin-service-apply:
+  #!/usr/bin/env bash
+  source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+  nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake .#service --impure
+
+nix-update-all: nix-channel-update home-manager-apply nix-darwin-apply
+
+# ================ Others ================#
 
 npm-tools:
   #!/usr/bin/env bash
   sudo n latest
   npm i -g npm
   npm i -g gitmoji-cli
+
+paths:
+  #!/usr/bin/env bash
+  echo $PATH | tr ':' '\n'
+
+@help:
+  #!/usr/bin/env bash
+  echo "Usage: just <recipe>"
+  echo ""
+  just --list

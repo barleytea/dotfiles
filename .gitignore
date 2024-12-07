@@ -3,51 +3,22 @@
 .vscode
 .netrwhist
 
+# XDG_CONFIG_HOME
+.config
+
 # vim
-.vim/plugged/**
-.vim/autoload/**
-.vim/init.vim
-.vim/sessions/**
-
-# fish
-.config/fish/functions
-.config/fish/fish_variable
-.config/fish/fish_variables
-.config/fish/fish_pluglins
-.config/fish/conf.d/sdk.fish
-.config/fish/completions/sdk.fish
-.config/fish/conf.d/rustup.fish
-.config/fish/local.fish
-
-# other configs
-.config/go/
-.config/flutter/
-.config/helm/
-.config/hub
-.config/iterm2/
-.config/jgit/
-.config/neofetch/
-.config/raycast/
-.config/stripe/
-.config/coc/
-.config/nvim
-.config/configstore/
-.config/gatsby/
-.config/github-copilot/
-.config/wireshark/
-.config/yarn/
-.config/gh/
-.config/wezterm/data/*.json
-.config/Code/
-.config/JetBrains/
-.config/bottom/
-.config/environment.d/
-.config/gcloud/
-.config/google-chrome/
-.config/pulse/
+.vim/
 
 # projects
 node_modules/
 package-lock.json
 package.json
 result
+
+# asdf
+.tool-versions
+
+# wezterm
+home-manager/wezterm/config/data/wifi-status.json
+
+secret

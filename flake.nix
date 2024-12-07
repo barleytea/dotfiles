@@ -11,6 +11,10 @@
       url = "github:LnL7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    neovim-nightly-overlay = {
+      url = "github:nix-community/neovim-nightly-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -18,33 +22,51 @@
     nixpkgs,
     home-manager,
     nix-darwin,
-    flake-utils,
+    neovim-nightly-overlay,
   } @ inputs: let
     system = builtins.currentSystem;
-    # system = "aarch64-darwin"; # "aarch64-darwin" | # "x86_64-darwin" | "x86_64-linux";
-    pkgs = nixpkgs.legacyPackages.${system};
   in {
-    packages.${system}.barleytea-packages = pkgs.buildEnv {
-      name = "barleytea-packages-list";
-      paths = with pkgs; [];
-    };
 
     homeConfigurations = {
-      barleyteaHomeConfig = home-manager.lib.homeManagerConfiguration {
-        pkgs = pkgs;
+      home = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.${system};
         extraSpecialArgs = {
           inherit inputs;
         };
         modules = [
-          ./.config/nix/home-manager/default.nix
+          ./home-manager/default.nix
         ];
       };
     };
-    darwinConfigurations.barleytea-darwin = nix-darwin.lib.darwinSystem {
-      system = system;
-      modules = [ 
-        ./.config/nix/nix-darwin/default.nix
-      ];
+
+    darwinConfigurations =  {
+      all = nix-darwin.lib.darwinSystem {
+        system = system;
+        modules = [
+          ./darwin/default.nix
+        ];
+      };
+
+      homebrew = nix-darwin.lib.darwinSystem {
+        system = system;
+        modules = [
+          ./darwin/homebrew/default.nix
+        ];
+      };
+
+      system = nix-darwin.lib.darwinSystem {
+        system = system;
+        modules = [
+          ./darwin/system/default.nix
+        ];
+      };
+
+      service = nix-darwin.lib.darwinSystem {
+        system = system;
+        modules = [
+          ./darwin/service/default.nix
+        ];
+      };
     };
   };
 }
