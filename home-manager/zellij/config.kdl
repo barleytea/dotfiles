@@ -1,4 +1,6 @@
-// If you'd like to override the default keybindings completely, be sure to change "keybinds" to "keybinds clear-defaults=true"
+copy_on_select true
+copy_command "pbcopy"
+
 keybinds {
     unbind "Ctrl g"
     normal {

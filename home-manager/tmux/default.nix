@@ -7,7 +7,6 @@ tmuxConf = ''
   set -g default-shell /bin/zsh
   set -g mouse on
 
-
   set-option -g status-left-length 20
   set-option -g status-right-length 60
 
