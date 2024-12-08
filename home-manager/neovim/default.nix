@@ -48,11 +48,11 @@ in {
           defaults = {
             lazy = true,
           },
-          -- dev = {
-          --   path = "${lazyPath}",
-          --   patterns = { "." },
-          --   fallback = true,
-          -- },
+          dev = {
+            path = "${lazyPath}",
+            patterns = { "." },
+            fallback = true,
+          },
           spec = {
             { "LazyVim/LazyVim", import = "lazyvim.plugins" },
             { "nvim-telescope/telescope-fzf-native.nvim", enabled = true },

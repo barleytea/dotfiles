@@ -1,5 +1,6 @@
 return {
   "lukas-reineke/indent-blankline.nvim",
+  dependencies = { "folke/snacks.nvim" },
   event = "LazyFile",
   opts = function()
     Snacks.toggle({
