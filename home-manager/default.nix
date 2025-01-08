@@ -13,9 +13,12 @@ in {
   };
 
   imports = [
+    ./alacritty
     ./asdf
+    ./atuin
     ./editorconfig
     ./git
+    ./ghostty
     ./just
     ./k9s
     ./neovim
@@ -38,6 +41,7 @@ in {
       bottom
       glib
       cairo
+      code-cursor
       delta
       docker
       eza
@@ -75,6 +79,7 @@ in {
       slack
       socat
       starship
+      terraform
       tmux
       tree
       vscode

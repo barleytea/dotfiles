@@ -10,7 +10,7 @@ in {
     extraConfig = readFile ./config/wezterm.lua;
   };
 
-   xdg.configFile."wezterm" = {
+  xdg.configFile."wezterm" = {
     source = config.lib.file.mkOutOfStoreSymlink "${pwd}/wezterm/config";
   };
   xdg.configFile."wezterm/wezterm.lua" = {

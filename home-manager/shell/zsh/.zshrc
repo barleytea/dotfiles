@@ -14,6 +14,8 @@
   export PATH="$HOME/.cargo/bin:$PATH"
   export PATH="$HOME/fultter/bin:$PATH"
   export PATH="$HOME/go/bin:$PATH"
+  export PATH="$HOME/.local/bin:$PATH"
+
 # }}}
 
 # GENERAL {{{
@@ -42,6 +44,12 @@
 # }}}
 
 # FUNCTIONS {{{
+
+  function fish_user_key_bindings() {
+    bindkey '^M' peco_select_history
+    bindkey '^G' ghq_repository_search
+  }
+
   function mkcd() {
     if [[ -d $1 ]]; then
       cd $1
@@ -49,6 +57,25 @@
       mkdir -p $1 && cd $1
     fi
   }
+
+  function ghq_repository_search() {
+    local select=$(ghq list --full-path | peco)
+    if [[ -n "$select" ]]; then
+      cd "$select"
+      zle reset-prompt
+    fi
+  }
+
+  function peco_select_history() {
+    local select=$(history | peco)
+    if [[ -n "$select" ]]; then
+      BUFFER="$select"
+      zle accept-line
+    fi
+  }
+
+  zle -N peco_select_history
+  zle -N ghq_repository_search
 # }}}
 
 # ALIAS {{{
@@ -61,13 +88,16 @@
     alias ls=e
     alias ea='eza -a --icons --git'
     alias la=ea
-    alias ee='eza -aahl --icons --git'f
+    alias ee='eza -aahl --icons --git'
     alias ll=ee
     alias et='eza -T -L 3 -a -I "node_modules|.git|.cache" --icons'
     alias lt=et
     alias eta='eza -T -a -I "node_modules|.git|.cache" --color=always --icons | less -r'
     alias lta=eta
     alias l='clear && ls'
+    alias vim=nvim
+    alias g=git
+    alias gmc='gitmoji -c'
   fi
 # }}}
 
@@ -91,10 +121,10 @@
 # }}}
 
 # fish {{{
-  if [[ -o interactive ]]; then
-    echo "fish executed."
-    exec fish
-  else
-    echo "not interactive"
-  fi
+#   if [[ -o interactive ]]; then
+#     echo "fish executed."
+#     exec fish
+#   else
+#     echo "not interactive"
+#   fi
 # }}}
