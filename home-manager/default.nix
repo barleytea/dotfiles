@@ -10,6 +10,7 @@ in {
     config = {
       allowUnfree = true;
       allowUnsupportedSystem = true;
+      allowBroken = true; # FIXME
     };
   };
 
