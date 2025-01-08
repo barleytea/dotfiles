@@ -9,14 +9,14 @@ cd git_repos/github.com/barleytea
 git clone https://github.com/barleytea/dotfiles.git
 ```
 
-### Install nix
+### Set up nix.conf
 
 ```sh
 mkdir -p "$HOME/.config"
 echo 'experimental-features = nix-command flakes' > "$HOME/.config/nix.conf"
 ```
 
-### Set up nix.conf
+### Install nix
 
 ```sh
 curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install --no-confirm
@@ -43,12 +43,6 @@ nix run nixpkgs#home-manager -- switch --flake .#home --impure
 zsh
 ```
 
-### Install nix-darwin
-
-```sh
-just nix-darwin-install
-```
-
 ### Apply darwin config
 
 ```sh
@@ -60,7 +54,7 @@ just nix-darwin-apply
 ### Update Home Settings
 
 ```sh
-just nix-apply
+just home-manager-apply
 ```
 
 ### Update Darwin Settings

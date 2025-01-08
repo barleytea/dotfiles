@@ -9,6 +9,7 @@ in {
   nixpkgs = {
     config = {
       allowUnfree = true;
+      allowBroken = true; # FIXME
     };
   };
 
