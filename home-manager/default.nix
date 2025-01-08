@@ -9,7 +9,6 @@ in {
   nixpkgs = {
     config = {
       allowUnfree = true;
-      allowBroken = true; # FIXME
     };
   };
 
@@ -19,7 +18,7 @@ in {
     ./atuin
     ./editorconfig
     ./git
-    ./ghostty
+    # ./ghostty
     ./just
     ./k9s
     ./neovim
