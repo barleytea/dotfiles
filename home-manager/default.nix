@@ -9,8 +9,6 @@ in {
   nixpkgs = {
     config = {
       allowUnfree = true;
-      allowUnsupportedSystem = true;
-      allowBroken = true; # FIXME
     };
   };
 
@@ -43,7 +41,6 @@ in {
       bottom
       glib
       cairo
-      code-cursor
       delta
       docker
       eza

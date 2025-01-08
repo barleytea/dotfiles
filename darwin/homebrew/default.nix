@@ -18,12 +18,13 @@
       "n"
     ];
     casks = [
-      "devutils"
       "android-studio"
       "apparency"
       "appcleaner"
       "authy"
       "caffeine"
+      "cursor"
+      "devutils"
       "font-hack-nerd-font"
       "gfxcardstatus"
       "google-japanese-ime"
