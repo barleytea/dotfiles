@@ -45,11 +45,6 @@
 
 # FUNCTIONS {{{
 
-  function fish_user_key_bindings() {
-    bindkey '^M' peco_select_history
-    bindkey '^G' ghq_repository_search
-  }
-
   function mkcd() {
     if [[ -d $1 ]]; then
       cd $1
@@ -74,7 +69,6 @@
     fi
   }
 
-  zle -N peco_select_history
   zle -N ghq_repository_search
 # }}}
 
@@ -109,8 +103,14 @@
   export NIX_CONF_DIR=$HOME/.config
 # }}}
 
+# KEYBIND {{{
+  bindkey '^G' ghq_repository_search
+# }}}
+
 # MISC {{{
   eval "$(starship init zsh)"
+  eval "$(sheldon source)"
+  eval "$(atuin init zsh)"
 # }}}
 
 # LOAD .zshrc_local {{{

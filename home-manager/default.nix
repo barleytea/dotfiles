@@ -18,11 +18,11 @@ in {
     ./atuin
     ./editorconfig
     ./git
-    # ./ghostty
     ./just
     ./k9s
     ./neovim
     ./shell
+    ./sheldon
     ./starship
     ./tmux
     ./wezterm
@@ -36,11 +36,9 @@ in {
     packages = with pkgs; [
       arp-scan
       asdf-vm
-      curl
-      gat
       bottom
-      glib
       cairo
+      curl
       delta
       docker
       eza
@@ -49,25 +47,28 @@ in {
       fish
       fontforge
       fzf
+      gat
       gh
       ghq
       git
       gitflow
+      glib
+      gnugrep
       go
       google-chrome
-      gnugrep
-      just
-      stack
       hub
       jpegoptim
       jq
+      just
       krb5
       kubectx
+      lazygit
       maven
       mecab
       minikube
       neofetch
       neovim-remote
+      nerd-fonts.hack
       peco
       postgresql
       postman
@@ -75,8 +76,10 @@ in {
       pyenv
       rbenv
       ripgrep
+      sheldon
       slack
       socat
+      stack
       starship
       terraform
       tmux

@@ -69,3 +69,38 @@ if vim.fn.has('nvim') then
   vim.cmd('command! -nargs=* T split | wincmd j | resize 20 | terminal <args>')
   vim.cmd('autocmd TermOpen * startinsert')
 end
+
+-- transparency settings
+vim.opt.winblend = 20
+vim.opt.pumblend = 20
+
+-- Neovim GUI
+if vim.g.neovide then
+  vim.g.neovide_transparency = 0.8        -- 0.0-1.0
+  vim.g.transparency = 0.8                -- 0.0-1.0
+  vim.g.neovide_background_color = '#0f1117' .. string.format('%x', math.floor(255 * 0.8))
+end
+
+-- FloatWindo
+vim.opt.wildoptions = 'pum'
+vim.opt.wildmode = 'longest:full'
+vim.api.nvim_create_autocmd('ColorScheme', {
+  pattern = '*',
+  callback = function()
+    vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'NONE' })
+    vim.api.nvim_set_hl(0, 'FloatBorder', { bg = 'NONE' })
+    vim.api.nvim_set_hl(0, 'Pmenu', { bg = 'NONE' })
+    vim.api.nvim_set_hl(0, 'PmenuSel', { bg = '#373844' })
+  end,
+})
+
+vim.api.nvim_create_autocmd("ColorScheme", {
+  pattern = "*",
+  callback = function()
+    vim.api.nvim_set_hl(0, "Normal", { bg = "NONE", ctermbg = "NONE" })
+    vim.api.nvim_set_hl(0, "NonText", { bg = "NONE", ctermbg = "NONE" })
+    vim.api.nvim_set_hl(0, "LineNr", { bg = "NONE", ctermbg = "NONE" })
+    vim.api.nvim_set_hl(0, "SignColumn", { bg = "NONE", ctermbg = "NONE" })
+    vim.api.nvim_set_hl(0, "EndOfBuffer", { bg = "NONE", ctermbg = "NONE" })
+  end,
+})
