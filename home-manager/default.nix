@@ -16,6 +16,7 @@ in {
     ./alacritty
     ./asdf
     ./atuin
+    ./cz-git
     ./editorconfig
     ./git
     ./just

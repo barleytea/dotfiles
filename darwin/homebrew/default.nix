@@ -21,7 +21,6 @@
       "android-studio"
       "apparency"
       "appcleaner"
-      "authy"
       "caffeine"
       "cursor"
       "devutils"

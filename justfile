@@ -60,8 +60,9 @@ vscode-save:
 npm-tools:
   #!/usr/bin/env bash
   sudo n latest
-  npm i -g npm
-  npm i -g gitmoji-cli
+  sudo npm i -g npm
+  sudo npm i -g gitmoji-cli
+  sudo npm i -g commitizen cz-git
 
 paths:
   #!/usr/bin/env bash
