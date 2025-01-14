@@ -37,6 +37,7 @@ in {
     packages = with pkgs; [
       arp-scan
       asdf-vm
+      bat
       bottom
       cairo
       curl

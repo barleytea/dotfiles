@@ -21,9 +21,10 @@
 # GENERAL {{{
   setopt no_beep
   bindkey -v
-  setopt share_history # コマンド履歴ファイルを共有する
-  setopt hist_reduce_blanks # 余計な空白を詰めて記録する
-  setopt hist_ignore_all_dups # 直前と同じコマンドラインはヒストリに追加しない
+  setopt share_history
+  setopt hist_reduce_blanks
+  setopt hist_ignore_all_dups
+  setopt auto_cd
   HISTFILE=$HOME/.zsh-history
   HISTSIZE=100000
   SAVEHIST=100000
@@ -54,7 +55,7 @@
   }
 
   function ghq_repository_search() {
-    local select=$(ghq list --full-path | peco)
+    local select=$(ghq list --full-path | fzf --preview "bat --color=always --style=header,grid --line-range :80 {}/README.*")
     if [[ -n "$select" ]]; then
       cd "$select"
       zle reset-prompt
@@ -62,7 +63,7 @@
   }
 
   function peco_select_history() {
-    local select=$(history | peco)
+    local select=$(history | fzf)
     if [[ -n "$select" ]]; then
       BUFFER="$select"
       zle accept-line
@@ -76,6 +77,7 @@
   alias reload="source ~/.zshrc"
   alias vsc="code"
   alias rgrep='grep -r --color=always --exclude-dir={.svn,tmp,tools,docs,.buildtool} --with-filename --line-number'
+  alias proot='cd $(git rev-parse --show-toplevel)'
   if [[ $(command -v eza) ]]; then
     alias e='eza --icons --git'
     alias l=e
