@@ -15,7 +15,6 @@
   export PATH="$HOME/fultter/bin:$PATH"
   export PATH="$HOME/go/bin:$PATH"
   export PATH="$HOME/.local/bin:$PATH"
-
 # }}}
 
 # GENERAL {{{
@@ -45,7 +44,6 @@
 # }}}
 
 # FUNCTIONS {{{
-
   function mkcd() {
     if [[ -d $1 ]]; then
       cd $1
@@ -94,6 +92,7 @@
     alias vim=nvim
     alias g=git
     alias gmc='gitmoji -c'
+    alias gcz='git cz'
   fi
 # }}}
 
