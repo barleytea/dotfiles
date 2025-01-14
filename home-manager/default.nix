@@ -56,7 +56,6 @@ in {
       gitflow
       glib
       gnugrep
-      go
       google-chrome
       hub
       jpegoptim
@@ -75,8 +74,6 @@ in {
       postgresql
       postman
       protobuf
-      pyenv
-      rbenv
       ripgrep
       sheldon
       slack
@@ -88,8 +85,8 @@ in {
       tree
       vscode
       wezterm
+      xdg-ninja
       zoom-us
-      zplug
       zsh
     ];
   };

@@ -1,3 +1,11 @@
+# XDG {{{
+  export XDG_CONFIG_HOME=$HOME/.config
+  export XDG_CACHE_HOME=$HOME/.cache
+  export XDG_DATA_HOME=$HOME/.local/share
+  export XDG_STATE_HOME=$HOME/.local/state
+  export ZDOTDIR=$HOME/.config/zsh
+# }}}
+
 # USER {{{
   export USER=$(whoami)
   export DARWIN_USER=$(whoami)
@@ -41,6 +49,7 @@
   setopt mark_dirs
   setopt auto_cd
   setopt nolistbeep
+  compinit -d "$XDG_CACHE_HOME"/zsh/zcompdump-"$ZSH_VERSION"
 # }}}
 
 # FUNCTIONS {{{

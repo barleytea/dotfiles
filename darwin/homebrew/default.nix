@@ -24,6 +24,7 @@
       "caffeine"
       "cursor"
       "devutils"
+      "fig"
       "font-hack-nerd-font"
       "gfxcardstatus"
       "ghostty"

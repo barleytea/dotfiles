@@ -62,12 +62,6 @@ jobs:
         run: |
           source $HOME/.zshrc
           just nix-update-all
-      - name: Run npm-tools
-        shell: zsh {0}
-        run: |
-          source $HOME/.zshrc
-          echo $PATH | grep -q /opt/homebrew/bin || export PATH="/opt/homebrew/bin:$PATH"
-          just npm-tools
       - name: Run vscode-settings
         shell: zsh {0}
         run: |
