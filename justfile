@@ -64,6 +64,11 @@ npm-tools:
   sudo npm i -g gitmoji-cli
   sudo npm i -g commitizen cz-git
 
+asdf-plugins-add:
+  #!/usr/bin/env bash
+  asdf plugin-add golang
+  asdf plugin-add rust
+
 paths:
   #!/usr/bin/env bash
   echo $PATH | tr ':' '\n'
