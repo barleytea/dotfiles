@@ -79,7 +79,6 @@ in {
       slack
       socat
       stack
-      starship
       terraform
       tmux
       tree

@@ -15,8 +15,14 @@ in {
     ];
 
     interactiveShellInit = ''
+      # XDG
+      set -gx XDG_CONFIG_HOME $HOME/.config
+      set -gx XDG_CACHE_HOME $HOME/.cache
+      set -gx XDG_DATA_HOME $HOME/.local/share
+      set -gx XDG_STATE_HOME $HOME/.local/state
+
       # path
-      fish_add_path $HOME/.nix-profile/bin
+      fish_add_path $XDG_STATE_HOME/nix/profiles/profile/bin
       fish_add_path $HOME/.cargo/bin
       fish_add_path $HOME/flutter/bin
       fish_add_path $HOME/go/bin
@@ -24,11 +30,11 @@ in {
       fish_add_path /opt/homebrew/bin
 
       set -gx USER "miyoshi_s"
-      set -gx NIX_PATH (echo $NIX_PATH:)nixpkgs=$HOME/.nix-defexpr/channels/nixpkgs
-      if test -e $HOME/.nix-profile/etc/profile.d/nix.sh
-        source $HOME/.nix-profile/etc/profile.d/nix.sh
+      set -gx NIX_PATH (echo $NIX_PATH:)nixpkgs=$XDG_STATE_HOME/nix/defexpr/channels/nixpkgs
+      if test -e $XDG_STATE_HOME/nix/profiles/profile/etc/profile.d/nix.sh
+        source $XDG_STATE_HOME/nix/profiles/profile/etc/profile.d/nix.sh
       end
-      set -gx NIX_CONF_DIR $HOME/.config
+      set -gx NIX_CONF_DIR $XDG_CONFIG_HOME
 
 
       # alias
@@ -89,14 +95,14 @@ in {
       complete -c bd -a '(__fish_bd_complete_dirs)'
 
       # asdf
-      if test -f $HOME/.nix-profile/share/asdf-vm/asdf.fish
-        source $HOME/.nix-profile/share/asdf-vm/asdf.fish
+      if test -f $XDG_STATE_HOME/nix/profiles/profile/share/asdf-vm/asdf.fish
+        source $XDG_STATE_HOME/nix/profiles/profile/share/asdf-vm/asdf.fish
       end
 
       # local.fish
       if test -f $HOME/.config/fish/local.fish
         echo "local.fish loaded."
-        source $HOME/.config/fish/local.fish
+        source $XDG_CONFIG_HOME/fish/local.fish
       end
     '';
 

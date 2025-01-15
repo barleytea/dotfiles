@@ -6,12 +6,17 @@
 }: let
   inherit (builtins) readFile;
 in {
-  programs.zsh = {
+  programs.zsh.enable = true;
+
+  home.sessionVariables = lib.mkForce {};
+
+  xdg = {
     enable = true;
-    dotDir = ".config/zsh";
-    initExtra = readFile ./.zshrc;
-    history = {
-      path = "${config.xdg.stateHome}/zsh/zsh-history";
+    configFile = {
+      "zsh/.zshrc".source = ./.zshrc;
+      "zsh/.zshenv".text = ''
+        export ZDOTDIR="$HOME/.config/zsh"
+      '';
     };
   };
 }

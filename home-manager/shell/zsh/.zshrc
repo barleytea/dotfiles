@@ -1,3 +1,9 @@
+# NIX ENV {{{
+  if [ -e "/nix/var/nix/profiles/per-user/$USER/home-manager/etc/profile.d/hm-session-vars.sh" ]; then
+    . "/nix/var/nix/profiles/per-user/$USER/home-manager/etc/profile.d/hm-session-vars.sh"
+  fi
+# }}}
+
 # XDG {{{
   export XDG_CONFIG_HOME=$HOME/.config
   export XDG_CACHE_HOME=$HOME/.cache
@@ -11,14 +17,13 @@
   export DARWIN_USER=$(whoami)
 # }}}
 
-
 # PATH {{{
   if [ "$(uname)" = "Linux" ]; then
     export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
   elif [ "$(uname)" = "Darwin" ]; then
     export PATH="/opt/homebrew/bin:$PATH"
   fi
-  export PATH="$HOME/.nix-profile/bin:$PATH"
+  export PATH="$XDG_STATE_HOME/nix/profiles/profile/bin:$PATH"
   export PATH="$HOME/.cargo/bin:$PATH"
   export PATH="$HOME/fultter/bin:$PATH"
   export PATH="$HOME/go/bin:$PATH"
@@ -32,12 +37,12 @@
   setopt hist_reduce_blanks
   setopt hist_ignore_all_dups
   setopt auto_cd
-  HISTFILE=$HOME/.zsh-history
   HISTSIZE=100000
   SAVEHIST=100000
 # }}}
 
 # COMPLEMENT {{{
+  autoload -Uz compinit
   zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z} r:|[-_.]=**' '+m:{A-Z}={a-z} r:|[-_.]=**'
   setopt hist_expand
   setopt list_types
@@ -50,6 +55,11 @@
   setopt auto_cd
   setopt nolistbeep
   compinit -d "$XDG_CACHE_HOME"/zsh/zcompdump-"$ZSH_VERSION"
+# }}}
+
+# HISTORY {{{
+  export LESSHISTFILE="$XDG_STATE_HOME"/less/history
+  export HISTFILE="$XDG_STATE_HOME"/zsh/zsh-history
 # }}}
 
 # FUNCTIONS {{{
@@ -80,11 +90,21 @@
   zle -N ghq_repository_search
 # }}}
 
+# KEYBIND {{{
+  bindkey '^G' ghq_repository_search
+# }}}
+
 # ALIAS {{{
-  alias reload="source ~/.zshrc"
+  alias reload='source $HOME/.config/zsh/.zshrc'
   alias vsc="code"
   alias rgrep='grep -r --color=always --exclude-dir={.svn,tmp,tools,docs,.buildtool} --with-filename --line-number'
   alias proot='cd $(git rev-parse --show-toplevel)'
+  alias vim=nvim
+  alias g=git
+  alias gmc='gitmoji -c'
+  alias gcz='git cz'
+  alias wget='wget --hsts-file="$XDG_DATA_HOME/wget-hsts"'
+
   if [[ $(command -v eza) ]]; then
     alias e='eza --icons --git'
     alias l=e
@@ -98,27 +118,30 @@
     alias eta='eza -T -a -I "node_modules|.git|.cache" --color=always --icons | less -r'
     alias lta=eta
     alias l='clear && ls'
-    alias vim=nvim
-    alias g=git
-    alias gmc='gitmoji -c'
-    alias gcz='git cz'
   fi
 # }}}
 
 # NIX {{{
-  export NIX_PATH=$HOME/.nix-defexpr/channels:/nix/var/nix/profiles/per-user/root/channels${NIX_PATH:+:$NIX_PATH}
-  if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
-    . $HOME/.nix-profile/etc/profile.d/nix.sh;
+  export NIX_PATH=$XDG_STATE_HOME/nix/defexpr/channels:/nix/var/nix/profiles/per-user/root/channels${NIX_PATH:+:$NIX_PATH}
+  if [ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
+    . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
   fi
-  export NIX_CONF_DIR=$HOME/.config
+  export NIX_CONF_DIR=$XDG_CONFIG_HOME
 # }}}
 
-# KEYBIND {{{
-  bindkey '^G' ghq_repository_search
+# Go {{{
+  export GOPATH="$XDG_DATA_HOME"/go
+# }}}
+
+# Rust {{{
+  export RUSTUP_HOME=$XDG_DATA_HOME/rustup
+  export CARGO_HOME=$XDG_DATA_HOME/cargo
 # }}}
 
 # MISC {{{
-  eval "$(starship init zsh)"
+  if [[ $TERM != "dumb" && -x "$(command -v starship)" ]]; then
+    eval "$(starship init zsh)"
+  fi
   eval "$(sheldon source)"
   eval "$(atuin init zsh)"
 # }}}

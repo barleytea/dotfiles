@@ -32,6 +32,7 @@ jobs:
           fi
           if [ ! -f "$HOME/.config/nix.conf" ]; then
             echo 'experimental-features = nix-command flakes' > "$HOME/.config/nix.conf"
+            echo 'use-xdg-base-directories = true' >> "$HOME/.config/nix.conf"
           fi
       - name: Prepare Nix
         shell: zsh {0}

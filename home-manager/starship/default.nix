@@ -3,11 +3,11 @@
   lib,
   pkgs,
   ...
-}: let
-
-in {
+}: {
   programs.starship = {
     enable = true;
+    enableZshIntegration = false;
+    package = pkgs.starship;
     settings = {
       format = ''
       [┌───────────────────](bold green)
@@ -46,5 +46,9 @@ in {
         format = "[$symbol($version )]($style)";
       };
     };
+  };
+
+  home.sessionVariables = {
+    STARSHIP_SHELL = "zsh";
   };
 }
