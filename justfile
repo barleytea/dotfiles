@@ -63,6 +63,10 @@ npm-tools:
   sudo npm i -g npm
   sudo npm i -g commitizen cz-git
 
+zsh:
+  #!/usr/bin/env bash
+  time (zsh -i -c exit)
+
 paths:
   #!/usr/bin/env bash
   echo $PATH | tr ':' '\n'
