@@ -27,12 +27,14 @@ jobs:
       - name: Set nix.conf
         shell: zsh {0}
         run : |
-          if [ ! -d "$HOME/.config" ]; then
-            mkdir -p "$HOME/.config"
+          if [ ! -d "$HOME/.config/nix" ]; then
+            mkdir -p "$HOME/.config/nix"
           fi
-          if [ ! -f "$HOME/.config/nix.conf" ]; then
-            echo 'experimental-features = nix-command flakes' > "$HOME/.config/nix.conf"
-            echo 'use-xdg-base-directories = true' >> "$HOME/.config/nix.conf"
+          if [ ! -f "$HOME/.config/nix/nix.conf" ]; then
+            echo 'experimental-features = nix-command flakes' > "$HOME/.config/nix/nix.conf"
+            echo 'use-xdg-base-directories = true' >> "$HOME/.config/nix/nix.conf"
+            echo 'extra-trusted-users = miyoshi_s' >> "$HOME/.config/nix/nix.conf"
+            echo 'warn-dirty = false' >> "$HOME/.config/nix/nix.conf"
           fi
       - name: Prepare Nix
         shell: zsh {0}

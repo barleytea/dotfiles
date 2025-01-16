@@ -5,7 +5,10 @@ export USER=$(whoami)
 export DARWIN_USER=$(whoami)
 
 # Nix
-export NIX_PATH=$XDG_STATE_HOME/nix/defexpr/channels:/nix/var/nix/profiles/per-user/root/channels${NIX_PATH:+:$NIX_PATH}
+if [ -d "$XDG_STATE_HOME/nix/defexpr/channels" ]; then
+  export NIX_PATH=$XDG_STATE_HOME/nix/defexpr/channels${NIX_PATH:+:$NIX_PATH}
+fi
+
 if [ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
   . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
 fi
