@@ -25,6 +25,7 @@
       "zsh/config/tools/starship.zsh".source = ./config/tools/starship.zsh;
       "zsh/config/tools/sheldon.zsh".source = ./config/tools/sheldon.zsh;
       "zsh/config/tools/atuin.zsh".source = ./config/tools/atuin.zsh;
+      "zsh/config/tools/asdf.zsh".source = ./config/tools/asdf.zsh;
     };
   };
 }

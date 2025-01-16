@@ -4,3 +4,6 @@ if [ "$(uname)" = "Linux" ]; then
 elif [ "$(uname)" = "Darwin" ]; then
   export PATH="/opt/homebrew/bin:$PATH"
 fi
+
+# asdf
+export PATH="$HOME/.asdf/bin:$PATH"
