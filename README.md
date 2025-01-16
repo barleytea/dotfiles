@@ -1,115 +1,50 @@
-## Installation
+# dotfiles
 
-Manually craete a directory that matches the ghq root.
+## Documents
 
-```sh
-cd ~
-mkdir -p git_repos/github.com/barleytea
-cd git_repos/github.com/barleytea
-git clone https://github.com/barleytea/dotfiles.git
-```
+- [Installation](docs/10_installation.md)
+- [Nix operations](docs/20_nix.md)
+- [Language & Runtimes](docs/30_languages.md)
+- [VSCode settings](docs/40_vscode.md)
+- [npm tools](docs/50_npm_tools.md)
 
-### Set up nix.conf
+## Main Tools
 
-```sh
-mkdir -p "$HOME/.config"
-echo 'experimental-features = nix-command flakes' > "$HOME/.config/nix.conf"
-echo 'use-xdg-base-directories = true' >> ~/.config/nix.conf
-```
+### Package Management
 
-### Install nix
+- [nix](https://nixos.org/) - package manager
+- [home-manager](https://github.com/nix-community/home-manager) - home manager
+- [nix-darwin](https://github.com/LnL7/nix-darwin) - darwin system manager
 
-```sh
-curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install --no-confirm
-source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-```
+### Editors
 
-### Update nix channel
+- [neovim](https://neovim.io/) - editor
+- [vscode](https://code.visualstudio.com/) - editor
+- [cursor](https://www.cursor.com/) - editor
 
-```sh
-nix-channel --add https://nixos.org/channels/nixpkgs-unstable
-nix-channel --update
-```
+### Terminals
 
-### Apply nix config
+- [alacritty](https://github.com/alacritty/alacritty) - terminal
+- [wezterm](https://github.com/wez/wezterm) - alternative terminal
+- [ghostty](https://github.com/ghostty/ghostty) - terminal
 
-```sh
-nix flake update
-nix run nixpkgs#home-manager -- switch --flake .#home --impure
-```
+### Terminal Multiplexers
 
-### Launch zsh (fish)
+- [zellij](https://github.com/zellij-org/zellij) - terminal multiplexer
+- [tmux](https://github.com/tmux/tmux) - alternative terminal multiplexer
 
-```sh
-zsh
-```
+### Shell Tools
 
-### Apply darwin config
+- [zsh](https://www.zsh.org/) - shell
+- [starship](https://starship.rs/) - shell prompt
+- [sheldon](https://github.com/rossmacarthur/sheldon) - plugin manager
+- [atuin](https://github.com/atuinsh/atuin) - shell history
 
-```sh
-just nix-darwin-apply
-```
+### Window Management
 
-## Operation
+- [yabai](https://github.com/koekeishiya/yabai) - window manager
+- [skhd](https://github.com/koekeishiya/skhd) - hotkey daemon
 
-### Update Home Settings
+### Task Runner
 
-```sh
-just home-manager-apply
-```
-
-### Update Darwin Settings
-
-```sh
-just nix-darwin-apply
-```
-
-### Update All Settings
-
-```sh
-just nix-update-all
-```
-
-### Install a new package
-
-```sh
-nix profile install nixpkgs#hoge
-```
-
-### Rollback
-
-1. Check generations 
-
-    ```sh
-    nix-env --list-generations
-    ```
-
-    ```
-    1   2024-10-17 10:19:29   
-    2   2024-10-17 11:55:16   
-    3   2024-10-17 19:19:37   
-    4   2024-11-06 18:37:37   
-    5   2024-11-06 18:52:58   (current)
-    ```
-
-1. Rollback
-
-    ```sh
-    nix-env --rollback
-    ```
-
-    or
-
-    ```sh
-    nix-env --switch-generation 3
-    ```
-
-## Shell Environment
-
-The default shell is zsh, but fish is launched within .zshrc
-
-```sh
-if [[ -o interactive ]]; then
-    exec fish
-fi
-```
+- [just](https://github.com/casey/just) - task runner
