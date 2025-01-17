@@ -17,11 +17,12 @@ cd git_repos/github.com/barleytea
 git clone https://github.com/barleytea/dotfiles.git
 ```
 
-## 2. Set up nix.conf
+## 2. Set up local nix.conf
 
 ```sh
 mkdir -p "$HOME/.config/nix"
-echo 'experimental-features = nix-command flakes' > "$HOME/.config/nix.conf"
+echo 'experimental-features = nix-command flakes' > "$HOME/.config/nix/nix.conf"
+echo 'use-xdg-base-directories = true' >> "$HOME/.config/nix/nix.conf"
 echo 'warn-dirty = false' >> "$HOME/.config/nix/nix.conf"
 ```
 
@@ -32,27 +33,49 @@ curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix 
 source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
 ```
 
-## 4. Update nix channel
+## 4. Set up global nix.conf
+
+1. edit /etc/nix/nix.conf
+
+```sh
+sudo vi /etc/nix/nix.conf
+```
+
+1. add the following to the file
+
+```sh
+extra-trusted-users = miyoshi_s
+use-xdg-base-directories = true
+```
+
+1. restart nix-daemon
+
+```sh
+sudo launchctl unload /Library/LaunchDaemons/org.nixos.nix-daemon.plist
+sudo launchctl load /Library/LaunchDaemons/org.nixos.nix-daemon.plist
+```
+
+## 5. Update nix channel
 
 ```sh
 nix-channel --add https://nixos.org/channels/nixpkgs-unstable
 nix-channel --update
 ```
 
-## 5. Apply nix config
+## 6. Apply nix config
 
 ```sh
 nix flake update
 nix run nixpkgs#home-manager -- switch --flake .#home --impure
 ```
 
-## 6. Launch zsh
+## 7. Launch zsh
 
 ```sh
 zsh
 ```
 
-## 7. Apply darwin config
+## 8. Apply darwin config
 
 ```sh
 just nix-darwin-apply
