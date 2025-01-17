@@ -22,6 +22,8 @@ git clone https://github.com/barleytea/dotfiles.git
 ```sh
 mkdir -p "$HOME/.config"
 echo 'experimental-features = nix-command flakes' > "$HOME/.config/nix.conf"
+echo 'use-xdg-base-directories = true' >> "$HOME/.config/nix/nix.conf"
+echo 'warn-dirty = false' >> "$HOME/.config/nix/nix.conf"
 ```
 
 ## 3. Install nix

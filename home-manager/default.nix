@@ -44,6 +44,7 @@ in {
       delta
       docker
       eza
+      fastfetch
       fd
       fftw
       fish

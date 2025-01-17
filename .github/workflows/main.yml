@@ -33,7 +33,6 @@ jobs:
           if [ ! -f "$HOME/.config/nix/nix.conf" ]; then
             echo 'experimental-features = nix-command flakes' > "$HOME/.config/nix/nix.conf"
             echo 'use-xdg-base-directories = true' >> "$HOME/.config/nix/nix.conf"
-            echo 'extra-trusted-users = miyoshi_s' >> "$HOME/.config/nix/nix.conf"
             echo 'warn-dirty = false' >> "$HOME/.config/nix/nix.conf"
           fi
       - name: Prepare Nix
