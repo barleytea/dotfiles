@@ -5,4 +5,5 @@ for tool_config ($ZDOTDIR/config/tools/*.zsh) source $tool_config
 # Load local configuration if exists
 if [[ -f ~/.zshrc_local ]]; then
   source ~/.zshrc_local
+  echo "[zsh] Local configuration loaded"
 fi

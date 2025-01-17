@@ -14,5 +14,15 @@ if [ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
 fi
 export NIX_CONF_DIR=$XDG_CONFIG_HOME
 
+# Go
+export GOPATH="$XDG_DATA_HOME"/go
+
+# Rust
+export RUSTUP_HOME=$XDG_DATA_HOME/rustup
+export CARGO_HOME=$XDG_DATA_HOME/cargo
+
+# History
+export HISTFILE="$XDG_STATE_HOME"/zsh/zsh-history
+
 # Less
 export LESSHISTFILE="$XDG_STATE_HOME"/less/history
