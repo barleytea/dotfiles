@@ -20,50 +20,70 @@ jobs:
           nix_path: nixpkgs=channel:nixos-unstable
           extra_nix_config: |
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+            substituters = https://cache.nixos.org/
       - name: Nix cache
         uses: DeterminateSystems/magic-nix-cache-action@main
       - name: Check flakes
         uses: DeterminateSystems/flake-checker-action@main
-      - name: Set nix.conf
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set Localnix.conf
         shell: zsh {0}
         run : |
           if [ ! -d "$HOME/.config/nix" ]; then
             mkdir -p "$HOME/.config/nix"
           fi
-          if [ ! -f "$HOME/.config/nix/nix.conf" ]; then
-            echo 'experimental-features = nix-command flakes' > "$HOME/.config/nix/nix.conf"
-            echo 'use-xdg-base-directories = true' >> "$HOME/.config/nix/nix.conf"
-            echo 'warn-dirty = false' >> "$HOME/.config/nix/nix.conf"
-          fi
+          echo 'experimental-features = nix-command flakes' > "$HOME/.config/nix/nix.conf"
+          echo 'warn-dirty = false' >> "$HOME/.config/nix/nix.conf"
       - name: Prepare Nix
         shell: zsh {0}
         run: |
-          echo "access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}" >> $HOME/.config/nix.conf
-            source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-            nix-channel --add https://nixos.org/channels/nixpkgs-unstable
-            nix-channel --update
-      - name: Apply home-manager
+          echo "access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}" >> $HOME/.config/nix/nix.conf
+          source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+          nix-channel --add https://nixos.org/channels/nixpkgs-unstable
+          nix-channel --update
+      - name: Set global nix.conf
         shell: zsh {0}
         run: |
+          sudo mkdir -p /etc/nix
+          if [ -f /etc/nix/nix.conf ]; then
+            sudo mv /etc/nix/nix.conf /etc/nix/nix.conf.before-nix-darwin
+          fi
+          echo 'use-xdg-base-directories = true' | sudo tee /etc/nix/nix.conf
+          echo 'extra-trusted-users = runner' | sudo tee -a /etc/nix/nix.conf
+          echo "access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}" | sudo tee -a /etc/nix/nix.conf
+      - name: Apply home-manager
+        shell: zsh {0}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
           export USER=runner
-          echo $USER
           source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
           nix flake update
           nix run nixpkgs#home-manager -- switch --flake .#home --impure
-          just
-      # - name: Crear initial nix.conf
-      #   run: |
-          # sudo rm /etc/nix/nix.conf # FIXME: work around
       - name: Apply nix-darwin
         shell: zsh {0}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          if [ -f /etc/nix/nix.conf ]; then
+            sudo mv /etc/nix/nix.conf /etc/nix/nix.conf.before-nix-darwin
+          fi
+          source $HOME/.config/zsh/.zshenv 
+          source $HOME/.config/zsh/.zshrc
           just nix-darwin-apply
       - name: Run nix-update-all
         shell: zsh {0}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          source $HOME/.config/zsh/.zshenv 
+          source $HOME/.config/zsh/.zshrc
           just nix-update-all
       - name: Run vscode-settings
         shell: zsh {0}
         run: |
+          source $HOME/.config/zsh/.zshenv 
+          source $HOME/.config/zsh/.zshrc
           just vscode-apply
           just vscode-save

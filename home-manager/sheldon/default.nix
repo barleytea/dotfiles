@@ -7,7 +7,7 @@
     apply = ['source']
 
     [templates]
-    defer = { value = 'zsh-defer source "{{ file }}"', each = true }
+    defer = "{{ hooks | get: \"pre\" | nl }}{% for file in files %}zsh-defer source \"{{ file }}\"\n{% endfor %}{{ hooks | get: \"post\" | nl }}"
 
     [plugins.compinit]
     inline = 'autoload -Uz compinit && zsh-defer compinit'
