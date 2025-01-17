@@ -20,9 +20,8 @@ git clone https://github.com/barleytea/dotfiles.git
 ## 2. Set up nix.conf
 
 ```sh
-mkdir -p "$HOME/.config"
+mkdir -p "$HOME/.config/nix"
 echo 'experimental-features = nix-command flakes' > "$HOME/.config/nix.conf"
-echo 'use-xdg-base-directories = true' >> "$HOME/.config/nix/nix.conf"
 echo 'warn-dirty = false' >> "$HOME/.config/nix/nix.conf"
 ```
 

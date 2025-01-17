@@ -3,7 +3,6 @@
     optimise.automatic = true;
     settings = {
       experimental-features = "nix-command flakes";
-      extra-trusted-users = ["miyoshi_s"];
       max-jobs = 8;
     };
   };
