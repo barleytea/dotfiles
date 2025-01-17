@@ -51,22 +51,19 @@ jobs:
           nix flake update
           nix run nixpkgs#home-manager -- switch --flake .#home --impure
           just
-      - name: Crear initial nix.conf
-        run: |
-          sudo rm /etc/nix/nix.conf # FIXME: work around
+      # - name: Crear initial nix.conf
+      #   run: |
+          # sudo rm /etc/nix/nix.conf # FIXME: work around
       - name: Apply nix-darwin
         shell: zsh {0}
         run: |
-          source $HOME/.zshrc
           just nix-darwin-apply
       - name: Run nix-update-all
         shell: zsh {0}
         run: |
-          source $HOME/.zshrc
           just nix-update-all
       - name: Run vscode-settings
         shell: zsh {0}
         run: |
-          source $HOME/.zshrc
           just vscode-apply
           just vscode-save
