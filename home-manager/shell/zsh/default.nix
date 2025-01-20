@@ -4,19 +4,13 @@
   pkgs,
   ...
 }: {
-  # programs.zsh = {
-  #   enable = true;
-  #   dotDir = ".config/zsh";
 
-  #   initExtra = builtins.readFile ./.zshrc;
-  #   envExtra = builtins.readFile ./.zshenv;
-  # };
+  home.file.".zshenv".source = ./.zshenv;
 
   xdg = {
     enable = true;
     configFile = {
       "zsh/.zshrc".source = ./.zshrc;
-      "zsh/.zshenv".source = ./.zshenv;
       "zsh/config/env.zsh".source = ./config/env.zsh;
       "zsh/config/aliases.zsh".source = ./config/aliases.zsh;
       "zsh/config/completion.zsh".source = ./config/completion.zsh;
