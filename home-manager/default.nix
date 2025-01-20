@@ -89,9 +89,5 @@ in {
       zoom-us
       zsh
     ];
-
-    sessionVariables = {
-      ZDOTDIR = "$HOME/.config/zsh";
-    };
   };
 }

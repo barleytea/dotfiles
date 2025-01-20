@@ -1,4 +1,4 @@
-{
+{ pkgs, ... }: {
   programs.alacritty = {
     enable = true;
     settings = {
@@ -26,11 +26,11 @@
       };
       terminal = {
         shell = {
-          program = "zsh";
+          program = "${pkgs.zsh}/bin/zsh";
           args = [
             "-l"
             "-c"
-            "zellij attach --index 0 --create"
+            "${pkgs.zellij}/bin/zellij attach --index 0 --create"
           ];
         };
       };
