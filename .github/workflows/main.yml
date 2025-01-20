@@ -69,15 +69,21 @@ jobs:
           if [ -f /etc/nix/nix.conf ]; then
             sudo mv /etc/nix/nix.conf /etc/nix/nix.conf.before-nix-darwin
           fi
+          source $HOME/.zshenv
+          source $HOME/.config/zsh/.zshrc
           just nix-darwin-apply
       - name: Run nix-update-all
         shell: zsh {0}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          source $HOME/.zshenv
+          source $HOME/.config/zsh/.zshrc
           just nix-update-all
       - name: Run vscode-settings
         shell: zsh {0}
         run: |
+          source $HOME/.zshenv
+          source $HOME/.config/zsh/.zshrc
           just vscode-apply
           just vscode-save
