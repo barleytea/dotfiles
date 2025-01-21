@@ -76,6 +76,7 @@ in {
       postman
       protobuf
       ripgrep
+      rustup
       sheldon
       slack
       socat

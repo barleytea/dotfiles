@@ -16,4 +16,7 @@ setopt mark_dirs
 setopt nolistbeep
 
 # Initialize completion
-compinit -d "$XDG_CACHE_HOME"/zsh/zcompdump-"$ZSH_VERSION"
+if [ ! -d "${XDG_CACHE_HOME}/zsh" ]; then
+  mkdir -p "${XDG_CACHE_HOME}/zsh"
+fi
+compinit -d "${XDG_CACHE_HOME}/zsh/zcompdump-${ZSH_VERSION}"
