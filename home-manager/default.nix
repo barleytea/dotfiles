@@ -58,6 +58,7 @@ in {
       glib
       gnugrep
       google-chrome
+      grpcurl
       hub
       jpegoptim
       jq
