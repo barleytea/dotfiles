@@ -7,6 +7,5 @@
 in {
   imports = [
     ./zsh
-    ./fish
   ];
 }

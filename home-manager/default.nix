@@ -47,7 +47,6 @@ in {
       fastfetch
       fd
       fftw
-      fish
       fontforge
       fzf
       gat
