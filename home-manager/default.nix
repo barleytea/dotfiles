@@ -39,6 +39,7 @@ in {
       asdf-vm
       bat
       bottom
+      bun
       cairo
       curl
       delta
