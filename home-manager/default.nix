@@ -76,6 +76,8 @@ in {
       postgresql
       postman
       protobuf
+      protoc-gen-go
+      protoc-gen-go-grpc
       ripgrep
       rustup
       sheldon
