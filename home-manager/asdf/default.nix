@@ -5,5 +5,5 @@ asdfrc = ''
 '';
 
 in {
-  home.file.".asdfrc".text = asdfrc;
+  xdg.configFile."asdf/asdfrc".text = asdfrc;
 }
