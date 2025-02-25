@@ -27,6 +27,7 @@ in {
     ./starship
     ./tmux
     ./wezterm
+    ./yazi
     ./zellij
   ];
 

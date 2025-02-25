@@ -53,6 +53,9 @@
       all = nix-darwin.lib.darwinSystem {
         system = system;
         modules = [
+          {
+            ids.gids.nixbld = 30000;
+          }
           ./darwin/default.nix
         ];
       };
@@ -60,6 +63,9 @@
       homebrew = nix-darwin.lib.darwinSystem {
         system = system;
         modules = [
+          {
+            ids.gids.nixbld = 30000;
+          }
           ./darwin/homebrew/default.nix
         ];
       };
@@ -67,6 +73,9 @@
       system = nix-darwin.lib.darwinSystem {
         system = system;
         modules = [
+          {
+            ids.gids.nixbld = 30000;
+          }
           ./darwin/system/default.nix
         ];
       };
@@ -74,6 +83,9 @@
       service = nix-darwin.lib.darwinSystem {
         system = system;
         modules = [
+          {
+            ids.gids.nixbld = 30000;
+          }
           ./darwin/service/default.nix
         ];
       };
