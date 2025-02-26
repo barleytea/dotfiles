@@ -26,6 +26,20 @@
   } @ inputs: let
     system = builtins.currentSystem;
     pkgs = nixpkgs.legacyPackages.${system};
+    
+    nixbldGid = let
+      tryNixbldGid = gid: 
+        builtins.tryEval (builtins.seq (pkgs.runCommand "test-gid" {} ''
+          if getent group ${toString gid} > /dev/null 2>&1; then
+            echo "GID ${toString gid} is already in use"
+            exit 1
+          fi
+          echo ${toString gid} > $out
+        '') true);
+      primary = tryNixbldGid 30000;
+      fallback = 350;
+    in
+      if primary.success then 30000 else fallback;
   in {
 
     devShells.${system}.default = pkgs.mkShell {
@@ -54,7 +68,7 @@
         system = system;
         modules = [
           {
-            ids.gids.nixbld = 30000;
+            ids.gids.nixbld = nixbldGid;
           }
           ./darwin/default.nix
         ];
@@ -64,7 +78,7 @@
         system = system;
         modules = [
           {
-            ids.gids.nixbld = 30000;
+            ids.gids.nixbld = nixbldGid;
           }
           ./darwin/homebrew/default.nix
         ];
@@ -74,7 +88,7 @@
         system = system;
         modules = [
           {
-            ids.gids.nixbld = 30000;
+            ids.gids.nixbld = nixbldGid;
           }
           ./darwin/system/default.nix
         ];
@@ -84,7 +98,7 @@
         system = system;
         modules = [
           {
-            ids.gids.nixbld = 30000;
+            ids.gids.nixbld = nixbldGid;
           }
           ./darwin/service/default.nix
         ];
