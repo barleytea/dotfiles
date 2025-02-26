@@ -69,6 +69,10 @@ jobs:
           if [ -f /etc/nix/nix.conf ]; then
             sudo mv /etc/nix/nix.conf /etc/nix/nix.conf.before-nix-darwin
           fi
+          # backup /etc/hosts
+          if [ -f /etc/hosts ]; then
+            sudo mv /etc/hosts /etc/hosts.before-nix-darwin
+          fi
           source $HOME/.zshenv
           source $HOME/.config/zsh/.zshrc
           just nix-darwin-apply
