@@ -3,6 +3,5 @@
     ./common.nix
     ./homebrew
     ./system
-    ./service
   ];
 }
