@@ -11,11 +11,14 @@
       "homebrew/bundle"
       "mscharley/homebrew"
       "sanemat/font"
+      "koekeishiya/formulae"
     ];
     brews = [
       "mas"
       "mise"
       "n"
+      "skhd"
+      "yabai"
     ];
     casks = [
       "android-studio"

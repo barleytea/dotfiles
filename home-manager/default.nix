@@ -24,9 +24,11 @@ in {
     ./neovim
     ./shell
     ./sheldon
+    ./skhd
     ./starship
     ./tmux
     ./wezterm
+    ./yabai
     ./zellij
   ];
 
