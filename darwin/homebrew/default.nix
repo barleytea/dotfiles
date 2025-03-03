@@ -12,8 +12,10 @@
       "mscharley/homebrew"
       "sanemat/font"
       "koekeishiya/formulae"
+      "aquaproj/aqua"
     ];
     brews = [
+      "aqua"
       "mas"
       "mise"
       "n"

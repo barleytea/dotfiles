@@ -29,6 +29,7 @@ in {
     ./tmux
     ./wezterm
     ./yabai
+    ./yazi
     ./zellij
   ];
 
