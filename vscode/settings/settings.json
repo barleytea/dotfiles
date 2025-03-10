@@ -103,5 +103,6 @@
             "after": ["<Esc>"]
         }
     ],
-    "vim.hlsearch": true
+    "vim.hlsearch": true,
+    "git.autofetch": true
 }

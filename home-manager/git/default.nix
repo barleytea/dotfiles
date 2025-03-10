@@ -47,9 +47,6 @@ gitConfig = ''
     enable = true
     syntax-theme = Dracula
     side-by-side = true
-
-  [includeIf "gitdir:~/git_repos/github.com/dr-joy/"]
-    path = ~/.gitconfig_sub
 '';
 
 gitIgnore = ''
@@ -58,6 +55,7 @@ gitIgnore = ''
   .vscode/
   *.log
   node_modules/
+  .tool-versions
 '';
 
 in {
