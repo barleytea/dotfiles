@@ -17,6 +17,7 @@
     brews = [
       "aqua"
       "mas"
+      "miro"
       "mise"
       "n"
       "skhd"
