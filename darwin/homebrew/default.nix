@@ -17,7 +17,6 @@
     brews = [
       "aqua"
       "mas"
-      "miro"
       "mise"
       "n"
       "skhd"
@@ -37,6 +36,7 @@
       "google-japanese-ime"
       "hammerspoon"
       "iterm2"
+      "miro"
       "notion"
       "plain-clip"
       "raycast"
