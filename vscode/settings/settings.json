@@ -104,5 +104,6 @@
         }
     ],
     "vim.hlsearch": true,
-    "git.autofetch": true
+    "git.autofetch": true,
+    "markdown-checkbox.typeOfBulletPoint": "-"
 }
