@@ -105,5 +105,13 @@
     ],
     "vim.hlsearch": true,
     "git.autofetch": true,
-    "markdown-checkbox.typeOfBulletPoint": "-"
+    "markdown-checkbox.typeOfBulletPoint": "-",
+    "roo-cline.allowedCommands": [
+        "npm test",
+        "npm install",
+        "tsc",
+        "git log",
+        "git diff",
+        "git show"
+    ]
 }
