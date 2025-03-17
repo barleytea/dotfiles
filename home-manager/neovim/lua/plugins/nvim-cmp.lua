@@ -1,6 +1,12 @@
 return {
   "hrsh7th/nvim-cmp",
-  ---@param opts cmp.ConfigSchema
+  event = "InsertEnter",
+  dependencies = {
+    "hrsh7th/cmp-nvim-lsp",
+    "hrsh7th/cmp-buffer",
+    "hrsh7th/cmp-path",
+    "hrsh7th/cmp-cmdline",
+  },
   opts = function(_, opts)
     local has_words_before = function()
       unpack = unpack or table.unpack

@@ -4,7 +4,28 @@ return {
   lazy = false,
   version = false, -- set this to "*" if you want to always pull the latest change, false to update on release
   opts = {
-    -- add any opts here
+    provider = "copilot",
+    auto_suggestion_provider = "copilot",
+    behaviour = {
+      auto_suggestions = true,
+      auto_set_highlight_group = true,
+      auto_set_keymaps = true,
+      auto_apply_diff_after_generation = true,
+      support_paste_from_clipboard = true,
+    },
+    windows = {
+      position = "right",
+      width = 30,
+      sidebar_header = {
+          align = "center",
+          rounded = false,
+      },
+      ask = {
+          floating = true,
+          start_insert = true,
+          border = "rounded"
+      }
+    },
   },
   -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
   build = "make",

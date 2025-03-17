@@ -1,8 +1,13 @@
 return {
   "zbirenbaum/copilot.lua",
   cmd = "Copilot",
-  build = ":Copilot auth",
   event = "InsertEnter",
+  config = function()
+    vim.defer_fn(function()
+      require("copilot").setup()
+      vim.cmd("Copilot auth")
+    end, 100)
+  end,
   opts = {
     suggestion = {
       enabled = not vim.g.ai_cmp,

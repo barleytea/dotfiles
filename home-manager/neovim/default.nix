@@ -29,10 +29,14 @@ in {
     ];
     plugins = with pkgs.vimPlugins; [ lazy-nvim ];
 
-    extraLuaConfig = 
+    extraLuaConfig =
       let
         plugins = with pkgs.vimPlugins; [
-          # TODO  
+          nvim-cmp
+          cmp-nvim-lsp
+          cmp-buffer
+          cmp-path
+          cmp-cmdline
         ];
         mkEntryFromDrv = drv:
           if lib.isDerivation drv then
