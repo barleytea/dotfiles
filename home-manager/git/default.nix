@@ -56,6 +56,9 @@ gitIgnore = ''
   *.log
   node_modules/
   .tool-versions
+  __debug*
+  .clinerules
+  .DS_Store
 '';
 
 in {
