@@ -95,7 +95,6 @@ in {
 
         -- Set up vim options
         require("config.base")
-        require("config.options")
 
         -- Set up lazy.nvim
         local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
