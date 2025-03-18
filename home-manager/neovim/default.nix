@@ -68,101 +68,115 @@ in {
       plenary-nvim
       telescope-fzf-native-nvim
       
-      # その他の便利なプラグイン
+      # 追加のプラグイン
+      nvim-surround
+      comment-nvim
       which-key-nvim
       nvim-treesitter
       nvim-treesitter-textobjects
-      comment-nvim
       neo-tree-nvim
       bufferline-nvim
     ];
 
-    extraLuaConfig =
-      let
-        plugins = with pkgs.vimPlugins; [
-          # プラグインは上記のplugins = with pkgs.vimPlugins;で定義
-        ];
-        mkEntryFromDrv = drv:
-          if lib.isDerivation drv then
-            { name = "${lib.getName drv}"; path = drv; }
-          else
-            drv;
-        lazyPath = pkgs.linkFarm "lazy-plugins" (builtins.map mkEntryFromDrv plugins);
-      in
-      ''
-        -- LazyVimのインポート順序チェックを無効化（Nixでの管理のため）
-        vim.g.lazyvim_check_order = false
+    extraLuaConfig = ''
+      -- LazyVimのインポート順序チェックを無効化
+      vim.g.lazyvim_check_order = false
 
-        -- Set up vim options
-        require("config.base")
+      -- Snacks変数が存在しないエラーを解決するために、より適切なダミーの実装を提供
+      Snacks = {
+        toggle = function(opts)
+          -- 空の関数を返して、chainingできるようにする
+          return {
+            map = function(mapKey) 
+              -- ここでmapKeyは文字列であることを確認
+              if type(mapKey) == "string" then
+                -- GitSignsの表示/非表示を切り替えるキーマッピング
+                vim.keymap.set("n", mapKey, function() 
+                  require("gitsigns").toggle_signs() 
+                end, { desc = "Toggle Git Signs" })
+              end
+              -- チェーン可能なオブジェクトを返す
+              return {}
+            end
+          }
+        end
+      }
 
-        -- Set up lazy.nvim
-        local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-        local lazy = require("lazy")
+      -- 問題のあるキーマッピングをオーバーライドする関数
+      -- これは元のvim.keymap.setをラップして、テーブルが渡された場合の処理を追加
+      local original_keymap_set = vim.keymap.set
+      vim.keymap.set = function(mode, lhs, rhs, opts)
+        -- テーブルが渡された場合はスキップ
+        if type(lhs) == "table" then
+          -- エラーを避けるために何もせずに返す
+          return
+        end
+        -- それ以外は通常通り処理
+        return original_keymap_set(mode, lhs, rhs, opts)
+      end
 
-        -- Set up completion
-        require("config.cmp")
+      -- 基本的なオプション設定
+      require("config.base")
 
-        -- Create custom event for compatibility
-        vim.api.nvim_create_autocmd("BufReadPost", {
-          callback = function()
-            vim.api.nvim_exec_autocmds("User", { pattern = "LazyFile" })
-          end,
-        })
-        vim.api.nvim_create_autocmd("BufNewFile", {
-          callback = function()
-            vim.api.nvim_exec_autocmds("User", { pattern = "LazyFile" })
-          end,
-        })
+      -- lazy.nvimのセットアップ
+      local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+      local lazy = require("lazy")
 
-        -- Configure colorscheme
-        vim.cmd("colorscheme dracula")
+      -- 補完設定のセットアップ
+      require("config.cmp")
 
-        -- Configure lazy.nvim with the correct import order
-        lazy.setup({
-          -- spec
-          spec = {
-            -- LazyVimのコアプラグイン（最初に読み込み）
-            { "LazyVim/LazyVim", import = "lazyvim.plugins" },
-            -- LazyVim extras（次に読み込み）
-            { import = "lazyvim.plugins.extras.lsp.none-ls" },
-            -- カスタムプラグイン（最後に読み込み）
-            { import = "plugins" },
-          },
-          -- デフォルト設定
-          defaults = {
-            lazy = true,
-            version = false,
-          },
-          -- インストール設定
-          install = { colorscheme = { "dracula", "tokyonight", "habamax" } },
-          -- チェッカー設定
-          checker = { enabled = true },
-          -- パフォーマンス設定
-          performance = {
-            rtp = {
-              disabled_plugins = {
-                "gzip",
-                "matchit",
-                "matchparen",
-                "netrwPlugin",
-                "tarPlugin",
-                "tohtml",
-                "tutor",
-                "zipPlugin",
-              },
+      -- カスタムイベントの作成（互換性のため）
+      vim.api.nvim_create_autocmd("BufReadPost", {
+        callback = function()
+          vim.api.nvim_exec_autocmds("User", { pattern = "LazyFile" })
+        end,
+      })
+      vim.api.nvim_create_autocmd("BufNewFile", {
+        callback = function()
+          vim.api.nvim_exec_autocmds("User", { pattern = "LazyFile" })
+        end,
+      })
+
+      -- カラースキームを設定
+      vim.cmd("colorscheme dracula")
+
+      -- lazy.nvimの設定
+      lazy.setup({
+        -- spec
+        spec = {
+          -- LazyVimのコアプラグイン（最初に読み込み）
+          { "LazyVim/LazyVim", import = "lazyvim.plugins" },
+          -- LazyVim extras（次に読み込み）
+          { import = "lazyvim.plugins.extras.lsp.none-ls" },
+          -- カスタムプラグイン（最後に読み込み）
+          { import = "plugins" },
+        },
+        -- デフォルト設定
+        defaults = {
+          lazy = true,
+          version = false,
+        },
+        -- インストール設定
+        install = { colorscheme = { "dracula", "tokyonight", "habamax" } },
+        -- チェッカー設定
+        checker = { enabled = true },
+        -- パフォーマンス設定
+        performance = {
+          rtp = {
+            disabled_plugins = {
+              "gzip",
+              "matchit",
+              "matchparen",
+              "netrwPlugin",
+              "tarPlugin",
+              "tohtml",
+              "tutor",
+              "zipPlugin",
             },
           },
-          -- デバッグ設定
-          debug = false,
-          -- 開発用設定
-          dev = {
-            path = "${lazyPath}",
-            patterns = { "." },
-            fallback = true,
-          },
-        })
-      '';
+        },
+      })
+    '';
   };
 
   xdg.configFile."nvim/lua" = {

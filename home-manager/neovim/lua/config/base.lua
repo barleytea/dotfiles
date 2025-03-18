@@ -156,3 +156,59 @@ vim.api.nvim_create_autocmd("ColorScheme", {
     vim.api.nvim_set_hl(0, "EndOfBuffer", { bg = "NONE", ctermbg = "NONE" })
   end,
 })
+
+-- 基本的なオプション
+vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.shiftwidth = 2
+vim.opt.tabstop = 2
+vim.opt.expandtab = true
+vim.opt.wrap = false
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+vim.opt.termguicolors = true
+vim.opt.signcolumn = "yes"
+vim.opt.splitbelow = true
+vim.opt.splitright = true
+vim.opt.scrolloff = 8
+vim.opt.sidescrolloff = 8
+vim.opt.clipboard = "unnamedplus"
+vim.opt.confirm = true
+vim.opt.backup = false
+vim.opt.writebackup = false
+vim.opt.updatetime = 250
+vim.opt.timeoutlen = 300
+vim.opt.undofile = true
+
+-- マウスサポート
+vim.opt.mouse = "a"
+
+-- リーダーキーの設定
+vim.g.mapleader = " "
+vim.g.maplocalleader = ","
+
+-- キーマッピング
+-- ファイル保存
+vim.keymap.set("n", "<leader>w", "<cmd>w<cr>", { desc = "Save" })
+
+-- エスケープでハイライト解除
+vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<cr>", { desc = "Clear Highlights" })
+
+-- バッファ間の移動
+vim.keymap.set("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
+vim.keymap.set("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
+
+-- ウィンドウ間の移動
+vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Go to left window" })
+vim.keymap.set("n", "<C-j>", "<C-w>j", { desc = "Go to lower window" })
+vim.keymap.set("n", "<C-k>", "<C-w>k", { desc = "Go to upper window" })
+vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Go to right window" })
+
+-- インデント調整時に選択を維持
+vim.keymap.set("v", "<", "<gv", { desc = "Unindent line" })
+vim.keymap.set("v", ">", ">gv", { desc = "Indent line" })
+
+-- 日本語入力設定
+vim.opt.timeout = true
+vim.opt.timeoutlen = 1000
+vim.opt.ttimeoutlen = 50
