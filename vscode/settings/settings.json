@@ -71,7 +71,6 @@
         "FIG_NEW_SESSION": "1"
     },
     "editor.accessibilitySupport": "off",
-    "go.goroot": "/opt/homebrew/Cellar/go/1.21.5/libexec/",
     "terminal.integrated.fontFamily": "'Hack Nerd Font Mono'",
     "editor.fontFamily": "'Hack Nerd Font Mono', Menlo, Monaco, 'Courier New', monospace",
     "go.toolsManagement.autoUpdate": true,
@@ -89,7 +88,7 @@
         "editor.tabCompletion": "onlySnippets",
         "editor.wordBasedSuggestions": "off"
     },
-    "go.gopath": "/Users/miyoshi_s/go",
+    "go.gopath": "/Users/miyoshi_s/.local/share/go",
     "files.associations": {
         "*.css": "tailwindcss"
     },
