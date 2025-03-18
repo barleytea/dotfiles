@@ -51,6 +51,11 @@ vscode-apply:
   bash vscode/settings/index.sh
   bash vscode/extensions/apply.sh
 
+vscode-insiders-apply:
+  #!/usr/bin/env bash
+  bash vscode/settings/index_insiders.sh
+  bash vscode/extensions/apply_insiders.sh
+
 vscode-save:
   #!/usr/bin/env bash
   bash vscode/extensions/save.sh
