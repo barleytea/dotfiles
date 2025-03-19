@@ -25,6 +25,7 @@
       "zsh/config/tools/202-atuin.zsh".source = ./config/atuin.zsh;
       "zsh/config/tools/203-asdf.zsh".source = ./config/asdf.zsh;
       "zsh/config/tools/204-fastfetch.zsh".source = ./config/fastfetch.zsh;
+      "zsh/config/tools/205-direnv.zsh".source = ./config/direnv.zsh;
 
       # 4. Alias settings
       "zsh/config/900-aliases.zsh".source = ./config/aliases.zsh;

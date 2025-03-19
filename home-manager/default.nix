@@ -46,6 +46,7 @@ in {
       cairo
       curl
       delta
+      direnv
       docker
       eza
       fastfetch
