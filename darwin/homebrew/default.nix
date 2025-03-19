@@ -29,6 +29,7 @@
       "caffeine"
       "cursor"
       "devutils"
+      "dbeaver-community"
       "fig"
       "font-hack-nerd-font"
       "gfxcardstatus"
