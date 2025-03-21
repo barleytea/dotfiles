@@ -51,6 +51,7 @@ gitConfig = ''
 
 gitIgnore = ''
   .local.memo.md
+  .local_memos/
   .idea/
   .vscode/
   *.log
