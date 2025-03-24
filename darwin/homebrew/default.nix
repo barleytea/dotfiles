@@ -38,6 +38,7 @@
       "hammerspoon"
       "iterm2"
       "miro"
+      "nosql-workbench"
       "notion"
       "plain-clip"
       "raycast"
