@@ -61,6 +61,7 @@ in {
       gitflow
       glib
       gnugrep
+      golangci-lint
       google-chrome
       grpcurl
       hub
