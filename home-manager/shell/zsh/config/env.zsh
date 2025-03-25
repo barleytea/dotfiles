@@ -20,6 +20,11 @@ if [ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
 fi
 export NIX_CONF_DIR=$XDG_CONFIG_HOME
 
+# git
+export GIT_EDITOR=vim
+export VISUAL=vim
+export EDITOR=vim
+
 # asdf
 export ASDF_DATA_DIR="$XDG_DATA_HOME"/asdf
 export ASDF_CONFIG_FILE="$XDG_CONFIG_HOME"/asdf/asdfrc
