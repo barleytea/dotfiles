@@ -59,6 +59,7 @@ gitIgnore = ''
   .tool-versions
   __debug*
   .clinerules
+  copilot-instructions.md
   .DS_Store
 '';
 
