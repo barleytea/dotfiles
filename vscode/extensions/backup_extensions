@@ -1,3 +1,4 @@
+asvetliakov.vscode-neovim
 bbenoist.nix
 bierner.markdown-mermaid
 bmalehorn.vscode-fish
@@ -16,9 +17,9 @@ github.copilot-chat
 golang.go
 hediet.vscode-drawio
 james-yu.latex-workshop
-janisdd.vscode-edit-csv
 jeff-hykin.better-cpp-syntax
 kdl-org.kdl
+marp-team.marp-vscode
 mechatroner.rainbow-csv
 ms-azuretools.vscode-docker
 ms-python.debugpy
@@ -42,7 +43,11 @@ ms-vscode.cpptools-themes
 ms-vscode.makefile-tools
 ms-vscode.remote-explorer
 ms-vscode.remote-server
+pkief.markdown-checkbox
+postman.postman-for-vscode
+rooveterinaryinc.roo-cline
 rust-lang.rust-analyzer
+saoudrizwan.claude-dev
 shd101wyy.markdown-preview-enhanced
 skyapps.fish-vscode
 starkwang.markdown
@@ -50,7 +55,6 @@ tamasfe.even-better-toml
 tauri-apps.tauri-vscode
 twxs.cmake
 vadimcn.vscode-lldb
-vscodevim.vim
 vsls-contrib.gistfs
 vstirbu.vscode-mermaid-preview
 yzane.markdown-pdf

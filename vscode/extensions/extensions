@@ -1,3 +1,4 @@
+asvetliakov.vscode-neovim
 bbenoist.nix
 bierner.markdown-mermaid
 bmalehorn.vscode-fish
@@ -54,7 +55,6 @@ tamasfe.even-better-toml
 tauri-apps.tauri-vscode
 twxs.cmake
 vadimcn.vscode-lldb
-vscodevim.vim
 vsls-contrib.gistfs
 vstirbu.vscode-mermaid-preview
 yzane.markdown-pdf

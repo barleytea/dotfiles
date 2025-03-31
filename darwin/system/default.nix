@@ -5,6 +5,7 @@
       NSGlobalDomain = {
         InitialKeyRepeat = 15;
         KeyRepeat = 2;
+        ApplePressAndHoldEnabled = false;
       };
       dock = {
         autohide = true;

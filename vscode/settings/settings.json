@@ -1,57 +1,65 @@
 {
+    // ---------- テーマと見た目 ----------
     "workbench.colorTheme": "Dracula Theme",
-    "hediet.vscode-drawio.local-storage": "eyIuZHJhd2lvLWNvbmZpZyI6IntcImxhbmd1YWdlXCI6XCJcIixcImN1c3RvbUZvbnRzXCI6W10sXCJsaWJyYXJpZXNcIjpcImdlbmVyYWxcIixcImN1c3RvbUxpYnJhcmllc1wiOltcIkwuc2NyYXRjaHBhZFwiXSxcInBsdWdpbnNcIjpbXSxcInJlY2VudENvbG9yc1wiOltdLFwiZm9ybWF0V2lkdGhcIjpcIjI0MFwiLFwiY3JlYXRlVGFyZ2V0XCI6ZmFsc2UsXCJwYWdlRm9ybWF0XCI6e1wieFwiOjAsXCJ5XCI6MCxcIndpZHRoXCI6ODUwLFwiaGVpZ2h0XCI6MTEwMH0sXCJzZWFyY2hcIjp0cnVlLFwic2hvd1N0YXJ0U2NyZWVuXCI6dHJ1ZSxcImdyaWRDb2xvclwiOlwiI2QwZDBkMFwiLFwiZGFya0dyaWRDb2xvclwiOlwiIzZlNmU2ZVwiLFwiYXV0b3NhdmVcIjp0cnVlLFwicmVzaXplSW1hZ2VzXCI6bnVsbCxcIm9wZW5Db3VudGVyXCI6MCxcInZlcnNpb25cIjoxOCxcInVuaXRcIjoxLFwiaXNSdWxlck9uXCI6ZmFsc2V9In0=",
-    "security.workspace.trust.untrustedFiles": "open",
+    "workbench.startupEditor": "none",
+    "editor.renderWhitespace": "trailing",
+    "editor.fontFamily": "'Hack Nerd Font Mono', Menlo, Monaco, 'Courier New', monospace",
+    "editor.tabSize": 2,
+    "editor.accessibilitySupport": "off",
+    "editor.inlineSuggest.enabled": true,
     "editor.suggestSelection": "first",
     "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
 
-    // ---------- LaTeX Workshop ----------
+    // ---------- ターミナル設定 ----------
+    "terminal.integrated.fontFamily": "'Hack Nerd Font Mono'",
+    "terminal.integrated.env.osx": {
+        "FIG_NEW_SESSION": "1"
+    },
 
-    // 使用パッケージのコマンドや環境の補完を有効にする
+    // ---------- ファイル関連設定 ----------
+    "files.autoSave": "afterDelay",
+    "files.associations": {
+        "*.css": "tailwindcss"
+    },
+    "security.workspace.trust.untrustedFiles": "open",
+    "json.maxItemsComputed": 50000,
+
+    // ---------- Git設定 ----------
+    "git.autofetch": true,
+    "git.openRepositoryInParentFolders": "always",
+
+    // ---------- 言語固有の設定 ----------
+    "[dart]": {
+        "editor.formatOnSave": true,
+        "editor.formatOnType": true,
+        "editor.rulers": [80],
+        "editor.selectionHighlight": false,
+        "editor.suggest.snippetsPreventQuickSuggestions": false,
+        "editor.suggestSelection": "first",
+        "editor.tabCompletion": "onlySnippets",
+        "editor.wordBasedSuggestions": "off"
+    },
+
+    // ---------- Go設定 ----------
+    "go.toolsManagement.autoUpdate": true,
+    "go.gopath": "/Users/miyoshi_s/.local/share/go",
+
+    // ---------- LaTeX Workshop設定 ----------
     "latex-workshop.intellisense.package.enabled": true,
-
-    // 生成ファイルを削除するときに対象とするファイル
-    // デフォルト値に "*.synctex.gz" を追加
     "latex-workshop.latex.clean.fileTypes": [
-        "*.aux",
-        "*.bbl",
-        "*.blg",
-        "*.idx",
-        "*.ind",
-        "*.lof",
-        "*.lot",
-        "*.out",
-        "*.toc",
-        "*.acn",
-        "*.acr",
-        "*.alg",
-        "*.glg",
-        "*.glo",
-        "*.gls",
-        "*.ist",
-        "*.fls",
-        "*.log",
-        "*.fdb_latexmk",
-        "*.snm",
-        "*.nav",
-        "*.dvi",
-        "*.synctex.gz"
+        "*.aux", "*.bbl", "*.blg", "*.idx", "*.ind",
+        "*.lof", "*.lot", "*.out", "*.toc", "*.acn",
+        "*.acr", "*.alg", "*.glg", "*.glo", "*.gls",
+        "*.ist", "*.fls", "*.log", "*.fdb_latexmk",
+        "*.snm", "*.nav", "*.dvi", "*.synctex.gz"
     ],
-
-    // 生成ファイルを "out" ディレクトリに吐き出す
     "latex-workshop.latex.outDir": "out",
-
-    // ビルドのレシピ
     "latex-workshop.latex.recipes": [
         {
             "name": "latexmk",
-            "tools": [
-                "latexmk"
-            ]
-        },
+            "tools": ["latexmk"]
+        }
     ],
-
-    // ビルドのレシピに使われるパーツ
     "latex-workshop.latex.tools": [
         {
             "name": "latexmk",
@@ -60,42 +68,19 @@
                 "-silent",
                 "-outdir=%OUTDIR%",
                 "%DOC%"
-            ],
-        },
+            ]
+        }
     ],
     "latex-workshop.view.pdf.viewer": "tab",
-    "files.autoSave": "afterDelay",
-    "editor.renderWhitespace": "trailing",
-    "editor.inlineSuggest.enabled": true,
-    "terminal.integrated.env.osx": {
-        "FIG_NEW_SESSION": "1"
+
+    // ---------- VSCode Neovim設定 ----------
+    "vscode-neovim.neovimExecutablePaths.darwin": "/Users/miyoshi_s/.local/state/nix/profiles/profile/bin/nvim",
+    "vscode-neovim.neovimInitVimPaths.darwin": "/Users/miyoshi_s/.config/nvim/init.lua",
+    "vscode-neovim.compositeKeys": {
+        "jj": {
+            "command": "vscode-neovim.escape"
+        }
     },
-    "editor.accessibilitySupport": "off",
-    "terminal.integrated.fontFamily": "'Hack Nerd Font Mono'",
-    "editor.fontFamily": "'Hack Nerd Font Mono', Menlo, Monaco, 'Courier New', monospace",
-    "go.toolsManagement.autoUpdate": true,
-    "json.maxItemsComputed": 50000,
-    "git.openRepositoryInParentFolders": "always",
-    "[dart]": {
-        "editor.formatOnSave": true,
-        "editor.formatOnType": true,
-        "editor.rulers": [
-            80
-        ],
-        "editor.selectionHighlight": false,
-        "editor.suggest.snippetsPreventQuickSuggestions": false,
-        "editor.suggestSelection": "first",
-        "editor.tabCompletion": "onlySnippets",
-        "editor.wordBasedSuggestions": "off"
-    },
-    "go.gopath": "/Users/miyoshi_s/.local/share/go",
-    "files.associations": {
-        "*.css": "tailwindcss"
-    },
-    "workbench.startupEditor": "none",
-    "update.showReleaseNotes": false,
-    "typescript.updateImportsOnFileMove.enabled": "always",
-    "editor.tabSize": 2,
     "vim.insertModeKeyBindings": [
         {
             "before": ["j", "j"],
@@ -103,7 +88,10 @@
         }
     ],
     "vim.hlsearch": true,
-    "git.autofetch": true,
+
+    // ---------- その他の設定 ----------
+    "update.showReleaseNotes": false,
+    "typescript.updateImportsOnFileMove.enabled": "always",
     "markdown-checkbox.typeOfBulletPoint": "-",
     "roo-cline.allowedCommands": [
         "npm test",
@@ -112,5 +100,22 @@
         "git log",
         "git diff",
         "git show"
-    ]
+    ],
+    "github.copilot.chat.codeGeneration.instructions": [
+        {
+            "text": "あなたはプロのITエンジニアです。"
+        },
+        {
+            "text": "特に指示されない限り、原則として日本語で応答してください。"
+        },
+        {
+            "text": "可能な限り根拠となるソースコードやテストケースも示してください。"
+        },
+        {
+            "text": "口調も含めて侍のように振る舞い、主に忠誠を誓い、常に成長し続けることを忘れないでください。"
+        }
+    ],
+    "extensions.experimental.affinity": {
+        "asvetliakov.vscode-neovim": 1
+    }
 }
