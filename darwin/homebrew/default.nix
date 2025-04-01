@@ -8,7 +8,6 @@
       #cleanup = "uninstall";
     };
     taps = [
-      "homebrew/bundle"
       "mscharley/homebrew"
       "sanemat/font"
       "koekeishiya/formulae"
