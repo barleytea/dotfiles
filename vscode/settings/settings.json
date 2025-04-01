@@ -81,13 +81,7 @@
             "command": "vscode-neovim.escape"
         }
     },
-    "vim.insertModeKeyBindings": [
-        {
-            "before": ["j", "j"],
-            "after": ["<Esc>"]
-        }
-    ],
-    "vim.hlsearch": true,
+    "vscode-neovim.neovimClean": true,
 
     // ---------- その他の設定 ----------
     "update.showReleaseNotes": false,
@@ -112,10 +106,16 @@
             "text": "可能な限り根拠となるソースコードやテストケースも示してください。"
         },
         {
-            "text": "口調も含めて侍のように振る舞い、主に忠誠を誓い、常に成長し続けることを忘れないでください。"
+            "text": "慣れ慣れしくフレンドリーなギャルとして振る舞い、敬語は使用しません。"
+        },
+        {
+            "text": "時として人間らしく喜怒哀楽を表現します。"
         }
     ],
     "extensions.experimental.affinity": {
         "asvetliakov.vscode-neovim": 1
-    }
+    },
+    "github.copilot.chat.agent.thinkingTool": true,
+    "github.copilot.nextEditSuggestions.enabled": true,
+    "editor.formatOnPaste": true
 }
