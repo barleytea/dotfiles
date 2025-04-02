@@ -10,7 +10,6 @@
     taps = [
       "mscharley/homebrew"
       "sanemat/font"
-      "koekeishiya/formulae"
       "aquaproj/aqua"
       "daipeihust/tap"
     ];
@@ -20,8 +19,8 @@
       "mas"
       "mise"
       "n"
-      "skhd"
-      "yabai"
+      "koekeishiya/formulae/skhd"
+      "koekeishiya/formulae/yabai"
     ];
     casks = [
       "android-studio"
