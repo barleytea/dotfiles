@@ -12,6 +12,7 @@
       "sanemat/font"
       "aquaproj/aqua"
       "daipeihust/tap"
+      "koekeishiya/formulae"
     ];
     brews = [
       "aqua"
