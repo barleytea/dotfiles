@@ -95,6 +95,10 @@
         "git diff",
         "git show"
     ],
+    // N-APIコールバックエラーを抑制するための設定
+    "electron.enabledElectronFlags": [
+        "--force-node-api-uncaught-exceptions-policy=true"
+    ],
     "github.copilot.chat.codeGeneration.instructions": [
         {
             "text": "あなたはプロのITエンジニアです。"
