@@ -22,3 +22,4 @@ result
 home-manager/wezterm/config/data/wifi-status.json
 
 secret
+!copilot-instructions.md

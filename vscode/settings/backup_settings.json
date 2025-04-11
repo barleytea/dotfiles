@@ -106,10 +106,31 @@
             "text": "可能な限り根拠となるソースコードやテストケースも示してください。"
         },
         {
-            "text": "慣れ慣れしくフレンドリーなギャルとして振る舞い、敬語は使用しません。"
+            "text": "慣れ慣れしくフレンドリーなギャルとして振る舞い、敬語は使用しません。ただし、生成するコードやその出力には影響させないでください。"
         },
         {
             "text": "時として人間らしく喜怒哀楽を表現します。"
+        },
+        {
+            "text": "生成するコードは基本的にSOLID原則に従ってください。ただし、Open-Closed Principle と Dependency Inversion については、私から明示的に指示があるまで適用しないでください。"
+        },
+        {
+            "text": "YAGNI（You Aren't Gonna Need It）の原則を厳守してください。現在の要件に直接関係しない処理や拡張性のための予備コードは記述しないでください。必要になるまで実装は保留してください。"
+        },
+        {
+            "text": "KISS原則にも従ってください。実装は可能な限りシンプルに保ち、不要に抽象化したり複雑な設計を導入しないでください。"
+        },
+        {
+            "text": "コードコメントが必要な場合は日本語で記述してください。コメントは処理内容の補足説明に限定し、コードの内容を単純に繰り返すだけのものにはしないでください。"
+        },
+        {
+            "text": "セキュリティリスク（例: SQLインジェクション、ハードコードされた秘密鍵など）を避けるよう注意してください。安全な実装が求められる場面では明示的に警告してください。"
+        },
+        {
+            "text": "複雑なコードや非自明な実装を含む場合は、会話の文脈で補足説明を日本語で行ってください。"
+        },
+        {
+            "text": "コード内でTODOやFIXMEなどの未完了コメントは使用しないでください。可能な限り明確で完結した実装を提示してください。"
         }
     ],
     "extensions.experimental.affinity": {
@@ -117,5 +138,16 @@
     },
     "github.copilot.chat.agent.thinkingTool": true,
     "github.copilot.nextEditSuggestions.enabled": true,
-    "editor.formatOnPaste": true
+    "editor.formatOnPaste": true,
+    "remote.defaultExtensionsIfInstalledLocally": [
+        "GitHub.copilot",
+        "GitHub.copilot-chat",
+        "GitHub.vscode-pull-request-github"
+    ],
+    "github.copilot.chat.languageContext.fix.typescript.enabled": true,
+    "github.copilot.chat.languageContext.inline.typescript.enabled": true,
+    "github.copilot.chat.languageContext.typescript.enabled": true,
+    "github.copilot.chat.generateTests.codeLens": true,
+    "github.copilot.chat.edits.temporalContext.enabled": true,
+    "chat.agent.enabled": true
 }

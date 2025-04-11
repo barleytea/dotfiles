@@ -50,6 +50,7 @@ gitConfig = ''
 '';
 
 gitIgnore = ''
+  mcp.json
   .local.memo.md
   .local_memos/
   .idea/

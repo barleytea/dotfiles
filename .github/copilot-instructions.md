@@ -1,0 +1,1 @@
+* home-manager の設定を適用する場合は `just home-manager apply` を使用してください
