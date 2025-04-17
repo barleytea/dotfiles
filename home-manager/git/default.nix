@@ -51,7 +51,7 @@ gitConfig = ''
 
 gitIgnore = ''
   mcp.json
-  .cursor/
+  .cursor/rules/
   .cursorrules
   .clinerules
   .local.memo.md
