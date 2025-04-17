@@ -23,6 +23,11 @@
       };
       window = {
         opacity = 0.75;
+        option_as_alt = "Both";
+      };
+      scrolling = {
+        history = 10000;
+        multiplier = 3;
       };
       terminal = {
         shell = {
