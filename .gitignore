@@ -1,25 +1,28 @@
-# editor
+# エディタ関連
 .swp
 .vscode
 .netrwhist
-
-# XDG_CONFIG_HOME
-.config
-
-# vim
 .vim/
 
-# projects
+# 設定関連
+.config
+.tool-versions
+
+# プロジェクト関連
 node_modules/
 package-lock.json
 package.json
 result
 
-# asdf
-.tool-versions
-
-# wezterm
+# アプリケーション固有
+## wezterm
 home-manager/wezterm/config/data/wifi-status.json
 
+# 機密情報
 secret
+
+# 除外解除（常に追跡するファイル）
 !copilot-instructions.md
+!.cursor/*.mdc
+!.cursorrules
+!.clinerules

@@ -51,6 +51,9 @@ gitConfig = ''
 
 gitIgnore = ''
   mcp.json
+  .cursor/
+  .cursorrules
+  .clinerules
   .local.memo.md
   .local_memos/
   .idea/
@@ -59,7 +62,6 @@ gitIgnore = ''
   node_modules/
   .tool-versions
   __debug*
-  .clinerules
   copilot-instructions.md
   .DS_Store
 '';
