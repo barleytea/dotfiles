@@ -1,0 +1,11 @@
+# gitleaksのデフォルト設定を使用
+# 詳細な設定については https://github.com/gitleaks/gitleaks/blob/master/config/gitleaks.toml を参照
+
+title = "gitleaks config"
+
+[allowlist]
+description = "global allow list"
+paths = [
+    '''flake.lock''',
+    '''\.gitleaks\.toml''',
+]
