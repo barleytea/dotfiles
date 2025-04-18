@@ -7,6 +7,7 @@
 - [Language & Runtimes](docs/30_languages.md)
 - [VSCode settings](docs/40_vscode.md)
 - [npm tools](docs/50_npm_tools.md)
+- [pre-commit](docs/70_pre_commit.md)
 
 ## Main Tools
 
@@ -15,6 +16,11 @@
 - [nix](https://nixos.org/) - package manager
 - [home-manager](https://github.com/nix-community/home-manager) - home manager
 - [nix-darwin](https://github.com/LnL7/nix-darwin) - darwin system manager
+
+### Development Tools
+
+- [pre-commit](https://pre-commit.com/) - git hooks framework
+- [gitleaks](https://github.com/gitleaks/gitleaks) - secret scanner
 
 ### Editors
 

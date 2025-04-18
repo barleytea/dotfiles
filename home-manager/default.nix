@@ -86,6 +86,7 @@ in {
       ghq
       git
       gitflow
+      gitleaks
       glib
       gnugrep
       (getGolangciLint pkgs)  # 自前でバージョン固定したパッケージを使う
@@ -107,6 +108,7 @@ in {
       peco
       postgresql
       postman
+      pre-commit
       protobuf
       protoc-gen-go
       protoc-gen-go-grpc
