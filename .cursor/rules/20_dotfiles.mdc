@@ -1,0 +1,89 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# dotfiles.mdc
+
+## Project Overview
+This repository is a dotfiles repository for managing macOS environment settings. It uses Nix, Home Manager, and nix-darwin for environment setup.
+
+## Key Commands
+
+### Nix-related
+- `just nix-channel-update`: Update nix-channel
+- `just home-manager-apply`: Apply Home Manager settings
+- `just nix-darwin-apply`: Apply nix-darwin settings
+- `just nix-update-all`: Update all Nix-related settings
+
+### VSCode-related
+- `just vscode-apply`: Apply VSCode settings
+- `just vscode-insiders-apply`: Apply VSCode Insiders settings
+- `just vscode-save`: Save the list of VSCode extensions
+
+### Others
+- `just npm-tools`: Install npm-related tools
+- `just zsh`: Measure zsh startup time
+- `just paths`: Display PATH contents
+
+## Directory Structure
+- `home-manager/`: Home Manager configuration files
+- `darwin/`: nix-darwin configuration files
+- `vscode/`: VSCode configuration files
+- `docs/`: Documentation
+- `flake.nix`: Nix Flakes configuration file
+- `justfile`: Task runner configuration file
+
+## Notes
+- Apply settings with appropriate commands after making changes
+- It is recommended to run `just nix-update-all` especially after changing Nix-related settings
+
+## Coding Rules
+
+### Nix-related
+1. **Package Management**
+   - Manage packages primarily in `home.packages` in `home-manager/default.nix`
+   - Create functions like `getGolangciLint` to manage packages that require specific versions
+   - Fix package versions in `flake.lock`
+
+2. **Modularization**
+   - Manage each configuration split into appropriate directories
+   - Place common utility functions in the `utils` directory
+   - Explicitly declare dependencies between modules using `imports`
+
+3. **Naming Conventions**
+   - Use `default.nix` for configuration files
+   - Use lowercase with hyphen separators for module names
+   - Use camelCase for function names
+
+### Configuration Files
+1. **Structuring**
+   - Group related settings in the same directory
+   - Clarify the hierarchical structure of settings
+   - Manage common settings in higher-level `default.nix` files
+
+2. **Comments**
+   - Add appropriate comments to complex settings
+   - Explain the purpose and reason for settings
+   - Clearly describe TODOs and FIXMEs
+
+3. **Version Management**
+   - Explicitly specify package versions
+   - Update dependencies carefully
+   - Record change history appropriately in commit messages
+
+### Others
+1. **Security**
+   - Do not include sensitive information
+   - Use only trusted sources for packages
+   - Grant only necessary permissions
+
+2. **Compatibility**
+   - Verify operation in macOS environment
+   - Support different architectures (Intel/Apple Silicon)
+   - Verify compatibility of dependencies
+
+3. **Documentation**
+   - Document configuration changes appropriately
+   - Maintain troubleshooting information
+   - Clearly document setup procedures

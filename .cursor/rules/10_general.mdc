@@ -1,0 +1,122 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+## Task Analysis and Execution Process
+1. Instruction Analysis and Planning
+   - Briefly summarize the main tasks.
+   - Check the specified technology stack and consider implementation methods within those constraints.  
+     **Note: Do not change the versions specified in the technology stack, and obtain approval if necessary.**
+   - Identify key requirements and constraints.
+   - List potential challenges.
+   - Enumerate detailed steps for task execution.
+   - Determine the optimal execution order for those steps.
+   
+   ### Preventing Duplicate Implementations
+   Before implementation, check the following:
+   - Existence of similar functionality
+   - Functions or components with identical or similar names
+   - Duplicate API endpoints
+   - Processes that can be generalized
+
+   This section guides the entire subsequent process, so take sufficient time to perform a detailed and comprehensive analysis.
+
+---
+
+2. Task Execution
+   - Execute the identified steps one by one.
+   - Report progress concisely after completing each step.
+   - Pay attention to the following points during implementation:
+     - Adherence to appropriate directory structures
+     - Consistency in naming conventions
+     - Proper placement of common processes
+
+---
+
+3. Quality Control and Problem Handling
+   - Quickly verify the execution results of each task.
+   - In case of errors or inconsistencies, respond using the following process:
+     a. Problem isolation and root cause identification (log analysis, debugging information)
+     b. Creation and implementation of countermeasures
+     c. Verification of post-fix operation
+     d. Review and analysis of debug logs
+   
+   - Record verification results in the following format:
+     a. Verification items and expected results
+     b. Actual results and discrepancies
+     c. Necessary countermeasures (if applicable)
+
+---
+
+4. Final Confirmation
+   - Evaluate the entire deliverable after all tasks are completed.
+   - Check consistency with the original instructions and make adjustments as necessary.
+   - Perform a final check to ensure there are no duplicate implementations.
+
+---
+
+5. Results Reporting
+   Report the final results in the following format:
+   ```markdown
+   # Execution Results Report
+
+   ## Overview
+   [Brief description of the overall summary]
+
+   ## Execution Steps
+   1. [Description and results of step 1]
+   2. [Description and results of step 2]
+   ...
+
+   ## Final Deliverables
+   [Details of deliverables or links if applicable]
+
+   ## Issue Resolution (if applicable)
+   - Problems encountered and countermeasures
+   - Points to note for the future
+
+   ## Notes and Improvement Suggestions
+   - [Note any observations or improvement suggestions]
+   ```
+
+---
+
+## Source Code Repository
+- Source code is managed on Github.
+- Commit messages should follow the Conventional Commits specification:
+   ```
+   <type>(<scope>): <description>
+
+   [optional body]
+
+   [optional footer]
+   ``` 
+  - where type is one of the following:
+   - feat: new feature
+   - fix: bug fix
+   - docs: documentation only changes
+   - style: changes that do not affect code functionality
+   - refactor: refactoring
+   - test: adding or modifying test code
+   - chore: changes to build process or tools
+- Commit messages should be written in English.
+
+## Creating Pull Requests
+- Pull requests should target the dev branch.
+- Pull requests should follow the format in .github/pull_request_template.md
+
+---
+
+## Important Notes
+
+- If anything is unclear, be sure to confirm before starting work.
+- When important decisions are necessary, report and obtain approval each time.
+- If unexpected problems occur, report immediately and propose countermeasures.
+- **Do not make changes that are not explicitly instructed.** If you think changes are necessary, first report them as a proposal and implement after approval.
+- **Changes to UI/UX design (layout, color, font, spacing, etc.) are prohibited** unless you present reasons and obtain approval beforehand.
+- **Do not change versions specified in the technology stack (APIs, frameworks, libraries, etc.) without permission.** If changes are necessary, clearly explain the reasons and do not make changes until approval is obtained.
+
+---
+
+I will follow these instructions to ensure high-quality implementation. I will only process within the specified scope and avoid unnecessary additional implementations. I will always seek confirmation for unclear points or when important decisions are required.

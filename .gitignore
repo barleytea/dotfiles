@@ -23,6 +23,6 @@ secret
 
 # 除外解除（常に追跡するファイル）
 !copilot-instructions.md
-!.cursor/*.mdc
+!.cursor/rules/
 !.cursorrules
 !.clinerules
