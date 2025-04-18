@@ -7,7 +7,22 @@
 - [Language & Runtimes](docs/30_languages.md)
 - [VSCode settings](docs/40_vscode.md)
 - [npm tools](docs/50_npm_tools.md)
-- [pre-commit](docs/70_pre_commit.md)
+- [Pre-commit hooks](docs/51_pre_commit.md)
+- [Services](docs/60_services.md)
+
+### Document Numbering Guideline
+
+Documents are numbered in increments of 10 according to the following categories:
+
+- `10s`: Setup & Installation
+- `20s`: System & Package Management
+- `30s`: Languages & Runtimes
+- `40s`: Editors & IDEs
+- `50s`: Tools & Utilities
+- `60s`: Services & Daemons
+- `70s`: Customization & Themes
+- `80s`: Security & Backup
+- `90s`: Miscellaneous & References
 
 ## Main Tools
 
