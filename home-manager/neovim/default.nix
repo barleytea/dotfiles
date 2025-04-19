@@ -82,6 +82,12 @@ in {
       -- LazyVimのインポート順序チェックを無効化
       vim.g.lazyvim_check_order = false
 
+      if not vim.g.vscode then
+        -- VSCodeモードでない場合のみ読み込み
+        pcall(function() require('shared.options').setup() end)
+        pcall(function() require('shared.keymaps').setup() end)
+      end
+
       -- Snacks変数が存在しないエラーを解決するために、より適切なダミーの実装を提供
       Snacks = {
         toggle = function(opts)

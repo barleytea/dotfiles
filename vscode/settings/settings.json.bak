@@ -1,0 +1,174 @@
+{
+    "workbench.colorTheme": "Dracula Theme",
+    "workbench.startupEditor": "none",
+    "editor.renderWhitespace": "trailing",
+    "editor.fontFamily": "'Hack Nerd Font Mono', Menlo, Monaco, 'Courier New', monospace",
+    "editor.tabSize": 2,
+    "editor.accessibilitySupport": "off",
+    "editor.inlineSuggest.enabled": true,
+    "editor.suggestSelection": "first",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "terminal.integrated.fontFamily": "'Hack Nerd Font Mono'",
+    "terminal.integrated.env.osx": {
+        "FIG_NEW_SESSION": "1"
+    },
+    "files.autoSave": "afterDelay",
+    "files.associations": {
+        "*.css": "tailwindcss"
+    },
+    "security.workspace.trust.untrustedFiles": "open",
+    "json.maxItemsComputed": 50000,
+    "git.autofetch": true,
+    "git.openRepositoryInParentFolders": "always",
+    "[dart]": {
+        "editor.formatOnSave": true,
+        "editor.formatOnType": true,
+        "editor.rulers": [
+            80
+        ],
+        "editor.selectionHighlight": false,
+        "editor.suggest.snippetsPreventQuickSuggestions": false,
+        "editor.suggestSelection": "first",
+        "editor.tabCompletion": "onlySnippets",
+        "editor.wordBasedSuggestions": "off"
+    },
+    "go.toolsManagement.autoUpdate": true,
+    "go.gopath": "/Users/miyoshi_s/.local/share/go",
+    "latex-workshop.intellisense.package.enabled": true,
+    "latex-workshop.latex.clean.fileTypes": [
+        "*.aux",
+        "*.bbl",
+        "*.blg",
+        "*.idx",
+        "*.ind",
+        "*.lof",
+        "*.lot",
+        "*.out",
+        "*.toc",
+        "*.acn",
+        "*.acr",
+        "*.alg",
+        "*.glg",
+        "*.glo",
+        "*.gls",
+        "*.ist",
+        "*.fls",
+        "*.log",
+        "*.fdb_latexmk",
+        "*.snm",
+        "*.nav",
+        "*.dvi",
+        "*.synctex.gz"
+    ],
+    "latex-workshop.latex.outDir": "out",
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "latexmk",
+            "tools": [
+                "latexmk"
+            ]
+        }
+    ],
+    "latex-workshop.latex.tools": [
+        {
+            "name": "latexmk",
+            "command": "latexmk",
+            "args": [
+                "-silent",
+                "-outdir=%OUTDIR%",
+                "%DOC%"
+            ]
+        }
+    ],
+    "latex-workshop.view.pdf.viewer": "tab",
+    "vscode-neovim.neovimExecutablePaths.darwin": "/Users/miyoshi_s/.local/state/nix/profiles/profile/bin/nvim",
+    "vscode-neovim.neovimInitVimPaths.darwin": "/Users/miyoshi_s/.config/nvim/vscode.lua",
+    "vscode-neovim.neovimClean": true,
+    "vscode-neovim.optimizeForLightTheme": false,
+    "vscode-neovim.useCtrlKeysForNormalMode": true,
+    "vscode-neovim.useCtrlKeysForInsertMode": true,
+    "vscode-neovim.logLevel": "error",
+    "vscode-neovim.textDecorationsAtTop": true,
+    "vscode-neovim.revealCursorScrollLine": true,
+    "vscode-neovim.mouseSelectionStartVisualMode": true,
+    "vscode-neovim.highlightGroups.cursor": true,
+    "vscode-neovim.highlightGroups.highlights": true,
+    "vscode-neovim.highlightGroups.search": true,
+    "vscode-neovim.highlightGroups.visual": true,
+    "update.showReleaseNotes": false,
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "markdown-checkbox.typeOfBulletPoint": "-",
+    "roo-cline.allowedCommands": [
+        "npm test",
+        "npm install",
+        "tsc",
+        "git log",
+        "git diff",
+        "git show"
+    ],
+    "electron.enabledElectronFlags": [
+        "--force-node-api-uncaught-exceptions-policy=true"
+    ],
+    "github.copilot.chat.codeGeneration.instructions": [
+        {
+            "text": "あなたはプロのITエンジニアです。"
+        },
+        {
+            "text": "特に指示されない限り、原則として日本語で応答してください。"
+        },
+        {
+            "text": "可能な限り根拠となるソースコードやテストケースも示してください。"
+        },
+        {
+            "text": "慣れ慣れしくフレンドリーなギャルとして振る舞い、敬語は使用しません。ただし、生成するコードやその出力には影響させないでください。"
+        },
+        {
+            "text": "時として人間らしく喜怒哀楽を表現します。"
+        },
+        {
+            "text": "生成するコードは基本的にSOLID原則に従ってください。ただし、Open-Closed Principle と Dependency Inversion については、私から明示的に指示があるまで適用しないでください。"
+        },
+        {
+            "text": "YAGNI（You Aren't Gonna Need It）の原則を厳守してください。現在の要件に直接関係しない処理や拡張性のための予備コードは記述しないでください。必要になるまで実装は保留してください。"
+        },
+        {
+            "text": "KISS原則にも従ってください。実装は可能な限りシンプルに保ち、不要に抽象化したり複雑な設計を導入しないでください。"
+        },
+        {
+            "text": "コードコメントが必要な場合は日本語で記述してください。コメントは処理内容の補足説明に限定し、コードの内容を単純に繰り返すだけのものにはしないでください。"
+        },
+        {
+            "text": "セキュリティリスク（例: SQLインジェクション、ハードコードされた秘密鍵など）を避けるよう注意してください。安全な実装が求められる場面では明示的に警告してください。"
+        },
+        {
+            "text": "複雑なコードや非自明な実装を含む場合は、会話の文脈で補足説明を日本語で行ってください。"
+        },
+        {
+            "text": "コード内でTODOやFIXMEなどの未完了コメントは使用しないでください。可能な限り明確で完結した実装を提示してください。"
+        }
+    ],
+    "extensions.experimental.affinity": {
+        "asvetliakov.vscode-neovim": 1
+    },
+    "github.copilot.chat.agent.thinkingTool": true,
+    "github.copilot.nextEditSuggestions.enabled": true,
+    "editor.formatOnPaste": true,
+    "remote.defaultExtensionsIfInstalledLocally": [
+        "GitHub.copilot",
+        "GitHub.copilot-chat",
+        "GitHub.vscode-pull-request-github"
+    ],
+    "github.copilot.chat.languageContext.fix.typescript.enabled": true,
+    "github.copilot.chat.languageContext.inline.typescript.enabled": true,
+    "github.copilot.chat.languageContext.typescript.enabled": true,
+    "github.copilot.chat.generateTests.codeLens": true,
+    "github.copilot.chat.edits.temporalContext.enabled": true,
+    "chat.agent.enabled": true,
+    "cursor.cpp.disabledLanguages": [
+        "plaintext",
+        "markdown",
+        "scminput"
+    ],
+    "terminal.integrated.allowChords": false,
+    "terminal.integrated.sendKeybindingsToShell": false
+}
