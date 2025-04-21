@@ -95,7 +95,9 @@
   "vscode-neovim.highlightGroups.highlights": true,
   "vscode-neovim.highlightGroups.search": true,
   "vscode-neovim.highlightGroups.visual": true,
-  "vscode-neovim.excludedExtensions": ["terminal"],
+  "vscode-neovim.excludedExtensions": [
+    "terminal"
+  ],
   "vscode-neovim.leader": "<space>",
   "vscode-neovim.useWSL": false,
   "vscode-neovim.processBufferMaxSize": 10240,
