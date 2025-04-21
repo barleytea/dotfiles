@@ -70,6 +70,16 @@ vscode-save:
   #!/usr/bin/env bash
   bash vscode/extensions/save.sh
 
+# VSCodeとNeovimの設定を同期する
+vscode-sync:
+  #!/usr/bin/env bash
+  bash vscode/settings/sync.sh
+
+# VSCode用のNeovim初期化ファイルを設定する
+vscode-neovim-init:
+  #!/usr/bin/env bash
+  bash vscode/settings/neovim-init.sh
+
 # ================ others ================ #
 
 npm-tools:
