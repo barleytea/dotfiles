@@ -18,6 +18,9 @@ result
 ## wezterm
 home-manager/wezterm/config/data/wifi-status.json
 
+# バックアップ  
+*.bak
+
 # 機密情報
 secret
 
