@@ -63,6 +63,7 @@ gitIgnore = ''
   .tool-versions
   __debug*
   copilot-instructions.md
+  .ai/
   .DS_Store
 '';
 
