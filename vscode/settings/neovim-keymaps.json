@@ -1,9 +1,4 @@
 {
-  "vscode-neovim.compositeKeybindings": {
-    "jj": {
-      "command": "vscode-neovim.escape"
-    }
-  },
   "vscode-neovim.normalModeKeyBindingsNonRecursive": [
     {
       "before": ["<C-h>"],

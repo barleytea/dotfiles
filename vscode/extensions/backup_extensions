@@ -22,15 +22,6 @@ kdl-org.kdl
 marp-team.marp-vscode
 mechatroner.rainbow-csv
 ms-azuretools.vscode-docker
-ms-python.debugpy
-ms-python.isort
-ms-python.python
-ms-python.vscode-pylance
-ms-toolsai.jupyter
-ms-toolsai.jupyter-keymap
-ms-toolsai.jupyter-renderers
-ms-toolsai.vscode-jupyter-cell-tags
-ms-toolsai.vscode-jupyter-slideshow
 ms-vscode-remote.remote-containers
 ms-vscode-remote.remote-ssh
 ms-vscode-remote.remote-ssh-edit

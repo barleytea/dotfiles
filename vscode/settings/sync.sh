@@ -35,16 +35,61 @@ check_and_create_dir() {
   fi
 }
 
+# Function to update a JSON/JSONC file property using Node.js
+# This handles comments correctly unlike jq
+update_jsonc_property() {
+  local file="$1"
+  local prop_path="$2"
+  local new_value="$3"
+
+  # Create a temporary Node.js script
+  local tmp_script=$(mktemp)
+
+  # Write a Node.js script that preserves comments
+  cat > "$tmp_script" << 'EOF'
+const fs = require('fs');
+const path = require('path');
+
+// Read the JSONC file as text
+const filePath = process.argv[2];
+const propPath = process.argv[3];
+const newValue = process.argv[4];
+
+try {
+  // Read file content
+  const content = fs.readFileSync(filePath, 'utf8');
+
+  // Simple approach: find the property and replace its value with regex
+  // This is not a proper JSON parser but works for simple cases with comments
+  const propRegex = new RegExp(`(["']${propPath}["']\\s*:\\s*)[^,\\n\\r}]*(,|\\n|\\r|})`, 'g');
+  const newContent = content.replace(propRegex, `$1"${newValue}"$2`);
+
+  // Write back to file
+  fs.writeFileSync(filePath, newContent, 'utf8');
+  console.log("Updated property successfully");
+} catch (error) {
+  console.error("Error updating property:", error);
+  process.exit(1);
+}
+EOF
+
+  # Execute the Node.js script
+  node "$tmp_script" "$file" "$prop_path" "$new_value"
+
+  # Clean up
+  rm "$tmp_script"
+}
+
 # VSCode settings sync
 sync_editor_settings() {
   local editor_dir=$1
   local editor_name=$2
-  
+
   log "Starting $editor_name settings synchronization..."
-  
+
   # Check settings directory
   check_and_create_dir "$editor_dir"
-  
+
   # Sync settings.json
   if [ -f "$VSCODE_SETTINGS_DIR/settings.json" ]; then
     if ! cmp -s "$VSCODE_SETTINGS_DIR/settings.json" "$editor_dir/settings.json"; then
@@ -55,7 +100,7 @@ sync_editor_settings() {
       log "Skipped $editor_name settings.json (files are identical)"
     fi
   fi
-  
+
   # Sync keybindings.json
   if [ -f "$VSCODE_SETTINGS_DIR/keybindings.json" ]; then
     if ! cmp -s "$VSCODE_SETTINGS_DIR/keybindings.json" "$editor_dir/keybindings.json"; then
@@ -66,7 +111,7 @@ sync_editor_settings() {
       log "Skipped $editor_name keybindings.json (files are identical)"
     fi
   fi
-  
+
   log "Completed $editor_name settings synchronization"
 }
 
@@ -255,15 +300,13 @@ sync_neovim_to_vscode() {
 EOL
     log "Generated basic VSCode settings file"
   else
-    # Check if jq is installed
-    if command -v jq &> /dev/null; then
+    # Use Node.js to update the JSON while preserving comments
+    if command -v node &> /dev/null; then
       # Set appropriate Neovim path in VSCode settings
-      jq --arg path "$NVIM_CONFIG_DIR/vscode.lua" \
-        '.["vscode-neovim.neovimInitVimPaths.darwin"] = $path' \
-        "$VSCODE_SETTINGS_DIR/settings.json.bak" > "$VSCODE_SETTINGS_DIR/settings.json"
-      log "Updated VSCode settings file"
+      update_jsonc_property "$VSCODE_SETTINGS_DIR/settings.json" "vscode-neovim.neovimInitVimPaths.darwin" "$NVIM_CONFIG_DIR/vscode.lua"
+      log "Updated VSCode settings file with Node.js"
     else
-      log "Warning: jq command not found. Cannot update settings automatically."
+      log "Warning: Node.js not found. Cannot update settings automatically."
       log "Please edit $VSCODE_SETTINGS_DIR/settings.json manually."
     fi
   fi

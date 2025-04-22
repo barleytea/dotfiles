@@ -39,13 +39,6 @@
     "command": "filesExplorer.copfilesExplorer.paste",
     "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus"
   },
-  // Neovim Escape
-  {
-    "key": "j j",
-    "command": "vscode-neovim.escape",
-    "when": "neovim.mode == 'insert' && editorTextFocus"
-  },
-
   // Normal Mode Navigation
   {
     "key": "ctrl+h",
@@ -159,4 +152,4 @@
     "key": "cmd+i",
     "command": "composerMode.agent"
   }
-] 
+]
