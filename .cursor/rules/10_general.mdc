@@ -1,18 +1,18 @@
 ---
-description: 
-globs: 
+description:
+globs:
 alwaysApply: true
 ---
 ## Task Analysis and Execution Process
 1. Instruction Analysis and Planning
    - Briefly summarize the main tasks.
-   - Check the specified technology stack and consider implementation methods within those constraints.  
+   - Check the specified technology stack and consider implementation methods within those constraints.
      **Note: Do not change the versions specified in the technology stack, and obtain approval if necessary.**
    - Identify key requirements and constraints.
    - List potential challenges.
    - Enumerate detailed steps for task execution.
    - Determine the optimal execution order for those steps.
-   
+
    ### Preventing Duplicate Implementations
    Before implementation, check the following:
    - Existence of similar functionality
@@ -41,7 +41,7 @@ alwaysApply: true
      b. Creation and implementation of countermeasures
      c. Verification of post-fix operation
      d. Review and analysis of debug logs
-   
+
    - Record verification results in the following format:
      a. Verification items and expected results
      b. Actual results and discrepancies
@@ -91,7 +91,7 @@ alwaysApply: true
    [optional body]
 
    [optional footer]
-   ``` 
+   ```
   - where type is one of the following:
    - feat: new feature
    - fix: bug fix

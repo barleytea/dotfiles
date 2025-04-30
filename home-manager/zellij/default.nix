@@ -2,16 +2,16 @@
 let
   readFile = builtins.readFile;
   configTemplate = builtins.readFile ./config.kdl;
-  
+
   copyCommand = if pkgs.stdenv.isDarwin then
     "pbcopy"
   else if pkgs.stdenv.isLinux then
     "xsel --clipboard --input"
   else
     "pbcopy";
-    
+
   # テンプレート内の copy_command を置換
-  config = builtins.replaceStrings 
+  config = builtins.replaceStrings
     ["copy_command \"pbcopy\""]
     ["copy_command \"${copyCommand}\""]
     configTemplate;

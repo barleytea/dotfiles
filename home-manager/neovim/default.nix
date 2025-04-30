@@ -31,7 +31,7 @@ in {
       # 基本プラグイン
       lazy-nvim
       LazyVim
-      
+
       # UI関連
       dracula-nvim
       nvim-web-devicons
@@ -39,7 +39,7 @@ in {
       nvim-notify
       noice-nvim
       nui-nvim
-      
+
       # 補完関連
       nvim-cmp
       cmp-nvim-lsp
@@ -48,17 +48,17 @@ in {
       cmp-cmdline
       luasnip
       cmp_luasnip
-      
+
       # LSP関連
       nvim-lspconfig
       mason-nvim
       mason-lspconfig-nvim
-      
+
       # フォーマッターとリンター
       conform-nvim
       nvim-lint
       none-ls-nvim
-      
+
       # エディタ機能
       indent-blankline-nvim
       copilot-vim
@@ -67,7 +67,7 @@ in {
       telescope-nvim
       plenary-nvim
       telescope-fzf-native-nvim
-      
+
       # 追加のプラグイン
       nvim-surround
       comment-nvim
@@ -93,12 +93,12 @@ in {
         toggle = function(opts)
           -- 空の関数を返して、chainingできるようにする
           return {
-            map = function(mapKey) 
+            map = function(mapKey)
               -- ここでmapKeyは文字列であることを確認
               if type(mapKey) == "string" then
                 -- GitSignsの表示/非表示を切り替えるキーマッピング
-                vim.keymap.set("n", mapKey, function() 
-                  require("gitsigns").toggle_signs() 
+                vim.keymap.set("n", mapKey, function()
+                  require("gitsigns").toggle_signs()
                 end, { desc = "Toggle Git Signs" })
               end
               -- チェーン可能なオブジェクトを返す

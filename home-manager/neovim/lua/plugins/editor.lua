@@ -36,7 +36,7 @@ return {
         end, "Prev Hunk")
         map("n", "<leader>gh", gs.preview_hunk, "Preview Hunk")
         map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", "GitSigns Select Hunk")
-        
+
         -- 追加の便利なマッピング
         map("n", "<leader>hs", gs.stage_hunk, "Stage Hunk")
         map("n", "<leader>hr", gs.reset_hunk, "Reset Hunk")
@@ -49,13 +49,13 @@ return {
         map("n", "<leader>hd", gs.diffthis, "Diff This")
         map("n", "<leader>hD", function() gs.diffthis("~") end, "Diff This ~")
         map("n", "<leader>td", gs.toggle_deleted, "Toggle Deleted")
-        
+
         -- GitSignsの表示/非表示を切り替えるキーマッピング
         map("n", "<leader>tg", gs.toggle_signs, "Toggle Git Signs")
       end,
     },
   },
-  
+
   -- その他のエディタープラグインをここに追加
   -- 例: vim-surround
   {
@@ -63,7 +63,7 @@ return {
     event = "VeryLazy",
     opts = {},
   },
-  
+
   -- インデント表示
   {
     "lukas-reineke/indent-blankline.nvim",
@@ -73,7 +73,7 @@ return {
       scope = { enabled = false },
     },
   },
-  
+
   -- ファジーファインダー
   {
     "nvim-telescope/telescope.nvim",
@@ -101,7 +101,7 @@ return {
       },
     },
   },
-  
+
   -- コメント
   {
     "numToStr/Comment.nvim",
@@ -111,4 +111,4 @@ return {
     },
     opts = {},
   },
-} 
+}

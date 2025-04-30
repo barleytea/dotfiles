@@ -26,7 +26,7 @@ return {
   },
   config = function(_, opts)
     vim.api.nvim_set_hl(0, "IblScope", { link = "Visual" })
-    
+
     local highlight_group = vim.api.nvim_create_augroup("IndentBlanklineHighlight", { clear = true })
     vim.api.nvim_create_autocmd("ColorScheme", {
       callback = function()
@@ -36,7 +36,7 @@ return {
       end,
       group = highlight_group,
     })
-    
+
     vim.api.nvim_create_autocmd("VimEnter", {
       callback = function()
         vim.schedule(function()
@@ -45,7 +45,7 @@ return {
       end,
       group = highlight_group,
     })
-    
+
     vim.defer_fn(function()
       vim.api.nvim_set_hl(0, "IblScope", { link = "Visual" })
       require("ibl").setup(opts)

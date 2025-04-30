@@ -6,11 +6,11 @@ return {
   },
   config = function()
     require("copilot_cmp").setup()
-    
+
     -- Get the existing cmp config
     local cmp = require("cmp")
     local config = cmp.get_config()
-    
+
     -- Add copilot to the sources if it's not already there
     if config.sources then
       table.insert(config.sources, { name = "copilot" })

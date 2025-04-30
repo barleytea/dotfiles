@@ -74,4 +74,4 @@ return {
       end, { desc = "Lint" })
     end,
   },
-} 
+}

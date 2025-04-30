@@ -79,7 +79,7 @@ if vim.fn.has("nvim-0.10") == 1 then
     foldopen = "▾",
     foldclose = "▸",
   })
-end 
+end
 
 -- highlighter
 vim.cmd('highlight SpecialKey ctermbg=235 guibg=#2c2d27')

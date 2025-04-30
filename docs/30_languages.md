@@ -5,7 +5,7 @@
 
 ## Go
 
-### 1. Install the golang plugin for asdf 
+### 1. Install the golang plugin for asdf
 
 ```sh
 asdf plugin-add golang

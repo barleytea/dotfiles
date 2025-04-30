@@ -159,4 +159,4 @@ To customize the configuration:
 1. Edit `home-manager/yabai/yabairc` for yabai settings
 2. Edit the skhd configuration file for keyboard shortcuts
 3. Run `home-manager switch` to apply changes
-4. Restart the services to apply the new configuration 
+4. Restart the services to apply the new configuration

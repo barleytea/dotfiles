@@ -1,4 +1,4 @@
-let 
+let
 
 tmuxConf = ''
   set -g default-terminal "screen-256color"

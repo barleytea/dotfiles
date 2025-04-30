@@ -34,7 +34,7 @@ function get_battery_status(b)
     else
         icon = icon_set[to_int(soc / 10) + 1]
     end
-    
+
     return icon, string.format('%.0f%%', soc)
 end
 
