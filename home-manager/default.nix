@@ -106,6 +106,7 @@ in {
       neovim-remote
       nerd-fonts.hack
       peco
+      pnpm
       postgresql
       postman
       pre-commit
