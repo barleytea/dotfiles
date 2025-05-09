@@ -105,6 +105,7 @@ in {
       neofetch
       neovim-remote
       nerd-fonts.hack
+      obsidian
       peco
       pnpm
       postgresql
