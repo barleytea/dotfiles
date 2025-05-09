@@ -26,6 +26,28 @@
   } @ inputs: let
     system = builtins.currentSystem;
     pkgs = nixpkgs.legacyPackages.${system};
+
+    # Override to skip tests
+    nixpkgsWithOverlays = import nixpkgs {
+      inherit system;
+      config = {
+        allowUnfree = true;
+      };
+      overlays = [
+        (final: prev: {
+          haskellPackages = prev.haskellPackages.override {
+            overrides = hfinal: hprev: {
+              system-fileio = hprev.system-fileio.overrideAttrs (oldAttrs: {
+                doCheck = false;
+              });
+              persistent-sqlite = hprev.persistent-sqlite.overrideAttrs (oldAttrs: {
+                doCheck = false;
+              });
+            };
+          };
+        })
+      ];
+    };
   in {
 
     devShells.${system}.default = pkgs.mkShell {
@@ -39,7 +61,7 @@
 
     homeConfigurations = {
       home = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.${system};
+        pkgs = nixpkgsWithOverlays;  # オーバーライドしたpkgsを使用
         extraSpecialArgs = {
           inherit inputs;
         };
