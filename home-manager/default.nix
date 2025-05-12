@@ -65,6 +65,7 @@ in {
     homeDirectory = utils.home;
     stateVersion = "24.05";
     packages = with pkgs; [
+      anki-bin
       arp-scan
       asdf-vm
       bat
