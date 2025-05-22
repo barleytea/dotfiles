@@ -79,6 +79,7 @@
   // Go
   "go.toolsManagement.autoUpdate": true,
   "go.gopath": "/Users/miyoshi_s/.local/share/go",
+  "go.goroot": "/Users/miyoshi_s/.local/share/asdf/installs/golang/1.23.4/go",
   // JSON
   "json.maxItemsComputed": 50000,
   // Markdown
