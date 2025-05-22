@@ -1,4 +1,5 @@
 copy_on_select true
+show_startup_tips false
 
 copy_command "pbcopy"
 
