@@ -25,6 +25,18 @@ nix-darwin-apply:
   source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
   nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake .#all --impure
 
+# CI環境用：ビルドテストのみ実行（実際の適用はしない）
+nix-darwin-check:
+  #!/usr/bin/env bash
+  source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+  nix --extra-experimental-features "nix-command flakes" build .#darwinConfigurations.all.system --impure
+
+# CI環境用：sudo付きでの強制適用
+nix-darwin-apply-sudo:
+  #!/usr/bin/env bash
+  source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+  sudo nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake .#all --impure
+
 nix-darwin-homebrew-apply:
   #!/usr/bin/env bash
   source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
@@ -41,6 +53,12 @@ nix-darwin-service-apply:
   nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake .#service --impure
 
 nix-update-all: nix-channel-update home-manager-apply nix-darwin-apply
+
+# CI環境用：実際の適用なしでのテスト
+nix-check-all: nix-channel-update home-manager-apply nix-darwin-check
+
+# CI環境用：sudo付きでの適用
+nix-update-all-sudo: nix-channel-update home-manager-apply nix-darwin-apply-sudo
 
 # ================ pre-commit ============ #
 
