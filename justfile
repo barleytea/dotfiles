@@ -35,11 +35,7 @@ nix-darwin-check:
 nix-darwin-apply-sudo:
   #!/usr/bin/env bash
   source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-  # CI環境ではGitHubトークンを設定
-  if [ -n "$GITHUB_TOKEN" ]; then
-    export NIX_CONFIG="access-tokens = github.com=$GITHUB_TOKEN"
-  fi
-  sudo -E nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake .#all --impure
+  sudo nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake .#all --impure
 
 nix-darwin-homebrew-apply:
   #!/usr/bin/env bash
