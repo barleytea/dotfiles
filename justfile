@@ -42,12 +42,9 @@ nix-darwin-service-apply:
 
 nix-update-all: nix-channel-update home-manager-apply nix-darwin-apply
 
-# CI環境用：ビルドテストのみ実行（実際の適用はしない）  nix-darwin-check:
+nix-darwin-check:
   #!/usr/bin/env bash
   source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-  # CI環境用の環境変数を設定
-  export CI=true
-  export USER=${USER:-runner}
   nix --extra-experimental-features "nix-command flakes" build .#darwinConfigurations.all.system --impure
 
 # CI環境用：実際の適用なしでのテスト
