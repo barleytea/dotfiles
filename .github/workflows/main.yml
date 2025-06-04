@@ -65,6 +65,8 @@ jobs:
         shell: zsh {0}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CI: true
+          USER: runner
         run: |
           source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
           export NIX_CONFIG="access-tokens = github.com=$GITHUB_TOKEN"
