@@ -52,6 +52,17 @@ jobs:
           echo 'use-xdg-base-directories = true' | sudo tee /etc/nix/nix.conf
           echo 'extra-trusted-users = runner' | sudo tee -a /etc/nix/nix.conf
           echo "access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}" | sudo tee -a /etc/nix/nix.conf
+      - name: Update flake
+        shell: zsh {0}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # HOME権限の修正
+          sudo chown -R runner:staff $HOME
+
+          source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+          export NIX_CONFIG="access-tokens = github.com=$GITHUB_TOKEN"
+          nix flake update
       - name: Apply home-manager
         shell: zsh {0}
         env:
@@ -59,7 +70,7 @@ jobs:
         run: |
           export USER=runner
           source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-          nix flake update
+          export NIX_CONFIG="access-tokens = github.com=$GITHUB_TOKEN"
           nix run nixpkgs#home-manager -- switch --flake .#home --impure
       - name: Apply nix-darwin with sudo
         shell: zsh {0}
@@ -73,6 +84,13 @@ jobs:
           if [ -f /etc/hosts ]; then
             sudo mv /etc/hosts /etc/hosts.before-nix-darwin
           fi
+
+          # nixの設定にGitHubトークンを追加
+          sudo mkdir -p /etc/nix
+          echo 'use-xdg-base-directories = true' | sudo tee /etc/nix/nix.conf
+          echo 'extra-trusted-users = runner' | sudo tee -a /etc/nix/nix.conf
+          echo "access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}" | sudo tee -a /etc/nix/nix.conf
+
           source $HOME/.zshenv
           source $HOME/.config/zsh/.zshrc
           just nix-darwin-apply-sudo
