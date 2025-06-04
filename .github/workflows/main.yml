@@ -61,7 +61,7 @@ jobs:
           source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
           nix flake update
           nix run nixpkgs#home-manager -- switch --flake .#home --impure
-      - name: Apply nix-darwin with sudo
+      - name: Apply nix-darwin
         shell: zsh {0}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -75,15 +75,15 @@ jobs:
           fi
           source $HOME/.zshenv
           source $HOME/.config/zsh/.zshrc
-          just nix-darwin-apply-sudo
-      - name: Run nix-update-all with sudo
+          just nix-darwin-apply
+      - name: Run nix-update-all
         shell: zsh {0}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           source $HOME/.zshenv
           source $HOME/.config/zsh/.zshrc
-          just nix-update-all-sudo
+          just nix-update-all
       - name: Run vscode-settings
         shell: zsh {0}
         run: |
