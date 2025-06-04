@@ -42,6 +42,15 @@ nix-darwin-service-apply:
 
 nix-update-all: nix-channel-update home-manager-apply nix-darwin-apply
 
+# CI環境用：ビルドテストのみ実行（実際の適用はしない）
+nix-darwin-check:
+  #!/usr/bin/env bash
+  source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+  nix --extra-experimental-features "nix-command flakes" build .#darwinConfigurations.all.system --impure
+
+# CI環境用：実際の適用なしでのテスト
+nix-check-all: nix-channel-update home-manager-apply nix-darwin-check
+
 # ================ pre-commit ============ #
 
 pre-commit-init:
