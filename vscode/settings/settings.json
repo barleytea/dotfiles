@@ -235,5 +235,8 @@
       "text": "コード内でTODOやFIXMEなどの未完了コメントは使用しないでください。可能な限り明確で完結した実装を提示してください。"
     }
   ],
-  "cursor.composer.shouldChimeAfterChatFinishes": true
+  "cursor.composer.shouldChimeAfterChatFinishes": true,
+  "cursor.composer.shouldAllowCustomModes": true,
+  "update.releaseTrack": "prerelease",
+  "cursor.cpp.enablePartialAccepts": true
 }
