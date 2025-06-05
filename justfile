@@ -93,8 +93,13 @@ vscode-neovim-init:
 npm-tools:
   #!/usr/bin/env bash
   sudo n latest
-  sudo npm i -g npm
-  sudo npm i -g commitizen cz-git
+  npm i -g npm
+  npm i -g \
+    commitizen \
+    cz-git \
+    @redocly/cli \
+    corepack \
+    @anthropic-ai/claude-code
 
 zsh:
   #!/usr/bin/env bash
