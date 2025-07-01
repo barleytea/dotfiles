@@ -99,7 +99,8 @@ npm-tools:
     cz-git \
     @redocly/cli \
     corepack \
-    @anthropic-ai/claude-code
+    @anthropic-ai/claude-code \
+    @google/gemini-cli
 
 zsh:
   #!/usr/bin/env bash
