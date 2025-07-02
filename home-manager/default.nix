@@ -41,13 +41,13 @@ in {
 
   imports = [
     ./alacritty
-    ./asdf
     ./atuin
     ./cz-git
     ./editorconfig
     ./git
     ./just
     ./k9s
+    ./mise
     ./neovim
     ./shell
     ./sheldon
@@ -64,10 +64,10 @@ in {
     username = utils.username;
     homeDirectory = utils.home;
     stateVersion = "24.05";
+
     packages = with pkgs; [
       anki-bin
       arp-scan
-      asdf-vm
       bat
       bottom
       bun
@@ -103,6 +103,7 @@ in {
       maven
       mecab
       minikube
+      mise
       neofetch
       neovim-remote
       nerd-fonts.hack

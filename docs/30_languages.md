@@ -1,34 +1,63 @@
 # Languages & Runtimes
 
-- [Go](#go)
-- [Node.js](#nodejs)
+This project uses mise for language version management and task execution.
 
-## Go
+- [Tool Versions](#tool-versions)
+- [Available Tasks](#available-tasks)
+- [Environment Variables](#environment-variables)
+- [Usage](#usage)
 
-### 1. Install the golang plugin for asdf
+## Tool Versions
+
+The following tools are configured in `.mise.toml`:
+
+- **Go**: `1.23.4` (migrated from asdf)
+- **Node.js**: `lts` (migrated from n)
+
+## Available Tasks
+
+### npm-tools
+Installs global npm packages required for development:
 
 ```sh
-asdf plugin-add golang
+mise run npm-tools
+# or
+just npm-tools
 ```
 
-### 2. Install golang
+Installs:
+- npm (latest)
+- commitizen
+- cz-git
+- @redocly/cli
+- corepack
+- @anthropic-ai/claude-code
+- @google/gemini-cli
+
+### dev
+Development environment setup:
 
 ```sh
-asdf install golang latest
-
-# or
-
-asdf list all golang
-asdf install golang 1.23.4
+mise run dev
 ```
 
-## Node.js
+## Environment Variables
+
+Configured environment variables:
+
+- `NODE_ENV`: Set to "development"
+- `GOPATH`: Set to "$XDG_DATA_HOME/go"
+
+## Usage
 
 ```sh
-sudo n latest
+# Install configured tools
+mise install
 
-# or
+# Check current versions
+mise current
 
-n ls-remote
-sudo n 22.3.0
+# Run tasks
+mise run npm-tools
+mise run dev
 ```

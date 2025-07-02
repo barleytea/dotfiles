@@ -23,7 +23,7 @@
       "zsh/config/tools/200-starship.zsh".source = ./config/starship.zsh;
       "zsh/config/tools/201-sheldon.zsh".source = ./config/sheldon.zsh;
       "zsh/config/tools/202-atuin.zsh".source = ./config/atuin.zsh;
-      "zsh/config/tools/203-asdf.zsh".source = ./config/asdf.zsh;
+      "zsh/config/tools/203-mise.zsh".source = ./config/mise.zsh;
       "zsh/config/tools/204-fastfetch.zsh".source = ./config/fastfetch.zsh;
       "zsh/config/tools/205-direnv.zsh".source = ./config/direnv.zsh;
 

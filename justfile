@@ -92,15 +92,12 @@ vscode-neovim-init:
 
 npm-tools:
   #!/usr/bin/env bash
-  sudo n latest
-  npm i -g npm
-  npm i -g \
-    commitizen \
-    cz-git \
-    @redocly/cli \
-    corepack \
-    @anthropic-ai/claude-code \
-    @google/gemini-cli
+  mise run npm-tools
+
+# mise tasks の実行
+mise-tools:
+  #!/usr/bin/env bash
+  mise run npm-tools
 
 zsh:
   #!/usr/bin/env bash
