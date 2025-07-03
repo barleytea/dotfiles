@@ -88,16 +88,39 @@ vscode-neovim-init:
   #!/usr/bin/env bash
   bash vscode/settings/neovim-init.sh
 
+# ================ mise ================== #
+
+# mise で管理している npm パッケージをグローバルにインストール
+mise-install-npm-commitizen:
+  #!/usr/bin/env bash
+  mise run npm-commitizen
+
+# mise で管理している全ツールをインストール
+mise-install-all:
+  #!/usr/bin/env bash
+  mise install
+
+# mise のツール一覧を表示
+mise-list:
+  #!/usr/bin/env bash
+  mise ls
+
+# mise の設定を表示
+mise-config:
+  #!/usr/bin/env bash
+  mise config
+
 # ================ others ================ #
 
+# 非推奨: 代わりに mise-install-npm-commitizen を使用
 npm-tools:
   #!/usr/bin/env bash
-  mise run npm-tools
+  mise run npm-commitizen
 
 # mise tasks の実行
 mise-tools:
   #!/usr/bin/env bash
-  mise run npm-tools
+  mise run npm-commitizen
 
 zsh:
   #!/usr/bin/env bash

@@ -12,10 +12,6 @@
       tools = {
         node = "lts";
         go = "1.23.4";
-        
-        # [npm] 
-        "npm:commitizen" = "latest";
-        "npm:cz-git" = "latest";
         "npm:@redocly/cli" = "latest";
         "npm:corepack" = "latest";
         "npm:@anthropic-ai/claude-code" = "latest";
@@ -23,12 +19,21 @@
       };
       
       settings = {
-        # mise の動作設定
         experimental = true;
         plugin_autoupdate_last_check_duration = "7 days";
         trusted_config_paths = [
           config.home.homeDirectory
         ];
+      };
+
+      # タスク定義でnpmグローバルインストールを実行
+      tasks = {
+        npm-commitizen = {
+          description = "Install commitizen and cz-git globally";
+          run = [
+            "npm install -g commitizen cz-git"
+          ];
+        };
       };
     };
   };

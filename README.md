@@ -4,6 +4,7 @@
 
 - [Installation](docs/10_installation.md)
 - [Nix operations](docs/20_nix.md)
+- [mise tool manager](docs/25_mise.md)
 - [Language & Runtimes](docs/30_languages.md)
 - [VSCode settings](docs/40_vscode.md)
 - [npm tools](docs/50_npm_tools.md)
@@ -31,11 +32,14 @@ Documents are numbered in increments of 10 according to the following categories
 - [nix](https://nixos.org/) - package manager
 - [home-manager](https://github.com/nix-community/home-manager) - home manager
 - [nix-darwin](https://github.com/LnL7/nix-darwin) - darwin system manager
+- [mise](https://mise.jdx.dev/) - runtime and tool manager
 
 ### Development Tools
 
 - [pre-commit](https://pre-commit.com/) - git hooks framework
 - [gitleaks](https://github.com/gitleaks/gitleaks) - secret scanner
+- [commitizen](https://github.com/commitizen/cz-cli) - commit convention tool
+- [cz-git](https://github.com/Zhengqbbb/cz-git) - commitizen adapter
 
 ### Editors
 
