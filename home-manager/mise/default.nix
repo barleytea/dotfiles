@@ -7,7 +7,7 @@
   programs.mise = {
     enable = true;
     enableZshIntegration = true;
-    
+
     globalConfig = {
       tools = {
         node = "lts";
@@ -16,8 +16,9 @@
         "npm:corepack" = "latest";
         "npm:@anthropic-ai/claude-code" = "latest";
         "npm:@google/gemini-cli" = "latest";
+        "npm:reviewit" = "latest";
       };
-      
+
       settings = {
         experimental = true;
         plugin_autoupdate_last_check_duration = "7 days";
