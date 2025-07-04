@@ -42,8 +42,10 @@ in {
   imports = [
     ./alacritty
     ./atuin
+    ./claude
     ./cz-git
     ./editorconfig
+    ./gemini
     ./git
     ./just
     ./k9s
@@ -58,7 +60,7 @@ in {
     ./yabai
     ./yazi
     ./zellij
-    ./claude
+    
   ];
 
   home = {
