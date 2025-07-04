@@ -6,6 +6,8 @@
         InitialKeyRepeat = 15;
         KeyRepeat = 2;
         ApplePressAndHoldEnabled = false;
+        AppleShowAllExtensions = true;
+        AppleShowAllFiles = true;
       };
       dock = {
         autohide = true;

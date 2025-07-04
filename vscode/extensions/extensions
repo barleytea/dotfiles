@@ -1,3 +1,4 @@
+anthropic.claude-code
 asvetliakov.vscode-neovim
 bbenoist.nix
 bierner.markdown-mermaid
@@ -37,10 +38,7 @@ ms-vscode.makefile-tools
 ms-vscode.remote-explorer
 ms-vscode.remote-server
 pkief.markdown-checkbox
-postman.postman-for-vscode
-rooveterinaryinc.roo-cline
 rust-lang.rust-analyzer
-saoudrizwan.claude-dev
 shd101wyy.markdown-preview-enhanced
 skyapps.fish-vscode
 starkwang.markdown
