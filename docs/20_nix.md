@@ -88,3 +88,30 @@ nix-env --rollback
 
 nix-env --switch-generation 3
 ```
+
+## Special Configuration Handling
+
+### Claude Configuration
+
+While most dotfiles configurations are managed through the Nix store for reproducibility and immutability, the Claude configuration is handled as an exception using direct symbolic links.
+
+**Rationale:**
+- Claude Desktop application modifies its configuration files directly during runtime
+- The Nix store approach would prevent Claude from updating its own settings
+- Direct symbolic links allow bidirectional synchronization between the application and dotfiles
+
+**Implementation:**
+The Claude configuration files are linked directly from the dotfiles repository:
+```sh
+~/.claude/CLAUDE.md → ~/git_repos/github.com/barleytea/dotfiles/home-manager/claude/config/CLAUDE.md
+~/.claude/settings.json → ~/git_repos/github.com/barleytea/dotfiles/home-manager/claude/config/settings.json
+```
+
+This approach enables:
+- Claude to modify its configuration files as needed
+- Changes to persist in the dotfiles repository automatically
+- Version control of Claude settings through git
+
+**Configuration Location:**
+- Dotfiles: `home-manager/claude/default.nix`
+- Target directory: `~/.claude/`

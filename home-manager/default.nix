@@ -58,6 +58,7 @@ in {
     ./yabai
     ./yazi
     ./zellij
+    ./claude
   ];
 
   home = {
