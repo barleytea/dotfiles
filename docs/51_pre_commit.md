@@ -12,7 +12,7 @@
 After cloning the repository, run the following command to install pre-commit hooks:
 
 ```bash
-just pre-commit-init
+make pre-commit-init
 ```
 
 ## Running Checks Manually
@@ -20,7 +20,7 @@ just pre-commit-init
 To run checks on all files manually:
 
 ```bash
-just pre-commit-run
+make pre-commit-run
 ```
 
 ## Secret Scanning

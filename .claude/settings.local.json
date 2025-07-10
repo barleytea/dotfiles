@@ -4,7 +4,8 @@
       "Bash(just home-manager-apply)",
       "WebFetch(domain:docs.anthropic.com)",
       "Bash(home-manager:*)",
-      "Bash(nix-instantiate:*)"
+      "Bash(nix-instantiate:*)",
+      "Bash(find:*)"
     ],
     "deny": []
   }

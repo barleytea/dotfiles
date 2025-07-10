@@ -47,7 +47,6 @@ in {
     ./editorconfig
     ./gemini
     ./git
-    ./just
     ./k9s
     ./mise
     ./neovim
@@ -99,7 +98,6 @@ in {
       hub
       jpegoptim
       jq
-      just
       krb5
       kubectx
       lazygit

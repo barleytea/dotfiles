@@ -15,20 +15,20 @@ npm config set prefix ~/.npm-global
 
 ```sh
 # commitizen + cz-git をグローバルにインストール
-just mise-install-npm-commitizen
+make mise-install-npm-commitizen
 
 # または直接 mise を使用
 mise run npm-commitizen
 
 # mise で管理している全ツールをインストール
-just mise-install-all
+make mise-install-all
 ```
 
 ### 方法2: 従来のnpmコマンド
 
 ```sh
 # 非推奨: 代わりに上記の mise タスクを使用
-just npm-tools
+make npm-tools
 ```
 
 ## mise で管理されているツール
@@ -37,10 +37,10 @@ just npm-tools
 
 ```sh
 # インストールされているツール一覧
-just mise-list
+make mise-list
 
 # mise の設定確認
-just mise-config
+make mise-config
 ```
 
 ### 管理対象ツール

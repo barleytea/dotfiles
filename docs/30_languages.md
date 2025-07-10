@@ -22,7 +22,7 @@ Installs global npm packages required for development:
 ```sh
 mise run npm-tools
 # or
-just npm-tools
+make npm-tools
 ```
 
 Installs:

@@ -23,7 +23,7 @@
 just vscode-neovim-init
 
 # VSCodeとNeovimの設定を同期
-just vscode-sync
+make vscode-sync
 
 # VSCode設定をシンボリックリンクで適用
 just vscode-apply
@@ -51,7 +51,7 @@ just vscode-neovim-init
 # VSCodeと設定を同期
 sync-editor-settings
 # または
-just vscode-sync
+make vscode-sync
 ```
 
 ### 日常的な使用方法
@@ -60,13 +60,13 @@ just vscode-sync
 
 ```bash
 # 設定を同期して反映
-just vscode-sync
+make vscode-sync
 ```
 
 2. Neovimの設定を更新した場合も同様:
 
 ```bash
-just vscode-sync
+make vscode-sync
 ```
 
 ## 仕組み
