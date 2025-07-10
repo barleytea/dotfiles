@@ -1,28 +1,16 @@
-# ==============================================================================
-# Makefile for dotfiles
-#
-# see: https://zenn.dev/loglass/articles/0016-make-makefile
-# ==============================================================================
-
+RULE_REGEX := ^[a-zA-Z_][a-zA-Z0-9_-]+:
+RULE_AND_DESC_REGEX := $(RULE_REGEX).*?## .*$$
+EXTRA_COMMENT_REGEX := ^## .* ##$$
 .DEFAULT_GOAL := help
 .PHONY: help
 
 SHELL := /bin/bash
 NIX_PROFILE := /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
 
-# ==============================================================================
-# Help
-# ==============================================================================
-
 help: ## このヘルプメッセージを表示します
-	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z0-9_-]+:.*?##/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } /^[a-zA-Z0-9_-]+:.*?##/ { printf "  \033[36m%-30s\033[0m %s\n", $$1, $$2 }' $(MAKEFILE_LIST) | sed 's/##@.*//'
+	@grep -E -e $(RULE_AND_DESC_REGEX) -e $(EXTRA_COMMENT_REGEX) $(MAKEFILE_LIST) | ./scripts/help.awk | less -R
 
-
-# ==============================================================================
-# Main commands
-# ==============================================================================
-
-##@ Nix
+## Nix ##
 nix-channel-update: ## Nixチャンネルを最新に更新します
 	source $(NIX_PROFILE); \
 	nix-channel --add https://nixos.org/channels/nixpkgs-unstable
@@ -62,14 +50,14 @@ nix-darwin-check: ## nix-darwinの設定をビルドのみ行います（実際�
 
 nix-check-all: nix-channel-update home-manager-apply nix-darwin-check ## CI環境用：実際の適用なしでテストを実行します
 
-##@ Pre-commit
+## Pre-commit ##
 pre-commit-init: ## pre-commitフックを初期化・インストールします
 	pre-commit install
 
 pre-commit-run: ## pre-commitを全ファイルに対して実行します
 	pre-commit run --all-files
 
-##@ VSCode
+## VSCode ##
 vscode-apply: ## VSCodeの設定と拡張機能を適用します
 	bash vscode/settings/index.sh
 	bash vscode/extensions/apply.sh
@@ -87,7 +75,7 @@ vscode-sync: ## VSCodeとNeovimの設定を同期します
 vscode-neovim-init: ## VSCode用のNeovim初期化ファイルを設定します
 	bash vscode/settings/neovim-init.sh
 
-##@ Mise
+## Mise ##
 mise-install-npm-commitizen: ## miseで管理しているnpmパッケージ（commitizen）をグローバルにインストールします
 	mise run npm-commitizen
 
@@ -100,7 +88,7 @@ mise-list: ## miseのツール一覧を表示します
 mise-config: ## miseの設定を表示します
 	mise config
 
-##@ Others
+## Others ##
 zsh: ## zshの起動時間を測定します
 	time (zsh -i -c exit)
 

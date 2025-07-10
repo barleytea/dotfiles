@@ -78,5 +78,5 @@ zsh
 ## 8. Apply darwin config
 
 ```sh
-just nix-darwin-apply
+make nix-darwin-apply
 ```

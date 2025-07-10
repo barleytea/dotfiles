@@ -1,6 +1,6 @@
 # Nix operations
 
-Basic operations are performed using `just`.
+Basic operations are performed using `make`.
 
 - [Nix](#nix)
   - [Apply home-manager settings](#apply-home-manager-settings)
@@ -15,37 +15,37 @@ Basic operations are performed using `just`.
 ### Apply home-manager settings
 
 ```sh
-just home-manager-apply
+make home-manager-apply
 ```
 
 ### Apply all nix-darwin settings
 
 ```sh
-just nix-darwin-apply
+make nix-darwin-apply
 ```
 
 #### Apply nix-darwin-homebrew settings
 
 ```sh
-just nix-darwin-homebrew-apply
+make nix-darwin-homebrew-apply
 ```
 
 #### Apply nix-darwin-system settings
 
 ```sh
-just nix-darwin-system-apply
+make nix-darwin-system-apply
 ```
 
 #### Apply nix-darwin-service settings
 
 ```sh
-just nix-darwin-service-apply
+make nix-darwin-service-apply
 ```
 
 ### Apply all nix settings
 
 ```sh
-just nix-update-all
+make nix-update-all
 ```
 
 ### Install a new package

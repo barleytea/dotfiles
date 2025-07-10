@@ -40,13 +40,13 @@ Installed via tasks due to complex dependencies:
 
 ```sh
 # List installed tools
-just mise-list
+make mise-list
 
 # Check mise configuration
-just mise-config
+make mise-config
 
 # Install all tools
-just mise-install-all
+make mise-install-all
 ```
 
 ### Individual Tool Operations
@@ -65,7 +65,7 @@ mise use node@lts
 
 ```sh
 # Install commitizen + cz-git
-just mise-install-npm-commitizen
+make mise-install-npm-commitizen
 
 # Direct execution
 mise run npm-commitizen
@@ -104,7 +104,7 @@ programs.mise = {
 Apply configuration changes:
 
 ```sh
-just home-manager-apply
+make home-manager-apply
 ```
 
 ## Troubleshooting

@@ -31,5 +31,5 @@ nix-instantiate --parse ~/git_repos/github.com/barleytea/dotfiles/home-manager/d
 ## Common commands
 ```bash
 # Apply configuration
-just home-manager-apply
+make home-manager-apply
 ```

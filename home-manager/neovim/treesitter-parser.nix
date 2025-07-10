@@ -30,7 +30,6 @@
               jq
               jsdoc
               json
-              just
               lua
               make
               markdown

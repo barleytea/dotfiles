@@ -79,11 +79,11 @@ jobs:
         run: |
           source $HOME/.zshenv
           source $HOME/.config/zsh/.zshrc
-          just nix-check-all
+          make nix-check-all
       - name: Run vscode-settings
         shell: zsh {0}
         run: |
           source $HOME/.zshenv
           source $HOME/.config/zsh/.zshrc
-          just vscode-apply
-          just vscode-save
+          make vscode-apply
+          make vscode-save
