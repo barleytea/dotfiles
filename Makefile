@@ -10,6 +10,13 @@ NIX_PROFILE := /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
 help: ## このヘルプメッセージを表示します
 	@grep -E -e $(RULE_AND_DESC_REGEX) -e $(EXTRA_COMMENT_REGEX) $(MAKEFILE_LIST) | ./scripts/help.awk | less -R
 
+help-fzf: ## fzfを使ってヘルプメッセージを表示します
+	@grep -E -e $(RULE_AND_DESC_REGEX) $(MAKEFILE_LIST) \
+	| ./scripts/help.awk \
+	| fzf --ansi \
+	| cut -d ' ' -f 1 \
+	| xargs -I{} make {}
+
 ## Nix ##
 nix-channel-update: ## Nixチャンネルを最新に更新します
 	source $(NIX_PROFILE); \
@@ -49,6 +56,10 @@ nix-darwin-check: ## nix-darwinの設定をビルドのみ行います（実際�
 	nix --extra-experimental-features "nix-command flakes" build .#darwinConfigurations.all.system --impure
 
 nix-check-all: nix-channel-update home-manager-apply nix-darwin-check ## CI環境用：実際の適用なしでテストを実行します
+
+nix-gc: ## Nixのガーベジコレクションを実行します
+	source $(NIX_PROFILE); \
+	sudo nix-collect-garbage -d
 
 ## Pre-commit ##
 pre-commit-init: ## pre-commitフックを初期化・インストールします

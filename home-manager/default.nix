@@ -59,7 +59,7 @@ in {
     ./yabai
     ./yazi
     ./zellij
-    
+
   ];
 
   home = {

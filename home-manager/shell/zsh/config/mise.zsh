@@ -4,7 +4,7 @@
 # mise の初期化
 if [[ -x "$(command -v mise)" ]]; then
   eval "$(mise activate zsh)"
-  
+
   # mise の補完設定
   if [[ -d "$HOME/.local/share/mise/completions" ]]; then
     fpath=("$HOME/.local/share/mise/completions" $fpath)

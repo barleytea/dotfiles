@@ -80,7 +80,7 @@ Edit home-manager configuration:
 programs.mise = {
   enable = true;
   enableZshIntegration = true;
-  
+
   globalConfig = {
     tools = {
       node = "lts";
@@ -88,7 +88,7 @@ programs.mise = {
       "npm:@redocly/cli" = "latest";
       # ... other tools
     };
-    
+
     tasks = {
       npm-commitizen = {
         description = "Install commitizen and cz-git globally";

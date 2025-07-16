@@ -197,7 +197,10 @@
   "github.copilot.chat.agent.terminal.allowList": [
     "git log",
     "git diff",
-    "git show"
+    "git show",
+    "make lint",
+    "make test",
+    "go test"
   ],
   "chat.agent.enabled": true,
   "chat.agent.maxRequests": 200,
