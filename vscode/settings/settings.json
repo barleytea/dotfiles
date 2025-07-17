@@ -194,14 +194,11 @@
   "github.copilot.chat.languageContext.typescript.enabled": true,
   "github.copilot.chat.generateTests.codeLens": true,
   "github.copilot.chat.edits.temporalContext.enabled": true,
-  "github.copilot.chat.agent.terminal.allowList": [
-    "git log",
-    "git diff",
-    "git show",
-    "make lint",
-    "make test",
-    "go test"
-  ],
+  "github.copilot.chat.agent.terminal.allowList": {
+    "/^make .*$/": true,
+    "/^go (test|generate|vet) .*$/": true,
+    "/^git (branch|log|diff) .*$/": true
+  },
   "chat.agent.enabled": true,
   "chat.agent.maxRequests": 200,
   "github.copilot.chat.codeGeneration.instructions": [
