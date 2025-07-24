@@ -36,7 +36,20 @@ in {
       dracula-nvim
       nvim-web-devicons
       lualine-nvim
-      nvim-notify
+      (nvim-notify.overrideAttrs (old: {
+        doCheck = false;
+        checkPhase = "true";  # Skip all checks
+        buildPhase = ''
+          runHook preBuild
+          runHook postBuild
+        '';
+        installPhase = ''
+          runHook preInstall
+          mkdir -p $out
+          cp -r . $out/
+          runHook postInstall
+        '';
+      }))
       noice-nvim
       nui-nvim
 

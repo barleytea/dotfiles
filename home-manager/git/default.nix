@@ -64,6 +64,7 @@ gitIgnore = ''
   __debug*
   copilot-instructions.md
   .ai/
+  .kiro/
   .DS_Store
 '';
 

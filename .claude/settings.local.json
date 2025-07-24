@@ -5,7 +5,8 @@
       "WebFetch(domain:docs.anthropic.com)",
       "Bash(home-manager:*)",
       "Bash(nix-instantiate:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(nix log:*)"
     ],
     "deny": []
   }
