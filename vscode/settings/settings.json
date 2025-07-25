@@ -192,6 +192,6 @@
   "chat.agent.maxRequests": 200,
   "chat.instructionsFilesLocations": {
     ".github/instructions": true,
-    "~/.config/vscode/instructions": true,
+    "~/.config/vscode/instructions": true
   }
 }
