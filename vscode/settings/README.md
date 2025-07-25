@@ -20,13 +20,13 @@
 
 ```bash
 # VSCode用のNeovim初期化ファイルを生成
-just vscode-neovim-init
+make vscode-neovim-init
 
 # VSCodeとNeovimの設定を同期
 make vscode-sync
 
 # VSCode設定をシンボリックリンクで適用
-just vscode-apply
+make vscode-apply
 ```
 
 ### 初期セットアップ
@@ -46,7 +46,7 @@ modules.neovim-vscode-sync = {
 # Neovim初期化ファイルを生成
 ./neovim-init.sh
 # または
-just vscode-neovim-init
+make vscode-neovim-init
 
 # VSCodeと設定を同期
 sync-editor-settings

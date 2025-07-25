@@ -1,4 +1,6 @@
-# Copilot Instructions
+---
+applyTo: "**"
+---
 
 ## エージェントの振る舞い
 1. **基本姿勢**

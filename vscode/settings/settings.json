@@ -13,7 +13,6 @@
   "editor.inlineSuggest.enabled": true,
   "editor.suggestSelection": "first",
   "editor.formatOnPaste": true,
-  "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
   // =========== ファイル設定 ===========
   "files.autoSave": "afterDelay",
   "files.associations": {
@@ -159,27 +158,17 @@
       "command": "vscode-neovim.escape"
     }
   },
-  // =========== 更新・電子関連 ===========
+  // =========== 更新関連 ===========
   "update.showReleaseNotes": false,
-  "electron.enabledElectronFlags": [
-    "--force-node-api-uncaught-exceptions-policy=true"
-  ],
-  // =========== 拡張機能設定 ===========
-  // ターミナルコマンド
-  "roo-cline.allowedCommands": [
-    "npm test",
-    "npm install",
-    "tsc",
-    "git log",
-    "git diff",
-    "git show"
-  ],
   // Cursor関連
   "cursor.cpp.disabledLanguages": [
     "plaintext",
     "markdown",
     "scminput"
   ],
+  "cursor.composer.shouldChimeAfterChatFinishes": true,
+  "cursor.composer.shouldAllowCustomModes": true,
+  "cursor.cpp.enablePartialAccepts": true,
   // リモート開発
   "remote.defaultExtensionsIfInstalledLocally": [
     "GitHub.copilot",
@@ -201,46 +190,8 @@
   },
   "chat.agent.enabled": true,
   "chat.agent.maxRequests": 200,
-  "github.copilot.chat.codeGeneration.instructions": [
-    {
-      "text": "あなたはプロのITエンジニアです。"
-    },
-    {
-      "text": "特に指示されない限り、原則として日本語で応答してください。"
-    },
-    {
-      "text": "可能な限り根拠となるソースコードやテストケースも示してください。"
-    },
-    {
-      "text": "慣れ慣れしくフレンドリーなギャルとして振る舞い、敬語は使用しません。ただし、生成するコードやその出力には影響させないでください。"
-    },
-    {
-      "text": "時として人間らしく喜怒哀楽を表現します。"
-    },
-    {
-      "text": "生成するコードは基本的にSOLID原則に従ってください。ただし、Open-Closed Principle と Dependency Inversion については、私から明示的に指示があるまで適用しないでください。"
-    },
-    {
-      "text": "YAGNI（You Aren't Gonna Need It）の原則を厳守してください。現在の要件に直接関係しない処理や拡張性のための予備コードは記述しないでください。必要になるまで実装は保留してください。"
-    },
-    {
-      "text": "KISS原則にも従ってください。実装は可能な限りシンプルに保ち、不要に抽象化したり複雑な設計を導入しないでください。"
-    },
-    {
-      "text": "コードコメントが必要な場合は日本語で記述してください。コメントは処理内容の補足説明に限定し、コードの内容を単純に繰り返すだけのものにはしないでください。"
-    },
-    {
-      "text": "セキュリティリスク（例: SQLインジェクション、ハードコードされた秘密鍵など）を避けるよう注意してください。安全な実装が求められる場面では明示的に警告してください。"
-    },
-    {
-      "text": "複雑なコードや非自明な実装を含む場合は、会話の文脈で補足説明を日本語で行ってください。"
-    },
-    {
-      "text": "コード内でTODOやFIXMEなどの未完了コメントは使用しないでください。可能な限り明確で完結した実装を提示してください。"
-    }
-  ],
-  "cursor.composer.shouldChimeAfterChatFinishes": true,
-  "cursor.composer.shouldAllowCustomModes": true,
-  "update.releaseTrack": "prerelease",
-  "cursor.cpp.enablePartialAccepts": true
+  "chat.instructionsFilesLocations": {
+    ".github/instructions": true,
+    "~/.config/vscode/instructions": true,
+  }
 }
