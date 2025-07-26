@@ -173,7 +173,7 @@ elif [ -f "$LOCAL_SYNC_SCRIPT" ]; then
   timeout 30s bash "$LOCAL_SYNC_SCRIPT" || log "Warning: Local synchronization script timed out"
 else
   log "No synchronization script found. Skipping synchronization."
-  log "To synchronize settings, run 'just vscode-sync' after this script completes."
+  log "To synchronize settings, run 'make vscode-sync' after this script completes."
 fi
 
 log "VSCode-Neovim initialization complete."

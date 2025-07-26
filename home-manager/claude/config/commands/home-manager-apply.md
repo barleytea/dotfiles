@@ -24,7 +24,7 @@ nix-instantiate --parse ~/git_repos/github.com/barleytea/dotfiles/home-manager/d
 
 ## Application process
 1. Navigate to dotfiles directory
-2. Run home-manager apply via just command
+2. Run home-manager apply via make command
 3. Review any warnings or errors
 4. Verify changes took effect
 
