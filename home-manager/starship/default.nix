@@ -11,13 +11,18 @@
     settings = {
       format = ''
       [┌───────────────────](bold green)
-      [│](bold green)$kubernetes$directory$nodejs$rust$java$golang$git_branch$git_state$git_status$time
+      [│](bold green)$kubernetes$aws$directory$nodejs$rust$java$golang$git_branch$git_state$git_status$time
       [└─>](bold green)'';
       scan_timeout = 10;
       add_newline = false;
 
       kubernetes = {
         format = "[$symbol$context](green) ";
+        disabled = false;
+      };
+
+      aws = {
+        format = "[$symbol$profile](green) ";
         disabled = false;
       };
 
