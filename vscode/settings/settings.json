@@ -185,8 +185,18 @@
   "github.copilot.chat.edits.temporalContext.enabled": true,
   "github.copilot.chat.agent.terminal.allowList": {
     "/^make .*$/": true,
-    "/^go (test|generate|vet) .*$/": true,
-    "/^git (branch|log|diff) .*$/": true
+    "/^go (test|generate|vet|build) .*$/": true,
+    "/^git (branch|log|diff) .*$/": true,
+    "/^ ls .*$/": true,
+    "/^cat .*$/": true,
+    "/^tail .*$/": true,
+    "/^head .*$/": true,
+    "/^echo .*$/": true,
+    "/^pwd$/": true,
+    "/^cd .*$/": true,
+    "/^wc .*$/": true,
+    "/^find .*$/": true,
+    "/^grep .*$/": true
   },
   "chat.agent.enabled": true,
   "chat.agent.maxRequests": 200,
