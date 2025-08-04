@@ -3,6 +3,9 @@
 
 set -euo pipefail
 
+# OS検出
+OS=$(uname -s)
+
 # 環境変数の設定
 HOME_DIR="$HOME"
 DOTFILES_DIR="$HOME/git_repos/github.com/barleytea/dotfiles"
@@ -103,27 +106,54 @@ if [ -f "$SETTINGS_JSON" ]; then
     VALID_JSON=$(mktemp)
     grep -v '//' "$TEMP_JSON" > "$VALID_JSON"
 
-    # 3. jqを使用して設定を更新
-    if jq --arg path "$VSCODE_LUA" \
-      '.["vscode-neovim.neovimInitVimPaths.darwin"] = $path' \
-      "$VALID_JSON" > "$TEMP_JSON.new" 2>/dev/null; then
+    # 3. jqを使用して設定を更新 - OS別に分岐
+    case "$OS" in
+      Darwin)
+        # macOS - darwin キーを使用
+        JQ_RESULT=$(jq --arg path "$VSCODE_LUA" \
+          '.["vscode-neovim.neovimInitVimPaths.darwin"] = $path' \
+          "$VALID_JSON" > "$TEMP_JSON.new" 2>/dev/null)
+        ;;
+      Linux)
+        # Linux - linux キーを使用
+        JQ_RESULT=$(jq --arg path "$VSCODE_LUA" \
+          '.["vscode-neovim.neovimInitVimPaths.linux"] = $path' \
+          "$VALID_JSON" > "$TEMP_JSON.new" 2>/dev/null)
+        ;;
+    esac
 
+    if [ $? -eq 0 ]; then
       # 4. 更新が成功したら、元のファイルに書き戻す
       mv "$TEMP_JSON.new" "$SETTINGS_JSON"
-      log "VSCode settings updated successfully with jq."
+      log "VSCode settings updated successfully with jq for $OS."
     else
       # jqでエラーが発生した場合は、手動で更新を試みる
       log "Warning: Error processing JSON with jq. Attempting manual update..."
 
-      # 5. 手動での置換（sed等を使用）
-      if grep -q "vscode-neovim.neovimInitVimPaths.darwin" "$SETTINGS_JSON"; then
-        # 既存の設定を更新
-        sed -i '' "s|\"vscode-neovim.neovimInitVimPaths.darwin\":[^,]*|\"vscode-neovim.neovimInitVimPaths.darwin\": \"$VSCODE_LUA\"|" "$SETTINGS_JSON"
-      else
-        # 設定が存在しない場合は追加（簡易的な方法）
-        sed -i '' "s|{|{\n    \"vscode-neovim.neovimInitVimPaths.darwin\": \"$VSCODE_LUA\",|" "$SETTINGS_JSON"
-      fi
-      log "VSCode settings manually updated."
+      # 5. 手動での置換（sed等を使用）- OS別に分岐
+      case "$OS" in
+        Darwin)
+          # macOS - darwin キーを使用
+          if grep -q "vscode-neovim.neovimInitVimPaths.darwin" "$SETTINGS_JSON"; then
+            # 既存の設定を更新
+            sed -i '' "s|\"vscode-neovim.neovimInitVimPaths.darwin\":[^,]*|\"vscode-neovim.neovimInitVimPaths.darwin\": \"$VSCODE_LUA\"|" "$SETTINGS_JSON"
+          else
+            # 設定が存在しない場合は追加（簡易的な方法）
+            sed -i '' "s|{|{\n    \"vscode-neovim.neovimInitVimPaths.darwin\": \"$VSCODE_LUA\",|" "$SETTINGS_JSON"
+          fi
+          ;;
+        Linux)
+          # Linux - linux キーを使用
+          if grep -q "vscode-neovim.neovimInitVimPaths.linux" "$SETTINGS_JSON"; then
+            # 既存の設定を更新
+            sed -i "s|\"vscode-neovim.neovimInitVimPaths.linux\":[^,]*|\"vscode-neovim.neovimInitVimPaths.linux\": \"$VSCODE_LUA\"|" "$SETTINGS_JSON"
+          else
+            # 設定が存在しない場合は追加（簡易的な方法）
+            sed -i "s|{|{\n    \"vscode-neovim.neovimInitVimPaths.linux\": \"$VSCODE_LUA\",|" "$SETTINGS_JSON"
+          fi
+          ;;
+      esac
+      log "VSCode settings manually updated for $OS."
     fi
 
     # 一時ファイルの削除
@@ -131,28 +161,57 @@ if [ -f "$SETTINGS_JSON" ]; then
   else
     log "Warning: jq command not found. Attempting manual update..."
 
-    # jqがない場合は手動で更新を試みる
-    if grep -q "vscode-neovim.neovimInitVimPaths.darwin" "$SETTINGS_JSON"; then
-      # 既存の設定を更新
-      sed -i '' "s|\"vscode-neovim.neovimInitVimPaths.darwin\":[^,]*|\"vscode-neovim.neovimInitVimPaths.darwin\": \"$VSCODE_LUA\"|" "$SETTINGS_JSON"
-    else
-      # 設定が存在しない場合は追加（簡易的な方法）
-      sed -i '' "s|{|{\n    \"vscode-neovim.neovimInitVimPaths.darwin\": \"$VSCODE_LUA\",|" "$SETTINGS_JSON"
-    fi
-    log "VSCode settings manually updated."
+    # jqがない場合は手動で更新を試みる - OS別に分岐
+    case "$OS" in
+      Darwin)
+        # macOS - darwin キーを使用
+        if grep -q "vscode-neovim.neovimInitVimPaths.darwin" "$SETTINGS_JSON"; then
+          # 既存の設定を更新
+          sed -i '' "s|\"vscode-neovim.neovimInitVimPaths.darwin\":[^,]*|\"vscode-neovim.neovimInitVimPaths.darwin\": \"$VSCODE_LUA\"|" "$SETTINGS_JSON"
+        else
+          # 設定が存在しない場合は追加（簡易的な方法）
+          sed -i '' "s|{|{\n    \"vscode-neovim.neovimInitVimPaths.darwin\": \"$VSCODE_LUA\",|" "$SETTINGS_JSON"
+        fi
+        ;;
+      Linux)
+        # Linux - linux キーを使用
+        if grep -q "vscode-neovim.neovimInitVimPaths.linux" "$SETTINGS_JSON"; then
+          # 既存の設定を更新
+          sed -i "s|\"vscode-neovim.neovimInitVimPaths.linux\":[^,]*|\"vscode-neovim.neovimInitVimPaths.linux\": \"$VSCODE_LUA\"|" "$SETTINGS_JSON"
+        else
+          # 設定が存在しない場合は追加（簡易的な方法）
+          sed -i "s|{|{\n    \"vscode-neovim.neovimInitVimPaths.linux\": \"$VSCODE_LUA\",|" "$SETTINGS_JSON"
+        fi
+        ;;
+    esac
+    log "VSCode settings manually updated for $OS."
   fi
 else
   log "Warning: VSCode settings file not found at $SETTINGS_JSON"
   log "Creating minimal settings file..."
 
-  # 最小限の設定ファイルを作成
-  cat > "$SETTINGS_JSON" << EOF
+  # 最小限の設定ファイルを作成 - OS別に分岐
+  case "$OS" in
+    Darwin)
+      # macOS
+      cat > "$SETTINGS_JSON" << EOF
 {
-    "vscode-neovim.neovimExecutablePaths.darwin": "/Users/miyoshi_s/.local/state/nix/profiles/profile/bin/nvim",
+    "vscode-neovim.neovimExecutablePaths.darwin": "$HOME/.local/state/nix/profiles/profile/bin/nvim",
     "vscode-neovim.neovimInitVimPaths.darwin": "$VSCODE_LUA"
 }
 EOF
-  log "Minimal VSCode settings file created."
+      ;;
+    Linux)
+      # Linux
+      cat > "$SETTINGS_JSON" << EOF
+{
+    "vscode-neovim.neovimExecutablePaths.linux": "$HOME/.local/state/nix/profiles/profile/bin/nvim",
+    "vscode-neovim.neovimInitVimPaths.linux": "$VSCODE_LUA"
+}
+EOF
+      ;;
+  esac
+  log "Minimal VSCode settings file created for $OS."
 fi
 
 # 設定の同期 - Home Managerインストール版かローカル版を使用

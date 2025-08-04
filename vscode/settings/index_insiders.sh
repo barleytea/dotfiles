@@ -1,6 +1,23 @@
 #!/bin/sh
 CURRENT=$(cd $(dirname $0) && pwd)
-VSCODE_SETTING_DIR=~/Library/Application\ Support/Code\ -\ Insiders/User
+
+# OS検出とVSCode Insiders設定ディレクトリの決定
+OS=$(uname -s)
+case "$OS" in
+  Darwin)
+    # macOS
+    VSCODE_SETTING_DIR=~/Library/Application\ Support/Code\ -\ Insiders/User
+    ;;
+  Linux)
+    # Linux
+    VSCODE_SETTING_DIR=~/.config/Code\ -\ Insiders/User
+    ;;
+  *)
+    echo "Unsupported OS: $OS"
+    exit 1
+    ;;
+esac
+
 BACKUP_FILE="$CURRENT/backup_settings.json"
 KEYBINDINGS_BACKUP_FILE="$CURRENT/backup_keybindings.json"
 

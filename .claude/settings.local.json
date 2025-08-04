@@ -6,7 +6,8 @@
       "Bash(home-manager:*)",
       "Bash(nix-instantiate:*)",
       "Bash(find:*)",
-      "Bash(nix log:*)"
+      "Bash(nix log:*)",
+      "Bash(bash:*)"
     ],
     "deny": []
   }

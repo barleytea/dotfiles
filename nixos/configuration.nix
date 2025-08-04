@@ -54,6 +54,19 @@
     LC_TIME = "ja_JP.UTF-8";
   };
 
+  fileSystems = {
+    "/mnt/sda1" = {
+      device = "/dev/disk/by-uuid/71323b1e-e85e-4658-b2f1-ce64474bb85b";
+      fsType = "ext4";
+      options = [ "defaults" ];
+    };
+    "/mnt/sdb1" = {
+      device = "/dev/disk/by-uuid/d002ced3-af30-411f-8d52-eb71b53ea6cf";
+      fsType = "ext4";
+      options = [ "defaults" ];
+    };
+  };
+
   # Environment variables for Japanese input
   environment.sessionVariables = {
     GTK_IM_MODULE = "fcitx";
@@ -124,8 +137,12 @@
     git
     curl
     wget
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #  wget
+    gnumake
+    gcc
+    cmake
+    python3
+    openssl
+    jq
   ];
 
   # Enable programs

@@ -4,6 +4,9 @@
 
 set -euo pipefail
 
+# OS検出
+OS=$(uname -s)
+
 # Environment variables
 HOME_DIR="$HOME"
 DOTFILES_DIR="$HOME/git_repos/github.com/barleytea/dotfiles"
@@ -11,8 +14,21 @@ NVIM_CONFIG_DIR="$HOME/.config/nvim"
 VSCODE_SETTINGS_DIR="$DOTFILES_DIR/vscode/settings"
 NVIM_LUA_DIR="$NVIM_CONFIG_DIR/lua"
 
-# Editor-specific settings directories
-VSCODE_USER_DIR="$HOME/Library/Application Support/Code/User"
+# Editor-specific settings directories - OS別に設定
+case "$OS" in
+  Darwin)
+    # macOS
+    VSCODE_USER_DIR="$HOME/Library/Application Support/Code/User"
+    ;;
+  Linux)
+    # Linux
+    VSCODE_USER_DIR="$HOME/.config/Code/User"
+    ;;
+  *)
+    echo "Unsupported OS: $OS"
+    exit 1
+    ;;
+esac
 
 # Logging function
 log() {
@@ -285,7 +301,11 @@ sync_neovim_to_vscode() {
 
   # Generate minimal settings file if it doesn't exist
   if [ ! -f "$VSCODE_SETTINGS_DIR/settings.json" ]; then
-    cat > "$VSCODE_SETTINGS_DIR/settings.json" << EOL
+    # OS別のVSCode-Neovim設定
+    case "$OS" in
+      Darwin)
+        # macOS
+        cat > "$VSCODE_SETTINGS_DIR/settings.json" << EOL
 {
     "workbench.colorTheme": "Dracula Theme",
     "editor.fontFamily": "'Hack Nerd Font Mono', Menlo, Monaco, 'Courier New', monospace",
@@ -298,13 +318,40 @@ sync_neovim_to_vscode() {
     "vscode-neovim.neovimInitVimPaths.darwin": "$NVIM_CONFIG_DIR/vscode.lua"
 }
 EOL
-    log "Generated basic VSCode settings file"
+        ;;
+      Linux)
+        # Linux
+        cat > "$VSCODE_SETTINGS_DIR/settings.json" << EOL
+{
+    "workbench.colorTheme": "Dracula Theme",
+    "editor.fontFamily": "'Hack Nerd Font Mono', monospace",
+    "editor.fontSize": 14,
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.wordWrap": "off",
+    "terminal.integrated.fontFamily": "'Hack Nerd Font Mono'",
+    "vscode-neovim.neovimExecutablePaths.linux": "$HOME/.local/state/nix/profiles/profile/bin/nvim",
+    "vscode-neovim.neovimInitVimPaths.linux": "$NVIM_CONFIG_DIR/vscode.lua"
+}
+EOL
+        ;;
+    esac
+    log "Generated basic VSCode settings file for $OS"
   else
     # Use Node.js to update the JSON while preserving comments
     if command -v node &> /dev/null; then
-      # Set appropriate Neovim path in VSCode settings
-      update_jsonc_property "$VSCODE_SETTINGS_DIR/settings.json" "vscode-neovim.neovimInitVimPaths.darwin" "$NVIM_CONFIG_DIR/vscode.lua"
-      log "Updated VSCode settings file with Node.js"
+      # Set appropriate Neovim path in VSCode settings - OS別に分岐
+      case "$OS" in
+        Darwin)
+          # macOS
+          update_jsonc_property "$VSCODE_SETTINGS_DIR/settings.json" "vscode-neovim.neovimInitVimPaths.darwin" "$NVIM_CONFIG_DIR/vscode.lua"
+          ;;
+        Linux)
+          # Linux
+          update_jsonc_property "$VSCODE_SETTINGS_DIR/settings.json" "vscode-neovim.neovimInitVimPaths.linux" "$NVIM_CONFIG_DIR/vscode.lua"
+          ;;
+      esac
+      log "Updated VSCode settings file with Node.js for $OS"
     else
       log "Warning: Node.js not found. Cannot update settings automatically."
       log "Please edit $VSCODE_SETTINGS_DIR/settings.json manually."
