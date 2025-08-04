@@ -68,6 +68,12 @@
     # Additional desktop apps
     firefox
     chromium
+
+    # Development tools  
+    python3
+    gnumake
+    gcc
+    cmake
   ];
 
   # GNOME specific settings
