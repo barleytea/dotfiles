@@ -68,6 +68,7 @@
     # Additional desktop apps
     firefox
     chromium
+    code-cursor
 
     # Development tools  
     python3

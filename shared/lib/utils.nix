@@ -25,7 +25,7 @@ rec {
     ] ++ lib.optionals isLinux [
       # Linux specific GUI apps
       firefox
-      # 他のLinux用GUIアプリをここに追加
+      code-cursor
     ];
 
   # プラットフォーム固有の設定を条件付きで含める
