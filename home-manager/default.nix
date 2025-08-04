@@ -6,6 +6,8 @@
   utils = import ./utils/utils.nix { inherit pkgs; };
 in {
 
+  # nixpkgsConfig is handled by useGlobalPkgs in NixOS configurations
+  # For standalone home-manager, this is still needed:
   nixpkgs = {
     config = {
       allowUnfree = true;
