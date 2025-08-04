@@ -1,17 +1,22 @@
-name: NixOS CI (Container)
+name: NixOS CI
 
 on:
   push:
     branches: [ main, nixos ]
+    paths:
+      - 'nixos/**'
+      - 'home-manager/**'
+      - 'flake.nix'
+      - 'flake.lock'
+      - '.github/workflows/nixos.yml'
   pull_request:
     branches: [ main, nixos ]
-  # NixOS関連ファイルの変更を検知
-  paths:
-    - 'nixos/**'
-    - 'home-manager/**'
-    - 'flake.nix'
-    - 'flake.lock'
-    - '.github/workflows/nixos-container.yml'
+    paths:
+      - 'nixos/**'
+      - 'home-manager/**'
+      - 'flake.nix'
+      - 'flake.lock'
+      - '.github/workflows/nixos.yml'
 
 jobs:
   nixos-build-container:
