@@ -58,6 +58,16 @@
     LC_TIME = "ja_JP.UTF-8";
   };
 
+  # Environment variables for Japanese input
+  environment.sessionVariables = {
+    GTK_IM_MODULE = "fcitx";
+    QT_IM_MODULE = "fcitx";
+    XMODIFIERS = "@im=fcitx";
+    INPUT_METHOD = "fcitx";
+    SDL_IM_MODULE = "fcitx";
+    GLFW_IM_MODULE = "ibus";
+  };
+
   # User configuration
   users.users.miyoshi_s = {
     isNormalUser = true;
