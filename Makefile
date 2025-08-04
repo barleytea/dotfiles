@@ -4,7 +4,7 @@ EXTRA_COMMENT_REGEX := ^## .* ##$$
 .DEFAULT_GOAL := help
 .PHONY: help
 
-SHELL := /bin/bash
+SHELL := /usr/bin/env bash
 NIX_PROFILE := /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
 
 help: ## このヘルプメッセージを表示します
