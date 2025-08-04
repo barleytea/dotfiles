@@ -24,7 +24,7 @@ in {
     ./git
     ./k9s
     ./mise
-    ./neovim
+    ./nixvim
     ./shell
     ./sheldon
     ./skhd

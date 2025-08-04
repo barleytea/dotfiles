@@ -11,8 +11,8 @@
       url = "github:LnL7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    neovim-nightly-overlay = {
-      url = "github:nix-community/neovim-nightly-overlay";
+    nixvim = {
+      url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -22,7 +22,7 @@
     nixpkgs,
     home-manager,
     nix-darwin,
-    neovim-nightly-overlay,
+    nixvim,
   } @ inputs: let
     system = "aarch64-darwin"; # Default to Apple Silicon Mac
     pkgs = nixpkgs.legacyPackages.${system};
