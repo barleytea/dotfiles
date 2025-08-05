@@ -11,6 +11,6 @@
 
   # Ensure NixOS wallpapers are available
   environment.systemPackages = with pkgs; [
-    nixos-artwork
+    nixos-artwork.wallpapers.simple-dark-gray
   ];
 }

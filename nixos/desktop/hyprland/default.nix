@@ -41,8 +41,8 @@
     libnotify        # Notification library
     
     # File manager
-    thunar           # Lightweight file manager
-    thunar-volman    # Volume management for Thunar
+    xfce.thunar      # Lightweight file manager
+    xfce.thunar-volman  # Volume management for Thunar
     gvfs             # Virtual file system
     
     # Terminal (use existing alacritty configuration)
