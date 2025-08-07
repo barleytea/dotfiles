@@ -11,7 +11,7 @@
     globalConfig = {
       tools = {
         node = "lts";
-        go = "1.23.4";
+        go = "1.24.5";
         "npm:@redocly/cli" = "latest";
         "npm:corepack" = "latest";
         "npm:@anthropic-ai/claude-code" = "latest";
