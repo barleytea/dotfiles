@@ -2,6 +2,10 @@
 { config, pkgs, ... }:
 
 {
+  imports = [
+    ./gnome-albert.nix  # Albert configuration for GNOME
+  ];
+
   # Enable GNOME Desktop Environment
   services.desktopManager.gnome.enable = true;
 

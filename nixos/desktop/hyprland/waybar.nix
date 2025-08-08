@@ -7,12 +7,16 @@
     {
         "layer": "top",
         "position": "top",
-        "height": 30,
+        "height": 32,
         "spacing": 4,
+        "margin-top": 5,
+        "margin-bottom": 0,
+        "margin-left": 10,
+        "margin-right": 10,
         
-        "modules-left": ["hyprland/workspaces", "hyprland/mode", "hyprland/scratchpad"],
-        "modules-center": ["hyprland/window"],
-        "modules-right": ["idle_inhibitor", "pulseaudio", "network", "cpu", "memory", "temperature", "backlight", "battery", "clock", "tray"],
+        "modules-left": ["hyprland/workspaces", "hyprland/mode", "hyprland/scratchpad", "hyprland/submap"],
+        "modules-center": ["hyprland/window", "mpd"],
+        "modules-right": ["custom/weather", "disk", "cpu", "memory", "temperature", "network", "bluetooth", "pulseaudio", "backlight", "battery", "custom/notification", "idle_inhibitor", "clock", "custom/power", "tray"],
 
         "hyprland/workspaces": {
             "disable-scroll": true,
@@ -44,7 +48,98 @@
         
         "hyprland/window": {
             "format": "{}",
-            "max-length": 50
+            "max-length": 60,
+            "separate-outputs": true
+        },
+        
+        "hyprland/submap": {
+            "format": " {}",
+            "max-length": 8,
+            "tooltip": false
+        },
+        
+        "mpd": {
+            "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ⸨{songPosition}|{queueLength}⸩ {volume}% ",
+            "format-disconnected": "Disconnected ",
+            "format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped ",
+            "unknown-tag": "N/A",
+            "interval": 2,
+            "consume-icons": {
+                "on": " "
+            },
+            "random-icons": {
+                "off": "<span color=\"#f53c3c\"></span> ",
+                "on": " "
+            },
+            "repeat-icons": {
+                "on": " "
+            },
+            "single-icons": {
+                "on": "1 "
+            },
+            "state-icons": {
+                "paused": "",
+                "playing": ""
+            },
+            "tooltip-format": "MPD (connected)",
+            "tooltip-format-disconnected": "MPD (disconnected)"
+        },
+        
+        "disk": {
+            "interval": 30,
+            "format": " {percentage_used}%",
+            "path": "/",
+            "tooltip": true,
+            "tooltip-format": "Used: {used} / Total: {total}",
+            "on-click": "thunar /"
+        },
+        
+        "bluetooth": {
+            "format": " {status}",
+            "format-connected": " {device_alias}",
+            "format-connected-battery": " {device_alias} {device_battery_percentage}%",
+            "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
+            "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}",
+            "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
+            "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t{device_battery_percentage}%",
+            "on-click": "blueman-manager"
+        },
+        
+        "custom/weather": {
+            "format": "{}",
+            "tooltip": true,
+            "interval": 1800,
+            "exec": "curl -s 'https://wttr.in/Tokyo?format=1' 2>/dev/null || echo '🌤️ Weather unavailable'",
+            "return-type": "",
+            "on-click": "firefox https://weather.yahoo.co.jp/"
+        },
+        
+        "custom/notification": {
+            "tooltip": false,
+            "format": "{icon}",
+            "format-icons": {
+                "notification": "<span foreground='red'><sup></sup></span>",
+                "none": "",
+                "dnd-notification": "<span foreground='red'><sup></sup></span>",
+                "dnd-none": "",
+                "inhibited-notification": "<span foreground='red'><sup></sup></span>",
+                "inhibited-none": "",
+                "dnd-inhibited-notification": "<span foreground='red'><sup></sup></span>",
+                "dnd-inhibited-none": ""
+            },
+            "return-type": "json",
+            "exec-if": "which swaync-client",
+            "exec": "swaync-client -swb",
+            "on-click": "swaync-client -t -sw",
+            "on-click-right": "swaync-client -d -sw",
+            "escape": true
+        },
+        
+        "custom/power": {
+            "format": "⏻",
+            "tooltip": false,
+            "on-click": "wlogout",
+            "on-click-right": "hyprctl dispatch exit"
         },
         
         "idle_inhibitor": {
@@ -137,11 +232,13 @@
     }
 
     window#waybar {
-        background-color: rgba(43, 48, 59, 0.5);
-        border-bottom: 3px solid rgba(100, 114, 125, 0.5);
-        color: #ffffff;
+        background: linear-gradient(45deg, rgba(30, 30, 46, 0.9), rgba(49, 50, 68, 0.9));
+        border-radius: 15px;
+        border: 2px solid rgba(137, 180, 250, 0.3);
+        color: #cdd6f4;
         transition-property: background-color;
         transition-duration: .5s;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     }
 
     window#waybar.hidden {
@@ -320,6 +417,108 @@
 
     #scratchpad.empty {
         background-color: transparent;
+    }
+
+    #custom-weather {
+        background-color: #fab387;
+        color: #1e1e2e;
+        border-radius: 10px;
+        padding: 0 10px;
+        margin: 0 5px;
+    }
+
+    #custom-power {
+        background-color: #f38ba8;
+        color: #1e1e2e;
+        border-radius: 10px;
+        padding: 0 10px;
+        margin: 0 5px;
+        font-weight: bold;
+    }
+
+    #custom-power:hover {
+        background-color: #f9e2af;
+    }
+
+    #custom-notification {
+        background-color: #a6e3a1;
+        color: #1e1e2e;
+        border-radius: 10px;
+        padding: 0 10px;
+        margin: 0 5px;
+    }
+
+    #disk {
+        background-color: #94e2d5;
+        color: #1e1e2e;
+        border-radius: 10px;
+        padding: 0 10px;
+        margin: 0 5px;
+    }
+
+    #bluetooth {
+        background-color: #89b4fa;
+        color: #1e1e2e;
+        border-radius: 10px;
+        padding: 0 10px;
+        margin: 0 5px;
+    }
+
+    #bluetooth.disabled {
+        background-color: #6c7086;
+    }
+
+    #bluetooth.off {
+        background-color: #6c7086;
+    }
+
+    #mpd {
+        background-color: #cba6f7;
+        color: #1e1e2e;
+        border-radius: 10px;
+        padding: 0 10px;
+        margin: 0 5px;
+    }
+
+    #mpd.disconnected {
+        background-color: #6c7086;
+    }
+
+    #mpd.stopped {
+        background-color: #6c7086;
+    }
+
+    #mpd.paused {
+        background-color: #f2cdcd;
+        color: #1e1e2e;
+    }
+
+    /* Enhanced module styling */
+    #workspaces button {
+        padding: 5px 10px;
+        background: rgba(137, 180, 250, 0.1);
+        color: #cdd6f4;
+        border-radius: 10px;
+        margin: 0 2px;
+        transition: all 0.3s ease;
+    }
+
+    #workspaces button:hover {
+        background: rgba(137, 180, 250, 0.3);
+    }
+
+    #workspaces button.active {
+        background: linear-gradient(45deg, #89b4fa, #b4befe);
+        color: #1e1e2e;
+        font-weight: bold;
+    }
+
+    #window {
+        background: rgba(49, 50, 68, 0.8);
+        border-radius: 10px;
+        padding: 0 15px;
+        margin: 0 10px;
+        font-style: italic;
     }
   '';
 }

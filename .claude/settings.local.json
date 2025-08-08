@@ -16,7 +16,16 @@
       "Bash(grep:*)",
       "Bash(readlink:*)",
       "Bash(nixvim-print-init:*)",
-      "Bash(nix search:*)"
+      "Bash(nix search:*)",
+      "Bash(echo:*)",
+      "Bash(systemctl:*)",
+      "Bash(nix --extra-experimental-features 'nix-command flakes' search nixpkgs albert)",
+      "Bash(nix --extra-experimental-features 'nix-command flakes' search nixpkgs launcher)",
+      "Bash(rm:*)",
+      "Bash(journalctl:*)",
+      "Bash(waybar:*)",
+      "Bash(nixos-rebuild switch:*)",
+      "Bash(hyprctl dispatch:*)"
     ],
     "deny": []
   }

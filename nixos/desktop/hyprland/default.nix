@@ -33,8 +33,14 @@
     wofi             # Application launcher
     wlogout          # Logout menu
     wl-clipboard     # Clipboard manager
+    xsel             # X11 clipboard utility (for Xwayland compatibility)
     grim             # Screenshot tool
     slurp            # Region selection
+    
+    # Additional utilities for enhanced waybar
+    blueman          # Bluetooth manager
+    curl             # For weather module
+    mpd              # Music Player Daemon (optional)
     
     # Notification system
     dunst            # Notification daemon
@@ -53,6 +59,9 @@
     playerctl        # Media control
     brightnessctl    # Brightness control
     pamixer          # Volume control
+    
+    # Mouse cursor theme
+    adwaita-icon-theme  # Adwaita cursor theme
     
     # Wayland-specific tools
     wlr-randr        # Display management

@@ -16,6 +16,7 @@
 
     # Environment variables
     env = XCURSOR_SIZE,24
+    env = XCURSOR_THEME,Adwaita
     env = GTK_IM_MODULE,fcitx
     env = QT_IM_MODULE,fcitx
     env = XMODIFIERS,@im=fcitx
@@ -60,10 +61,12 @@
             passes = 1
         }
 
-        drop_shadow = yes
-        shadow_range = 4
-        shadow_render_power = 3
-        col.shadow = rgba(1a1a1aee)
+        shadow {
+            enabled = true
+            range = 4
+            render_power = 3
+            color = rgba(1a1a1aee)
+        }
     }
 
     # Animations
@@ -104,7 +107,7 @@
     bind = $mainMod, M, exit,
     bind = $mainMod, E, exec, thunar
     bind = $mainMod, V, togglefloating,
-    bind = $mainMod, R, exec, wofi --show drun
+    bind = $mainMod, Space, exec, wofi --show drun
     bind = $mainMod, P, pseudo,
     bind = $mainMod, J, togglesplit,
 
@@ -173,10 +176,10 @@
     bind = $mainMod, L, exec, hyprlock
 
     # Window rules
-    windowrule = float, ^(pavucontrol)$
-    windowrule = float, ^(blueman-manager)$
-    windowrule = float, ^(nm-connection-editor)$
-    windowrule = float, ^(firefox)$ title:^(Picture-in-Picture)$
-    windowrule = size 800 600, ^(thunar)$
+    windowrulev2 = float, class:^(pavucontrol)$
+    windowrulev2 = float, class:^(blueman-manager)$
+    windowrulev2 = float, class:^(nm-connection-editor)$
+    windowrulev2 = float, class:^(firefox)$, title:^(Picture-in-Picture)$
+    windowrulev2 = size 800 600, class:^(thunar)$
   '';
 }

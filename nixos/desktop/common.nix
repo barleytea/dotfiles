@@ -65,6 +65,9 @@
     firefox
     chromium
 
+    # Application launchers
+    albert
+
     # Development tools
     code-cursor
     python3
@@ -72,4 +75,51 @@
     gcc
     cmake
   ];
+
+  # Albert launcher configuration (shared between GNOME and Hyprland)
+  environment.etc."xdg/albert/albert.conf".text = ''
+    [General]
+    hotkey=Meta+Space
+    showTray=false
+    telemetry=false
+    
+    [org.albert.extension.applications]
+    enabled=true
+    use_generic_name=false
+    use_keywords=true
+    use_non_localized_name=false
+    fuzzy=true
+    
+    [org.albert.extension.calculator]
+    enabled=true
+    
+    [org.albert.extension.files]
+    enabled=true
+    paths=/home
+    fuzzy=true
+    
+    [org.albert.extension.system]
+    enabled=true
+    
+    [org.albert.extension.websearch]
+    enabled=true
+    
+    [org.albert.extension.terminal]
+    enabled=true
+    
+    [org.albert.frontend.qmlboxmodel]
+    alwaysOnTop=true
+    clearOnHide=false
+    hideOnFocusLoss=true
+    showCentered=true
+    styleSheet=
+    windowPosition=@Point(640 360)
+    
+    [org.albert.frontend.widgetboxmodel]
+    alwaysOnTop=true
+    clearOnHide=false
+    hideOnFocusLoss=true
+    showCentered=true
+    theme=Arc Dark
+  '';
 }
