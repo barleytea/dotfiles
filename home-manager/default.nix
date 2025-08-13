@@ -74,7 +74,6 @@ in {
       krb5
       kubectx
       lazygit
-      lmstudio
       maven
       mecab
       minikube
@@ -105,6 +104,9 @@ in {
       xdg-ninja
       zoom-us
       zsh
-    ];
+    ] ++ (if pkgs.stdenv.isLinux then [
+      # Linux (NixOS) specific packages
+      lmstudio
+    ] else []);
   };
 }

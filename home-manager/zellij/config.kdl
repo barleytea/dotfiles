@@ -1,7 +1,7 @@
 copy_on_select true
 show_startup_tips false
 
-copy_command "wl-copy"
+copy_command "pbcopy"
 
 keybinds {
     unbind "Ctrl g"
@@ -353,8 +353,8 @@ load_plugins {
 // Examples:
 //
 // copy_command "xclip -selection clipboard" // x11
-// copy_command "wl-copy"                    // wayland
-// copy_command "wl-copy"                     // osx
+// copy_command "pbcopy"                    // wayland
+// copy_command "pbcopy"                     // osx
 
 // Choose the destination for copied text
 // Allows using the primary selection buffer (on x11/wayland) instead of the system clipboard.

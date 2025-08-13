@@ -38,6 +38,7 @@
       "google-japanese-ime"
       "hammerspoon"
       "iterm2"
+      "lmstudio"
       "miro"
       "nosql-workbench"
       "notion"

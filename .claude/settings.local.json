@@ -25,7 +25,8 @@
       "Bash(journalctl:*)",
       "Bash(waybar:*)",
       "Bash(nixos-rebuild switch:*)",
-      "Bash(hyprctl dispatch:*)"
+      "Bash(hyprctl dispatch:*)",
+      "Bash(nix run home-manager/master:*)"
     ],
     "deny": []
   }
