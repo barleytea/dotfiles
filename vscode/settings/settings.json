@@ -1,11 +1,9 @@
 {
-  // =========== UI/テーマ設定 ===========
   "workbench.colorTheme": "Dracula Theme",
   "workbench.startupEditor": "none",
   "workbench.editorAssociations": {
     "terminal": "default"
   },
-  // =========== エディタ設定 ===========
   "editor.renderWhitespace": "trailing",
   "editor.fontFamily": "'Hack Nerd Font Mono', Menlo, Monaco, 'Courier New', monospace",
   "editor.tabSize": 2,
@@ -13,13 +11,11 @@
   "editor.inlineSuggest.enabled": true,
   "editor.suggestSelection": "first",
   "editor.formatOnPaste": true,
-  // =========== ファイル設定 ===========
   "files.autoSave": "afterDelay",
   "files.associations": {
     "*.css": "tailwindcss"
   },
   "security.workspace.trust.untrustedFiles": "open",
-  // =========== ターミナル設定 ===========
   "terminal.integrated.fontFamily": "'Hack Nerd Font Mono'",
   "terminal.integrated.env.osx": {
     "FIG_NEW_SESSION": "1"
@@ -56,11 +52,8 @@
     "editor.formatOnSave": false,
     "editor.formatOnType": false
   },
-  // =========== Git設定 ===========
   "git.autofetch": true,
   "git.openRepositoryInParentFolders": "always",
-  // =========== 言語固有設定 ===========
-  // Dart
   "[dart]": {
     "editor.formatOnSave": true,
     "editor.formatOnType": true,
@@ -73,15 +66,10 @@
     "editor.tabCompletion": "onlySnippets",
     "editor.wordBasedSuggestions": "off"
   },
-  // TypeScript
   "typescript.updateImportsOnFileMove.enabled": "always",
-  // Go
   "go.toolsManagement.autoUpdate": true,
-  // JSON
   "json.maxItemsComputed": 50000,
-  // Markdown
   "markdown-checkbox.typeOfBulletPoint": "-",
-  // =========== LaTeX設定 ===========
   "latex-workshop.intellisense.package.enabled": true,
   "latex-workshop.latex.clean.fileTypes": [
     "*.aux",
@@ -129,9 +117,8 @@
     }
   ],
   "latex-workshop.view.pdf.viewer": "tab",
-  // =========== Neovim統合 ===========
   "vscode-neovim.neovimExecutablePaths.darwin": "/Users/miyoshi_s/.local/state/nix/profiles/profile/bin/nvim",
-  "vscode-neovim.neovimInitVimPaths.darwin": "/Users/miyoshi_s/.config/nvim/vscode.lua",
+  "vscode-neovim.neovimInitVimPaths.darwin": "/home/miyoshi_s/.config/nvim/vscode.lua",
   "vscode-neovim.neovimClean": true,
   "vscode-neovim.optimizeForLightTheme": false,
   "vscode-neovim.useCtrlKeysForNormalMode": true,
@@ -158,9 +145,7 @@
       "command": "vscode-neovim.escape"
     }
   },
-  // =========== 更新関連 ===========
   "update.showReleaseNotes": false,
-  // Cursor関連
   "cursor.cpp.disabledLanguages": [
     "plaintext",
     "markdown",
@@ -169,13 +154,11 @@
   "cursor.composer.shouldChimeAfterChatFinishes": true,
   "cursor.composer.shouldAllowCustomModes": true,
   "cursor.cpp.enablePartialAccepts": true,
-  // リモート開発
   "remote.defaultExtensionsIfInstalledLocally": [
     "GitHub.copilot",
     "GitHub.copilot-chat",
     "GitHub.vscode-pull-request-github"
   ],
-  // =========== GitHub Copilot設定 ===========
   "github.copilot.chat.agent.thinkingTool": true,
   "github.copilot.nextEditSuggestions.enabled": true,
   "github.copilot.chat.languageContext.fix.typescript.enabled": true,

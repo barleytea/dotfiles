@@ -6,7 +6,8 @@ let
   copyCommand = if pkgs.stdenv.isDarwin then
     "pbcopy"
   else if pkgs.stdenv.isLinux then
-    "xsel --clipboard --input"
+    # wl-copyが存在する場合は使用、なければxselにフォールバック
+    "sh -c 'if command -v wl-copy >/dev/null 2>&1; then wl-copy; else xsel --clipboard --input; fi'"
   else
     "pbcopy";
 

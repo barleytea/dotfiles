@@ -11,8 +11,8 @@
       url = "github:LnL7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    neovim-nightly-overlay = {
-      url = "github:nix-community/neovim-nightly-overlay";
+    nixvim = {
+      url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -22,9 +22,9 @@
     nixpkgs,
     home-manager,
     nix-darwin,
-    neovim-nightly-overlay,
+    nixvim,
   } @ inputs: let
-    system = builtins.currentSystem;
+    system = "aarch64-darwin"; # Default to Apple Silicon Mac
     pkgs = nixpkgs.legacyPackages.${system};
 
     # Override to skip tests
@@ -97,6 +97,26 @@
         system = system;
         modules = [
           ./darwin/service/default.nix
+        ];
+      };
+    };
+
+    # NixOS configurations (新規追加)
+    nixosConfigurations = {
+      desktop = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = { inherit inputs; };
+        modules = [
+          ./nixos/configuration.nix
+          home-manager.nixosModules.home-manager
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              users.miyoshi_s = import ./home-manager;
+              extraSpecialArgs = { inherit inputs; };
+            };
+          }
         ];
       };
     };

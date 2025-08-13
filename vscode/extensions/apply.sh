@@ -2,7 +2,23 @@
 # dotfiles内のextensionsを正として、localの拡張を上書きする
 
 CURRENT=$(cd $(dirname $0) && pwd)
-VSCODE_SETTING_DIR=~/Library/Application\ Support/Code/User
+
+# OS検出とVSCode設定ディレクトリの決定（参照用）
+OS=$(uname -s)
+case "$OS" in
+  Darwin)
+    # macOS
+    VSCODE_SETTING_DIR=~/Library/Application\ Support/Code/User
+    ;;
+  Linux)
+    # Linux
+    VSCODE_SETTING_DIR=~/.config/Code/User
+    ;;
+  *)
+    echo "Unsupported OS: $OS"
+    exit 1
+    ;;
+esac
 
 # Backup current extensions list
 code --list-extensions > "$CURRENT/backup_extensions"

@@ -6,7 +6,26 @@
       "Bash(home-manager:*)",
       "Bash(nix-instantiate:*)",
       "Bash(find:*)",
-      "Bash(nix log:*)"
+      "Bash(nix log:*)",
+      "Bash(bash:*)",
+      "Bash(nix flake check:*)",
+      "Bash(sudo nixos-rebuild switch:*)",
+      "Bash(nix --extra-experimental-features 'nix-command flakes' flake check)",
+      "Bash(make:*)",
+      "Bash(nvim:*)",
+      "Bash(grep:*)",
+      "Bash(readlink:*)",
+      "Bash(nixvim-print-init:*)",
+      "Bash(nix search:*)",
+      "Bash(echo:*)",
+      "Bash(systemctl:*)",
+      "Bash(nix --extra-experimental-features 'nix-command flakes' search nixpkgs albert)",
+      "Bash(nix --extra-experimental-features 'nix-command flakes' search nixpkgs launcher)",
+      "Bash(rm:*)",
+      "Bash(journalctl:*)",
+      "Bash(waybar:*)",
+      "Bash(nixos-rebuild switch:*)",
+      "Bash(hyprctl dispatch:*)"
     ],
     "deny": []
   }
