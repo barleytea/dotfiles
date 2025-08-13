@@ -2,6 +2,11 @@
 { config, pkgs, ... }:
 
 {
+  imports = [
+    ./tailscale
+    ./fileserver
+  ];
+
   # System services
   services = {
     # Automatic updates

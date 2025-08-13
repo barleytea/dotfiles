@@ -74,6 +74,7 @@ in {
       krb5
       kubectx
       lazygit
+      lmstudio
       maven
       mecab
       minikube

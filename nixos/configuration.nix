@@ -10,6 +10,7 @@
     ./system/default.nix
     ./desktop/default.nix
     ./services/default.nix
+    ./storage/default.nix
   ];
 
   # Bootloader.
@@ -36,6 +37,7 @@
   networking = {
     hostName = "nixos"; # Define your hostname.
     networkmanager.enable = true;
+    # ファイアウォール設定はTailscaleとファイルサーバモジュールで管理
     firewall.enable = true;
   };
 
@@ -54,18 +56,7 @@
     LC_TIME = "ja_JP.UTF-8";
   };
 
-  fileSystems = {
-    "/mnt/sda1" = {
-      device = "/dev/disk/by-uuid/71323b1e-e85e-4658-b2f1-ce64474bb85b";
-      fsType = "ext4";
-      options = [ "defaults" ];
-    };
-    "/mnt/sdb1" = {
-      device = "/dev/disk/by-uuid/d002ced3-af30-411f-8d52-eb71b53ea6cf";
-      fsType = "ext4";
-      options = [ "defaults" ];
-    };
-  };
+  # ファイルシステム設定はstorage/default.nixで管理
 
   # Environment variables for Japanese input
   environment.sessionVariables = {
