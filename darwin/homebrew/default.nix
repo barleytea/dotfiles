@@ -45,6 +45,7 @@
       "raycast"
       "rstudio"
       "scroll-reverser"
+      "tailscale"
       "the-unarchiver"
       "xquartz"
     ];
