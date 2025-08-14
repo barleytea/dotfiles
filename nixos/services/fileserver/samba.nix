@@ -51,10 +51,16 @@
       media = {
         path = "/mnt/sda1/shares/media";
         browseable = "yes";
-        "read only" = "yes";
+        "read only" = "no";
         "guest ok" = "no";
+        "create mask" = "0664";
+        "directory mask" = "0775";
+        "force user" = "miyoshi_s";
+        "force group" = "media";
+        "vfs objects" = "catia fruit streams_xattr";
+        "fruit:aapl" = "yes";
         "valid users" = "miyoshi_s";
-        comment = "Media files (read-only)";
+        comment = "Media files (read-write)";
       };
       
       backup = {
