@@ -4,6 +4,7 @@
     settings = {
       experimental-features = "nix-command flakes";
       max-jobs = 8;
+      trusted-users = [ "root" "miyoshi_s" ];
     };
   };
 

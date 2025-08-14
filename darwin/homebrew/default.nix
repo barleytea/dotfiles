@@ -38,7 +38,7 @@
       "google-japanese-ime"
       "hammerspoon"
       "iterm2"
-      "lmstudio"
+      "lm-studio"
       "miro"
       "nosql-workbench"
       "notion"
@@ -46,7 +46,6 @@
       "raycast"
       "rstudio"
       "scroll-reverser"
-      "tailscale"
       "the-unarchiver"
       "xquartz"
     ];
