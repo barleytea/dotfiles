@@ -26,7 +26,10 @@
       "Bash(waybar:*)",
       "Bash(nixos-rebuild switch:*)",
       "Bash(hyprctl dispatch:*)",
-      "Bash(nix run home-manager/master:*)"
+      "Bash(nix run home-manager/master:*)",
+      "Bash(sudo smbstatus:*)",
+      "Bash(testparm:*)",
+      "Bash(pdbedit -L:*)"
     ],
     "deny": []
   }

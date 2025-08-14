@@ -78,6 +78,7 @@ in {
       mecab
       minikube
       mise
+      mpv
       neofetch
       neovim-remote
       nerd-fonts.hack

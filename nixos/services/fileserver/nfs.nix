@@ -14,7 +14,7 @@
       # サブエクスポート（擬似ルート配下）
       /mnt/sda1/shares/docker 100.64.0.0/10(rw,sync,no_subtree_check)
       /mnt/sda1/shares/dev    100.64.0.0/10(rw,sync,no_subtree_check)
-      /mnt/sda1/shares/media  100.64.0.0/10(ro,sync,no_subtree_check)
+      /mnt/sda1/shares/media  100.64.0.0/10(rw,sync,no_subtree_check)
     '';
   };
 
