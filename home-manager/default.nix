@@ -103,6 +103,7 @@ in {
       vscode
       wezterm
       xdg-ninja
+      xan
       zoom-us
       zsh
     ] ++ (if pkgs.stdenv.isLinux then [
