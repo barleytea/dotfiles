@@ -14,9 +14,10 @@
         go = "1.24.5";
         "npm:@redocly/cli" = "latest";
         "npm:corepack" = "latest";
-        "npm:@anthropic-ai/claude-code" = "latest";
         "npm:@google/gemini-cli" = "latest";
         "npm:reviewit" = "latest";
+        "npm:vibe-kanban" = "latest";
+        "npm:@openai/codex" = "latest";
       };
 
       settings = {

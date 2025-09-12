@@ -6,6 +6,7 @@ alias vim=nvim
 alias g=git
 alias gcz='git cz'
 alias wget='wget --hsts-file="$XDG_DATA_HOME/wget-hsts"'
+alias wttr='(){ curl -H "Accept-Language: ${LANG%_*}" --compressed "wttr.in/${1:-Tokyo}" }'
 
 # eza aliases
 if [[ $(command -v eza) ]]; then

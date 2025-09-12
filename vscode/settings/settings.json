@@ -179,7 +179,8 @@
     "/^cd .*$/": true,
     "/^wc .*$/": true,
     "/^find .*$/": true,
-    "/^grep .*$/": true
+    "/^grep .*$/": true,
+    "/^cargo .*$": true
   },
   "chat.agent.enabled": true,
   "chat.agent.maxRequests": 200,

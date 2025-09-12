@@ -20,6 +20,7 @@
       "mas"
       "mise"
       "n"
+      "uv"
       "koekeishiya/formulae/skhd"
       "koekeishiya/formulae/yabai"
     ];
