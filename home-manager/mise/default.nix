@@ -18,6 +18,7 @@
         "npm:reviewit" = "latest";
         "npm:vibe-kanban" = "latest";
         "npm:@openai/codex" = "latest";
+        "npm:@github/copilot" = "latest";
       };
 
       settings = {

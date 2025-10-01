@@ -24,10 +24,39 @@ nix-channel-update: ## Nixチャンネルを最新に更新します
 	source $(NIX_PROFILE); \
 	nix-channel --update
 
-home-manager-apply: ## Home Managerの設定を適用します（flakeを更新してから適用）
+## ---- Flake Lock 操作 (細粒度アップデート) ---- ##
+flake-update: ## flake.lock の全入力を更新します
 	source $(NIX_PROFILE); \
 	nix flake update
+
+flake-update-nixpkgs: ## nixpkgs 入力のみ更新します
+	source $(NIX_PROFILE); \
+	nix flake lock --update-input nixpkgs
+
+flake-update-home-manager: ## home-manager 入力のみ更新します
+	source $(NIX_PROFILE); \
+	nix flake lock --update-input home-manager
+
+flake-update-nixvim: ## nixvim 入力のみ更新します
+	source $(NIX_PROFILE); \
+	nix flake lock --update-input nixvim
+
+## ---- Home Manager Operations ---- ##
+home-manager-switch: ## Home Manager設定を適用 (flake.lock を更新しない)
+	source $(NIX_PROFILE); \
 	nix run nixpkgs#home-manager -- switch --flake .#home --impure
+
+home-manager-build: ## Home Manager設定をビルドのみ (適用しない)
+	source $(NIX_PROFILE); \
+	nix build .#homeConfigurations.home.activationPackage --impure
+
+home-manager-diff-activation: ## (旧) activationPackage ベースの簡易差分 (closure は過小・参考程度)
+	bash scripts/home-manager-diff-activation.sh
+
+home-manager-diff: ## 現行 generation と "home-manager build" した新 generation の実質差分を表示
+	bash scripts/home-manager-diff.sh
+
+home-manager-apply: flake-update home-manager-switch ## Home Manager設定を適用 (まずflakeを全更新)
 
 nix-uninstall: ## Nixを完全にアンインストールします
 	source $(NIX_PROFILE); \
