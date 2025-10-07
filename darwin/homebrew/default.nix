@@ -1,7 +1,18 @@
 {pkgs, ...}: {
   imports = [ ../common.nix ];
+
+  # Homebrew を通常ユーザー権限で実行するための設定
+  users.users.miyoshi_s = {
+    home = "/Users/miyoshi_s";
+  };
+
   homebrew = {
     enable = true;
+
+    # Homebrewコマンドを実行するユーザーを指定
+    # これによりsudo実行時でもHomebrewは通常ユーザーとして実行される
+    user = "miyoshi_s";
+
     onActivation = {
       autoUpdate = true;
       upgrade = true;
@@ -21,6 +32,7 @@
       "mise"
       "n"
       "uv"
+      "harelba/q/q"
       "koekeishiya/formulae/skhd"
       "koekeishiya/formulae/yabai"
     ];

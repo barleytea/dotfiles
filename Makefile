@@ -64,19 +64,19 @@ nix-uninstall: ## Nixを完全にアンインストールします
 
 nix-darwin-apply: ## nix-darwinの全設定を適用します（システム全体の設定）
 	source $(NIX_PROFILE); \
-	nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake .#all --impure
+	sudo nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake .#all --impure
 
 nix-darwin-homebrew-apply: ## nix-darwinのHomebrew設定のみを適用します
 	source $(NIX_PROFILE); \
-	nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake .#homebrew --impure
+	sudo nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake .#homebrew --impure
 
 nix-darwin-system-apply: ## nix-darwinのシステム設定のみを適用します（Finder、Dock等の設定）
 	source $(NIX_PROFILE); \
-	nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake .#system --impure
+	sudo nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake .#system --impure
 
 nix-darwin-service-apply: ## nix-darwinのサービス設定のみを適用します
 	source $(NIX_PROFILE); \
-	nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake .#service --impure
+	sudo nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake .#service --impure
 
 nix-update-all: nix-channel-update home-manager-apply nix-darwin-apply ## Nix関連の全設定を一括で更新・適用します
 
