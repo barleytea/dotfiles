@@ -66,13 +66,20 @@ jobs:
         run: |
           source $HOME/.zshenv
           source $HOME/.config/zsh/.zshrc
+          # miseで管理している全ツールをインストール
           mise install
-          which pre-commit
-          pre-commit --version
-          which node
-          which go
-          node --version
-          go version
+          # shimを再生成してPATHを更新
+          mise reshim
+          # PATH更新のため再度mise activate
+          eval "$(mise activate zsh)"
+          # pre-commitが正しくインストールされたか確認
+          mise exec -- which pre-commit
+          mise exec -- pre-commit --version
+          # その他の主要ツールも確認
+          mise exec -- which node
+          mise exec -- which go
+          mise exec -- node --version
+          mise exec -- go version
       - name: Check nix-darwin configuration
         shell: zsh {0}
         env:
