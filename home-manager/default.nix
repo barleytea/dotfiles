@@ -87,7 +87,6 @@ in {
       pnpm
       postgresql
       postman
-      pre-commit
       protobuf
       protoc-gen-go
       protoc-gen-go-grpc

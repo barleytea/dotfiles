@@ -61,6 +61,18 @@ jobs:
           source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
           nix flake update
           nix run nixpkgs#home-manager -- switch --flake .#home --impure
+      - name: Test mise install
+        shell: zsh {0}
+        run: |
+          source $HOME/.zshenv
+          source $HOME/.config/zsh/.zshrc
+          mise install
+          which pre-commit
+          pre-commit --version
+          which node
+          which go
+          node --version
+          go version
       - name: Check nix-darwin configuration
         shell: zsh {0}
         env:
