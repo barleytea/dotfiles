@@ -30,7 +30,11 @@
       "Bash(sudo smbstatus:*)",
       "Bash(testparm:*)",
       "Bash(pdbedit -L:*)",
-      "Bash(sudo /nix/store/0mbhwi1461n52jv98zqd40id44j2v6h4-darwin-rebuild/bin/darwin-rebuild switch)"
+      "Bash(sudo /nix/store/0mbhwi1461n52jv98zqd40id44j2v6h4-darwin-rebuild/bin/darwin-rebuild switch)",
+      "Bash(bats:*)",
+      "Read(//nix/store/**)",
+      "Bash(nix develop:*)",
+      "Bash(command:*)"
     ],
     "deny": []
   }

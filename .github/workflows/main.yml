@@ -106,3 +106,9 @@ jobs:
           source $HOME/.config/zsh/.zshrc
           make vscode-apply
           make vscode-save
+      - name: Run bats tests
+        shell: zsh {0}
+        run: |
+          source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+          # Enter nix-shell to get bats and run tests
+          nix develop --impure -c make test

@@ -128,6 +128,22 @@ mise-list: ## miseのツール一覧を表示します
 mise-config: ## miseの設定を表示します
 	mise config
 
+## Testing ##
+test: ## 全てのbatsテストを実行します
+	bats --recursive tests/
+
+test-scripts: ## scripts/のテストのみを実行します
+	bats --recursive tests/scripts/
+
+test-integration: ## 統合テストのみを実行します
+	bats --recursive tests/integration/
+
+test-verbose: ## 詳細モードで全テストを実行します
+	bats --recursive -t tests/
+
+test-watch: ## テストをwatchモードで実行します（entr使用）
+	find tests -name '*.bats' -o -name '*.bash' | entr -c bats --recursive tests/
+
 ## Others ##
 zsh: ## zshの起動時間を測定します
 	time (zsh -i -c exit)

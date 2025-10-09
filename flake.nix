@@ -52,11 +52,9 @@
 
     devShells.${system}.default = pkgs.mkShell {
       packages = with pkgs; [
-        # TODO: Add your development packages here
+        # Testing
+        (bats.withLibraries (p: [ p.bats-support p.bats-assert p.bats-file ]))
       ];
-      shellHook = ''
-        $SHELL
-      '';
     };
 
     homeConfigurations = {

@@ -10,6 +10,7 @@
 - [npm tools](docs/50_npm_tools.md)
 - [Pre-commit hooks](docs/51_pre_commit.md)
 - [Atuin shell history](docs/52_atuin.md)
+- [Testing](docs/55_testing.md)
 - [Services](docs/60_services.md)
 
 ### Document Numbering Guideline
@@ -41,6 +42,7 @@ Documents are numbered in increments of 10 according to the following categories
 - [gitleaks](https://github.com/gitleaks/gitleaks) - secret scanner
 - [commitizen](https://github.com/commitizen/cz-cli) - commit convention tool
 - [cz-git](https://github.com/Zhengqbbb/cz-git) - commitizen adapter
+- [bats](https://github.com/bats-core/bats-core) - bash testing framework
 
 ### Editors
 

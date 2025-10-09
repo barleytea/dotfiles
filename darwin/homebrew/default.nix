@@ -41,6 +41,7 @@
       "android-studio"
       "apparency"
       "appcleaner"
+      "awscli"
       "caffeine"
       "cursor"
       "devutils"
