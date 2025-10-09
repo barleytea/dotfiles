@@ -9,6 +9,7 @@
 - [VSCode settings](docs/40_vscode.md)
 - [npm tools](docs/50_npm_tools.md)
 - [Pre-commit hooks](docs/51_pre_commit.md)
+- [Atuin shell history](docs/52_atuin.md)
 - [Services](docs/60_services.md)
 
 ### Document Numbering Guideline
