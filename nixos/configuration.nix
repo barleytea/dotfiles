@@ -98,9 +98,9 @@
     #media-session.enable = true;
   };
 
-  # OpenGL support for Wine
-  hardware.opengl.enable = true;
-  hardware.opengl.driSupport32Bit = true;
+  # Graphics support for Wine
+  hardware.graphics.enable = true;
+  hardware.graphics.enable32Bit = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;

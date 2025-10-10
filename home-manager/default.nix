@@ -108,6 +108,7 @@ in {
     ] ++ (if pkgs.stdenv.isLinux then [
       # Linux (NixOS) specific packages
       lmstudio
+      git-credential-manager
     ] else []);
   };
 }

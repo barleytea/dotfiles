@@ -1,3 +1,5 @@
+{ pkgs, ... }:
+
 let
 
 gitConfig = ''
@@ -15,6 +17,21 @@ gitConfig = ''
 
   [ghq]
     root = ~/git_repos/
+
+${if pkgs.stdenv.isLinux then ''
+  [credential]
+    helper =
+    helper = !${pkgs.git-credential-manager}/bin/git-credential-manager
+
+  [credential "https://github.com"]
+    provider = github
+
+  [credential "https://gist.github.com"]
+    provider = github
+'' else if pkgs.stdenv.isDarwin then ''
+  [credential]
+    helper = osxkeychain
+'' else ""}
 
   [alias]
 # ---- 基本操作 ----
