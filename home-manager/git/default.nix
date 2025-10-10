@@ -18,21 +18,21 @@ gitConfig = ''
   [ghq]
     root = ~/git_repos/
 
-${if pkgs.stdenv.isLinux then ''
-  [credential]
-    helper =
-    helper = !${pkgs.git-credential-manager}/bin/git-credential-manager
-    credentialStore = cache
+  ${if pkgs.stdenv.isLinux then ''
+    [credential]
+      helper =
+      helper = !${pkgs.git-credential-manager}/bin/git-credential-manager
+      credentialStore = cache
 
-  [credential "https://github.com"]
-    provider = github
+    [credential "https://github.com"]
+      provider = github
 
-  [credential "https://gist.github.com"]
-    provider = github
-'' else if pkgs.stdenv.isDarwin then ''
-  [credential]
-    helper = osxkeychain
-'' else ""}
+    [credential "https://gist.github.com"]
+      provider = github
+  '' else if pkgs.stdenv.isDarwin then ''
+    [credential]
+      helper = osxkeychain
+  '' else ""}
 
   [alias]
 # ---- 基本操作 ----

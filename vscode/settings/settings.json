@@ -206,5 +206,6 @@
   "chat.promptFilesLocations": {
     ".github/instructions": true,
     "~/.config/vscode/instructions": true
-  }
+  },
+  "makefile.configureOnOpen": true
 }
