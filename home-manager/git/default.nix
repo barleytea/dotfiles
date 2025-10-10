@@ -22,6 +22,7 @@ ${if pkgs.stdenv.isLinux then ''
   [credential]
     helper =
     helper = !${pkgs.git-credential-manager}/bin/git-credential-manager
+    credentialStore = cache
 
   [credential "https://github.com"]
     provider = github
