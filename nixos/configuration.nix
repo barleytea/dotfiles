@@ -146,8 +146,8 @@
     winetricks
     # NW.js
     nwjs
-    # Cursor (AppImage)
-    (import ./packages/cursor { inherit pkgs; })
+    # Cursor (extracted from AppImage)
+    (pkgs.callPackage ./packages/cursor/extracted.nix { })
   ];
 
   # Enable programs

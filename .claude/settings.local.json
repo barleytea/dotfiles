@@ -47,7 +47,10 @@
       "Bash(sudo journalctl:*)",
       "Bash(/nix/store/wch817yy36wkf8mgvggl9b08pgiiyyw0-cursor-1.7.43/bin/cursor --version)",
       "Bash(nix --extra-experimental-features 'nix-command' hash convert --hash-algo sha256 --to sri 15xnqxlh8x3pdx92bxbjdrpcjz62j396vslnlnhkx05s9nyxwnij)",
-      "Bash(nix --extra-experimental-features 'nix-command' log /nix/store/ihf7w53c991hlp434a8klr2aw1xr1cqx-pamixer-1.6.drv)"
+      "Bash(nix --extra-experimental-features 'nix-command' log /nix/store/ihf7w53c991hlp434a8klr2aw1xr1cqx-pamixer-1.6.drv)",
+      "Bash(nix --extra-experimental-features 'nix-command flakes' search nixpkgs cursor)",
+      "Bash(xargs nix-store:*)",
+      "Bash(nix --extra-experimental-features 'nix-command' derivation show /nix/store/7gz94sw57gsc0g77dajxjdaij4p2ix7v-cursor-1.5.11)"
     ],
     "deny": []
   }
