@@ -17,6 +17,7 @@
 , libsecret
 , libXScrnSaver
 , libxshmfence
+, libxkbfile
 , alsa-lib
 , at-spi2-atk
 , at-spi2-core
