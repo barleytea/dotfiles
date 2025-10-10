@@ -11,6 +11,9 @@
     ./desktop/default.nix
     ./services/default.nix
     ./storage/default.nix
+
+    # AppImage support
+    ./packages/appimages.nix
   ];
 
   # Bootloader.
@@ -143,6 +146,8 @@
     winetricks
     # NW.js
     nwjs
+    # Cursor (AppImage)
+    (import ./packages/cursor { inherit pkgs; })
   ];
 
   # Enable programs

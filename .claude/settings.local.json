@@ -36,7 +36,17 @@
       "Bash(nix develop:*)",
       "Bash(command:*)",
       "Bash(zellij:*)",
-      "Read(//home/miyoshi_s/.config/zellij/**)"
+      "Read(//home/miyoshi_s/.config/zellij/**)",
+      "WebFetch(domain:github.com)",
+      "WebSearch",
+      "Bash(cursor:*)",
+      "Bash(nix-prefetch-url:*)",
+      "Bash(nix hash convert:*)",
+      "Bash(nix --extra-experimental-features 'nix-command' hash convert --hash-algo sha256 --to sri 13qyjkb7msqplzvabk37a30yl5cx25qj9mqnxagk1f48ib4k9mja)",
+      "Bash(nix-store:*)",
+      "Bash(sudo journalctl:*)",
+      "Bash(/nix/store/wch817yy36wkf8mgvggl9b08pgiiyyw0-cursor-1.7.43/bin/cursor --version)",
+      "Bash(nix --extra-experimental-features 'nix-command' hash convert --hash-algo sha256 --to sri 15xnqxlh8x3pdx92bxbjdrpcjz62j396vslnlnhkx05s9nyxwnij)"
     ],
     "deny": []
   }
