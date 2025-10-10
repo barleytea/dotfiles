@@ -98,6 +98,10 @@
     #media-session.enable = true;
   };
 
+  # OpenGL support for Wine
+  hardware.opengl.enable = true;
+  hardware.opengl.driSupport32Bit = true;
+
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
@@ -126,12 +130,19 @@
     git
     curl
     wget
+    unzip
     gnumake
     gcc
     cmake
     python3
     openssl
     jq
+    file
+    # Wine
+    wineWowPackages.staging
+    winetricks
+    # NW.js
+    nwjs
   ];
 
   # Enable programs

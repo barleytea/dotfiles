@@ -4,6 +4,7 @@ gitConfig = ''
   [core]
     excludesFile = ~/.config/git/ignore
     editor = nvim
+    longpaths = true
 
   [user]
     name = barleytea
