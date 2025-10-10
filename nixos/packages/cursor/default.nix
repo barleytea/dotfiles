@@ -30,7 +30,11 @@ appimageTools.wrapType2 {
     fi
   '';
 
-  extraBwrapArgs = [ "--bind-try /etc/nixos/ /etc/nixos/" ];
+  extraBwrapArgs = [
+    "--bind-try /etc/nixos/ /etc/nixos/"
+    # Bind home directory for cursor-agent
+    "--bind-try \${HOME}/.local/share/cursor-agent \${HOME}/.local/share/cursor-agent"
+  ];
   dieWithParent = false;
 
   extraPkgs = pkgs: [
@@ -40,6 +44,8 @@ appimageTools.wrapType2 {
     openssl
     icu
     zlib
+    # Node.js runtime for cursor-agent
+    nodejs_20
   ];
 
   meta = with lib; {
