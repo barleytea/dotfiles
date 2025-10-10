@@ -52,28 +52,20 @@
     # Helper function to create devShell for any system
     mkDevShell = system: let
       pkgs = nixpkgs.legacyPackages.${system};
-
-      # Override flock to remove ronn dependency (which requires nokogiri)
-      # flock is a dependency of bats, and ronn is only needed for man page generation
-      flockWithoutRonn = pkgs.flock.overrideAttrs (oldAttrs: {
+      # Override bats to remove ronn dependency (which requires nokogiri)
+      batsWithoutRonn = pkgs.bats.overrideAttrs (oldAttrs: {
         nativeBuildInputs = builtins.filter
-          (dep: !(builtins.isString (builtins.toString dep) &&
-                  builtins.match ".*ronn.*" (builtins.toString dep) != null))
+          (dep: !(builtins.match ".*ronn.*" (builtins.toString dep) != null))
           (oldAttrs.nativeBuildInputs or []);
-        # Disable man page generation to avoid ronn dependency
-        postInstall = oldAttrs.postInstall or "" + ''
+        # Skip man page generation
+        postInstall = ''
           # Skip ronn-based man page generation
         '';
       });
-
-      # Use the modified flock in bats
-      batsWithoutNokogiri = pkgs.bats.override {
-        flock = flockWithoutRonn;
-      };
     in pkgs.mkShell {
       packages = [
-        # Testing - Use bats with flock that doesn't require ronn/nokogiri
-        (batsWithoutNokogiri.withLibraries (p: [ p.bats-support p.bats-assert p.bats-file ]))
+        # Testing - Use bats without ronn to avoid nokogiri build issues in CI
+        (batsWithoutRonn.withLibraries (p: [ p.bats-support p.bats-assert p.bats-file ]))
       ];
     };
   in {
