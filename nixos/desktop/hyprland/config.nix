@@ -161,10 +161,10 @@
     bind = , Print, exec, grim -g "$(slurp)" - | wl-copy
     bind = SHIFT, Print, exec, grim - | wl-copy
 
-    # Media keys
-    bind = , XF86AudioRaiseVolume, exec, pamixer -i 5
-    bind = , XF86AudioLowerVolume, exec, pamixer -d 5
-    bind = , XF86AudioMute, exec, pamixer -t
+    # Media keys (using pactl instead of pamixer due to build issues)
+    bind = , XF86AudioRaiseVolume, exec, pactl set-sink-volume @DEFAULT_SINK@ +5%
+    bind = , XF86AudioLowerVolume, exec, pactl set-sink-volume @DEFAULT_SINK@ -5%
+    bind = , XF86AudioMute, exec, pactl set-sink-mute @DEFAULT_SINK@ toggle
     bind = , XF86AudioPlay, exec, playerctl play-pause
     bind = , XF86AudioPause, exec, playerctl play-pause
     bind = , XF86AudioNext, exec, playerctl next

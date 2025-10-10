@@ -61,7 +61,8 @@
     gammastep        # Blue light filter
     playerctl        # Media control
     brightnessctl    # Brightness control
-    pamixer          # Volume control
+    # pamixer          # Volume control (temporarily disabled due to build issues)
+    pulsemixer       # Volume control (alternative to pamixer)
     
     # Mouse cursor theme
     adwaita-icon-theme  # Adwaita cursor theme
