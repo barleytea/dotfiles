@@ -25,10 +25,6 @@ backup_*
 # 機密情報
 secret
 
-# テスト関連
-tests/**/.bats-tmp-*
-tests/**/tmp/
-
 # 除外解除（常に追跡するファイル）
 !copilot-instructions.md
 !.cursor/rules/
