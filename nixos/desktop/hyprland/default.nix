@@ -33,7 +33,10 @@
     wofi             # Application launcher
     wlogout          # Logout menu
     wl-clipboard     # Clipboard manager
+    wl-clipboard-x11 # X11 compatibility for clipboard
+    cliphist         # Clipboard history manager
     xsel             # X11 clipboard utility (for Xwayland compatibility)
+    xclip            # Additional X11 clipboard tool
     grim             # Screenshot tool
     slurp            # Region selection
     

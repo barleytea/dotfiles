@@ -6,8 +6,9 @@ let
   copyCommand = if pkgs.stdenv.isDarwin then
     "pbcopy"
   else if pkgs.stdenv.isLinux then
-    # wl-copyが存在する場合は使用、なければxselにフォールバック
-    "sh -c 'if command -v wl-copy >/dev/null 2>&1; then wl-copy; else xsel --clipboard --input; fi'"
+    # Wayland環境でより確実なクリップボードアクセス
+    # KDL raw stringを使用してエスケープの問題を回避
+    ''wl-copy''
   else
     "pbcopy";
 
