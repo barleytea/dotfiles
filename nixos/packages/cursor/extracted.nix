@@ -46,15 +46,16 @@
 , freetype
 , libglvnd
 , libdbusmenu
+, patchelf
 }:
 
 let
   pname = "cursor";
-  version = "1.6.45";
+  version = "1.7.43";
 
   src = fetchurl {
-    url = "https://downloads.cursor.com/production/3ccce8f55d8cca49f6d28b491a844c699b8719a3/linux/x64/Cursor-${version}-x86_64.AppImage";
-    hash = "sha256-MlrevU26gD6hpZbqbdKQwnzJbm5y9SVSb3d0BGnHtpc=";
+    url = "https://downloads.cursor.com/production/df279210b53cf4686036054b15400aa2fe06d6dd/linux/x64/Cursor-${version}-x86_64.AppImage";
+    hash = "sha256-StY0yYqIuDCf6hbXJHERnRXqwVBnzKX2pxfretaUHo8=";
   };
 
   appimageContents = appimageTools.extract {
@@ -70,6 +71,7 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [
     autoPatchelfHook
     asar
+    makeWrapper
     copyDesktopItems
     wrapGAppsHook
   ];
@@ -125,7 +127,38 @@ in stdenv.mkDerivation {
     mkdir -p "$out/lib/cursor" "$out/bin"
     cp -r ./* "$out/lib/cursor"
 
-    ln -s "$out/lib/cursor/bin/cursor" "$out/bin/cursor"
+    # Create a wrapper script that patches cursor-agent node binaries
+    cat > "$out/bin/.cursor-real" <<'EOF'
+#!/usr/bin/env bash
+# Patch cursor-agent node binaries if they exist and haven't been patched yet
+CURSOR_AGENT_DIR="$HOME/.local/share/cursor-agent/versions"
+if [ -d "$CURSOR_AGENT_DIR" ]; then
+  for version_dir in "$CURSOR_AGENT_DIR"/*/; do
+    if [ -f "$version_dir/node" ] && [ ! -f "$version_dir/.patched" ]; then
+      echo "Patching cursor-agent node binary: $version_dir/node" >&2
+      chmod +w "$version_dir/node" 2>/dev/null || true
+      PATCHELF_BIN/patchelf \
+        --set-interpreter "DYNAMIC_LINKER" \
+        --set-rpath "RPATH" \
+        "$version_dir/node" 2>/dev/null && touch "$version_dir/.patched" || true
+    fi
+  done
+fi
+
+# Run the actual cursor binary
+exec CURSOR_BIN "$@"
+EOF
+
+    substituteInPlace "$out/bin/.cursor-real" \
+      --replace-fail "PATCHELF_BIN" "${patchelf}/bin" \
+      --replace-fail "DYNAMIC_LINKER" "${stdenv.cc.bintools.dynamicLinker}" \
+      --replace-fail "RPATH" "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}" \
+      --replace-fail "CURSOR_BIN" "$out/lib/cursor/bin/cursor"
+
+    chmod +x "$out/bin/.cursor-real"
+
+    # Rename for wrapGAppsHook to wrap
+    mv "$out/bin/.cursor-real" "$out/bin/cursor"
 
     mkdir -p "$out/share/pixmaps"
     cp "$out/lib/cursor/resources/app/resources/linux/code.png" "$out/share/pixmaps/cursor.png"

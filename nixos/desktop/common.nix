@@ -69,7 +69,6 @@
     albert
 
     # Development tools
-    code-cursor
     python3
     gnumake
     gcc

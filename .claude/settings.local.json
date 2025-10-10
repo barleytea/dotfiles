@@ -50,7 +50,10 @@
       "Bash(nix --extra-experimental-features 'nix-command' log /nix/store/ihf7w53c991hlp434a8klr2aw1xr1cqx-pamixer-1.6.drv)",
       "Bash(nix --extra-experimental-features 'nix-command flakes' search nixpkgs cursor)",
       "Bash(xargs nix-store:*)",
-      "Bash(nix --extra-experimental-features 'nix-command' derivation show /nix/store/7gz94sw57gsc0g77dajxjdaij4p2ix7v-cursor-1.5.11)"
+      "Bash(nix --extra-experimental-features 'nix-command' derivation show /nix/store/7gz94sw57gsc0g77dajxjdaij4p2ix7v-cursor-1.5.11)",
+      "Read(//home/miyoshi_s/.local/share/cursor-agent/versions/**)",
+      "Read(//home/miyoshi_s/.local/share/cursor-agent/versions/2025.10.02-bd871ac/**)",
+      "Bash(nix --extra-experimental-features 'nix-command flakes' eval --raw 'nixpkgs#stdenv.cc.bintools.dynamicLinker')"
     ],
     "deny": []
   }
