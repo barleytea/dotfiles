@@ -48,31 +48,13 @@
         })
       ];
     };
-
-    # Helper function to create devShell for any system
-    mkDevShell = system: let
-      pkgs = nixpkgs.legacyPackages.${system};
-      # Override bats to remove ronn dependency (which requires nokogiri)
-      batsWithoutRonn = pkgs.bats.overrideAttrs (oldAttrs: {
-        nativeBuildInputs = builtins.filter
-          (dep: !(builtins.match ".*ronn.*" (builtins.toString dep) != null))
-          (oldAttrs.nativeBuildInputs or []);
-        # Skip man page generation
-        postInstall = ''
-          # Skip ronn-based man page generation
-        '';
-      });
-    in pkgs.mkShell {
-      packages = [
-        # Testing - Use bats without ronn to avoid nokogiri build issues in CI
-        (batsWithoutRonn.withLibraries (p: [ p.bats-support p.bats-assert p.bats-file ]))
-      ];
-    };
   in {
 
-    devShells = {
-      aarch64-darwin.default = mkDevShell "aarch64-darwin";
-      x86_64-linux.default = mkDevShell "x86_64-linux";
+    devShells.${system}.default = pkgs.mkShell {
+      packages = with pkgs; [
+        # Testing
+        (bats.withLibraries (p: [ p.bats-support p.bats-assert p.bats-file ]))
+      ];
     };
 
     homeConfigurations = {
