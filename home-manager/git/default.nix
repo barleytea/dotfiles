@@ -22,7 +22,7 @@ gitConfig = ''
     [credential]
       helper =
       helper = !${pkgs.git-credential-manager}/bin/git-credential-manager
-      credentialStore = cache
+      credentialStore = secretservice
 
     [credential "https://github.com"]
       provider = github
