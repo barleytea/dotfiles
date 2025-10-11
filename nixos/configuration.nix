@@ -155,4 +155,15 @@
     zsh.enable = true;
     git.enable = true;
   };
+
+  # Git SSH Server
+  services.gitserver = {
+    enable = true;
+    authorizedKeys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICL34VaEgzwLhtlFTGBarQkJILQAatNVXFDt3zc92O8x miyoshi_s@nixos"
+    ];
+    repositories = [
+      "novel.git"
+    ];
+  };
 }

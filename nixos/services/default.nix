@@ -5,6 +5,7 @@
   imports = [
     ./tailscale
     ./fileserver
+    ./gitserver
   ];
 
   # System services
