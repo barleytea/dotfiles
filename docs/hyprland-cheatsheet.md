@@ -105,3 +105,16 @@
 - メイン設定: `/etc/xdg/hypr/hyprland.conf`
 - Waybar設定: `/etc/xdg/waybar/config`
 - Dunst設定: `/etc/xdg/dunst/dunstrc`
+
+## テーマと見た目の調整
+
+- Waybar: `nixos/desktop/hyprland/waybar.nix` でモジュール構成・Catppuccin配色を管理。`style.css` 内の `@define-color` を変更すると一括で色が切り替わります。
+- ウィンドウ装飾: `nixos/desktop/hyprland/config.nix` の `decoration`・`general` ブロックで丸み・ブラー・ボーダー色を制御。
+- 壁紙: `nixos/desktop/hyprland/wallpaper.nix` がグラデーション壁紙を自動生成します。別画像に差し替える場合は `preload`/`wallpaper` 行を書き換え。
+- ランチャー: `nixos/desktop/hyprland/wofi.nix` でサイズやフォント、ハイライト色を変更可能。
+
+## リロードのショートカット
+
+- Waybar を再起動: `systemctl --user restart waybar`
+- Hyprland 設定反映: `hyprctl reload`
+- Wofi テーマ確認: `wofi --show drun` を都度実行してプレビュー

@@ -7,125 +7,158 @@
     {
         "layer": "top",
         "position": "top",
-        "height": 32,
-        "spacing": 4,
-        "margin-top": 5,
-        "margin-bottom": 0,
-        "margin-left": 10,
-        "margin-right": 10,
-        
-        "modules-left": ["hyprland/workspaces", "hyprland/mode", "hyprland/scratchpad", "hyprland/submap"],
-        "modules-center": ["hyprland/window", "mpd"],
-        "modules-right": ["custom/weather", "disk", "cpu", "memory", "temperature", "network", "bluetooth", "pulseaudio", "backlight", "battery", "custom/notification", "idle_inhibitor", "clock", "custom/power", "tray"],
+        "height": 36,
+        "spacing": 8,
+        "margin": "12 20 0 20",
+        "modules-left": ["custom/logo", "custom/launcher", "hyprland/workspaces"],
+        "modules-center": ["hyprland/window"],
+        "modules-right": ["custom/nowplaying", "custom/weather", "pulseaudio", "network", "backlight", "battery", "cpu", "memory", "temperature", "idle_inhibitor", "custom/notification", "clock", "tray", "custom/power"],
+
+        "custom/logo": {
+            "format": "{}",
+            "exec": "echo ",
+            "interval": 0,
+            "tooltip": false
+        },
+
+        "custom/launcher": {
+            "format": "󰍉",
+            "tooltip": "Launch applications",
+            "interval": 0,
+            "on-click": "wofi --show drun &",
+            "on-click-right": "wofi --show run &"
+        },
 
         "hyprland/workspaces": {
             "disable-scroll": true,
             "all-outputs": true,
-            "format": "{name}: {icon}",
+            "active-only": false,
+            "sort-by-number": true,
+            "format": "{icon}",
+            "persistent-workspaces": {
+                "*": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+            },
             "format-icons": {
-                "1": "",
-                "2": "",
-                "3": "",
-                "4": "",
-                "5": "",
-                "urgent": "",
-                "focused": "",
-                "default": ""
+                "urgent": "",
+                "focused": "",
+                "default": ""
             }
         },
-        
-        "hyprland/mode": {
-            "format": "<span style=\"italic\">{}</span>"
-        },
-        
-        "hyprland/scratchpad": {
-            "format": "{icon} {count}",
-            "show-empty": false,
-            "format-icons": ["", ""],
-            "tooltip": true,
-            "tooltip-format": "{app}: {title}"
-        },
-        
+
         "hyprland/window": {
             "format": "{}",
-            "max-length": 60,
-            "separate-outputs": true
+            "max-length": 40,
+            "separate-outputs": true,
+            "empty-format": "Ready to flow",
+            "rewrite": {
+                "(.*) — Mozilla Firefox": "  $1",
+                "(.*) - Visual Studio Code": "  $1",
+                "(.*) - Alacritty": "  $1"
+            }
         },
-        
-        "hyprland/submap": {
-            "format": " {}",
-            "max-length": 8,
-            "tooltip": false
-        },
-        
-        "mpd": {
-            "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ⸨{songPosition}|{queueLength}⸩ {volume}% ",
-            "format-disconnected": "Disconnected ",
-            "format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped ",
-            "unknown-tag": "N/A",
-            "interval": 2,
-            "consume-icons": {
-                "on": " "
-            },
-            "random-icons": {
-                "off": "<span color=\"#f53c3c\"></span> ",
-                "on": " "
-            },
-            "repeat-icons": {
-                "on": " "
-            },
-            "single-icons": {
-                "on": "1 "
-            },
-            "state-icons": {
-                "paused": "",
-                "playing": ""
-            },
-            "tooltip-format": "MPD (connected)",
-            "tooltip-format-disconnected": "MPD (disconnected)"
-        },
-        
-        "disk": {
-            "interval": 30,
-            "format": " {percentage_used}%",
-            "path": "/",
+
+        "custom/nowplaying": {
+            "exec": "playerctl metadata --format '{{ artist }} — {{ title }}' 2>/dev/null || echo Nothing playing",
+            "interval": 5,
             "tooltip": true,
-            "tooltip-format": "Used: {used} / Total: {total}",
-            "on-click": "thunar /"
+            "on-click": "playerctl play-pause",
+            "on-scroll-up": "playerctl next",
+            "on-scroll-down": "playerctl previous",
+            "format": "󰎈  {}",
+            "max-length": 48
         },
-        
-        "bluetooth": {
-            "format": " {status}",
-            "format-connected": " {device_alias}",
-            "format-connected-battery": " {device_alias} {device_battery_percentage}%",
-            "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
-            "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}",
-            "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
-            "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t{device_battery_percentage}%",
-            "on-click": "blueman-manager"
-        },
-        
+
         "custom/weather": {
             "format": "{}",
             "tooltip": true,
-            "interval": 1800,
-            "exec": "curl -s 'https://wttr.in/Tokyo?format=1' 2>/dev/null || echo '🌤️ Weather unavailable'",
-            "return-type": "",
+            "interval": 1200,
+            "exec": "curl -fs 'https://wttr.in/Tokyo?format=%c %t' || echo Weather N/A",
+            "return-type": "string",
             "on-click": "firefox https://weather.yahoo.co.jp/"
         },
-        
+
+        "tray": {
+            "icon-size": 18,
+            "spacing": 10
+        },
+
+        "pulseaudio": {
+            "format": "{icon} {volume}%",
+            "format-muted": "󰝟  mute",
+            "format-icons": {
+                "headphones": "󰋋",
+                "handsfree": "󰋎",
+                "headset": "󰋎",
+                "phone": "󰄜",
+                "portable": "󰏴",
+                "car": "󰄫",
+                "default": ["󰖀", "󰕾", "󰕿"]
+            },
+            "scroll-step": 3,
+            "on-click": "pavucontrol"
+        },
+
+        "network": {
+            "format-wifi": "󰖩  {essid}",
+            "format-ethernet": "󰈀  {ifname}",
+            "format-disconnected": "󰖪  offline",
+            "tooltip-format": "{ifname} via {gwaddr}\\n{ipaddr}/{cidr}",
+            "on-click": "nm-connection-editor"
+        },
+
+        "backlight": {
+            "format": "󰃜  {percent}%",
+            "format-icons": ["󰃜"]
+        },
+
+        "battery": {
+            "format": "{icon} {capacity}%",
+            "format-charging": "󰂄 {capacity}%",
+            "format-plugged": "󰂄 {capacity}%",
+            "format-alt": "{time} remaining",
+            "states": {
+                "warning": 30,
+                "critical": 15
+            },
+            "format-icons": ["󰁺","󰁻","󰁼","󰁽","󰁾","󰁿","󰂀","󰂁","󰂂","󰁹"]
+        },
+
+        "cpu": {
+            "format": "󰍛 {usage}%",
+            "tooltip": false
+        },
+
+        "memory": {
+            "format": "󰍛 {percentage}%",
+            "tooltip": false
+        },
+
+        "temperature": {
+            "critical-threshold": 80,
+            "format": "󰔄 {temperatureC}°",
+            "format-icons": ["󰔄"]
+        },
+
+        "idle_inhibitor": {
+            "format": "{icon}",
+            "format-icons": {
+                "activated": "󰌵",
+                "deactivated": "󰌶"
+            }
+        },
+
         "custom/notification": {
             "tooltip": false,
             "format": "{icon}",
             "format-icons": {
-                "notification": "<span foreground='red'><sup></sup></span>",
-                "none": "",
-                "dnd-notification": "<span foreground='red'><sup></sup></span>",
-                "dnd-none": "",
-                "inhibited-notification": "<span foreground='red'><sup></sup></span>",
-                "inhibited-none": "",
-                "dnd-inhibited-notification": "<span foreground='red'><sup></sup></span>",
-                "dnd-inhibited-none": ""
+                "notification": "󰂚",
+                "none": "󰂜",
+                "dnd-notification": "󰂛",
+                "dnd-none": "󰂛",
+                "inhibited-notification": "󰂛",
+                "inhibited-none": "󰂛",
+                "dnd-inhibited-notification": "󰂛",
+                "dnd-inhibited-none": "󰂛"
             },
             "return-type": "json",
             "exec-if": "which swaync-client",
@@ -134,233 +167,218 @@
             "on-click-right": "swaync-client -d -sw",
             "escape": true
         },
-        
+
+        "clock": {
+            "timezone": "Asia/Tokyo",
+            "format": "{:%H:%M}",
+            "format-alt": "{:%a %b %d}",
+            "tooltip-format": "<b>{:%A, %B %d}</b>\n<tt><small>{calendar}</small></tt>"
+        },
+
         "custom/power": {
-            "format": "⏻",
+            "format": "󰤆",
             "tooltip": false,
             "on-click": "wlogout",
             "on-click-right": "hyprctl dispatch exit"
-        },
-        
-        "idle_inhibitor": {
-            "format": "{icon}",
-            "format-icons": {
-                "activated": "",
-                "deactivated": ""
-            }
-        },
-        
-        "tray": {
-            "spacing": 10
-        },
-        
-        "clock": {
-            "timezone": "Asia/Tokyo",
-            "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-            "format-alt": "{:%Y-%m-%d}"
-        },
-        
-        "cpu": {
-            "format": "{usage}% ",
-            "tooltip": false
-        },
-        
-        "memory": {
-            "format": "{}% "
-        },
-        
-        "temperature": {
-            "critical-threshold": 80,
-            "format": "{temperatureC}°C {icon}",
-            "format-icons": ["", "", ""]
-        },
-        
-        "backlight": {
-            "format": "{percent}% {icon}",
-            "format-icons": ["", "", "", "", "", "", "", "", ""]
-        },
-        
-        "battery": {
-            "states": {
-                "warning": 30,
-                "critical": 15
-            },
-            "format": "{capacity}% {icon}",
-            "format-charging": "{capacity}% ",
-            "format-plugged": "{capacity}% ",
-            "format-alt": "{time} {icon}",
-            "format-icons": ["", "", "", "", ""]
-        },
-        
-        "network": {
-            "format-wifi": "{essid} ({signalStrength}%) ",
-            "format-ethernet": "{ipaddr}/{cidr} ",
-            "tooltip-format": "{ifname} via {gwaddr} ",
-            "format-linked": "{ifname} (No IP) ",
-            "format-disconnected": "Disconnected ⚠",
-            "format-alt": "{ifname}: {ipaddr}/{cidr}"
-        },
-        
-        "pulseaudio": {
-            "format": "{volume}% {icon} {format_source}",
-            "format-bluetooth": "{volume}% {icon} {format_source}",
-            "format-bluetooth-muted": " {icon} {format_source}",
-            "format-muted": " {format_source}",
-            "format-source": "{volume}% ",
-            "format-source-muted": "",
-            "format-icons": {
-                "headphone": "",
-                "hands-free": "",
-                "headset": "",
-                "phone": "",
-                "portable": "",
-                "car": "",
-                "default": ["", "", ""]
-            },
-            "on-click": "pavucontrol"
         }
     }
   '';
 
   environment.etc."xdg/waybar/style.css".text = ''
+    @define-color base rgba(14, 16, 26, 0.72);
+    @define-color mantle rgba(24, 25, 36, 0.65);
+    @define-color surface rgba(30, 30, 46, 0.82);
+    @define-color overlay #6c7086;
+    @define-color text #cdd6f4;
+    @define-color accent #cba6f7;
+    @define-color accent2 #74c7ec;
+    @define-color accent3 #f2cdcd;
+
     * {
         border: none;
         border-radius: 0;
-        font-family: "Hack Nerd Font", Roboto, Helvetica, Arial, sans-serif;
+        font-family: "JetBrainsMono Nerd Font", "Inter", "Noto Sans JP", sans-serif;
         font-size: 13px;
         min-height: 0;
+        color: @text;
     }
 
     window#waybar {
-        background: linear-gradient(45deg, rgba(30, 30, 46, 0.9), rgba(49, 50, 68, 0.9));
-        border-radius: 15px;
-        border: 2px solid rgba(137, 180, 250, 0.3);
-        color: #cdd6f4;
-        transition-property: background-color;
-        transition-duration: .5s;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        background: linear-gradient(120deg, rgba(25, 26, 39, 0.88), rgba(17, 18, 28, 0.72));
+        border-radius: 22px;
+        border: 1px solid rgba(180, 190, 254, 0.25);
+        padding: 12px 18px;
+        margin: 0;
+        box-shadow: 0 18px 48px rgba(8, 9, 15, 0.6);
+        backdrop-filter: blur(22px);
     }
 
     window#waybar.hidden {
-        opacity: 0.2;
+        opacity: 0.12;
     }
 
-    button {
-        box-shadow: inset 0 -3px transparent;
-        border: none;
-        border-radius: 0;
+    .modules-left > widget,
+    .modules-center > widget,
+    .modules-right > widget {
+        margin: 0 8px;
     }
 
-    button:hover {
-        background: inherit;
-        box-shadow: inset 0 -3px #ffffff;
+    #custom-logo {
+        font-size: 16px;
+        padding: 0 10px;
+        color: @accent;
+    }
+
+    #custom-logo:hover {
+        color: @accent2;
+    }
+
+    #custom-launcher {
+        background: rgba(203, 166, 247, 0.18);
+        border-radius: 14px;
+        padding: 6px 12px;
+        font-size: 15px;
+        transition: all 0.25s ease;
+    }
+
+    #custom-launcher:hover {
+        background: rgba(203, 166, 247, 0.32);
+        box-shadow: 0 0 12px rgba(203, 166, 247, 0.35);
+    }
+
+    #workspaces {
+        background: rgba(30, 32, 48, 0.75);
+        border-radius: 16px;
+        padding: 4px 8px;
     }
 
     #workspaces button {
-        padding: 0 5px;
-        background-color: transparent;
+        background: transparent;
+        padding: 4px 10px;
+        margin: 0 2px;
+        border-radius: 12px;
+        transition: all 0.25s ease;
+        color: rgba(205, 214, 244, 0.45);
+    }
+
+    #workspaces button.focused {
+        background: rgba(203, 166, 247, 0.35);
+        color: @text;
+        box-shadow: 0 0 10px rgba(203, 166, 247, 0.35);
+    }
+
+    #workspaces button.urgent {
+        background: rgba(244, 184, 228, 0.4);
         color: #ffffff;
     }
 
     #workspaces button:hover {
-        background: rgba(0, 0, 0, 0.2);
+        color: @text;
+        background: rgba(148, 226, 213, 0.28);
     }
 
-    #workspaces button.focused {
-        background-color: #64727D;
-        box-shadow: inset 0 -3px #ffffff;
+    #hyprland-window {
+        padding: 0 18px;
+        border-radius: 16px;
+        background: rgba(30, 32, 48, 0.6);
+        color: @text;
+        font-weight: 500;
     }
 
-    #workspaces button.urgent {
-        background-color: #eb4d4b;
+    #custom-nowplaying {
+        max-width: 360px;
+        padding: 0 16px;
+        border-radius: 16px;
+        background: rgba(148, 226, 213, 0.14);
+        color: @text;
     }
 
-    #mode {
-        background-color: #64727D;
-        border-bottom: 3px solid #ffffff;
+    #custom-weather {
+        padding: 0 12px;
+        border-radius: 12px;
+        background: rgba(116, 199, 236, 0.18);
     }
 
-    #clock,
+    #pulseaudio,
+    #network,
+    #backlight,
     #battery,
     #cpu,
     #memory,
-    #disk,
     #temperature,
-    #backlight,
-    #network,
-    #pulseaudio,
-    #tray,
-    #mode,
     #idle_inhibitor,
-    #scratchpad,
-    #mpd {
+    #custom-notification,
+    #clock {
+        background: rgba(35, 37, 53, 0.68);
+        border-radius: 12px;
         padding: 0 10px;
-        color: #ffffff;
-    }
-
-    #window,
-    #workspaces {
-        margin: 0 4px;
-    }
-
-    .modules-left > widget:first-child > #workspaces {
-        margin-left: 0;
-    }
-
-    .modules-right > widget:last-child > #workspaces {
-        margin-right: 0;
     }
 
     #clock {
-        background-color: #64727D;
+        font-weight: 600;
+        color: @accent;
     }
 
-    #battery {
-        background-color: #ffffff;
-        color: #000000;
+    #pulseaudio.muted {
+        background: rgba(249, 226, 175, 0.28);
+        color: @accent3;
     }
 
-    #battery.charging, #battery.plugged {
-        color: #ffffff;
-        background-color: #26A65B;
+    #battery.warning {
+        color: #f9e2af;
     }
 
-    @keyframes blink {
-        to {
-            background-color: #ffffff;
-            color: #000000;
-        }
+    #battery.critical {
+        background: rgba(235, 160, 172, 0.28);
+        color: #f38ba8;
     }
 
-    #battery.critical:not(.charging) {
-        background-color: #f53c3c;
-        color: #ffffff;
-        animation-name: blink;
-        animation-duration: 0.5s;
-        animation-timing-function: linear;
-        animation-iteration-count: infinite;
-        animation-direction: alternate;
+    #battery.charging {
+        color: #94e2d5;
     }
 
-    label:focus {
-        background-color: #000000;
-    }
-
-    #cpu {
-        background-color: #2ecc71;
-        color: #000000;
-    }
-
+    #cpu,
     #memory {
-        background-color: #9b59b6;
+        color: @accent2;
     }
 
-    #disk {
-        background-color: #964B00;
+    #temperature {
+        color: @accent3;
     }
 
-    #backlight {
-        background-color: #90b1b1;
+    #custom-notification,
+    #idle_inhibitor {
+        color: @accent2;
+    }
+
+    #tray {
+        background: rgba(30, 32, 48, 0.65);
+        border-radius: 14px;
+        padding: 0 10px;
+    }
+
+    #custom-power {
+        color: #f38ba8;
+        padding: 0 16px;
+        border-radius: 16px;
+        background: rgba(244, 219, 226, 0.18);
+        transition: all 0.2s ease;
+    }
+
+    #custom-power:hover {
+        background: rgba(243, 139, 168, 0.32);
+        box-shadow: 0 0 10px rgba(243, 139, 168, 0.28);
+    }
+
+    tooltip {
+        background: rgba(24, 25, 38, 0.96);
+        border-radius: 12px;
+        border: 1px solid rgba(180, 190, 254, 0.3);
+        padding: 6px 10px;
+    }
+
+    tooltip label {
+        color: @text;
     }
 
     #network {

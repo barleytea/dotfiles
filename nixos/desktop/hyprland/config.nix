@@ -44,51 +44,58 @@
 
     # General settings
     general {
-        gaps_in = 5
-        gaps_out = 20
-        border_size = 2
-        col.active_border = rgba(33ccffee) rgba(00ff99ee) 45deg
-        col.inactive_border = rgba(595959aa)
-
+        gaps_in = 6
+        gaps_out = 18
+        border_size = 3
+        resize_on_border = true
+        allow_tearing = false
+        col.active_border = rgba(b4befecc) rgba(cba6f7ff) 45deg
+        col.inactive_border = rgba(1e1e2ecc)
         layout = dwindle
     }
 
     # Decoration
     decoration {
-        rounding = 10
-        
+        rounding = 18
+        active_opacity = 0.96
+        inactive_opacity = 0.88
+
         blur {
             enabled = true
-            size = 3
-            passes = 1
+            size = 16
+            passes = 3
+            new_optimizations = true
+            noise = 0.015
         }
 
         shadow {
             enabled = true
-            range = 4
+            range = 18
             render_power = 3
-            color = rgba(1a1a1aee)
+            color = rgba(0d0d1488)
         }
     }
 
     # Animations
     animations {
         enabled = yes
+        bezier = smooth, 0.16, 1.00, 0.30, 1.00
+        bezier = pop, 0.05, 0.80, 0.10, 1.05
 
-        bezier = myBezier, 0.05, 0.9, 0.1, 1.05
-
-        animation = windows, 1, 7, myBezier
-        animation = windowsOut, 1, 7, default, popin 80%
-        animation = border, 1, 10, default
-        animation = borderangle, 1, 8, default
-        animation = fade, 1, 7, default
-        animation = workspaces, 1, 6, default
+        animation = windows, 1, 6, smooth
+        animation = windowsOut, 1, 6, pop, popin 80%
+        animation = border, 1, 5, smooth
+        animation = borderangle, 1, 8, smooth
+        animation = fade, 1, 5, smooth
+        animation = workspaces, 1, 5, smooth
     }
 
     # Layout configuration
     dwindle {
         pseudotile = yes
         preserve_split = yes
+        smart_split = true
+        smart_resizing = true
     }
 
     master {
@@ -98,6 +105,13 @@
     # Gestures
     gestures {
         workspace_swipe = off
+    }
+
+    misc {
+        disable_hyprland_logo = true
+        disable_splash_rendering = true
+        focus_on_activate = true
+        mouse_move_enables_dpms = true
     }
 
     # Key bindings
