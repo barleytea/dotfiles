@@ -24,6 +24,40 @@
     ];
   };
 
+  # macOS-like Super (Command) shortcuts while keeping Control intact
+  services.keyd = {
+    enable = true;
+    keyboards.default = {
+      ids = [ "*" ];
+      settings.main = {
+        leftmeta = "layer(supercmd)";
+        rightmeta = "layer(supercmd)";
+      };
+      settings.supercmd = {
+        c = "C-c";
+        "S-c" = "C-c";
+        v = "C-v";
+        "S-v" = "C-v";
+        x = "C-x";
+        z = "C-z";
+        "S-z" = "C-S-z";
+        a = "C-a";
+        s = "C-s";
+        f = "C-f";
+        p = "C-p";
+        n = "C-n";
+        t = "C-t";
+        w = "C-w";
+        q = "C-q";
+        l = "C-l";
+        o = "C-o";
+        comma = "C-comma";
+        tab = "A-tab";
+        "S-tab" = "A-S-tab";
+      };
+    };
+  };
+
   # Display manager
   services.displayManager.gdm.enable = true;
 

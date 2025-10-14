@@ -104,13 +104,13 @@
     $mainMod = SUPER
 
     # Basic bindings
-    bind = $mainMod, Q, exec, alacritty
-    bind = $mainMod, C, killactive,
-    bind = $mainMod, M, exit,
-    bind = $mainMod, E, exec, thunar
-    bind = $mainMod, V, togglefloating,
+    bind = $mainMod, Return, exec, alacritty
+    bind = $mainMod SHIFT, Q, killactive,
+    bind = $mainMod SHIFT, M, exit,
+    bind = $mainMod SHIFT, E, exec, thunar
+    bind = $mainMod SHIFT, V, togglefloating,
     bind = $mainMod, Space, exec, wofi --show drun
-    bind = $mainMod, P, pseudo,
+    bind = $mainMod SHIFT, P, pseudo,
     bind = $mainMod, J, togglesplit,
 
     # Move focus with mainMod + arrow keys
@@ -175,7 +175,7 @@
     bind = , XF86MonBrightnessDown, exec, brightnessctl set 10%-
 
     # Lock screen
-    bind = $mainMod, L, exec, hyprlock
+    bind = $mainMod SHIFT, L, exec, hyprlock
 
     # Window rules
     windowrulev2 = float, class:^(pavucontrol)$

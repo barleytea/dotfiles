@@ -4,11 +4,11 @@
 
 | キー | 動作 |
 |------|------|
-| `Super + Q` | ターミナル（Alacritty）を開く |
-| `Super + C` | アクティブウィンドウを閉じる |
-| `Super + M` | Hyprlandを終了（ログアウト） |
-| `Super + E` | ファイルマネージャー（Thunar）を開く |
-| `Super + L` | スクリーンロック |
+| `Super + Return` | ターミナル（Alacritty）を開く |
+| `Super + Shift + Q` | アクティブウィンドウを閉じる |
+| `Super + Shift + M` | Hyprlandを終了（ログアウト） |
+| `Super + Shift + E` | ファイルマネージャー（Thunar）を開く |
+| `Super + Shift + L` | スクリーンロック |
 
 ## アプリケーションランチャー
 
@@ -20,8 +20,8 @@
 
 | キー | 動作 |
 |------|------|
-| `Super + V` | フローティングモード切替 |
-| `Super + P` | 疑似タイル |
+| `Super + Shift + V` | フローティングモード切替 |
+| `Super + Shift + P` | 疑似タイル |
 | `Super + J` | 分割方向切替 |
 
 ## フォーカス移動
