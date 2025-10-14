@@ -12,8 +12,7 @@
       tools = {
         node = "lts";
         go = "1.24.5";
-        python = "latest";
-        "pipx:pre-commit" = "latest";
+        python = "system";
         "npm:@redocly/cli" = "latest";
         "npm:corepack" = "latest";
         "npm:@google/gemini-cli" = "latest";

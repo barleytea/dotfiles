@@ -37,6 +37,13 @@ with pkgs; [
   stack
   terraform
 
+  # Python versions (複数バージョン管理)
+  python312
+  python313
+  
+  # Python tools
+  python313Packages.pipx
+
   # Network tools
   arp-scan
   grpcurl
