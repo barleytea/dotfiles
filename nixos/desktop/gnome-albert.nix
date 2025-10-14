@@ -8,7 +8,7 @@
     settings = {
       # Custom keyboard shortcuts for Albert
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
-        binding = "<Super>space";
+        binding = "<Alt>space";
         command = "albert toggle";
         name = "Albert Launcher";
       };

@@ -145,7 +145,7 @@
   # Albert launcher configuration (shared between GNOME and Hyprland)
   environment.etc."xdg/albert/albert.conf".text = ''
     [General]
-    hotkey=Meta+Space
+    hotkey=Alt+Space
     showTray=false
     telemetry=false
     

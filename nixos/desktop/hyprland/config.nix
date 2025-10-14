@@ -109,7 +109,7 @@
     bind = $mainMod SHIFT, M, exit,
     bind = $mainMod SHIFT, E, exec, thunar
     bind = $mainMod SHIFT, V, togglefloating,
-    bind = $mainMod, Space, exec, wofi --show drun
+    bind = ALT, Space, exec, wofi --show drun
     bind = $mainMod SHIFT, P, pseudo,
     bind = $mainMod, J, togglesplit,
 
