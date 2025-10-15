@@ -43,7 +43,7 @@
         bindings = [
           { key = "V"; mods = "Control"; action = "Paste"; }
           { key = "V"; mods = "Control|Shift"; action = "Paste"; }
-          { key = "C"; mods = "Control"; action = "Copy"; }
+          { key = "C"; mods = "Control|Shift"; action = "Copy"; }
         ];
       };
     };

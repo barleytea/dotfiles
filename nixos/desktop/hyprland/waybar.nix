@@ -66,7 +66,7 @@
 
         "group/system": {
             "orientation": "horizontal",
-            "modules": ["pulseaudio", "cpu", "memory", "temperature"]
+            "modules": ["pulseaudio", "cpu", "temperature", "memory"]
         },
 
         "group/status": {
@@ -127,7 +127,7 @@
 
         "temperature": {
             "critical-threshold": 80,
-            "format": "󰔄 {temperatureC}",
+            "format": "󰍛 {temperatureC}󰔄",
             "format-icons": ["󰔄"]
         },
 
@@ -261,6 +261,7 @@
         letter-spacing: 0.03em;
     }
 
+    #workspaces button.active,
     #workspaces button.focused {
         background: linear-gradient(130deg, rgba(137, 220, 235, 0.75), rgba(203, 166, 247, 0.78));
         color: #0b0d1a;
