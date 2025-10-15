@@ -8,9 +8,7 @@
     monitor=,preferred,auto,auto
 
     # Startup applications
-    exec-once = waybar
     exec-once = dunst
-    exec-once = hyprpaper
     exec-once = fcitx5
     exec-once = gammastep -l 35.6762:139.6503 -t 6500:3500
     exec-once = wl-paste --type text --watch cliphist store

@@ -25,6 +25,7 @@ in {
     ./k9s
     ./mise
     ./nixvim
+    ./hyprland
     ./shell
     ./sheldon
     ./skhd
