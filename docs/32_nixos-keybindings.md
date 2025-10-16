@@ -6,7 +6,7 @@ macOS 風に `Super`（⌘）キーを扱うための仕組みと、関連モジ
 
 - File: `nixos/desktop/common.nix:27`
 - `services.keyd` を有効化し、左右の `Super` キーを専用レイヤーにして `Super+…` 操作を `Ctrl+…` に送出しています。
-- ワークスペース切替（`Super+1-0` や `Super+Shift+1-0`）、ウィンドウ操作（`Super+Shift+V/E/M/Q/L`、`Alt+Space`、`Super+Return` など）は同レイヤーで `Super` にフォワードしているため、Hyprland で従来どおり機能します。
+- ワークスペース切替（`Super+1-0` や `Super+Shift+1-0`）、ウィンドウ操作（`⌘+Shift+V` → `Alt+Shift+V` でクリップボード履歴、`Super+Shift+E/M/Q/L`、`Alt+Space`、`Super+Return` など）は同レイヤーで `Super` にフォワードしているため、Hyprland で従来どおり機能します。
 - これにより `Command+C / V / X / Z / A / S / F / P / N / T / W / Q / L / O`、`Command+Shift+Z`、`Command+,`、`Command+Tab / Command+Shift+Tab` がそのまま Linux アプリでも動作します。
 - Control キー自体の挙動は変えていないため、`Ctrl+…` 系ショートカットは従来どおり利用できます。
 

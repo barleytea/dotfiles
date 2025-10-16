@@ -115,6 +115,7 @@
     bind = $mainMod SHIFT, Q, killactive,
     bind = $mainMod SHIFT, M, exit,
     bind = $mainMod SHIFT, E, exec, thunar
+    bind = ALT SHIFT, V, exec, cliphist-menu
     bind = $mainMod SHIFT, V, togglefloating,
     bind = ALT, Space, exec, wofi --show drun
     bind = $mainMod SHIFT, P, pseudo,

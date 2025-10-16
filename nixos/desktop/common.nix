@@ -55,7 +55,6 @@
         j = "M-j";
         k = "M-k";
         l = "M-l";
-        "S-v" = "M-S-v";
         "S-e" = "M-S-e";
         "S-m" = "M-S-m";
         o = "C-o";
@@ -88,6 +87,9 @@
         "S-9" = "M-S-9";
         "0" = "M-0";
         "S-0" = "M-S-0";
+      };
+      settings."supercmd+shift" = {
+        v = "A-S-v";
       };
     };
   };

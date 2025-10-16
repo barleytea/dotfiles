@@ -20,7 +20,8 @@
 
 | キー | 動作 |
 |------|------|
-| `Super + Shift + V` | フローティングモード切替 |
+| `⌘ (Super) + Shift + V` | クリップボード履歴から貼り付け（Hyprland バインドは `Alt + Shift + V`） |
+| `Win（物理Super） + Shift + V` | フローティングモード切替 |
 | `Super + Shift + P` | 疑似タイル |
 | `Super + J` | 分割方向切替 |
 

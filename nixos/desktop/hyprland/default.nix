@@ -42,6 +42,46 @@ let
       notify-send "Screenshot saved" "$file (copied to clipboard)"
     '';
   };
+
+  cliphistLauncher = pkgs.writeShellApplication {
+    name = "cliphist-menu";
+    runtimeInputs = with pkgs; [
+      cliphist
+      coreutils
+      wl-clipboard
+      wofi
+      wtype
+    ];
+    text = ''
+      set -euo pipefail
+
+      selection="$(
+        cliphist list --max-items 50 \
+          | wofi --dmenu \
+              --prompt "Clipboard" \
+              --hide-scroll \
+              --no-actions \
+              --cache-file /dev/null \
+          || true
+      )"
+
+      if [ -z "''${selection:-}" ]; then
+        exit 0
+      fi
+
+      content="$(cliphist decode "$selection")"
+      if [ -z "''${content:-}" ]; then
+        exit 0
+      fi
+
+      printf '%s' "$content" | wl-copy
+      printf '%s' "$content" | wl-copy --primary
+
+      # Give focus back to the previous window before pasting
+      sleep 0.1
+      wtype -M ctrl v -m ctrl
+    '';
+  };
 in
 {
   imports = [
@@ -115,6 +155,7 @@ in
       xwayland         # X11 compatibility layer
     ]) ++ [
       hyprshot
+      cliphistLauncher
     ];
 
   # XDG portal configuration for Hyprland
