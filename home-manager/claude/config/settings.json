@@ -12,5 +12,6 @@
       "Bash(mv:*)"
     ],
     "deny": []
-  }
+  },
+  "alwaysThinkingEnabled": true
 }

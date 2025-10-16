@@ -145,6 +145,26 @@ if [ -d "$CURSOR_AGENT_DIR" ]; then
   done
 fi
 
+# Ensure IME variables are present for Japanese input
+export XMODIFIERS="''${XMODIFIERS:-@im=fcitx}"
+export GTK_IM_MODULE="''${GTK_IM_MODULE:-fcitx}"
+export QT_IM_MODULE="''${QT_IM_MODULE:-fcitx}"
+export SDL_IM_MODULE="''${SDL_IM_MODULE:-fcitx}"
+export WAYLAND_IM_MODULE="''${WAYLAND_IM_MODULE:-fcitx}"
+
+# Prefer Wayland rendering when available and enable IME on Electron
+if [ -n "''${WAYLAND_DISPLAY:-}" ]; then
+  export ELECTRON_OZONE_PLATFORM_HINT="''${ELECTRON_OZONE_PLATFORM_HINT:-wayland}"
+  set -- --ozone-platform=wayland \
+         --enable-features=UseOzonePlatform,WaylandWindowDecorations \
+         --enable-wayland-ime \
+         --wayland-text-input-version=3 \
+         "$@"
+fi
+
+# Disable in-app updates (handled by Nix build)
+set -- --update=false "$@"
+
 # Run the actual cursor binary
 exec CURSOR_BIN "$@"
 EOF
@@ -173,8 +193,12 @@ EOF
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libdbusmenu ]}
       --prefix PATH : ${glib}/bin
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}"
       --add-flags '--update=false'
+      --set GTK_IM_MODULE fcitx
+      --set QT_IM_MODULE fcitx
+      --set XMODIFIERS '@im=fcitx'
+      --set SDL_IM_MODULE fcitx
+      --set WAYLAND_IM_MODULE fcitx
     )
   '';
 

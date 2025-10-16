@@ -1,6 +1,48 @@
 # Hyprland configuration
 { config, pkgs, ... }:
 
+let
+  hyprshot = pkgs.writeShellApplication {
+    name = "hyprshot";
+    runtimeInputs = with pkgs; [
+      coreutils
+      grim
+      libnotify
+      slurp
+      wl-clipboard
+    ];
+    text = ''
+      set -euo pipefail
+
+      dir="''${XDG_PICTURES_DIR:-$HOME/Pictures}/Screenshots"
+      mkdir -p "$dir"
+
+      timestamp="$(date +"%Y-%m-%d_%H-%M-%S")"
+      file="$dir/screenshot-$timestamp.png"
+
+      mode="''${1:-}"
+      case "$mode" in
+        area)
+          geometry="$(slurp || true)"
+          if [ -z "''${geometry:-}" ]; then
+            exit 0
+          fi
+          grim -g "$geometry" "$file"
+          ;;
+        full)
+          grim "$file"
+          ;;
+        *)
+          echo "Usage: hyprshot {area|full}" >&2
+          exit 1
+          ;;
+      esac
+
+      wl-copy < "$file"
+      notify-send "Screenshot saved" "$file (copied to clipboard)"
+    '';
+  };
+in
 {
   imports = [
     ./config.nix
@@ -21,56 +63,59 @@
   services.displayManager.sessionPackages = [ pkgs.hyprland ];
 
   # Essential Wayland packages
-  environment.systemPackages = with pkgs; [
-    # Core Hyprland components
-    hyprland
-    hyprpaper        # Wallpaper
-    hyprlock         # Screen lock
-    hypridle         # Idle management
-    
-    # Wayland utilities
-    waybar           # Status bar
-    wofi             # Application launcher
-    wlogout          # Logout menu
-    wl-clipboard     # Clipboard manager
-    wl-clipboard-x11 # X11 compatibility for clipboard
-    cliphist         # Clipboard history manager
-    xsel             # X11 clipboard utility (for Xwayland compatibility)
-    xclip            # Additional X11 clipboard tool
-    grim             # Screenshot tool
-    slurp            # Region selection
-    
-    # Additional utilities for enhanced waybar
-    blueman          # Bluetooth manager
-    curl             # For weather module
-    mpd              # Music Player Daemon (optional)
-    
-    # Notification system
-    dunst            # Notification daemon
-    libnotify        # Notification library
-    
-    # File manager
-    xfce.thunar      # Lightweight file manager
-    xfce.thunar-volman  # Volume management for Thunar
-    gvfs             # Virtual file system
-    
-    # Terminal (use existing alacritty configuration)
-    alacritty
-    
-    # Additional utilities
-    gammastep        # Blue light filter
-    playerctl        # Media control
-    brightnessctl    # Brightness control
-    # pamixer          # Volume control (temporarily disabled due to build issues)
-    pulsemixer       # Volume control (alternative to pamixer)
-    
-    # Mouse cursor theme
-    adwaita-icon-theme  # Adwaita cursor theme
-    
-    # Wayland-specific tools
-    wlr-randr        # Display management
-    xwayland         # X11 compatibility layer
-  ];
+  environment.systemPackages =
+    (with pkgs; [
+      # Core Hyprland components
+      hyprland
+      hyprpaper        # Wallpaper
+      hyprlock         # Screen lock
+      hypridle         # Idle management
+      
+      # Wayland utilities
+      waybar           # Status bar
+      wofi             # Application launcher
+      wlogout          # Logout menu
+      wl-clipboard     # Clipboard manager
+      wl-clipboard-x11 # X11 compatibility for clipboard
+      cliphist         # Clipboard history manager
+      xsel             # X11 clipboard utility (for Xwayland compatibility)
+      xclip            # Additional X11 clipboard tool
+      grim             # Screenshot tool
+      slurp            # Region selection
+      
+      # Additional utilities for enhanced waybar
+      blueman          # Bluetooth manager
+      curl             # For weather module
+      mpd              # Music Player Daemon (optional)
+      
+      # Notification system
+      dunst            # Notification daemon
+      libnotify        # Notification library
+      
+      # File manager
+      xfce.thunar      # Lightweight file manager
+      xfce.thunar-volman  # Volume management for Thunar
+      gvfs             # Virtual file system
+      
+      # Terminal (use existing alacritty configuration)
+      alacritty
+      
+      # Additional utilities
+      gammastep        # Blue light filter
+      playerctl        # Media control
+      brightnessctl    # Brightness control
+      # pamixer          # Volume control (temporarily disabled due to build issues)
+      pulsemixer       # Volume control (alternative to pamixer)
+      
+      # Mouse cursor theme
+      adwaita-icon-theme  # Adwaita cursor theme
+      
+      # Wayland-specific tools
+      wlr-randr        # Display management
+      xwayland         # X11 compatibility layer
+    ]) ++ [
+      hyprshot
+    ];
 
   # XDG portal configuration for Hyprland
   xdg.portal = {

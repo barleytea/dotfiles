@@ -100,11 +100,6 @@
         new_status = master
     }
 
-    # Gestures
-    gestures {
-        workspace_swipe = off
-    }
-
     misc {
         disable_hyprland_logo = true
         disable_splash_rendering = true
@@ -169,9 +164,13 @@
     bindm = $mainMod, mouse:272, movewindow
     bindm = $mainMod, mouse:273, resizewindow
 
-    # Screenshot bindings
-    bind = , Print, exec, grim -g "$(slurp)" - | wl-copy
-    bind = SHIFT, Print, exec, grim - | wl-copy
+    # Screenshot bindings (PrintScreen present)
+    bind = , Print, exec, hyprshot area
+    bind = SHIFT, Print, exec, hyprshot full
+
+    # Screenshot bindings (alternatives when PrintScreen is unavailable)
+    bind = ALT SHIFT, S, exec, hyprshot area
+    bind = ALT SHIFT, D, exec, hyprshot full
 
     # Media keys (using pactl instead of pamixer due to build issues)
     bind = , XF86AudioRaiseVolume, exec, pactl set-sink-volume @DEFAULT_SINK@ +5%

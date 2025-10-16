@@ -159,6 +159,14 @@ If Cursor attempts to update cursor-agent but fails:
    ```
 2. Restart Cursor - it will re-download and the patcher will handle the new version
 
+### Issue: IME/Fcitx input does not work
+
+1. Make sure fcitx5 is running (`fcitx5` is launched in Hyprland via `exec-once`).
+2. Rebuild the system so the Cursor wrapper exports IME variables: `sudo nixos-rebuild switch --flake .#desktop`.
+3. Confirm the input method modules are installed: the configuration now pulls in `fcitx5-gtk`, `libsForQt5.fcitx5-qt`, and `fcitx5-mozc`.
+4. After rebuilding, restart Cursor; it launches with `GTK_IM_MODULE`, `QT_IM_MODULE`, and `XMODIFIERS` set to `fcitx`, plus the Wayland IME flags.
+5. If the issue persists, try switching IME with `Ctrl+Space` and check `fcitx5-configtool` to ensure Mozc is enabled.
+
 ## Architecture Details
 
 ### Package Structure

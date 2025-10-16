@@ -12,6 +12,11 @@
 - [Atuin shell history](docs/52_atuin.md)
 - [Services](docs/60_services.md)
 
+## Screenshot Shortcuts
+
+- GNOME: `Super+Shift+S` opens the built-in screenshot UI; use `Enter` for full screen or drag to capture a region.
+- Hyprland: `Alt+Shift+S` captures a region and `Alt+Shift+D` captures the full screen via `hyprshot`, saving under `~/Pictures/Screenshots` and copying to the clipboard. PrintScreen bindings remain available if the key exists.
+
 ### Document Numbering Guideline
 
 Documents are numbered in increments of 10 according to the following categories:

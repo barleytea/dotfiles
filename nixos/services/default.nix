@@ -3,9 +3,10 @@
 
 {
   imports = [
-    ./tailscale
     ./fileserver
     ./gitserver
+    ./ollama
+    ./tailscale
   ];
 
   # System services
