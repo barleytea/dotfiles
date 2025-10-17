@@ -5,6 +5,8 @@
   # X11 and display manager (both GNOME and Hyprland need this)
   services.xserver = {
     enable = true;
+    autoRepeatDelay = 200;
+    autoRepeatInterval = 5;
 
     # Keyboard layout
     xkb = {
@@ -33,6 +35,12 @@
       settings.main = {
         leftmeta = "layer(supercmd)";
         rightmeta = "layer(supercmd)";
+      };
+      settings.control = {
+        a = "home";
+        e = "end";
+        "S-a" = "S-home";
+        "S-e" = "S-end";
       };
       settings.supercmd = {
         c = "C-c";
