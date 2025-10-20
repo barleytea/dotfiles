@@ -8,6 +8,8 @@
     monitor=,preferred,auto,auto
 
     # Startup applications
+    exec-once = waybar
+    exec-once = hyprpaper
     exec-once = dunst
     exec-once = fcitx5
     exec-once = gammastep -l 35.6762:139.6503 -t 6500:3500
@@ -110,11 +112,12 @@
     # Key bindings
     $mainMod = SUPER
 
-    # Basic bindings
-    bind = $mainMod, Return, exec, alacritty
-    bind = $mainMod SHIFT, Q, killactive,
-    bind = $mainMod SHIFT, M, exit,
-    bind = $mainMod SHIFT, E, exec, thunar
+  # Basic bindings
+  bind = $mainMod, Return, exec, alacritty
+  bind = $mainMod SHIFT, Q, killactive,
+  bind = ALT SHIFT, Q, killactive,
+  bind = $mainMod SHIFT, M, exit,
+  bind = $mainMod SHIFT, E, exec, thunar
     bind = ALT SHIFT, V, exec, cliphist-menu
     bind = $mainMod SHIFT, V, togglefloating,
     bind = ALT, Space, exec, wofi --show drun

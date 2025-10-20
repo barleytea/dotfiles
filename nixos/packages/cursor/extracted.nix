@@ -155,10 +155,12 @@ export WAYLAND_IM_MODULE="''${WAYLAND_IM_MODULE:-fcitx}"
 # Prefer Wayland rendering when available and enable IME on Electron
 if [ -n "''${WAYLAND_DISPLAY:-}" ]; then
   export ELECTRON_OZONE_PLATFORM_HINT="''${ELECTRON_OZONE_PLATFORM_HINT:-wayland}"
+  # text-input-v3 breaks fcitx5 IME when Cursor opens additional windows, so default to v1.
+  wayland_text_input_version="''${CURSOR_WAYLAND_TEXT_INPUT_VERSION:-1}"
   set -- --ozone-platform=wayland \
          --enable-features=UseOzonePlatform,WaylandWindowDecorations \
          --enable-wayland-ime \
-         --wayland-text-input-version=3 \
+         --wayland-text-input-version="''${wayland_text_input_version}" \
          "$@"
 fi
 

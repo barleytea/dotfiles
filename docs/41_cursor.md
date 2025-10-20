@@ -108,6 +108,13 @@ nix --extra-experimental-features 'nix-command flakes' run nixpkgs#patchelf -- \
 
 ## Troubleshooting
 
+### Issue: Unable to type Japanese (IME not working)
+
+1. Ensure `fcitx5` is running. On Hyprland it starts automatically via `exec-once`, but you can also launch it manually with `fcitx5 &`.
+2. Rebuild your home-manager configuration (`make home-manager-apply`) so that `~/.config/fcitx5/profile` is populated with the Mozc input method and `ShareInputState` is set to `All` (managed by `home-manager/fcitx5`), letting every Cursor window reuse the same IME state.
+3. In Cursor, toggle the input method with `Ctrl+Space`. You should now see the Mozc candidate window. If Mozc still does not appear, run `fcitx5-configtool` and confirm that **Mozc** is enabled under *Input Method*.
+4. Cursor now defaults to Wayland text-input v1 because fcitx5 loses IME focus on additional windows with v3. If you need to experiment with another protocol, launch Cursor with `CURSOR_WAYLAND_TEXT_INPUT_VERSION=3 cursor`.
+
 ### Issue: `Could not start dynamically linked executable`
 
 **Error message:**

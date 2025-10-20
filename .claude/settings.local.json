@@ -53,7 +53,8 @@
       "Bash(nix --extra-experimental-features 'nix-command' derivation show /nix/store/7gz94sw57gsc0g77dajxjdaij4p2ix7v-cursor-1.5.11)",
       "Read(//home/miyoshi_s/.local/share/cursor-agent/versions/**)",
       "Read(//home/miyoshi_s/.local/share/cursor-agent/versions/2025.10.02-bd871ac/**)",
-      "Bash(nix --extra-experimental-features 'nix-command flakes' eval --raw 'nixpkgs#stdenv.cc.bintools.dynamicLinker')"
+      "Bash(nix --extra-experimental-features 'nix-command flakes' eval --raw 'nixpkgs#stdenv.cc.bintools.dynamicLinker')",
+      "Bash(pgrep -a hyprpaper)"
     ],
     "deny": []
   }

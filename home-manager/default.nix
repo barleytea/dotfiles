@@ -21,6 +21,7 @@ in {
     ./cz-git
     ./editorconfig
     ./gemini
+    ./fcitx5
     ./git
     ./k9s
     ./lazygit
