@@ -23,6 +23,7 @@ in {
     ./gemini
     ./git
     ./k9s
+    ./lazygit
     ./mise
     ./nixvim
     ./hyprland
