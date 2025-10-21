@@ -108,13 +108,6 @@ nix --extra-experimental-features 'nix-command flakes' run nixpkgs#patchelf -- \
 
 ## Troubleshooting
 
-### Issue: Unable to type Japanese (IME not working)
-
-1. Ensure `fcitx5` is running. On Hyprland it starts automatically via `exec-once`, but you can also launch it manually with `fcitx5 &`.
-2. Rebuild your home-manager configuration (`make home-manager-apply`) so that `~/.config/fcitx5/profile` is populated with the Mozc input method and `ShareInputState` is set to `All` (managed by `home-manager/fcitx5`), letting every Cursor window reuse the same IME state.
-3. In Cursor, toggle the input method with `Ctrl+Space`. You should now see the Mozc candidate window. If Mozc still does not appear, run `fcitx5-configtool` and confirm that **Mozc** is enabled under *Input Method*.
-4. Cursor now defaults to Wayland text-input v1 because fcitx5 loses IME focus on additional windows with v3. If you need to experiment with another protocol, launch Cursor with `CURSOR_WAYLAND_TEXT_INPUT_VERSION=3 cursor`.
-
 ### Issue: `Could not start dynamically linked executable`
 
 **Error message:**
@@ -165,14 +158,6 @@ If Cursor attempts to update cursor-agent but fails:
    rm -rf ~/.local/share/cursor-agent
    ```
 2. Restart Cursor - it will re-download and the patcher will handle the new version
-
-### Issue: IME/Fcitx input does not work
-
-1. Make sure fcitx5 is running (`fcitx5` is launched in Hyprland via `exec-once`).
-2. Rebuild the system so the Cursor wrapper exports IME variables: `sudo nixos-rebuild switch --flake .#desktop`.
-3. Confirm the input method modules are installed: the configuration now pulls in `fcitx5-gtk`, `libsForQt5.fcitx5-qt`, and `fcitx5-mozc`.
-4. After rebuilding, restart Cursor; it launches with `GTK_IM_MODULE`, `QT_IM_MODULE`, and `XMODIFIERS` set to `fcitx`, plus the Wayland IME flags.
-5. If the issue persists, try switching IME with `Ctrl+Space` and check `fcitx5-configtool` to ensure Mozc is enabled.
 
 ## Architecture Details
 
