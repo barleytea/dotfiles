@@ -46,6 +46,7 @@
       "devutils"
       "dbeaver-community"
       "fig"
+      "finicky"
       "font-hack-nerd-font"
       "gfxcardstatus"
       "ghostty"

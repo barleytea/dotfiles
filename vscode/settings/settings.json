@@ -180,7 +180,15 @@
     "/^wc .*$/": true,
     "/^find .*$/": true,
     "/^grep .*$/": true,
-    "/^cargo .*$": true
+    "/^cargo .*$": true,
+    "docker images": true,
+    ".Repository}}\\t": true,
+    ".Tag}}\\t": true,
+    ".Size}}\\t": true,
+    ".ID}}\"": true,
+    "docker inspect": true,
+    ".Size}}'": true,
+    "npm install": true
   },
   "chat.agent.enabled": true,
   "chat.agent.maxRequests": 200,

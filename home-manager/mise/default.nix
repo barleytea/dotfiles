@@ -13,6 +13,8 @@
         node = "lts";
         go = "1.24.5";
         python = "system";
+        awscli = "latest";
+        "npm:aws-cdk" = "latest";
         "npm:@redocly/cli" = "latest";
         "npm:corepack" = "latest";
         "npm:@google/gemini-cli" = "latest";
