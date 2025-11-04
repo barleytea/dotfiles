@@ -101,9 +101,15 @@
     #media-session.enable = true;
   };
 
-  # Graphics support for Wine
-  hardware.graphics.enable = true;
-  hardware.graphics.enable32Bit = true;
+  # Graphics support (required for Wine and Vulkan workloads)
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+    extraPackages = with pkgs; [
+      vulkan-loader
+      vulkan-validation-layers
+    ];
+  };
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
@@ -141,6 +147,7 @@
     openssl
     jq
     file
+    vulkan-tools
     # Wine
     wineWowPackages.staging
     winetricks
