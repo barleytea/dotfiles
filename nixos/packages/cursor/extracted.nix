@@ -7,7 +7,7 @@
 , makeWrapper
 , copyDesktopItems
 , makeDesktopItem
-, wrapGAppsHook
+, wrapGAppsHook3
 , bash
 , ripgrep
 , glib
@@ -51,11 +51,11 @@
 
 let
   pname = "cursor";
-  version = "1.7.43";
+  version = "2.0.34";
 
   src = fetchurl {
-    url = "https://downloads.cursor.com/production/df279210b53cf4686036054b15400aa2fe06d6dd/linux/x64/Cursor-${version}-x86_64.AppImage";
-    hash = "sha256-StY0yYqIuDCf6hbXJHERnRXqwVBnzKX2pxfretaUHo8=";
+    url = "https://downloads.cursor.com/production/45fd70f3fe72037444ba35c9e51ce86a1977ac11/linux/x64/Cursor-${version}-x86_64.AppImage";
+    hash = "sha256-x51N2BttMkfKwH4/Uxn/ZNFVPZbaNdsZm8BFFIMmxBM=";
   };
 
   appimageContents = appimageTools.extract {
@@ -73,7 +73,7 @@ in stdenv.mkDerivation {
     asar
     makeWrapper
     copyDesktopItems
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

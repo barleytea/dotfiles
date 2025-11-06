@@ -3,7 +3,7 @@
 
 {
   imports = [
-    ./gnome-albert.nix  # Albert configuration for GNOME
+    # ./gnome-albert.nix  # Albert integration temporarily disabled
   ];
 
   # Enable GNOME Desktop Environment

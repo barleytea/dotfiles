@@ -23,7 +23,7 @@
       pkgs.fcitx5-mozc
       pkgs.fcitx5-gtk
       pkgs.libsForQt5.fcitx5-qt
-      pkgs.fcitx5-configtool
+      pkgs.qt6Packages.fcitx5-configtool
     ];
   };
 
@@ -112,7 +112,7 @@
       noto-fonts
       noto-fonts-cjk-sans
       noto-fonts-cjk-serif
-      noto-fonts-emoji
+      noto-fonts-color-emoji
       liberation_ttf
 
       # Programming fonts
@@ -143,60 +143,10 @@
     firefox
     chromium
 
-    # Application launchers
-    albert
-
     # Development tools
     python3
     gnumake
     gcc
     cmake
   ];
-
-  # Albert launcher configuration (shared between GNOME and Hyprland)
-  environment.etc."xdg/albert/albert.conf".text = ''
-    [General]
-    hotkey=Alt+Space
-    showTray=false
-    telemetry=false
-    
-    [org.albert.extension.applications]
-    enabled=true
-    use_generic_name=false
-    use_keywords=true
-    use_non_localized_name=false
-    fuzzy=true
-    
-    [org.albert.extension.calculator]
-    enabled=true
-    
-    [org.albert.extension.files]
-    enabled=true
-    paths=/home
-    fuzzy=true
-    
-    [org.albert.extension.system]
-    enabled=true
-    
-    [org.albert.extension.websearch]
-    enabled=true
-    
-    [org.albert.extension.terminal]
-    enabled=true
-    
-    [org.albert.frontend.qmlboxmodel]
-    alwaysOnTop=true
-    clearOnHide=false
-    hideOnFocusLoss=true
-    showCentered=true
-    styleSheet=
-    windowPosition=@Point(640 360)
-    
-    [org.albert.frontend.widgetboxmodel]
-    alwaysOnTop=true
-    clearOnHide=false
-    hideOnFocusLoss=true
-    showCentered=true
-    theme=Arc Dark
-  '';
 }
