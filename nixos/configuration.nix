@@ -140,6 +140,7 @@
     curl
     wget
     unzip
+    unar
     gnumake
     gcc
     cmake
@@ -151,6 +152,8 @@
     # Wine
     wineWowPackages.staging
     winetricks
+    dxvk
+    vkd3d
     # NW.js
     nwjs
     # Cursor (extracted from AppImage)

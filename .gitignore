@@ -29,6 +29,10 @@ secret
 
 .cache/
 
+# Docker
+docker/*/workspace/
+!docker/*/workspace/.gitkeep
+
 # 除外解除（常に追跡するファイル）
 !copilot-instructions.md
 !.cursor/rules/

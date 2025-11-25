@@ -22,6 +22,7 @@
         "npm:vibe-kanban" = "latest";
         "npm:@openai/codex" = "latest";
         "npm:@github/copilot" = "latest";
+        "npm:@vibe-kit/grok-cli" = "latest";
       };
 
       settings = {

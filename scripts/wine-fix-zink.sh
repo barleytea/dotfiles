@@ -2,23 +2,20 @@
 # Wine ZINK error fix script
 # MESA: error: ZINK: vkCreateBufferView failed (VK_ERROR_OUT_OF_HOST_MEMORY) 対策
 
-echo "Setting up Wine environment to fix ZINK memory errors..."
+echo "Setting up Wine environment with Vulkan enabled..."
 
-# Mesa/Zink問題の回避設定
-export MESA_LOADER_DRIVER_OVERRIDE=llvmpipe  # Zinkを無効化してLLVMpipeを使用
-export WINED3D_RENDERER=opengl              # OpenGLバックエンドを強制
-export WINED3D_MEMORY_LIMIT=1024             # VRAM使用量を1GB制限
+# Vulkan設定（デフォルト有効）
+# WINED3D_RENDERER を明示的に設定しない場合、Vulkanが優先的に使用される
+# export WINED3D_RENDERER=vulkan            # Vulkanバックエンドを使用（オプション）
 
-# 追加の安全設定
-export VK_INSTANCE_LAYERS=""                 # Vulkan層を無効化
-export VK_DEVICE_LAYERS=""
+# Zink設定（オプション - 必要に応じて有効化）
+# export MESA_LOADER_DRIVER_OVERRIDE=zink  # Zinkを使用する場合はこれを有効化
 
-echo "Environment variables set:"
-echo "  MESA_LOADER_DRIVER_OVERRIDE=$MESA_LOADER_DRIVER_OVERRIDE"
-echo "  WINED3D_RENDERER=$WINED3D_RENDERER"
-echo "  WINED3D_MEMORY_LIMIT=$WINED3D_MEMORY_LIMIT"
-echo "  VK_INSTANCE_LAYERS=$VK_INSTANCE_LAYERS"
-echo "  VK_DEVICE_LAYERS=$VK_DEVICE_LAYERS"
+# Vulkan層を有効化
+# export VK_INSTANCE_LAYERS=""
+# export VK_DEVICE_LAYERS=""
+
+echo "Vulkan enabled - using default Wine/DXVK rendering"
 echo ""
 
 # 引数が指定されている場合はそのコマンドを実行

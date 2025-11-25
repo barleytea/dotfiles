@@ -14,7 +14,19 @@
   # Hardware support
   hardware = {
     enableAllFirmware = true;
+    # NVIDIA プロプライエタリドライバー
+    nvidia = {
+      modesetting.enable = true;
+      powerManagement.enable = false;
+      powerManagement.finegrained = false;
+      open = false; # オープンソースドライバーではなくプロプライエタリを使用
+      nvidiaSettings = true;
+      package = config.boot.kernelPackages.nvidiaPackages.stable;
+    };
   };
+
+  # X11とWaylandでNVIDIAドライバーを使用
+  services.xserver.videoDrivers = [ "nvidia" ];
 
   # Audio - disable PulseAudio in favor of PipeWire
   services.pulseaudio.enable = false;
