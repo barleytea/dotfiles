@@ -54,7 +54,13 @@
       "Read(//home/miyoshi_s/.local/share/cursor-agent/versions/**)",
       "Read(//home/miyoshi_s/.local/share/cursor-agent/versions/2025.10.02-bd871ac/**)",
       "Bash(nix --extra-experimental-features 'nix-command flakes' eval --raw 'nixpkgs#stdenv.cc.bintools.dynamicLinker')",
-      "Bash(pgrep -a hyprpaper)"
+      "Bash(pgrep -a hyprpaper)",
+      "Bash(docker compose:*)",
+      "Bash(docker exec kali-pentesting sh -c 'cat /root/.config/zsh/.zshrc')",
+      "Bash(docker logs:*)",
+      "Bash(docker exec kali-pentesting sh -c 'ls -la /root/.config/')",
+      "Bash(test:*)",
+      "Bash(docker exec:*)"
     ],
     "deny": []
   }

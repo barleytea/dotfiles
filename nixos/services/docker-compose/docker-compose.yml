@@ -1,0 +1,117 @@
+services:
+  kali:
+    image: kali-linux:latest
+    container_name: kali-pentesting
+
+    # Run as root user (uid=0, gid=0)
+    # Note: Nix Docker image runs as root by default
+    user: "0:0"
+
+    # Volume mounts for environment sharing
+    volumes:
+      # Zsh shell configuration (read-write to allow entrypoint to fix symlinks)
+      - $HOME/.config/zsh:/root/.config/zsh
+      - $HOME/.zshenv:/root/.zshenv:ro
+
+      # Starship prompt configuration (read-only)
+      - $HOME/.config/starship.toml:/root/.config/starship.toml:ro
+
+      # Sheldon plugin manager (read-only config, writable cache)
+      - $HOME/.config/sheldon:/root/.config/sheldon:ro
+      - $HOME/.cache/sheldon:/root/.cache/sheldon
+
+      # Atuin shell history (read-write for persistence)
+      - $HOME/.local/share/atuin:/root/.local/share/atuin
+
+      # Mise tool management
+      - $HOME/.config/mise:/root/.config/mise:ro
+      - $HOME/.local/share/mise:/root/.local/share/mise
+      - $HOME/.cache/mise:/root/.cache/mise
+
+      # Zsh shell history (read-write for persistence)
+      - $HOME/.local/state/zsh:/root/.local/state/zsh
+
+      # X11 socket for GUI support (read-only)
+      - /tmp/.X11-unix:/tmp/.X11-unix:ro
+
+      # Docker shared volume for pentesting targets
+      - /mnt/sda1/shares/docker:/mnt/shares/docker
+
+      # Work directory
+      - $HOME/projects:/root/projects
+
+    # Environment variables
+    environment:
+      # XDG Base Directory settings
+      XDG_CONFIG_HOME: /root/.config
+      XDG_DATA_HOME: /root/.local/share
+      XDG_CACHE_HOME: /root/.cache
+      XDG_STATE_HOME: /root/.local/state
+
+      # Zsh configuration (will be overridden by entrypoint if needed)
+      ZDOTDIR: /root/.config/zsh.kali
+      HISTFILE: /root/.local/state/zsh/zsh-history
+
+      # Starship prompt
+      STARSHIP_SHELL: zsh
+
+      # Sheldon plugin manager
+      SHELDON_CONFIG_DIR: /root/.config/sheldon
+
+      # Atuin shell history
+      ATUIN_DB_DIR: /root/.local/share/atuin
+
+      # Mise tool management
+      MISE_USE_TOML: "1"
+      MISE_EXPERIMENTAL: "1"
+      MISE_DATA_DIR: /root/.local/share/mise
+      MISE_CONFIG_DIR: /root/.config/mise
+      MISE_CACHE_DIR: /root/.cache/mise
+
+      # Shell settings
+      SHELL: /bin/zsh
+      TERM: xterm-256color
+
+      # X11 display support
+      DISPLAY: $DISPLAY
+      XAUTHORITY: /root/.Xauthority
+
+      # Wayland support
+      WAYLAND_DISPLAY: $WAYLAND_DISPLAY
+      QT_QPA_PLATFORM: wayland
+      XDG_RUNTIME_DIR: /tmp/xdg-runtime
+
+      # Home directory
+      HOME: /root
+
+    # Network configuration (bridge network for security)
+    networks:
+      - kali-network
+
+    # Resource allocation
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 4G
+        reservations:
+          cpus: '2'
+          memory: 2G
+
+    # Interactive terminal
+    stdin_open: true
+    tty: true
+
+    # Security options
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+
+    # IPC for MIT-SHM X11 extension
+    ipc: host
+
+# Bridge network for Kali service
+networks:
+  kali-network:
+    driver: bridge

@@ -5,7 +5,13 @@ EXTRA_COMMENT_REGEX := ^## .* ##$$
 .PHONY: help
 
 SHELL := /usr/bin/env bash
-NIX_PROFILE := /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+UNAME_S := $(shell uname -s)
+# Nix profile path - handle both macOS and Linux
+ifeq ($(UNAME_S),Darwin)
+  NIX_PROFILE := /etc/profiles/per-user/$(USER)/etc/profile.d/nix.sh
+else
+  NIX_PROFILE := /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+endif
 
 help: ## このヘルプメッセージを表示します
 	@grep -E -e $(RULE_AND_DESC_REGEX) -e $(EXTRA_COMMENT_REGEX) $(MAKEFILE_LIST) | ./scripts/help.awk | less -R
@@ -127,6 +133,30 @@ mise-list: ## miseのツール一覧を表示します
 
 mise-config: ## miseの設定を表示します
 	mise config
+
+## Docker / Kali Linux ##
+docker-kali-build: ## Kali Linux Docker イメージをビルドします
+	nix build .#packages.x86_64-linux.kali-linux --impure
+
+docker-kali-load: docker-kali-build ## ビルドしたKali Linux Docker イメージを Docker に読み込みます
+	docker load < ./result
+
+docker-kali-compose-up: ## Docker Compose で Kali Linux コンテナを起動します
+	cd nixos/services/docker-compose && \
+	docker compose up -d
+
+docker-kali-compose-down: ## Docker Compose で Kali Linux コンテナを停止します
+	cd nixos/services/docker-compose && \
+	docker compose down
+
+docker-kali-shell: ## Kali Linux コンテナに対話的にログインします
+	docker exec -it kali-pentesting /bin/zsh
+
+docker-kali-status: ## Kali Linux コンテナの状態を表示します
+	docker ps | grep kali-pentesting
+
+docker-kali-logs: ## Kali Linux コンテナのログを表示します
+	docker logs -f kali-pentesting
 
 ## Others ##
 zsh: ## zshの起動時間を測定します

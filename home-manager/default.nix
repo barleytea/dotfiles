@@ -28,6 +28,7 @@ in {
     ./mise
     ./nixvim
     ./hyprland
+    ./security/kali
     ./shell
     ./sheldon
     ./skhd
@@ -114,4 +115,14 @@ in {
       git-credential-manager
     ] else []);
   };
+
+  # Enable security tools (Kali Linux) on Linux systems
+  security.kali.enable = pkgs.stdenv.isLinux;
+  security.kali.includeNetwork = true;
+  security.kali.includeWeb = true;
+  security.kali.includePassword = true;
+  security.kali.includeExploitation = true;
+  security.kali.includeReverse = true;
+  security.kali.includeForensics = true;
+  security.kali.includeWireless = true;
 }
