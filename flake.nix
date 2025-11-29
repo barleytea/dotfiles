@@ -359,8 +359,12 @@ chmod +x /root/.vnc/kali-info.sh 2>/dev/null || true
 alias kali-info='/root/.vnc/kali-info.sh' 2>/dev/null || true
 alias start-desktop='/root/.vnc/start-desktop.sh' 2>/dev/null || true
 
-# For now, just start interactive zsh shell
-exec /bin/zsh -l "$@"
+# Start zsh in the background for docker logs visibility
+# Users can still exec into the shell with: docker exec -it kali-pentesting zsh
+/bin/zsh -l "$@" &
+
+# Keep container running
+exec sleep infinity
 ENTRYPOINT
           chmod +x ./entrypoint.sh
         '';
