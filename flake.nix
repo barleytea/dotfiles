@@ -184,6 +184,10 @@
         extraCommands = ''
           cat > ./entrypoint.sh << 'ENTRYPOINT'
 #!/bin/sh
+
+# Set up PATH to include /nix/store for Nix packages
+export PATH="/run/current-system/sw/bin:/nix/store/*/bin:$PATH"
+
 mkdir -p /root/.local/state/zsh /root/.cache /root/.config/zsh.kali 2>/dev/null
 
 # Source host .zshenv but override ZDOTDIR to prevent broken symlinks
@@ -359,12 +363,8 @@ chmod +x /root/.vnc/kali-info.sh 2>/dev/null || true
 alias kali-info='/root/.vnc/kali-info.sh' 2>/dev/null || true
 alias start-desktop='/root/.vnc/start-desktop.sh' 2>/dev/null || true
 
-# Start zsh in the background for docker logs visibility
-# Users can still exec into the shell with: docker exec -it kali-pentesting zsh
-/bin/zsh -l "$@" &
-
-# Keep container running
-exec sleep infinity
+# Start interactive zsh shell
+exec /bin/zsh -l "$@"
 ENTRYPOINT
           chmod +x ./entrypoint.sh
         '';
