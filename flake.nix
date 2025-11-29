@@ -97,9 +97,33 @@
           xorg.libXext
           xorg.libXrender
           xorg.libXrandr
+          xorg.xauth
+          xorg.xdpyinfo
+          xorg.xhost
           libxcb
           libxkbcommon
           mesa
+
+          # Additional GUI dependencies
+          libxkbcommon
+          libGL
+          dbus
+          fontconfig
+          freetype
+          gtk3
+          libxrender
+
+          # VNC server for remote desktop access
+          tigervnc
+          xorg.xvfb
+
+          # Lightweight desktop environment
+          openbox
+          xterm
+
+          # noVNC for browser-based access
+          novnc
+          python312Packages.websockify
 
           # Network scanning tools
           nmap
@@ -200,6 +224,142 @@ if test ! -f "$ZDOTDIR/.zshrc"; then
   } > "$ZDOTDIR/.zshrc"
 fi
 
+# Setup desktop environment scripts (VNC + noVNC for browser access)
+mkdir -p /root/.vnc 2>/dev/null
+
+# Create Xvfb + Xvnc startup script
+{
+  cat << 'DESKTOP_SCRIPT'
+#!/bin/sh
+# Start Kali desktop environment with Xvfb + Xvnc
+
+DISPLAY=:99
+
+echo "Starting Kali Linux desktop environment..."
+echo ""
+
+# Clean up any previous instance
+rm -f /tmp/.X''${DISPLAY#:}-lock 2>/dev/null || true
+sleep 1
+
+# Start Xvfb (Virtual X11 framebuffer display server)
+echo "1. Starting Xvfb virtual X server..."
+Xvfb ''$DISPLAY -screen 0 1920x1080x24 -ac &
+XVFB_PID=$!
+sleep 2
+
+# Start Xvnc (VNC server) on the Xvfb display
+echo "2. Starting Xvnc (VNC server)..."
+DISPLAY=''$DISPLAY Xvnc \
+  ''$DISPLAY \
+  -geometry 1920x1080 \
+  -depth 24 \
+  -securitytypes none \
+  -rfbport 5900 &
+XVNC_PID=$!
+sleep 2
+
+# Find and try to start websockify with noVNC
+NOVNC_PATH=\$(find /nix/store -type d -name "novnc-*" 2>/dev/null | head -1)
+if [ -n "\$NOVNC_PATH" ]; then
+  NOVNC_WEB="\''${NOVNC_PATH}/share/webapps/novnc"
+  if [ -d "\$NOVNC_WEB" ]; then
+    echo "3. Starting websockify with noVNC..."
+    websockify --web="\$NOVNC_WEB" 6080 localhost:5900 &
+    WS_PID=''$!
+    sleep 2
+  fi
+fi
+
+echo ""
+echo "========================================================"
+echo "SUCCESS! Kali desktop environment started"
+echo "========================================================"
+echo ""
+echo "X11 Display:        ''$DISPLAY"
+echo "VNC Server:         localhost:5900"
+echo ""
+echo "Access methods:"
+echo "  1. Browser (noVNC):  http://localhost:6080/vnc.html"
+echo "  2. VNC client:       vncviewer localhost:5900"
+echo "  3. X11 GUI apps:     DISPLAY=''$DISPLAY export DISPLAY"
+echo ""
+echo "Example: Launch Ghidra on host display"
+echo "  DISPLAY=:0 ghidra"
+echo ""
+echo "========================================================"
+echo ""
+
+# Keep processes running
+wait
+DESKTOP_SCRIPT
+} > /root/.vnc/start-desktop.sh 2>/dev/null || true
+chmod +x /root/.vnc/start-desktop.sh 2>/dev/null || true
+
+# Create simple wrapper for quick X11 GUI app launching
+{
+  cat << 'GUI_LAUNCH'
+#!/bin/sh
+# Launch GUI application on host X11 display
+# Usage: launch-gui-app <app> [args...]
+
+if [ ''$# -eq 0 ]; then
+  echo "Usage: ''$0 <application> [args...]"
+  echo "Examples: ''$0 ghidra, ''$0 burpsuite"
+  exit 1
+fi
+
+export DISPLAY=:0
+exec "''$@"
+GUI_LAUNCH
+} > /root/.vnc/launch-gui-app.sh 2>/dev/null || true
+chmod +x /root/.vnc/launch-gui-app.sh 2>/dev/null || true
+
+# Create information script
+{
+  cat << 'INFO_SCRIPT'
+#!/bin/sh
+# Display Kali Linux container information
+
+echo "=== Kali Linux Container Information ==="
+echo ""
+echo "Shell Configuration:"
+echo "  SHELL: ''$SHELL"
+echo "  ZDOTDIR: ''$ZDOTDIR"
+echo "  HISTFILE: ''$HISTFILE"
+echo ""
+echo "Display/Desktop:"
+echo "  DISPLAY: ''$DISPLAY"
+echo "  WAYLAND_DISPLAY: ''$WAYLAND_DISPLAY"
+echo "  XDG_SESSION_TYPE: ''$XDG_SESSION_TYPE"
+echo ""
+echo "Tool Management:"
+echo "  Mise Config: ''$MISE_CONFIG_DIR"
+echo "  Mise Data: ''$MISE_DATA_HOME"
+echo ""
+echo "History & Shell State:"
+echo "  Atuin History: ''$ATUIN_DB_DIR"
+echo "  Zsh State: ''$HOME/.local/state/zsh"
+echo ""
+echo "Available Commands:"
+echo "  - /root/.vnc/start-desktop.sh      # Start desktop (VNC + browser)"
+echo "  - /root/.vnc/launch-gui-app.sh     # Launch GUI app on host display"
+echo "  - kali-info                        # Show this information"
+echo ""
+echo "Desktop Access Methods (after starting desktop):"
+echo "  1. Browser noVNC: http://localhost:6080/vnc.html"
+echo "  2. VNC client:    vncviewer localhost:5900"
+echo "  3. X11 forwarding (CLI): SSH with -X flag"
+echo ""
+INFO_SCRIPT
+} > /root/.vnc/kali-info.sh 2>/dev/null || true
+chmod +x /root/.vnc/kali-info.sh 2>/dev/null || true
+
+# Create a convenience alias
+alias kali-info='/root/.vnc/kali-info.sh' 2>/dev/null || true
+alias start-desktop='/root/.vnc/start-desktop.sh' 2>/dev/null || true
+
+# For now, just start interactive zsh shell
 exec /bin/zsh -l "$@"
 ENTRYPOINT
           chmod +x ./entrypoint.sh

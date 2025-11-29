@@ -158,6 +158,23 @@ docker-kali-status: ## Kali Linux コンテナの状態を表示します
 docker-kali-logs: ## Kali Linux コンテナのログを表示します
 	docker logs -f kali-pentesting
 
+docker-kali-xauth-setup: ## X11 GUI アクセス用の xauth ファイルを生成します
+	@COOKIE=$$(xauth list | grep ":0" | awk '{print $$3}' | head -1); \
+	if [ -z "$$COOKIE" ]; then \
+		echo "Error: Could not extract X11 magic cookie"; \
+		exit 1; \
+	fi; \
+	xauth -f /tmp/kali-xauth add "localhost:0" MIT-MAGIC-COOKIE-1 "$$COOKIE"; \
+	xauth -f /tmp/kali-xauth add "localhost/unix:0" MIT-MAGIC-COOKIE-1 "$$COOKIE"; \
+	xauth -f /tmp/kali-xauth add "unix:0" MIT-MAGIC-COOKIE-1 "$$COOKIE"; \
+	xauth -f /tmp/kali-xauth add ":0" MIT-MAGIC-COOKIE-1 "$$COOKIE"; \
+	chmod 644 /tmp/kali-xauth; \
+	echo "✓ Generated xauth file at /tmp/kali-xauth"
+
+docker-kali-gui: docker-kali-xauth-setup ## Kali Linux で GUI アプリを起動します (APP=ghidra, burpsuite, wireshark など)
+	@APP=$$(test -n "$(APP)" && echo $(APP) || echo "ghidra"); \
+	cd nixos/services/docker-compose && bash kali-gui.sh "$$APP"
+
 ## Others ##
 zsh: ## zshの起動時間を測定します
 	time (zsh -i -c exit)
