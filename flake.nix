@@ -29,7 +29,18 @@
     nixvim,
     arion,
   } @ inputs: let
-    system = "aarch64-darwin"; # Default to Apple Silicon Mac
+    darwinSystems = [
+      "aarch64-darwin"
+      "x86_64-darwin"
+    ];
+    hostSystem =
+      if builtins ? currentSystem
+      then builtins.currentSystem
+      else null;
+    system =
+      if hostSystem != null && builtins.elem hostSystem darwinSystems
+      then hostSystem
+      else "aarch64-darwin"; # Default to Apple Silicon Mac
     linuxSystem = "x86_64-linux";
     pkgs = nixpkgs.legacyPackages.${system};
     pkgsLinux = import nixpkgs {
