@@ -60,7 +60,11 @@
       "Bash(docker logs:*)",
       "Bash(docker exec kali-pentesting sh -c 'ls -la /root/.config/')",
       "Bash(test:*)",
-      "Bash(docker exec:*)"
+      "Bash(docker exec:*)",
+      "Bash(chmod:*)",
+      "Bash(nix-env:*)",
+      "Bash(curl:*)",
+      "Bash(docker inspect:*)"
     ],
     "deny": []
   }

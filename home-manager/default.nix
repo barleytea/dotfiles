@@ -6,13 +6,7 @@
   utils = import ./utils/utils.nix { inherit pkgs; };
 in {
 
-  # nixpkgsConfig is handled by useGlobalPkgs in NixOS configurations
-  # For standalone home-manager, this is still needed:
-  nixpkgs = {
-    config = {
-      allowUnfree = true;
-    };
-  };
+  # nixpkgs config is supplied by the caller (NixOS flake sets allowUnfree)
 
   imports = [
     ./alacritty
@@ -28,7 +22,6 @@ in {
     ./mise
     ./nixvim
     ./hyprland
-    ./security/kali
     ./shell
     ./sheldon
     ./skhd
@@ -117,12 +110,4 @@ in {
   };
 
   # Enable security tools (Kali Linux) on Linux systems
-  security.kali.enable = pkgs.stdenv.isLinux;
-  security.kali.includeNetwork = true;
-  security.kali.includeWeb = true;
-  security.kali.includePassword = true;
-  security.kali.includeExploitation = true;
-  security.kali.includeReverse = true;
-  security.kali.includeForensics = true;
-  security.kali.includeWireless = true;
 }
