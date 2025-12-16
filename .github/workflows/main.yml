@@ -72,6 +72,8 @@ jobs:
         run: |
           source $HOME/.zshenv
           source $HOME/.config/zsh/.zshrc
+          # Import Node.js release GPG key used for tarball signatures
+          gpg --keyserver hkps://keys.openpgp.org --recv-keys 86C8D74642E67846F8E120284DAA80D1E737BC9F
           # miseで管理している全ツールをインストール
           mise install
           # shimを再生成してPATHを更新
