@@ -5,12 +5,13 @@ EXTRA_COMMENT_REGEX := ^## .* ##$$
 .PHONY: help
 
 SHELL := /usr/bin/env bash
-UNAME_S := $(shell uname -s)
-# Nix profile path - handle both macOS and Linux
-ifeq ($(UNAME_S),Darwin)
-  NIX_PROFILE := /etc/profiles/per-user/$(USER)/etc/profile.d/nix.sh
-else
-  NIX_PROFILE := /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+# Nix profile path - pick the first available known location (allow override)
+NIX_PROFILE ?= $(firstword $(foreach path,/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh /etc/profiles/per-user/$(USER)/etc/profile.d/nix.sh $(HOME)/.nix-profile/etc/profile.d/nix.sh,$(wildcard $(path))))
+ifeq ($(NIX_PROFILE),)
+$(error Nix profile script not found; set NIX_PROFILE to a valid path)
+endif
+ifeq ($(wildcard $(NIX_PROFILE)),)
+$(error Nix profile script '$(NIX_PROFILE)' not found; set NIX_PROFILE to a valid path)
 endif
 
 help: ## このヘルプメッセージを表示します
