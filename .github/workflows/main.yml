@@ -63,6 +63,12 @@ jobs:
           nix run nixpkgs#home-manager -- switch --flake .#home --impure
       - name: Test mise install
         shell: zsh {0}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MISE_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Skip Node.js tarball signature checks in CI (no release keys available)
+          NODEJS_CHECK_SIGNATURES: "no"
+          ASDF_NODEJS_SKIP_GPG: "1"
         run: |
           source $HOME/.zshenv
           source $HOME/.config/zsh/.zshrc

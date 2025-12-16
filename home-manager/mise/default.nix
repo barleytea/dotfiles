@@ -13,7 +13,8 @@
         node = "lts";
         go = "1.24.5";
         python = "system";
-        awscli = "latest";
+        # Pin to a concrete release; "latest" URL 404s in CI on macOS runners.
+        awscli = "2.22.28";
         "npm:aws-cdk" = "latest";
         "npm:@redocly/cli" = "latest";
         "npm:corepack" = "latest";
