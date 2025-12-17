@@ -83,8 +83,8 @@ jobs:
           # PATH更新のため再度mise activate
           eval "$(mise activate zsh)"
           # pre-commitが正しくインストールされたか確認
-          mise exec -- which pre-commit
-          mise exec -- pre-commit --version
+          which pre-commit
+          pre-commit --version
           # その他の主要ツールも確認
           mise exec -- which node
           mise exec -- which go

@@ -81,6 +81,7 @@ in {
       obsidian
       peco
       pnpm
+      pre-commit
       postgresql
       postman
       protobuf
