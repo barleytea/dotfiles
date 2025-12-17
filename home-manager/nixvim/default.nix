@@ -29,7 +29,6 @@
     extraPackages = with pkgs; [
       # Language servers
       lua-language-server
-      nil
       stylua
       # Add more packages as needed
     ];

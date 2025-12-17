@@ -78,7 +78,6 @@ in {
       mpv
       neofetch
       neovim-remote
-      nerd-fonts.hack
       obsidian
       peco
       pnpm
@@ -99,7 +98,6 @@ in {
       vscode
       wezterm
       xdg-ninja
-      xan
       zoom-us
       zsh
     ] ++ (if pkgs.stdenv.isLinux then [

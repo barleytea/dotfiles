@@ -1,5 +1,13 @@
 # dotfiles
 
+## Supported Architectures
+
+| Architecture | nixpkgs | Status |
+|--------------|---------|--------|
+| Apple Silicon (aarch64-darwin) | unstable | ✅ Full support |
+| Intel Mac (x86_64-darwin) | 24.11 | ✅ Supported (some Homebrew packages excluded) |
+| NixOS (x86_64-linux) | unstable | ✅ Full support |
+
 ## Documents
 
 - [Installation](docs/10_installation.md)

@@ -2,6 +2,7 @@
 
 Basic operations are performed using `make`.
 
+- [Architecture Support](#architecture-support)
 - [Nix](#nix)
   - [Apply home-manager settings](#apply-home-manager-settings)
   - [Apply all nix-darwin settings](#apply-all-nix-darwin-settings)
@@ -9,6 +10,33 @@ Basic operations are performed using `make`.
   - [Apply all nix settings](#apply-all-nix-settings)
   - [Install a new package](#install-a-new-package)
   - [Rollback](#rollback)
+
+## Architecture Support
+
+This repository supports both Apple Silicon and Intel Mac. The architecture is auto-detected at build time.
+
+| Architecture | nixpkgs | nix-darwin | home-manager |
+|--------------|---------|------------|--------------|
+| Apple Silicon (aarch64-darwin) | unstable | unstable | unstable |
+| Intel Mac (x86_64-darwin) | 24.11 | 24.11 | 24.11 |
+
+### Version-specific Settings
+
+Version-specific settings are isolated in `compat/` directories:
+
+- `darwin/compat/unstable.nix`: unstable-only darwin options (`system.primaryUser`, `homebrew.user`)
+- `darwin/compat/nixpkgs-2411.nix`: 24.11-only settings (Homebrew package exclusions for macOS 13 compatibility)
+- `home-manager/compat/unstable.nix`: unstable-only packages (`nerd-fonts.hack`, `xan`, `nil`, `nil_ls`)
+- `home-manager/compat/nixpkgs-2411.nix`: 24.11-only packages (`nerdfonts.override`)
+
+### Intel Mac (24.11) Limitations
+
+Due to macOS 13 (Tier 3) and older Xcode limitations, the following Homebrew packages are excluded on Intel Mac:
+
+- **brews**: `aqua`, `im-select`, `mas`, `mise`, `uv`, `skhd`, `yabai` (require Xcode 15.2+ or build from source)
+- **casks**: `lm-studio` (ARM64 only)
+
+These tools can be installed via nixpkgs or alternative methods if needed.
 
 ## Nix
 

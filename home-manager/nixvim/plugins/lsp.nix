@@ -1,4 +1,4 @@
-{...}: {
+{ ... }: {
   programs.nixvim = {
     plugins = {
       # LSP Configuration
@@ -23,11 +23,6 @@
                 enable = false;
               };
             };
-          };
-          
-          # Nix language server
-          nil_ls = {
-            enable = true;
           };
           
           # Add more language servers as needed

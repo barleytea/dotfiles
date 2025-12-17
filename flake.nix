@@ -12,6 +12,18 @@
       url = "github:LnL7/nix-darwin/nix-darwin-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # Intel Mac (x86_64-darwin) 用の 24.11 リリース
+    nixpkgs-2411 = {
+      url = "github:nixos/nixpkgs?ref=nixos-24.11";
+    };
+    home-manager-2411 = {
+      url = "github:nix-community/home-manager?ref=release-24.11";
+      inputs.nixpkgs.follows = "nixpkgs-2411";
+    };
+    nix-darwin-2411 = {
+      url = "github:LnL7/nix-darwin?ref=nix-darwin-24.11";
+      inputs.nixpkgs.follows = "nixpkgs-2411";
+    };
     nixvim = {
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -27,6 +39,9 @@
     nixpkgs,
     home-manager,
     nix-darwin,
+    nixpkgs-2411,
+    home-manager-2411,
+    nix-darwin-2411,
     nixvim,
     arion,
   } @ inputs: let
@@ -43,7 +58,14 @@
       then hostSystem
       else "aarch64-darwin"; # Default to Apple Silicon Mac
     linuxSystem = "x86_64-linux";
-    pkgs = nixpkgs.legacyPackages.${system};
+    
+    # Intel Mac (x86_64-darwin) の場合は 24.11 を使用、それ以外は unstable を使用
+    isIntelMac = system == "x86_64-darwin";
+    selectedNixpkgs = if isIntelMac then nixpkgs-2411 else nixpkgs;
+    selectedHomeManager = if isIntelMac then home-manager-2411 else home-manager;
+    selectedNixDarwin = if isIntelMac then nix-darwin-2411 else nix-darwin;
+    
+    pkgs = selectedNixpkgs.legacyPackages.${system};
     pkgsLinux = import nixpkgs {
       system = linuxSystem;
       config = {
@@ -52,7 +74,7 @@
     };
 
     # Override to skip tests
-    nixpkgsWithOverlays = import nixpkgs {
+    nixpkgsWithOverlays = import selectedNixpkgs {
       inherit system;
       config = {
         allowUnfree = true;
@@ -70,7 +92,23 @@
             };
           };
         })
-      ];
+      ] ++ (if isIntelMac then [
+        # Intel Mac (24.11) では nix パッケージのテストが失敗するためスキップ
+        (final: prev: {
+          nix = prev.nix.overrideAttrs (oldAttrs: {
+            doCheck = false;
+            doInstallCheck = false;
+          });
+        })
+      ] else []);
+    };
+
+    # darwin設定用のヘルパー関数
+    mkDarwinConfig = modules: selectedNixDarwin.lib.darwinSystem {
+      inherit system;
+      modules = modules ++ (if isIntelMac
+        then [ ./darwin/compat/nixpkgs-2411.nix ]
+        else [ ./darwin/compat/unstable.nix ]);
     };
   in {
 
@@ -85,45 +123,22 @@
 
 
     homeConfigurations = {
-      home = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgsWithOverlays;  # オーバーライドしたpkgsを使用
-        extraSpecialArgs = {
-          inherit inputs;
-        };
+      home = selectedHomeManager.lib.homeManagerConfiguration {
+        pkgs = nixpkgsWithOverlays;
+        extraSpecialArgs = { inherit inputs; };
         modules = [
           ./home-manager/default.nix
-        ];
+        ] ++ (if isIntelMac
+          then [ ./home-manager/compat/nixpkgs-2411.nix ]
+          else [ ./home-manager/compat/unstable.nix ]);
       };
     };
 
-    darwinConfigurations =  {
-      all = nix-darwin.lib.darwinSystem {
-        system = system;
-        modules = [
-          ./darwin/default.nix
-        ];
-      };
-
-      homebrew = nix-darwin.lib.darwinSystem {
-        system = system;
-        modules = [
-          ./darwin/homebrew/default.nix
-        ];
-      };
-
-      system = nix-darwin.lib.darwinSystem {
-        system = system;
-        modules = [
-          ./darwin/system/default.nix
-        ];
-      };
-
-      service = nix-darwin.lib.darwinSystem {
-        system = system;
-        modules = [
-          ./darwin/service/default.nix
-        ];
-      };
+    darwinConfigurations = {
+      all = mkDarwinConfig [ ./darwin/default.nix ];
+      homebrew = mkDarwinConfig [ ./darwin/homebrew/default.nix ];
+      system = mkDarwinConfig [ ./darwin/system/default.nix ];
+      service = mkDarwinConfig [ ./darwin/service/default.nix ];
     };
 
     # NixOS configurations (新規追加)

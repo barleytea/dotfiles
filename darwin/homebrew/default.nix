@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+# Homebrew 設定
+{ pkgs, ... }: {
   imports = [ ../common.nix ];
 
   # Homebrew を通常ユーザー権限で実行するための設定
@@ -9,17 +10,12 @@
   homebrew = {
     enable = true;
 
-    # Homebrewコマンドを実行するユーザーを指定
-    # これによりsudo実行時でもHomebrewは通常ユーザーとして実行される
-    user = "miyoshi_s";
-
     onActivation = {
       autoUpdate = true;
       upgrade = true;
       #cleanup = "uninstall";
     };
     taps = [
-      "mscharley/homebrew"
       "sanemat/font"
       "aquaproj/aqua"
       "daipeihust/tap"
@@ -60,7 +56,6 @@
       "plain-clip"
       "raycast"
       "rstudio"
-      "scroll-reverser"
       "the-unarchiver"
       "xquartz"
     ];

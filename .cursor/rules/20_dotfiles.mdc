@@ -6,37 +6,46 @@ alwaysApply: true
 # dotfiles.mdc
 
 ## Project Overview
-This repository is a dotfiles repository for managing macOS environment settings. It uses Nix, Home Manager, and nix-darwin for environment setup.
+This repository is a dotfiles repository for managing macOS and NixOS environment settings. It uses Nix, Home Manager, and nix-darwin for environment setup.
+
+### Supported Architectures
+- **Apple Silicon (aarch64-darwin)**: Uses nixpkgs/nix-darwin/home-manager unstable
+- **Intel Mac (x86_64-darwin)**: Uses nixpkgs/nix-darwin/home-manager 24.11
+- **NixOS (x86_64-linux)**: Uses nixpkgs unstable
 
 ## Key Commands
 
 ### Nix-related
-- `just nix-channel-update`: Update nix-channel
-- `just home-manager-apply`: Apply Home Manager settings
-- `just nix-darwin-apply`: Apply nix-darwin settings
-- `just nix-update-all`: Update all Nix-related settings
+- `make nix-channel-update`: Update nix-channel
+- `make home-manager-apply`: Apply Home Manager settings
+- `make nix-darwin-apply`: Apply nix-darwin settings
+- `make nix-update-all`: Update all Nix-related settings
 
 ### VSCode-related
-- `just vscode-apply`: Apply VSCode settings
-- `just vscode-insiders-apply`: Apply VSCode Insiders settings
-- `just vscode-save`: Save the list of VSCode extensions
+- `make vscode-apply`: Apply VSCode settings
+- `make vscode-insiders-apply`: Apply VSCode Insiders settings
+- `make vscode-save`: Save the list of VSCode extensions
 
 ### Others
-- `just npm-tools`: Install npm-related tools
-- `just zsh`: Measure zsh startup time
-- `just paths`: Display PATH contents
+- `make npm-tools`: Install npm-related tools
+- `make zsh`: Measure zsh startup time
+- `make paths`: Display PATH contents
 
 ## Directory Structure
 - `home-manager/`: Home Manager configuration files
+  - `compat/`: Version-specific packages (unstable.nix, nixpkgs-2411.nix)
 - `darwin/`: nix-darwin configuration files
+  - `compat/`: Version-specific settings (unstable.nix, nixpkgs-2411.nix)
+- `nixos/`: NixOS configuration files
 - `vscode/`: VSCode configuration files
 - `docs/`: Documentation
 - `flake.nix`: Nix Flakes configuration file
-- `justfile`: Task runner configuration file
+- `Makefile`: Task runner configuration file
 
 ## Notes
 - Apply settings with appropriate commands after making changes
-- It is recommended to run `just nix-update-all` especially after changing Nix-related settings
+- It is recommended to run `make nix-update-all` especially after changing Nix-related settings
+- Version-specific settings are isolated in `compat/` directories to keep modules clean
 
 ## Coding Rules
 
