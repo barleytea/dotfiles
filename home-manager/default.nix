@@ -100,6 +100,7 @@ in {
       wezterm
       xdg-ninja
       zoom-us
+      zoxide
       zsh
     ] ++ (if pkgs.stdenv.isLinux then [
       # Linux (NixOS) specific packages

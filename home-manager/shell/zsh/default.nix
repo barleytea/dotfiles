@@ -26,6 +26,7 @@
       "zsh/config/tools/203-mise.zsh".source = ./config/mise.zsh;
       "zsh/config/tools/204-fastfetch.zsh".source = ./config/fastfetch.zsh;
       "zsh/config/tools/205-direnv.zsh".source = ./config/direnv.zsh;
+      "zsh/config/tools/206-zoxide.zsh".source = ./config/zoxide.zsh;
 
       # 4. Alias settings
       "zsh/config/900-aliases.zsh".source = ./config/aliases.zsh;

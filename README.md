@@ -18,6 +18,7 @@
 - [npm tools](docs/50_npm_tools.md)
 - [Pre-commit hooks](docs/51_pre_commit.md)
 - [Atuin shell history](docs/52_atuin.md)
+- [zoxide directory jumper](docs/53_zoxide.md)
 - [Services](docs/60_services.md)
 
 ## Screenshot Shortcuts
