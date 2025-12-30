@@ -51,12 +51,12 @@
 
       # 初回起動時は手動認証が必要
       if [ "$status" = "NeedsLogin" ]; then
-        echo "Tailscale needs authentication. Please run: sudo tailscale up --accept-routes --advertise-exit-node"
+        echo "Tailscale needs authentication. Please run: sudo tailscale up --accept-routes --advertise-exit-node --ssh"
         exit 0
       fi
 
-      # 認証済みの場合は自動接続
-      ${tailscale}/bin/tailscale up --accept-routes --advertise-exit-node
+      # 認証済みの場合は自動接続（SSH有効化でホストキー公開）
+      ${tailscale}/bin/tailscale up --accept-routes --advertise-exit-node --ssh
     '';
   };
 

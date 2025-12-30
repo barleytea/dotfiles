@@ -74,9 +74,11 @@ NixOSをファイルサーバとしても活用するための設計案です。
 ### アクセス制御
 
 #### VPNレベル
-- **Tailscale ACL**: デバイス・ユーザー単位でのアクセス制御
+- **Tailscale ACL**: デバイス・ユーザー単位でのアクセス制御（Admin Consoleで管理）
 - **Magic DNS**: デバイス名での簡単アクセス
 - **Exit Node**: ファイルサーバ経由でのインターネットアクセス
+
+ACL運用の詳細は `docs/72_tailscale_acl.md` を参照。
 
 #### システムレベル
 - **ユーザー管理**: 既存のmiyoshi_sユーザー + ファイルサーバ専用ユーザー
@@ -129,7 +131,7 @@ nixos/
 │   │   └── backup.nix          # バックアップ設定
 │   ├── tailscale/
 │   │   ├── default.nix         # Tailscale基本設定
-│   │   └── acl.nix             # アクセス制御設定
+│   │   └── (ACLはAdmin Consoleで管理)
 │   └── default.nix             # 既存（fileserver, tailscale追加）
 └── storage/
     ├── default.nix             # ストレージ管理
@@ -254,18 +256,22 @@ sudo nixos-rebuild switch
 sudo tailscale up --accept-routes --advertise-exit-node
 # → ブラウザでOAuth認証を実行
 
-# 3. ディレクトリ作成（自動化予定）
+# 3. Tailscale ACL設定（Admin Console）
+#  - SSHアクセスが必要ならSSHルールを追加
+#  - このリポジトリではACLは管理しない
+
+# 4. ディレクトリ作成（自動化予定）
 sudo mkdir -p /mnt/sda1/shares/{public,media,backup,docker}
 sudo mkdir -p /mnt/sdb1/{backup,shares/archive}
 
-# 4. 権限設定
+# 5. 権限設定
 sudo chown -R miyoshi_s:users /mnt/sda1/shares
 sudo chmod -R 755 /mnt/sda1/shares
 
-# 5. Sambaユーザー追加
+# 6. Sambaユーザー追加
 sudo smbpasswd -a miyoshi_s
 
-# 6. Tailscale設定確認
+# 7. Tailscale設定確認
 tailscale status
 tailscale netcheck
 ```
@@ -363,7 +369,7 @@ sudo mount -t nfs nixos:/mnt/sda1/shares/docker /mnt/docker-data
 - **ZFS**: データ整合性とスナップショット機能
 - **Jellyfin**: メディアサーバ機能（Tailscale経由）
 - **rsync daemon**: 効率的な同期サービス
-- **Tailscale ACL**: 細かいアクセス制御とロール管理
+- **Tailscale ACL**: 細かいアクセス制御とロール管理（Admin Console）
 
 ## トラブルシューティング
 
@@ -386,7 +392,7 @@ sudo mount -t nfs nixos:/mnt/sda1/shares/docker /mnt/docker-data
 4. **権限エラー**
    - ディレクトリ権限確認
    - グループ所属確認
-   - Tailscale ACL設定確認
+   - Tailscale ACL設定確認（Admin Console）
 
 ### ログ確認コマンド
 ```bash
