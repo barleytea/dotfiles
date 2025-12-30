@@ -1,0 +1,38 @@
+# Appearance
+font-family = "Hack Nerd Font"
+font-size = 12
+theme = "Dracula"
+
+# Window
+window-decoration = auto
+window-padding-x = 10
+window-padding-y = 8
+background-opacity = 0.65
+background-blur = 20
+macos-titlebar-style = hidden
+
+# macOS niceties
+macos-option-as-alt = true
+
+# Cursor
+cursor-style = bar
+cursor-style-blink = true
+
+# Tabs & splits (aligned with wezterm habits)
+keybind = ctrl+tab=next_tab
+keybind = ctrl+shift+tab=previous_tab
+keybind = ctrl+shift+t=new_tab
+keybind = ctrl+shift+w=close_tab
+keybind = ctrl+shift+n=new_window
+keybind = ctrl+shift+enter=new_split:right
+keybind = ctrl+shift+d=new_split:down
+keybind = ctrl+shift+h=goto_split:left
+keybind = ctrl+shift+j=goto_split:down
+keybind = ctrl+shift+k=goto_split:up
+keybind = ctrl+shift+l=goto_split:right
+keybind = ctrl+shift+arrow_left=resize_split:left,3
+keybind = ctrl+shift+arrow_right=resize_split:right,3
+keybind = ctrl+shift+arrow_up=resize_split:up,3
+keybind = ctrl+shift+arrow_down=resize_split:down,3
+keybind = ctrl+shift+e=equalize_splits
+keybind = ctrl+shift+p=toggle_command_palette

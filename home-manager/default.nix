@@ -17,6 +17,7 @@ in {
     ./gemini
     ./fcitx5
     ./git
+    ./ghostty
     ./k9s
     ./lazygit
     ./mise
