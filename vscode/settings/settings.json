@@ -137,9 +137,6 @@
   "vscode-neovim.leader": "<space>",
   "vscode-neovim.useWSL": false,
   "vscode-neovim.processBufferMaxSize": 10240,
-  "extensions.experimental.affinity": {
-    "asvetliakov.vscode-neovim": 1
-  },
   "vscode-neovim.compositeKeys": {
     "jj": {
       "command": "vscode-neovim.escape"
@@ -215,5 +212,7 @@
     ".github/instructions": true,
     "~/.config/vscode/instructions": true
   },
-  "makefile.configureOnOpen": true
+  "makefile.configureOnOpen": true,
+  "update.releaseTrack": "dev",
+  "update.mode": "silentlyApplyOnQuit"
 }

@@ -11,7 +11,7 @@
     settings = {
       format = ''
       [┌───────────────────](bold green)
-      [│](bold green)$kubernetes$aws$directory$nodejs$rust$java$golang$git_branch$git_state$git_status$time
+      [│](bold green)$kubernetes$aws$hostname$directory$nodejs$rust$java$golang$git_branch$git_state$git_status$time
       [└─>](bold green)'';
       scan_timeout = 10;
       add_newline = false;
@@ -24,6 +24,11 @@
       aws = {
         format = "[$symbol$profile](green) ";
         disabled = false;
+      };
+
+      hostname = {
+        format = "[$hostname]($style) ";
+        ssh_only = true;
       };
 
       directory = {
