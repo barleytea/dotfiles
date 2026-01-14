@@ -20,6 +20,7 @@ in {
     ./ghostty
     ./k9s
     ./lazygit
+    ./helix
     ./mise
     ./nixvim
     ./hyprland
