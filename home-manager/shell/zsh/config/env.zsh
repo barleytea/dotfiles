@@ -1,5 +1,14 @@
 # XDG Base Directory
 
+# Fallback when remote hosts lack Ghostty's terminfo.
+if [ "$TERM" = "xterm-ghostty" ]; then
+  if command -v infocmp >/dev/null 2>&1; then
+    infocmp -x xterm-ghostty >/dev/null 2>&1 || export TERM=xterm-256color
+  else
+    export TERM=xterm-256color
+  fi
+fi
+
 # User
 export USER=$(whoami)
 export DARWIN_USER=$(whoami)

@@ -53,6 +53,8 @@
       settings = {
         PasswordAuthentication = false;
         KbdInteractiveAuthentication = false;
+        # Ensure remote logins don't fail when the client TERM isn't available.
+        SetEnv = [ "TERM=xterm-256color" ];
       };
     };
 
