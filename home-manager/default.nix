@@ -4,6 +4,11 @@
   ...
 }: let
   utils = import ./utils/utils.nix { inherit pkgs; };
+  # Linux専用パッケージはlet内で定義して遅延評価の問題を回避
+  linuxPackages = with pkgs; [
+    lmstudio
+    git-credential-manager
+  ];
 in {
 
   # nixpkgs config is supplied by the caller (NixOS flake sets allowUnfree)
@@ -106,11 +111,7 @@ in {
       zsh
     ]) ++ [
       (pkgs.callPackage ./packages/gwq.nix {})
-    ] ++ (if pkgs.stdenv.isLinux then [
-      # Linux (NixOS) specific packages
-      # lmstudio  # TODO: unstableで未定義のため一時的に無効化
-      # git-credential-manager  # TODO: macOSビルド時に評価エラーになるため一時的に無効化
-    ] else []);
+    ] ++ (if pkgs.stdenv.isLinux then linuxPackages else []);
   };
 
   # Enable security tools (Kali Linux) on Linux systems
