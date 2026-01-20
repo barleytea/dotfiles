@@ -118,6 +118,22 @@ keybinds {
         bind "Ctrl o" { SwitchToMode "Normal"; }
         bind "Ctrl s" { SwitchToMode "Scroll"; }
         bind "d" { Detach; }
+        // git worktree切り替え（gwq + fzf）
+        bind "g" {
+            Run "bash" "-c" "source ~/.zshrc && ~/.local/bin/zellij-worktree-switcher" {
+                floating true
+                close_on_exit true
+            };
+            SwitchToMode "Normal"
+        }
+        // セッション切り替え（fzf）
+        bind "f" {
+            Run "bash" "-c" "source ~/.zshrc && ~/.local/bin/zellij-session-switcher" {
+                floating true
+                close_on_exit true
+            };
+            SwitchToMode "Normal"
+        }
         bind "w" {
             LaunchOrFocusPlugin "session-manager" {
                 floating true

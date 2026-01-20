@@ -112,6 +112,16 @@ in {
     ]) ++ [
       (pkgs.callPackage ./packages/gwq.nix {})
     ] ++ (if pkgs.stdenv.isLinux then linuxPackages else []);
+
+    file.".local/bin/zellij-worktree-switcher" = {
+      text = builtins.readFile ./scripts/zellij-worktree-switcher.sh;
+      executable = true;
+    };
+
+    file.".local/bin/zellij-session-switcher" = {
+      text = builtins.readFile ./scripts/zellij-session-switcher.sh;
+      executable = true;
+    };
   };
 
   # Enable security tools (Kali Linux) on Linux systems
