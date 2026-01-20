@@ -30,9 +30,9 @@ keybind = ctrl+shift+h=goto_split:left
 keybind = ctrl+shift+j=goto_split:down
 keybind = ctrl+shift+k=goto_split:up
 keybind = ctrl+shift+l=goto_split:right
-keybind = ctrl+shift+arrow_left=resize_split:left,3
-keybind = ctrl+shift+arrow_right=resize_split:right,3
-keybind = ctrl+shift+arrow_up=resize_split:up,3
-keybind = ctrl+shift+arrow_down=resize_split:down,3
+keybind = ctrl+shift+left=resize_split:left,3
+keybind = ctrl+shift+right=resize_split:right,3
+keybind = ctrl+shift+up=resize_split:up,3
+keybind = ctrl+shift+down=resize_split:down,3
 keybind = ctrl+shift+e=equalize_splits
-keybind = ctrl+shift+p=toggle_command_palette
+keybind = ctrl+shift+p=inspector:toggle

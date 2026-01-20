@@ -139,6 +139,7 @@ gitConfig = ''
 
 gitIgnore = ''
   mcp.json
+  .mcp.json
   .cursor/rules/
   .cursorrules
   .clinerules

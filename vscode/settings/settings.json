@@ -214,5 +214,6 @@
   },
   "makefile.configureOnOpen": true,
   "update.releaseTrack": "dev",
-  "update.mode": "silentlyApplyOnQuit"
+  "update.mode": "silentlyApplyOnQuit",
+  "chat.viewSessions.orientation": "stacked"
 }

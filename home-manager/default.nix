@@ -40,7 +40,7 @@ in {
     homeDirectory = utils.home;
     stateVersion = "24.05";
 
-    packages = with pkgs; [
+    packages = (with pkgs; [
       anki-bin
       arp-scan
       bat
@@ -104,10 +104,12 @@ in {
       zoom-us
       zoxide
       zsh
+    ]) ++ [
+      (pkgs.callPackage ./packages/gwq.nix {})
     ] ++ (if pkgs.stdenv.isLinux then [
       # Linux (NixOS) specific packages
-      lmstudio
-      git-credential-manager
+      # lmstudio  # TODO: unstableで未定義のため一時的に無効化
+      # git-credential-manager  # TODO: macOSビルド時に評価エラーになるため一時的に無効化
     ] else []);
   };
 
