@@ -54,7 +54,7 @@
         PasswordAuthentication = false;
         KbdInteractiveAuthentication = false;
         # Ensure remote logins don't fail when the client TERM isn't available.
-        SetEnv = [ "TERM=xterm-256color" ];
+        SetEnv = "TERM=xterm-256color";
       };
     };
 
@@ -68,5 +68,22 @@
   # Virtualization
   virtualisation = {
     docker.enable = true;
+  };
+
+  # Allow running pre-built binaries from generic Linux distributions (e.g. Claude CLI)
+  programs.nix-ld = {
+    enable = true;
+    libraries = with pkgs; [
+      stdenv.cc.cc
+      stdenv.cc.libc
+      zlib
+      openssl
+      curl
+      expat
+      libuuid
+      xorg.libxcb
+      xorg.libX11
+      xorg.libXext
+    ];
   };
 }

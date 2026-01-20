@@ -143,3 +143,20 @@ This approach enables:
 **Configuration Location:**
 - Dotfiles: `home-manager/claude/default.nix`
 - Target directory: `~/.claude/`
+
+### NixOS: Running Generic Linux Binaries
+
+If you install pre-built binaries that target “generic” Linux environments (for example the Claude CLI), NixOS will refuse to start them with an error like:
+
+```
+Could not start dynamically linked executable: claude
+NixOS cannot run dynamically linked executables intended for generic linux environments out of the box.
+```
+
+The `nixos/system/default.nix` module now enables `programs.nix-ld` with the common runtime libraries (`glibc`, `libstdc++`, `openssl`, `zlib`, `libX11`, etc.) so these binaries can locate their dependencies. After updating the flake, rebuild the machine to pick up the loader:
+
+```sh
+sudo nixos-rebuild switch --flake .#desktop
+```
+
+If a third-party binary still complains about missing libraries, extend the `programs.nix-ld.libraries` list in `nixos/system/default.nix` with the required packages and rebuild again.

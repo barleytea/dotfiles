@@ -25,7 +25,9 @@
           };
         };
         
-        folding = false;
+        folding = {
+          enable = false;
+        };
         nixGrammars = true;
       };
       
