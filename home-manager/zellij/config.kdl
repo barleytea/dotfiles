@@ -118,9 +118,33 @@ keybinds {
         bind "Ctrl o" { SwitchToMode "Normal"; }
         bind "Ctrl s" { SwitchToMode "Scroll"; }
         bind "d" { Detach; }
-        // git worktree切り替え（gwq + fzf）
+        // git worktree切り替え - ペインで開く（デフォルト）
         bind "g" {
-            Run "bash" "-c" "source ~/.zshrc && ~/.local/bin/zellij-worktree-switcher" {
+            Run "bash" "-c" "source ~/.zshrc && ~/.local/bin/zellij-worktree-switcher --pane" {
+                floating true
+                close_on_exit true
+            };
+            SwitchToMode "Normal"
+        }
+        // git worktree切り替え - 新しいセッションで開く
+        bind "G" {
+            Run "bash" "-c" "source ~/.zshrc && ~/.local/bin/zellij-worktree-switcher --session" {
+                floating true
+                close_on_exit true
+            };
+            SwitchToMode "Normal"
+        }
+        // git worktree削除（worktree + ブランチ）
+        bind "x" {
+            Run "bash" "-c" "source ~/.zshrc && ~/.local/bin/zellij-worktree-remove --branch" {
+                floating true
+                close_on_exit true
+            };
+            SwitchToMode "Normal"
+        }
+        // git worktree削除（worktreeのみ）
+        bind "X" {
+            Run "bash" "-c" "source ~/.zshrc && ~/.local/bin/zellij-worktree-remove" {
                 floating true
                 close_on_exit true
             };

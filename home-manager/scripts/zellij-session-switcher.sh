@@ -43,13 +43,15 @@ if [[ "$selected" == "✨ [新規セッションを作成]" ]]; then
         exit 1
     fi
     echo "🔄 Creating new session: $session_name"
-    zellij run --close-on-exit --name "switch-session" -- zellij attach --create "$session_name"
-    exit 0
+    # ZELLIJ環境変数をunsetしてからattach（入れ子防止）
+    unset ZELLIJ ZELLIJ_SESSION_NAME
+    exec zellij attach --create "$session_name"
 fi
 
 # 現在のセッションが選択された場合は何もしない
 if [[ "$selected" == *"(current)"* ]]; then
     echo "Already in this session!"
+    sleep 1
     exit 0
 fi
 
@@ -58,5 +60,6 @@ session_name=$(echo "$selected" | sed 's/^📍 //' | sed 's/^🔌 //' | sed 's/ 
 
 echo "🔄 Switching to session: $session_name"
 
-# セッションに切り替え
-zellij run --close-on-exit --name "switch-session" -- zellij attach "$session_name"
+# ZELLIJ環境変数をunsetしてからattach（入れ子防止）
+unset ZELLIJ ZELLIJ_SESSION_NAME
+exec zellij attach "$session_name"

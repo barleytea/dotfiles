@@ -118,6 +118,11 @@ in {
       executable = true;
     };
 
+    file.".local/bin/zellij-worktree-remove" = {
+      text = builtins.readFile ./scripts/zellij-worktree-remove.sh;
+      executable = true;
+    };
+
     file.".local/bin/zellij-session-switcher" = {
       text = builtins.readFile ./scripts/zellij-session-switcher.sh;
       executable = true;
