@@ -223,3 +223,85 @@ make vscode-insiders-apply
 
 **チートシート:**
 - `/hyprland-cheatsheet` - Hyprland shortcuts
+
+## Documentation Maintenance Policy
+
+When making changes to this dotfiles project, **ALWAYS** check and update related documentation to keep it synchronized.
+
+### 自動更新が必要なケース
+
+以下のような変更を行った場合、関連するドキュメントを必ず更新してください：
+
+1. **新しいツール・パッケージを追加**
+   - → `README.md` の "Main Tools" セクションを更新
+   - → 該当するスキル（例: `/nix-operations`, `/mise-guide`）に使用方法を追加
+
+2. **新しいNixモジュール・設定ファイルを追加**
+   - → `.claude/CLAUDE.md` の "Architecture Overview" または "Nix Configuration Structure" を更新
+   - → `/nix-operations` スキルのコマンド例を更新
+
+3. **キーバインド・ショートカットを変更**
+   - → `/hyprland-cheatsheet` スキル（Hyprland）
+   - → `/nixos-keybindings` スキル（NixOS keyd設定）
+   - → `/services-guide` スキル（Yabai/skhd）
+   - → `/zellij-worktree` スキル（Zellij）
+
+4. **新しいMakeタスク・コマンドを追加**
+   - → `.claude/CLAUDE.md` の "Common Commands" セクション
+   - → 該当するスキル（`/nix-operations`, `/mise-guide` など）
+
+5. **ディレクトリ構造・ファイルパスを変更**
+   - → `.claude/CLAUDE.md` の "Nix Configuration Structure" セクション
+   - → 該当するスキルの Configuration Location セクション
+
+6. **サービス・設定の動作を変更**
+   - → 該当するスキル（`/services-guide`, `/fileserver-guide`, `/gitserver-guide` など）
+
+### 更新プロセス
+
+**IMPORTANT**: コードを変更した後、以下のプロセスを**必ず**実行してください：
+
+1. **影響範囲の特定**
+   - 変更内容を確認し、影響するドキュメント/スキルをリストアップ
+
+2. **ドキュメント更新**
+   - 特定した全ドキュメントを更新
+   - コマンド例、設定例、説明文を最新の状態に
+
+3. **整合性チェック**
+   - README.md と .claude/CLAUDE.md が矛盾していないか確認
+   - スキル間で重複・矛盾する情報がないか確認
+
+4. **ユーザーへ報告**
+   - 更新したドキュメントの一覧を提示
+   - 変更内容のサマリーを説明
+
+### 便利なツール
+
+ドキュメント同期を支援するスキル：
+
+- `/sync-docs` - 最近の変更を分析し、更新が必要なドキュメントを自動検出・提案
+
+### 更新例
+
+**例1: 新しいパッケージを追加**
+```
+変更: home-manager/default.nix に ripgrep を追加
+更新箇所:
+- README.md → Main Tools > Development Tools
+- /nix-operations → Package installation examples
+```
+
+**例2: Yabaiのキーバインド追加**
+```
+変更: home-manager/skhd/default.nix に alt+t を追加
+更新箇所:
+- /services-guide → Keyboard Shortcuts テーブル
+```
+
+**例3: 新しいMakeタスク追加**
+```
+変更: Makefile に make docker-prune を追加
+更新箇所:
+- .claude/CLAUDE.md → Development Tools セクション
+```
