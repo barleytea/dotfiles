@@ -17,7 +17,7 @@ in
       for file in "${claudeConfigPath}/commands"/*; do
         if [ -f "$file" ]; then
           filename=$(${pkgs.coreutils}/bin/basename "$file")
-          $DRY_RUN_CMD ${pkgs.coreutils}/bin/ln -sf "$file" "${config.home.homeDirectory}/.claude/commands/$filename"
+          $DRY_RUN_CMD ${pkgs.coreutils}/bin/ln -sfn "$file" "${config.home.homeDirectory}/.claude/commands/$filename"
         fi
       done
     fi
@@ -27,7 +27,7 @@ in
       for skillDir in "${claudeConfigPath}/skills"/*; do
         if [ -d "$skillDir" ]; then
           skillName=$(${pkgs.coreutils}/bin/basename "$skillDir")
-          $DRY_RUN_CMD ${pkgs.coreutils}/bin/ln -sf "$skillDir" "${config.home.homeDirectory}/.claude/skills/$skillName"
+          $DRY_RUN_CMD ${pkgs.coreutils}/bin/ln -sfn "$skillDir" "${config.home.homeDirectory}/.claude/skills/$skillName"
         fi
       done
     fi
