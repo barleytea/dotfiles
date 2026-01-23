@@ -8,37 +8,61 @@
 | Intel Mac (x86_64-darwin) | 24.11 | ✅ Supported (some Homebrew packages excluded) |
 | NixOS (x86_64-linux) | unstable | ✅ Full support |
 
-## Documents
+## Documentation
 
-- [Installation](docs/10_installation.md)
-- [Nix operations](docs/20_nix.md)
-- [mise tool manager](docs/25_mise.md)
-- [Language & Runtimes](docs/30_languages.md)
-- [VSCode settings](docs/40_vscode.md)
-- [npm tools](docs/50_npm_tools.md)
-- [Pre-commit hooks](docs/51_pre_commit.md)
-- [Atuin shell history](docs/52_atuin.md)
-- [zoxide directory jumper](docs/53_zoxide.md)
-- [Services](docs/60_services.md)
+Documentation is available as Claude Code skills in `.claude/skills/`. These skills can be accessed by both humans and Claude AI:
+
+**Setup & Installation:**
+- `/installation` - Nix and dotfiles installation guide
+
+**System & Package Management:**
+- `/nix-operations` - Nix operations (home-manager, nix-darwin, package management)
+- `/mise-guide` - Mise tool version management
+
+**Languages & Runtimes:**
+- `/languages-setup` - Language and runtime setup
+
+**Editors & IDEs:**
+- `/vscode-setup` - VSCode configuration
+- `/cursor-setup` - Cursor AI editor setup (NixOS)
+- `/nixos-keybindings` - NixOS keyboard shortcuts
+
+**Tools & Utilities:**
+- `/npm-tools` - NPM package management
+- `/pre-commit-guide` - Pre-commit hooks
+- `/atuin-guide` - Atuin shell history with SQLite
+- `/zoxide-guide` - Zoxide smart directory navigation
+- `/zellij-worktree` - Zellij git worktree workflow
+
+**Services:**
+- `/services-guide` - Yabai and skhd window management
+- `/fileserver-guide` - NixOS file server with Tailscale
+- `/gitserver-guide` - Git SSH server (NixOS)
+- `/tailscale-acl` - Tailscale ACL configuration
+
+**Cheatsheets:**
+- `/hyprland-cheatsheet` - Hyprland shortcuts and configuration
+
+### Usage
+
+**In Claude Code:**
+```bash
+# Invoke skills directly
+/installation
+/nix-operations
+/zellij-worktree
+
+# Or ask naturally - Claude will reference them automatically
+"How do I install Nix?"
+"Show me zellij keybindings"
+```
+
+**Skills are also readable as markdown files** in `.claude/skills/*/SKILL.md`
 
 ## Screenshot Shortcuts
 
 - GNOME: `Super+Shift+S` opens the built-in screenshot UI; use `Enter` for full screen or drag to capture a region.
 - Hyprland: `Alt+Shift+S` captures a region and `Alt+Shift+D` captures the full screen via `hyprshot`, saving under `~/Pictures/Screenshots` and copying to the clipboard. PrintScreen bindings remain available if the key exists.
-
-### Document Numbering Guideline
-
-Documents are numbered in increments of 10 according to the following categories:
-
-- `10s`: Setup & Installation
-- `20s`: System & Package Management
-- `30s`: Languages & Runtimes
-- `40s`: Editors & IDEs
-- `50s`: Tools & Utilities
-- `60s`: Services & Daemons
-- `70s`: Customization & Themes
-- `80s`: Security & Backup
-- `90s`: Miscellaneous & References
 
 ## Main Tools
 

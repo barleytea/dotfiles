@@ -191,10 +191,35 @@ make vscode-insiders-apply
 
 ## Documentation Structure
 
-ドキュメントは10の倍数でカテゴリ分けされています：
-- 10s: セットアップ・インストール
-- 20s: システム・パッケージ管理
-- 30s: 言語・ランタイム
-- 40s: エディタ・IDE
-- 50s: ツール・ユーティリティ
-- 60s: サービス・デーモン
+ドキュメントはClaude Codeスキルとして管理されています（`.claude/skills/`）：
+
+**セットアップ・インストール:**
+- `/installation` - Nix and dotfiles installation guide
+
+**システム・パッケージ管理:**
+- `/nix-operations` - Nix operations (home-manager, nix-darwin, rollback)
+- `/mise-guide` - Mise tool version management
+
+**言語・ランタイム:**
+- `/languages-setup` - Language and runtime setup
+
+**エディタ・IDE:**
+- `/vscode-setup` - VSCode configuration
+- `/cursor-setup` - Cursor AI editor (NixOS)
+- `/nixos-keybindings` - NixOS keyboard shortcuts
+
+**ツール・ユーティリティ:**
+- `/npm-tools` - NPM package management
+- `/pre-commit-guide` - Pre-commit hooks
+- `/atuin-guide` - Atuin shell history (SQLite)
+- `/zoxide-guide` - Zoxide directory navigation
+- `/zellij-worktree` - Zellij git worktree workflow
+
+**サービス・デーモン:**
+- `/services-guide` - Yabai and skhd (macOS)
+- `/fileserver-guide` - NixOS file server (Tailscale)
+- `/gitserver-guide` - Git SSH server (NixOS)
+- `/tailscale-acl` - Tailscale ACL
+
+**チートシート:**
+- `/hyprland-cheatsheet` - Hyprland shortcuts
