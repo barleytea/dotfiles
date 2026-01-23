@@ -139,6 +139,18 @@ make vscode-insiders-apply
 4. **Window Management**: Yabai + skhd
 5. **Development**: pre-commit、gitleaks、commitizen
 
+### Claude Code Configuration
+- **home-manager/claude/config/**: Claude Code設定の管理
+  - **CLAUDE.md**: プロジェクト固有の指示
+  - **settings.json**: Claude Code設定
+  - **commands/**: カスタムコマンド定義
+  - **skills/**: カスタムスキル定義
+- **自動デプロイ**: `make home-manager-apply`で`~/.claude/`にシンボリックリンクを作成
+- **スキル追加手順**:
+  1. `home-manager/claude/config/skills/<skill-name>/`にスキルディレクトリを作成
+  2. `SKILL.md`（必須）とオプションファイルを配置
+  3. `make home-manager-apply`で`~/.claude/skills/<skill-name>/`に自動展開
+
 ## Important Notes
 
 ### Nix Specifics

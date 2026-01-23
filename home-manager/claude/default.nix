@@ -8,6 +8,7 @@ in
   home.activation.createClaudeSymlinks = lib.hm.dag.entryAfter ["writeBoundary"] ''
     $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir -p "${config.home.homeDirectory}/.config/claude"
     $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir -p "${config.home.homeDirectory}/.claude/commands"
+    $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir -p "${config.home.homeDirectory}/.claude/skills"
     $DRY_RUN_CMD ${pkgs.coreutils}/bin/ln -sf "${claudeConfigPath}/CLAUDE.md" "${config.home.homeDirectory}/.claude/CLAUDE.md"
     $DRY_RUN_CMD ${pkgs.coreutils}/bin/ln -sf "${claudeConfigPath}/settings.json" "${config.home.homeDirectory}/.claude/settings.json"
 
@@ -17,6 +18,16 @@ in
         if [ -f "$file" ]; then
           filename=$(${pkgs.coreutils}/bin/basename "$file")
           $DRY_RUN_CMD ${pkgs.coreutils}/bin/ln -sf "$file" "${config.home.homeDirectory}/.claude/commands/$filename"
+        fi
+      done
+    fi
+
+    # Link skill directories from skills directory
+    if [ -d "${claudeConfigPath}/skills" ]; then
+      for skillDir in "${claudeConfigPath}/skills"/*; do
+        if [ -d "$skillDir" ]; then
+          skillName=$(${pkgs.coreutils}/bin/basename "$skillDir")
+          $DRY_RUN_CMD ${pkgs.coreutils}/bin/ln -sf "$skillDir" "${config.home.homeDirectory}/.claude/skills/$skillName"
         fi
       done
     fi
