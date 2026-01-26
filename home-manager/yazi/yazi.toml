@@ -1,0 +1,21 @@
+[mgr]
+# 親:現在:プレビュー の比率（プレビューを大きく）
+# 値は比率を表す: [1, 3, 4] = 親1/8、現在3/8、プレビュー4/8
+ratio = [1, 3, 4]
+
+# 隠しファイルを表示
+show_hidden = true
+
+# ソート方法
+sort_by = "natural"
+sort_sensitive = false
+sort_reverse = false
+sort_dir_first = true
+
+# 行表示モード
+linemode = "size"
+
+[preview]
+# 画像プレビューの最大サイズ
+max_width = 800
+max_height = 600

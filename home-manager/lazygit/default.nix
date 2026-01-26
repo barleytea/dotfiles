@@ -7,8 +7,8 @@ let
       showRandomTip: false
 
     git:
-      paging:
-        pager: delta --dark --paging=never
+      pagers:
+        - pager: delta --dark --paging=never
 
     os:
       editCommand: 'nvim'

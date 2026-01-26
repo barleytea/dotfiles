@@ -82,13 +82,13 @@ in {
       mecab
       minikube
       mise
-      mpv
+      # mpv  # Temporarily disabled due to Swift build failure in nixpkgs unstable
       neofetch
       neovim-remote
       obsidian
       peco
       pnpm
-      pre-commit
+      # pre-commit  # Temporarily disabled due to Swift build failure in nixpkgs unstable
       postgresql
       postman
       protobuf

@@ -99,10 +99,10 @@ nix-gc: ## Nixのガーベジコレクションを実行します
 
 ## Pre-commit ##
 pre-commit-init: ## pre-commitフックを初期化・インストールします
-	pre-commit install
+	mise run pre-commit-init
 
 pre-commit-run: ## pre-commitを全ファイルに対して実行します
-	pre-commit run --all-files
+	mise exec -- pre-commit run --all-files
 
 ## VSCode ##
 vscode-apply: ## VSCodeの設定と拡張機能を適用します

@@ -24,6 +24,7 @@
         "npm:@openai/codex" = "latest";
         "npm:@github/copilot" = "latest";
         "npm:@vibe-kit/grok-cli" = "latest";
+        "pipx:pre-commit" = "latest";
       };
 
       settings = {
@@ -40,6 +41,12 @@
           description = "Install commitizen and cz-git globally";
           run = [
             "npm install -g commitizen cz-git"
+          ];
+        };
+        pre-commit-init = {
+          description = "Install pre-commit hooks";
+          run = [
+            "pre-commit install"
           ];
         };
       };
