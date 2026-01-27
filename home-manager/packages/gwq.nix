@@ -2,13 +2,20 @@
   buildGoModule,
   fetchFromGitHub,
   git,
+  go,
+  go_1_24 ? null,
   installShellFiles,
   lib,
   makeWrapper,
   tmux,
 }:
 
-buildGoModule rec {
+let
+  buildGoModule' = buildGoModule.override {
+    go = if go_1_24 != null then go_1_24 else go;
+  };
+in
+buildGoModule' rec {
   pname = "gwq";
   version = "0.0.5";
 

@@ -66,6 +66,12 @@
     selectedNixDarwin = if isIntelMac then nix-darwin-2411 else nix-darwin;
     
     pkgs = selectedNixpkgs.legacyPackages.${system};
+    unstablePkgs = import nixpkgs {
+      inherit system;
+      config = {
+        allowUnfree = true;
+      };
+    };
     pkgsLinux = import nixpkgs {
       system = linuxSystem;
       config = {
@@ -99,6 +105,10 @@
             doCheck = false;
             doInstallCheck = false;
           });
+        })
+        # gwq のビルドで Go 1.24 が必要なため、unstable から提供
+        (final: prev: {
+          go_1_24 = unstablePkgs.go_1_24 or unstablePkgs.go;
         })
       ] else []);
     };
