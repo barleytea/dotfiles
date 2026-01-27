@@ -87,6 +87,7 @@ in {
       neovim-remote
       obsidian
       peco
+      pipx
       pnpm
       # pre-commit  # Temporarily disabled due to Swift build failure in nixpkgs unstable
       postgresql

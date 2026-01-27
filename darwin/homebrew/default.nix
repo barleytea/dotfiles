@@ -55,7 +55,6 @@
       "notion"
       "plain-clip"
       "raycast"
-      "rstudio"
       "the-unarchiver"
       "xquartz"
     ];
