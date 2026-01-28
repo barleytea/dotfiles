@@ -15,8 +15,9 @@
     trustedInterfaces = [ "tailscale0" ];
     
     # VPN経由のみ許可、外部アクセス無効
-    allowedTCPPorts = [ 
+    allowedTCPPorts = [
       # SSH, SMB, NFSはTailscale経由のみアクセス可能
+      18789  # Web server
     ];
     allowedUDPPorts = [ 
       41641  # Tailscale
