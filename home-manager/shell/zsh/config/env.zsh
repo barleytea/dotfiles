@@ -50,3 +50,6 @@ export CARGO_HOME="$XDG_DATA_HOME"/cargo
 
 # Haskell
 export STACK_ROOT="$XDG_DATA_HOME"/stack
+
+# claude
+export ANTHROPIC_MODEL='opusplan'
