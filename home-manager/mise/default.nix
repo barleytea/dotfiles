@@ -15,6 +15,7 @@
         python = "system";
         # Pin to a concrete release; "latest" URL 404s in CI on macOS runners.
         awscli = "2.22.28";
+        jujutsu = "latest";
         "npm:aws-cdk" = "latest";
         "npm:@redocly/cli" = "latest";
         "npm:corepack" = "latest";
@@ -22,7 +23,6 @@
         "npm:reviewit" = "latest";
         "npm:vibe-kanban" = "latest";
         "npm:@openai/codex" = "latest";
-        "npm:@github/copilot" = "latest";
         "npm:@vibe-kit/grok-cli" = "latest";
         "pipx:pre-commit" = "latest";
       };
@@ -41,6 +41,18 @@
           description = "Install commitizen and cz-git globally";
           run = [
             "npm install -g commitizen cz-git"
+          ];
+        };
+        copilot-install = {
+          description = "Install GitHub Copilot CLI via official install script";
+          run = [
+            "curl -fsSL https://gh.io/copilot-install | bash"
+          ];
+        };
+        claude-install = {
+          description = "Install Claude Code CLI via official install script";
+          run = [
+            "curl -fsSL https://claude.ai/install.sh | bash"
           ];
         };
         pre-commit-init = {

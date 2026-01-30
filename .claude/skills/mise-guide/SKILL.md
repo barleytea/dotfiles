@@ -21,7 +21,8 @@ mise is configured and managed through home-manager.
 ### Programming Languages
 
 - **Node.js**: `lts`
-- **Go**: `1.23.4`
+- **Go**: `1.24.5`
+- **Jujutsu**: `latest`
 
 ### NPM Packages
 
@@ -29,8 +30,8 @@ Packages directly managed by mise:
 
 - `@redocly/cli` - CLI tool for OpenAPI/Swagger
 - `corepack` - Node.js package manager management
-- `@anthropic-ai/claude-code` - CLI tool for Claude AI
 - `@google/gemini-cli` - CLI tool for Google Gemini
+- `@openai/codex` - CLI tool for OpenAI Codex
 
 ### NPM Global Packages (via Tasks)
 
@@ -38,6 +39,13 @@ Installed via tasks due to complex dependencies:
 
 - `commitizen` - Git commit convention tool
 - `cz-git` - commitizen adapter
+
+### CLI Tools (via curl install scripts)
+
+These tools should be installed via mise tasks using official install scripts:
+
+- **GitHub Copilot CLI** - AI-powered coding assistance in terminal
+- **Claude Code CLI** - Anthropic's coding assistant for terminal
 
 ## Commands
 
@@ -76,6 +84,19 @@ make mise-install-npm-commitizen
 mise run npm-commitizen
 ```
 
+### CLI Tools Installation
+
+```sh
+# Install GitHub Copilot CLI
+mise run copilot-install
+
+# Install Claude Code CLI
+mise run claude-install
+
+# Install pre-commit hooks
+mise run pre-commit-init
+```
+
 ## Configuration Editing
 
 Edit home-manager configuration:
@@ -89,7 +110,8 @@ programs.mise = {
   globalConfig = {
     tools = {
       node = "lts";
-      go = "1.23.4";
+      go = "1.24.5";
+      jujutsu = "latest";
       "npm:@redocly/cli" = "latest";
       # ... other tools
     };
@@ -99,6 +121,24 @@ programs.mise = {
         description = "Install commitizen and cz-git globally";
         run = [
           "npm install -g commitizen cz-git"
+        ];
+      };
+      copilot-install = {
+        description = "Install GitHub Copilot CLI via official install script";
+        run = [
+          "curl -fsSL https://gh.io/copilot-install | bash"
+        ];
+      };
+      claude-install = {
+        description = "Install Claude Code CLI via official install script";
+        run = [
+          "curl -fsSL https://claude.ai/install.sh | bash"
+        ];
+      };
+      pre-commit-init = {
+        description = "Install pre-commit hooks";
+        run = [
+          "pre-commit install"
         ];
       };
     };
