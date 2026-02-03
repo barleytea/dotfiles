@@ -32,6 +32,10 @@
       url = "github:hercules-ci/arion";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    yazi-plugins = {
+      url = "github:yazi-rs/plugins/230b9c6055a3144f6974fef297ad1a91b46a6aac";
+      flake = false;
+    };
   };
 
   outputs = {
@@ -44,6 +48,7 @@
     nix-darwin-2411,
     nixvim,
     arion,
+    yazi-plugins,
   } @ inputs: let
     darwinSystems = [
       "aarch64-darwin"
@@ -58,13 +63,13 @@
       then hostSystem
       else "aarch64-darwin"; # Default to Apple Silicon Mac
     linuxSystem = "x86_64-linux";
-    
+
     # Intel Mac (x86_64-darwin) の場合は 24.11 を使用、それ以外は unstable を使用
     isIntelMac = system == "x86_64-darwin";
     selectedNixpkgs = if isIntelMac then nixpkgs-2411 else nixpkgs;
     selectedHomeManager = if isIntelMac then home-manager-2411 else home-manager;
     selectedNixDarwin = if isIntelMac then nix-darwin-2411 else nix-darwin;
-    
+
     pkgs = selectedNixpkgs.legacyPackages.${system};
     unstablePkgs = import nixpkgs {
       inherit system;

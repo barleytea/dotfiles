@@ -1,13 +1,8 @@
-{pkgs, ...}: let
-  # 公式プラグインリポジトリから取得（最新版）
-  yazi-plugins = pkgs.fetchFromGitHub {
-    owner = "yazi-rs";
-    repo = "plugins";
-    rev = "230b9c6055a3144f6974fef297ad1a91b46a6aac";
-    hash = "sha256-dd2PWWi/HsdLWEUci5lP+Vc2IABtpEleaR/aMFUC3Qw=";
-  };
-
-in {
+{
+  pkgs,
+  inputs,
+  ...
+}: {
   programs.yazi = {
     enable = true;
     enableZshIntegration = true;
@@ -15,12 +10,12 @@ in {
 
     plugins = {
       # キーバインドから呼び出すプラグイン（初期化不要）
-      jump-to-char = "${yazi-plugins}/jump-to-char.yazi";
-      smart-enter = "${yazi-plugins}/smart-enter.yazi";
-      smart-filter = "${yazi-plugins}/smart-filter.yazi";
+      jump-to-char = "${inputs.yazi-plugins}/jump-to-char.yazi";
+      smart-enter = "${inputs.yazi-plugins}/smart-enter.yazi";
+      smart-filter = "${inputs.yazi-plugins}/smart-filter.yazi";
 
       # Git統合（初期化が必要）
-      git = "${yazi-plugins}/git.yazi";
+      git = "${inputs.yazi-plugins}/git.yazi";
     };
 
     # プラグインの初期化
