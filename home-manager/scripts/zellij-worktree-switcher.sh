@@ -11,6 +11,9 @@
 
 set -euo pipefail
 
+# zellij のフローティングペインから実行される場合、標準入出力を端末に接続
+exec < /dev/tty > /dev/tty 2>&1
+
 # オプション解析
 OPEN_MODE="pane"  # デフォルトはペイン
 
@@ -141,3 +144,8 @@ else
     echo "📦 Mode: New Pane"
     zellij action new-pane --cwd "$worktree_path" --name "$branch" -- zsh
 fi
+
+# 完了メッセージを表示してユーザーの確認を待つ
+echo ""
+echo "✅ 完了しました。Enterキーを押して閉じてください..."
+read -r

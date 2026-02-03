@@ -12,10 +12,21 @@ sort_sensitive = false
 sort_reverse = false
 sort_dir_first = true
 
-# 行表示モード
+# 行表示モード（gitプラグインは自動的に追加される）
 linemode = "size"
 
 [preview]
 # 画像プレビューの最大サイズ
 max_width = 800
 max_height = 600
+
+# Gitプラグインのfetcher設定
+[[plugin.prepend_fetchers]]
+id = "git"
+url = "*"
+run = "git"
+
+[[plugin.prepend_fetchers]]
+id = "git"
+url = "*/"
+run = "git"

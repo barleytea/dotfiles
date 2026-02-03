@@ -10,6 +10,9 @@
 
 set -euo pipefail
 
+# zellij のフローティングペインから実行される場合、標準入出力を端末に接続
+exec < /dev/tty > /dev/tty 2>&1
+
 # オプション解析
 DELETE_BRANCH=false
 FORCE_DELETE=false

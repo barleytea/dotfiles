@@ -120,7 +120,7 @@ keybinds {
         bind "d" { Detach; }
         // git worktree切り替え - ペインで開く（デフォルト）
         bind "g" {
-            Run "bash" "-c" "source ~/.zshrc && ~/.local/bin/zellij-worktree-switcher --pane" {
+            Run "zsh" "-ic" "~/.local/bin/zellij-worktree-switcher --pane; exec zsh" {
                 floating true
                 close_on_exit true
             };
@@ -128,7 +128,7 @@ keybinds {
         }
         // git worktree切り替え - 新しいセッションで開く
         bind "G" {
-            Run "bash" "-c" "source ~/.zshrc && ~/.local/bin/zellij-worktree-switcher --session" {
+            Run "zsh" "-ic" "~/.local/bin/zellij-worktree-switcher --session; exec zsh" {
                 floating true
                 close_on_exit true
             };
@@ -136,7 +136,7 @@ keybinds {
         }
         // git worktree削除（worktree + ブランチ）
         bind "x" {
-            Run "bash" "-c" "source ~/.zshrc && ~/.local/bin/zellij-worktree-remove --branch" {
+            Run "zsh" "-ic" "~/.local/bin/zellij-worktree-remove --branch; exec zsh" {
                 floating true
                 close_on_exit true
             };
@@ -144,7 +144,7 @@ keybinds {
         }
         // git worktree削除（worktreeのみ）
         bind "X" {
-            Run "bash" "-c" "source ~/.zshrc && ~/.local/bin/zellij-worktree-remove" {
+            Run "zsh" "-ic" "~/.local/bin/zellij-worktree-remove; exec zsh" {
                 floating true
                 close_on_exit true
             };
@@ -152,7 +152,7 @@ keybinds {
         }
         // セッション切り替え（fzf）
         bind "f" {
-            Run "bash" "-c" "source ~/.zshrc && ~/.local/bin/zellij-session-switcher" {
+            Run "zsh" "-ic" "~/.local/bin/zellij-session-switcher; exec zsh" {
                 floating true
                 close_on_exit true
             };

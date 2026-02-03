@@ -5,6 +5,9 @@
 
 set -euo pipefail
 
+# zellij のフローティングペインから実行される場合、標準入出力を端末に接続
+exec < /dev/tty > /dev/tty 2>&1
+
 # 現在のセッション名を取得
 current_session="${ZELLIJ_SESSION_NAME:-}"
 
