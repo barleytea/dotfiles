@@ -101,7 +101,6 @@ in {
       slack
       socat
       stack
-      terraform
       tmux
       tree
       vscode
