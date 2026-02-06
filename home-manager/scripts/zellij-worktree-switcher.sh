@@ -45,6 +45,9 @@ fi
 repo_root=$(git rev-parse --show-toplevel)
 repo_name=$(basename "$repo_root")
 
+# 現在のworktreeパス（切り替え元）を保存
+current_worktree_path="$repo_root"
+
 # gwq listをJSONで取得してブランチ一覧を得る
 get_worktree_branches() {
     gwq list --json 2>/dev/null | jq -r '.[].branch' || echo ""
@@ -94,6 +97,9 @@ if [ -z "$selected" ]; then
     exit 0
 fi
 
+# worktreeが新規作成されたかどうかを追跡
+worktree_created=false
+
 # 新規ブランチ作成が選択された場合
 if [[ "$selected" == "✨ [新規ブランチを作成]" ]]; then
     echo -n "新しいブランチ名を入力: "
@@ -107,6 +113,7 @@ if [[ "$selected" == "✨ [新規ブランチを作成]" ]]; then
         echo "Failed to create branch: $branch"
         exit 1
     }
+    worktree_created=true
 else
     # マークを除去してブランチ名を取得
     branch=$(echo "$selected" | sed 's/^🌳 //' | sed 's/^🌐 //')
@@ -118,6 +125,7 @@ else
             echo "Failed to create worktree. Creating new branch..."
             gwq add -b "$branch" || exit 1
         }
+        worktree_created=true
     fi
 fi
 
@@ -127,6 +135,32 @@ worktree_path=$(get_worktree_path "$branch")
 if [ -z "$worktree_path" ]; then
     echo "Error: Could not find worktree path for branch: $branch"
     exit 1
+fi
+
+# 新規作成されたworktreeの場合、gitignoreされているファイルのみをコピー
+if [ "$worktree_created" = true ]; then
+    echo "📦 Copying gitignored files from current worktree..."
+    echo "   Source: $current_worktree_path"
+    echo "   Destination: $worktree_path"
+
+    # Gitが追跡しているファイルのリストを一時ファイルに保存
+    exclude_file=$(mktemp)
+    trap 'rm -f "$exclude_file"' EXIT
+
+    # git ls-filesでGitが追跡している全ファイルを取得し、除外リストに追加
+    (cd "$current_worktree_path" && git ls-files) > "$exclude_file"
+
+    # rsyncでgitignoreされているファイルのみをコピー
+    # -a: アーカイブモード（パーミッション、タイムスタンプ等を保持）
+    # --exclude-from: Gitが追跡しているファイルを除外
+    # --exclude='.git': .gitディレクトリを除外
+    if rsync -a --exclude-from="$exclude_file" --exclude='.git' --exclude='.git/' "$current_worktree_path/" "$worktree_path/" 2>/dev/null; then
+        echo "✅ Gitignored files copied successfully"
+    else
+        echo "⚠️  Warning: Failed to copy some files. Continuing anyway..."
+    fi
+
+    rm -f "$exclude_file"
 fi
 
 # ブランチ名からセッション名を生成（/をハイフンに置換）
