@@ -75,12 +75,18 @@
       inherit system;
       config = {
         allowUnfree = true;
+        permittedInsecurePackages = [
+          "google-chrome-144.0.7559.97"
+        ];
       };
     };
     pkgsLinux = import nixpkgs {
       system = linuxSystem;
       config = {
         allowUnfree = true;
+        permittedInsecurePackages = [
+          "google-chrome-144.0.7559.97"
+        ];
       };
     };
 
@@ -89,6 +95,9 @@
       inherit system;
       config = {
         allowUnfree = true;
+        permittedInsecurePackages = [
+          "google-chrome-144.0.7559.97"
+        ];
       };
       overlays = [
         (final: prev: {
