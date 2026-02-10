@@ -1,0 +1,61 @@
+name: NixOS CI
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'nixos/**'
+      - 'nixvim/**'
+      - '.github/workflows/nixos.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'nixos/**'
+      - 'nixvim/**'
+      - '.github/workflows/nixos.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: "write"
+      contents: "read"
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Nix
+        uses: cachix/install-nix-action@v30
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+          extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+            substituters = https://cache.nixos.org/
+      - name: Nix cache
+        uses: DeterminateSystems/magic-nix-cache-action@v8
+      - name: Check flakes
+        uses: DeterminateSystems/flake-checker-action@v9
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set Local nix.conf
+        run: |
+          mkdir -p "$HOME/.config/nix"
+          echo 'experimental-features = nix-command flakes' > "$HOME/.config/nix/nix.conf"
+          echo 'warn-dirty = false' >> "$HOME/.config/nix/nix.conf"
+      - name: Prepare Nix
+        run: |
+          echo "access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}" >> $HOME/.config/nix/nix.conf
+      - name: Check NixOS configuration
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          export NIX_CONFIG="access-tokens = github.com=$GITHUB_TOKEN"
+          cd nixos
+          # ビルドチェックのみ実行（実際の適用はしない）
+          nix build .#nixosConfigurations.desktop.config.system.build.toplevel --impure
+      - name: Check nixvim configuration
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          export NIX_CONFIG="access-tokens = github.com=$GITHUB_TOKEN"
+          cd nixvim
+          # nixvimのビルドチェック (x86_64-linux)
+          nix build .#packages.x86_64-linux.default --impure

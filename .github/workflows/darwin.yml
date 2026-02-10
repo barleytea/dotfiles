@@ -1,9 +1,23 @@
-name: Dotfiles CI
+name: Darwin CI
 on:
   push:
-    branches: [ main ]
+    branches: [main]
+    paths:
+      - 'darwin/**'
+      - 'nixvim/**'
+      - '.github/workflows/darwin.yml'
+      - 'Makefile'
+      - 'vscode/**'
+      - 'scripts/**'
   pull_request:
-    branches: [ main ]
+    branches: [main]
+    paths:
+      - 'darwin/**'
+      - 'nixvim/**'
+      - '.github/workflows/darwin.yml'
+      - 'Makefile'
+      - 'vscode/**'
+      - 'scripts/**'
 
 jobs:
   build:
@@ -13,21 +27,21 @@ jobs:
       contents: "read"
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install Nix
-        uses: cachix/install-nix-action@v18
+        uses: cachix/install-nix-action@v30
         with:
           nix_path: nixpkgs=channel:nixos-unstable
           extra_nix_config: |
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
             substituters = https://cache.nixos.org/
       - name: Nix cache
-        uses: DeterminateSystems/magic-nix-cache-action@main
+        uses: DeterminateSystems/magic-nix-cache-action@v8
       - name: Check flakes
-        uses: DeterminateSystems/flake-checker-action@main
+        uses: DeterminateSystems/flake-checker-action@v9
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Set Localnix.conf
+      - name: Set Local nix.conf
         shell: zsh {0}
         run: |
           if [ ! -d "$HOME/.config/nix" ]; then
