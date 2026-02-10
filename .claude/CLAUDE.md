@@ -161,6 +161,19 @@ make vscode-insiders-apply
   - 通知クリア: 次のコマンド実行時に自動的にタブ名から🔔を削除
 - **実装**: `ZELLIJ_TAB_INDEX`環境変数を使用して各タブを個別に管理
 
+#### Statusline（ステータスバー）機能
+- **home-manager/claude/config/statusline.sh**: カスタムstatuslineスクリプト
+- **表示内容**:
+  - **1行目**: 🤖 モデル名 | 📁 ディレクトリ名 | 🌿 Gitブランチ
+  - **2行目**: 💰 セッション費用/当日費用/ブロック費用 | 🔥 Burn rate（$/時） | 🧠 コンテキスト使用量
+  - **3行目**: 📊 今月の累計費用
+- **機能**:
+  - `npx ccusage`と統合し、リアルタイムで費用・トークン使用状況を表示
+  - Gitブランチ情報をキャッシュ（5秒間隔）
+  - 月間累計費用をキャッシュ（60秒間隔）
+  - Burn rate（1時間あたりの消費ペース）を自動計算
+- **パフォーマンス最適化**: キャッシュによりGitコマンドとccusageの実行頻度を抑制
+
 ## Important Notes
 
 ### Nix Specifics
