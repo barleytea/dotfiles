@@ -3,17 +3,15 @@
 ## Project Structure & Module Organization
 - `flake.nix`/`flake.lock`: Nix flake entry; defines `home`, `darwin`, and `nixos` configs.
 - `home-manager/`: User-level configs (git, shell, editors, tools).
-  - `compat/`: Version-specific packages and settings (unstable vs 24.11).
 - `darwin/`, `nixos/`: System-level modules per platform.
-  - `darwin/compat/`: Version-specific darwin options (unstable vs 24.11).
 - `shared/`: Reusable Nix fragments; `scripts/`: helper utilities.
 - `docs/`: How‑to docs (installation, Nix, pre-commit, VSCode, mise, etc.).
 - `vscode/`: Settings and extension sync scripts.
 
 ## Architecture Support
 - **Apple Silicon (aarch64-darwin)**: Uses nixpkgs unstable + nix-darwin unstable + home-manager unstable.
-- **Intel Mac (x86_64-darwin)**: Uses nixpkgs 24.11 + nix-darwin 24.11 + home-manager 24.11 (due to compatibility issues with unstable on older macOS).
-- Architecture is auto-detected at build time; version-specific settings are isolated in `compat/` directories.
+- **Intel Mac (x86_64-darwin)**: Uses nixpkgs unstable + nix-darwin unstable + home-manager unstable.
+- Architecture is auto-detected at build time.
 
 ## Build, Test, and Development Commands
 - `make help`: Interactive overview of available tasks.

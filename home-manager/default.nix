@@ -84,6 +84,7 @@ in {
       minikube
       mise
       # mpv  # Temporarily disabled due to Swift build failure in nixpkgs unstable
+      nerd-fonts.hack
       neofetch
       neovim-remote
       obsidian
@@ -106,6 +107,7 @@ in {
       tree
       vscode
       wezterm
+      xan
       xdg-ninja
       zoom-us
       zoxide

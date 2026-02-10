@@ -10,7 +10,7 @@ This repository is a dotfiles repository for managing macOS and NixOS environmen
 
 ### Supported Architectures
 - **Apple Silicon (aarch64-darwin)**: Uses nixpkgs/nix-darwin/home-manager unstable
-- **Intel Mac (x86_64-darwin)**: Uses nixpkgs/nix-darwin/home-manager 24.11
+- **Intel Mac (x86_64-darwin)**: Uses nixpkgs/nix-darwin/home-manager unstable
 - **NixOS (x86_64-linux)**: Uses nixpkgs unstable
 
 ## Key Commands
@@ -33,9 +33,7 @@ This repository is a dotfiles repository for managing macOS and NixOS environmen
 
 ## Directory Structure
 - `home-manager/`: Home Manager configuration files
-  - `compat/`: Version-specific packages (unstable.nix, nixpkgs-2411.nix)
 - `darwin/`: nix-darwin configuration files
-  - `compat/`: Version-specific settings (unstable.nix, nixpkgs-2411.nix)
 - `nixos/`: NixOS configuration files
 - `vscode/`: VSCode configuration files
 - `docs/`: Documentation
@@ -45,7 +43,6 @@ This repository is a dotfiles repository for managing macOS and NixOS environmen
 ## Notes
 - Apply settings with appropriate commands after making changes
 - It is recommended to run `make nix-update-all` especially after changing Nix-related settings
-- Version-specific settings are isolated in `compat/` directories to keep modules clean
 
 ## Coding Rules
 

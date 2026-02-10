@@ -101,27 +101,6 @@
         "type": "github"
       }
     },
-    "home-manager-2411": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs-2411"
-        ]
-      },
-      "locked": {
-        "lastModified": 1747688870,
-        "narHash": "sha256-ypL9WAZfmJr5V70jEVzqGjjQzF0uCkz+AFQF7n9NmNc=",
-        "owner": "nix-community",
-        "repo": "home-manager",
-        "rev": "d5f1f641b289553927b3801580598d200a501863",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "ref": "release-24.11",
-        "repo": "home-manager",
-        "type": "github"
-      }
-    },
     "nix-darwin": {
       "inputs": {
         "nixpkgs": [
@@ -142,27 +121,6 @@
         "type": "github"
       }
     },
-    "nix-darwin-2411": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs-2411"
-        ]
-      },
-      "locked": {
-        "lastModified": 1743127615,
-        "narHash": "sha256-+sMGqywrSr50BGMLMeY789mSrzjkoxZiu61eWjYS/8o=",
-        "owner": "LnL7",
-        "repo": "nix-darwin",
-        "rev": "fc843893cecc1838a59713ee3e50e9e7edc6207c",
-        "type": "github"
-      },
-      "original": {
-        "owner": "LnL7",
-        "ref": "nix-darwin-24.11",
-        "repo": "nix-darwin",
-        "type": "github"
-      }
-    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1770562336,
@@ -175,22 +133,6 @@
       "original": {
         "owner": "nixos",
         "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs-2411": {
-      "locked": {
-        "lastModified": 1751274312,
-        "narHash": "sha256-/bVBlRpECLVzjV19t5KMdMFWSwKLtb5RyXdjz3LJT+g=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "50ab793786d9de88ee30ec4e4c24fb4236fc2674",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "nixos-24.11",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -257,11 +199,8 @@
       "inputs": {
         "arion": "arion",
         "home-manager": "home-manager",
-        "home-manager-2411": "home-manager-2411",
         "nix-darwin": "nix-darwin",
-        "nix-darwin-2411": "nix-darwin-2411",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-2411": "nixpkgs-2411",
         "nixvim-config": "nixvim-config",
         "yazi-plugins": "yazi-plugins"
       }

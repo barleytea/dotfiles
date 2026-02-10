@@ -5,7 +5,7 @@
 | Architecture | nixpkgs | Status |
 |--------------|---------|--------|
 | Apple Silicon (aarch64-darwin) | unstable | ✅ Full support |
-| Intel Mac (x86_64-darwin) | 24.11 | ✅ Supported (some Homebrew packages excluded) |
+| Intel Mac (x86_64-darwin) | unstable | ✅ Full support |
 | NixOS (x86_64-linux) | unstable | ✅ Full support |
 
 ## Documentation

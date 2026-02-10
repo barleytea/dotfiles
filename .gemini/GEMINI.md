@@ -17,17 +17,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | Architecture | nixpkgs | Status |
 |--------------|---------|--------|
 | Apple Silicon (aarch64-darwin) | unstable | Full support |
-| Intel Mac (x86_64-darwin) | 24.11 | Supported (some Homebrew packages excluded) |
+| Intel Mac (x86_64-darwin) | unstable | Full support |
 | NixOS (x86_64-linux) | unstable | Full support |
-
-### Version-specific Settings (compat/)
-
-バージョン依存の設定は `compat/` ディレクトリに分離されています：
-
-- `darwin/compat/unstable.nix`: unstable専用オプション（system.primaryUser, homebrew.user）
-- `darwin/compat/nixpkgs-2411.nix`: 24.11専用設定（macOS 13互換性のためHomebrew除外）
-- `home-manager/compat/unstable.nix`: unstable専用パッケージ（nerd-fonts.hack, xan, nil, nil_ls）
-- `home-manager/compat/nixpkgs-2411.nix`: 24.11専用パッケージ（nerdfonts.override）
 
 ## Common Commands
 
@@ -122,9 +113,7 @@ make vscode-insiders-apply
 ### Nix Configuration Structure
 - **flake.nix**: メインエントリポイント、inputs/outputsの定義
 - **home-manager/default.nix**: Home Manager設定のエントリポイント
-- **home-manager/compat/**: バージョン依存パッケージ
 - **darwin/default.nix**: nix-darwinシステム設定のエントリポイント
-- **darwin/compat/**: バージョン依存オプション
 - **nixos/configuration.nix**: NixOS設定のエントリポイント
 
 ### Tool Management Strategy

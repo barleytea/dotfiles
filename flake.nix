@@ -12,18 +12,6 @@
       url = "github:LnL7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # Intel Mac (x86_64-darwin) 用の 24.11 リリース
-    nixpkgs-2411 = {
-      url = "github:nixos/nixpkgs?ref=nixos-24.11";
-    };
-    home-manager-2411 = {
-      url = "github:nix-community/home-manager?ref=release-24.11";
-      inputs.nixpkgs.follows = "nixpkgs-2411";
-    };
-    nix-darwin-2411 = {
-      url = "github:LnL7/nix-darwin?ref=nix-darwin-24.11";
-      inputs.nixpkgs.follows = "nixpkgs-2411";
-    };
     nixvim-config = {
       url = "github:barleytea/nixvim-config";
       # nixpkgs を follows しない（nixvim-config 側で unstable を独自管理）
@@ -43,9 +31,6 @@
     nixpkgs,
     home-manager,
     nix-darwin,
-    nixpkgs-2411,
-    home-manager-2411,
-    nix-darwin-2411,
     nixvim-config,
     arion,
     yazi-plugins,
@@ -64,22 +49,7 @@
       else "aarch64-darwin"; # Default to Apple Silicon Mac
     linuxSystem = "x86_64-linux";
 
-    # Intel Mac (x86_64-darwin) の場合は 24.11 を使用、それ以外は unstable を使用
-    isIntelMac = system == "x86_64-darwin";
-    selectedNixpkgs = if isIntelMac then nixpkgs-2411 else nixpkgs;
-    selectedHomeManager = if isIntelMac then home-manager-2411 else home-manager;
-    selectedNixDarwin = if isIntelMac then nix-darwin-2411 else nix-darwin;
-
-    pkgs = selectedNixpkgs.legacyPackages.${system};
-    unstablePkgs = import nixpkgs {
-      inherit system;
-      config = {
-        allowUnfree = true;
-        permittedInsecurePackages = [
-          "google-chrome-144.0.7559.97"
-        ];
-      };
-    };
+    pkgs = nixpkgs.legacyPackages.${system};
     pkgsLinux = import nixpkgs {
       system = linuxSystem;
       config = {
@@ -91,7 +61,7 @@
     };
 
     # Override to skip tests
-    nixpkgsWithOverlays = import selectedNixpkgs {
+    nixpkgsWithOverlays = import nixpkgs {
       inherit system;
       config = {
         allowUnfree = true;
@@ -112,27 +82,13 @@
             };
           };
         })
-      ] ++ (if isIntelMac then [
-        # Intel Mac (24.11) では nix パッケージのテストが失敗するためスキップ
-        (final: prev: {
-          nix = prev.nix.overrideAttrs (oldAttrs: {
-            doCheck = false;
-            doInstallCheck = false;
-          });
-        })
-        # gwq のビルドで Go 1.24 が必要なため、unstable から提供
-        (final: prev: {
-          go_1_24 = unstablePkgs.go_1_24 or unstablePkgs.go;
-        })
-      ] else []);
+      ];
     };
 
     # darwin設定用のヘルパー関数
-    mkDarwinConfig = modules: selectedNixDarwin.lib.darwinSystem {
+    mkDarwinConfig = modules: nix-darwin.lib.darwinSystem {
       inherit system;
-      modules = modules ++ (if isIntelMac
-        then [ ./darwin/compat/nixpkgs-2411.nix ]
-        else [ ./darwin/compat/unstable.nix ]);
+      modules = modules;
     };
   in {
 
@@ -147,14 +103,12 @@
 
 
     homeConfigurations = {
-      home = selectedHomeManager.lib.homeManagerConfiguration {
+      home = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgsWithOverlays;
         extraSpecialArgs = { inherit inputs; };
         modules = [
           ./home-manager/default.nix
-        ] ++ (if isIntelMac
-          then [ ./home-manager/compat/nixpkgs-2411.nix ]
-          else [ ./home-manager/compat/unstable.nix ]);
+        ];
       };
     };
 
