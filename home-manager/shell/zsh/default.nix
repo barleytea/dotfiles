@@ -27,6 +27,7 @@
       "zsh/config/tools/204-fastfetch.zsh".source = ./config/fastfetch.zsh;
       "zsh/config/tools/205-direnv.zsh".source = ./config/direnv.zsh;
       "zsh/config/tools/206-zoxide.zsh".source = ./config/zoxide.zsh;
+      "zsh/config/tools/207-zellij.zsh".source = ./config/zellij.zsh;
 
       # 4. Alias settings
       "zsh/config/900-aliases.zsh".source = ./config/aliases.zsh;

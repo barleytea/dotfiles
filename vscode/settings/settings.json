@@ -17,18 +17,18 @@
   },
   "security.workspace.trust.untrustedFiles": "open",
   "terminal.integrated.fontFamily": "'Hack Nerd Font Mono'",
-  "terminal.integrated.env.osx": {
-    "FIG_NEW_SESSION": "1"
-  },
+  "terminal.integrated.shellIntegration.enabled": false,
   "terminal.integrated.allowChords": false,
   "terminal.integrated.sendKeybindingsToShell": false,
-  "terminal.integrated.inheritEnv": false,
+  "terminal.integrated.inheritEnv": true,
   "terminal.integrated.enableFileLinks": false,
   "terminal.integrated.gpuAcceleration": "off",
   "terminal.integrated.defaultProfile.osx": "zsh",
-  "terminal.integrated.automationProfile.osx": {
-    "path": "zsh",
-    "icon": "terminal"
+  "terminal.integrated.profiles.osx": {
+    "zsh": {
+      "path": "/bin/zsh",
+      "args": []
+    }
   },
   "terminal.integrated.commandsToSkipShell": [
     "editor.action.toggleTabFocusMode",
@@ -131,9 +131,7 @@
   "vscode-neovim.highlightGroups.highlights": true,
   "vscode-neovim.highlightGroups.search": true,
   "vscode-neovim.highlightGroups.visual": true,
-  "vscode-neovim.excludedExtensions": [
-    "terminal"
-  ],
+  "vscode-neovim.excludedExtensions": [],
   "vscode-neovim.leader": "<space>",
   "vscode-neovim.useWSL": false,
   "vscode-neovim.processBufferMaxSize": 10240,

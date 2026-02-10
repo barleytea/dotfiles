@@ -142,7 +142,7 @@ make vscode-insiders-apply
 ### Claude Code Configuration
 - **home-manager/claude/config/**: Claude Code設定の管理
   - **CLAUDE.md**: プロジェクト固有の指示
-  - **settings.json**: Claude Code設定
+  - **settings.json**: Claude Code設定（hooks、permissions）
   - **commands/**: カスタムコマンド定義
   - **skills/**: カスタムスキル定義
 - **自動デプロイ**: `make home-manager-apply`で`~/.claude/`にシンボリックリンクを作成
@@ -150,6 +150,16 @@ make vscode-insiders-apply
   1. `home-manager/claude/config/skills/<skill-name>/`にスキルディレクトリを作成
   2. `SKILL.md`（必須）とオプションファイルを配置
   3. `make home-manager-apply`で`~/.claude/skills/<skill-name>/`に自動展開
+
+#### Zellij通知機能
+- **home-manager/scripts/zellij-claude-notify.sh**: Claude Code通知スクリプト
+- **機能**: Claude Codeが入力待ちやパーミッション要求時にZellijタブ名に🔔を表示
+- **動作**:
+  - `Stop`イベント: Claude Code処理完了時（⏸️ Waiting...）
+  - `permission_prompt`: パーミッション要求時（🔔 Permission Required）
+  - `idle_prompt`: アイドル状態（⏸️ Waiting...）
+  - 通知クリア: 次のコマンド実行時に自動的にタブ名から🔔を削除
+- **実装**: `ZELLIJ_TAB_INDEX`環境変数を使用して各タブを個別に管理
 
 ## Important Notes
 
