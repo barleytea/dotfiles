@@ -1,4 +1,5 @@
-if [[ -z "$ZELLIJ" ]]; then
+# CI環境ではZellijを起動しない
+if [[ -z "$ZELLIJ" ]] && [[ -z "$CI" ]]; then
   active_sessions=$(zellij list-sessions 2>/dev/null | grep -v "EXITED" | wc -l)
 
   if [[ $active_sessions -gt 0 ]]; then
