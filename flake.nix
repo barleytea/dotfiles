@@ -24,9 +24,9 @@
       url = "github:LnL7/nix-darwin?ref=nix-darwin-24.11";
       inputs.nixpkgs.follows = "nixpkgs-2411";
     };
-    nixvim = {
-      url = "github:nix-community/nixvim";
-      inputs.nixpkgs.follows = "nixpkgs";
+    nixvim-config = {
+      url = "github:barleytea/nixvim-config";
+      # nixpkgs を follows しない（nixvim-config 側で unstable を独自管理）
     };
     arion = {
       url = "github:hercules-ci/arion";
@@ -46,7 +46,7 @@
     nixpkgs-2411,
     home-manager-2411,
     nix-darwin-2411,
-    nixvim,
+    nixvim-config,
     arion,
     yazi-plugins,
   } @ inputs: let

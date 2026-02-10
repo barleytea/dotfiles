@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  inputs,
   ...
 }: let
   utils = import ./utils/utils.nix { inherit pkgs; };
@@ -14,6 +15,7 @@ in {
   # nixpkgs config is supplied by the caller (NixOS flake sets allowUnfree)
 
   imports = [
+    inputs.nixvim-config.homeManagerModules.default
     ./alacritty
     ./atuin
     ./claude
@@ -27,7 +29,6 @@ in {
     ./lazygit
     ./helix
     ./mise
-    ./nixvim
     ./hyprland
     ./shell
     ./sheldon

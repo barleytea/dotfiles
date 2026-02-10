@@ -44,9 +44,9 @@ flake-update-home-manager: ## home-manager 入力のみ更新します
 	source $(NIX_PROFILE); \
 	nix flake lock --update-input home-manager
 
-flake-update-nixvim: ## nixvim 入力のみ更新します
+flake-update-nixvim: ## nixvim-config 入力のみ更新します
 	source $(NIX_PROFILE); \
-	nix flake lock --update-input nixvim
+	nix flake lock --update-input nixvim-config
 
 ## ---- Home Manager Operations ---- ##
 home-manager-switch: ## Home Manager設定を適用 (flake.lock を更新しない)
