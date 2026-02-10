@@ -11,9 +11,15 @@ This repository enables zoxide for zsh via home-manager and loads it from the zs
 
 ## Configuration Location
 
-- zsh init: `home-manager/shell/zsh/config/zoxide.zsh`
-- tool config symlink: `home-manager/shell/zsh/default.nix` (installs to `~/.config/zsh/config/tools/206-zoxide.zsh`)
-- package install: `home-manager/default.nix` (`home.packages` includes `zoxide`)
+**macOS (darwin):**
+- zsh init: `darwin/home-manager/shell/zsh/config/zoxide.zsh`
+- tool config symlink: `darwin/home-manager/shell/zsh/default.nix` (installs to `~/.config/zsh/config/tools/206-zoxide.zsh`)
+- package install: `darwin/home-manager/default.nix` (`home.packages` includes `zoxide`)
+
+**NixOS:**
+- zsh init: `nixos/home-manager/shell/zsh/config/zoxide.zsh`
+- tool config symlink: `nixos/home-manager/shell/zsh/default.nix` (installs to `~/.config/zsh/config/tools/206-zoxide.zsh`)
+- package install: `nixos/home-manager/default.nix` (`home.packages` includes `zoxide`)
 
 ## Usage
 

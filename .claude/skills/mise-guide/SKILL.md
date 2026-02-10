@@ -13,7 +13,8 @@ mise is configured and managed through home-manager.
 
 ## Configuration Files
 
-- **home-manager configuration**: `home-manager/mise/default.nix`
+- **home-manager configuration (darwin)**: `darwin/home-manager/mise/default.nix`
+- **home-manager configuration (NixOS)**: `nixos/home-manager/mise/default.nix`
 - **Generated configuration**: `~/.config/mise/config.toml`
 
 ## Managed Tools
@@ -102,7 +103,9 @@ mise run pre-commit-init
 Edit home-manager configuration:
 
 ```nix
-# home-manager/mise/default.nix
+# darwin/home-manager/mise/default.nix (macOS)
+# or
+# nixos/home-manager/mise/default.nix (NixOS)
 programs.mise = {
   enable = true;
   enableZshIntegration = true;

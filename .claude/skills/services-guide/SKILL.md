@@ -7,16 +7,18 @@ description: System services configuration guide including Yabai tiling window m
 
 This document provides information about the services configured in this dotfiles repository, focusing on window management with yabai and keyboard shortcuts with skhd.
 
+**Note:** This guide is specific to macOS (darwin). For NixOS window management, see `/hyprland-cheatsheet` and `/nixos-keybindings`.
+
 ## Yabai
 
 [Yabai](https://github.com/koekeishiya/yabai) is a tiling window manager for macOS that allows you to organize your windows in a more efficient way.
 
 ### Installation and Setup
 
-Yabai is installed and configured through Nix using both darwin-nix and home-manager:
+Yabai is installed and configured through Nix using both nix-darwin and home-manager:
 
 - The system-level service is configured in `darwin/service/yabai/default.nix`
-- The user-level configuration is in `home-manager/yabai/yabairc`
+- The user-level configuration is in `darwin/home-manager/yabai/yabairc`
 
 ### Starting and Stopping Yabai
 
@@ -161,7 +163,11 @@ tail -f /tmp/skhd_$(whoami).log
 
 To customize the configuration:
 
-1. Edit `home-manager/yabai/yabairc` for yabai settings
-2. Edit the skhd configuration file for keyboard shortcuts
-3. Run `home-manager switch` to apply changes
-4. Restart the services to apply the new configuration
+1. Edit `darwin/home-manager/yabai/yabairc` for yabai settings
+2. Edit `darwin/home-manager/skhd/skhdrc` for keyboard shortcuts
+3. Run `make home-manager-apply` or `make nix-darwin-apply` to apply changes
+4. Restart the services to apply the new configuration:
+   ```bash
+   yabai --restart-service
+   skhd --restart-service
+   ```

@@ -5,13 +5,20 @@ description: Step-by-step installation guide for Nix and dotfiles setup includin
 
 # Installation
 
-- [1. Manually craete a directory that matches the ghq root.](#1-manually-craete-a-directory-that-matches-the-ghq-root)
-- [2. Set up nix.conf](#2-set-up-nixconf)
+This guide covers installation for both macOS (using nix-darwin) and NixOS.
+
+**macOS Installation:**
+- [1. Create dotfiles directory](#1-craete-a-directory-that-matches-the-ghq-root)
+- [2. Set up local nix.conf](#2-set-up-local-nixconf)
 - [3. Install nix](#3-install-nix)
-- [4. Update nix channel](#4-update-nix-channel)
-- [5. Apply nix config](#5-apply-nix-config)
-- [6. Launch zsh](#6-launch-zsh)
-- [7. Apply darwin config](#7-apply-darwin-config)
+- [4. Set up global nix.conf](#4-set-up-global-nixconf)
+- [5. Update nix channel](#5-update-nix-channel)
+- [6. Apply home-manager config](#6-apply-home-manager-config)
+- [7. Launch zsh](#7-launch-zsh)
+- [8. Apply darwin config](#8-apply-darwin-config)
+
+**NixOS Installation:**
+- [NixOS Setup](#nixos-setup)
 
 ## 1. Craete a directory that matches the ghq root.
 
@@ -67,9 +74,10 @@ nix-channel --add https://nixos.org/channels/nixpkgs-unstable
 nix-channel --update
 ```
 
-## 6. Apply nix config
+## 6. Apply home-manager config
 
 ```sh
+cd ~/git_repos/github.com/barleytea/dotfiles/darwin
 nix flake update
 nix run nixpkgs#home-manager -- switch --flake .#home --impure
 ```
@@ -83,5 +91,56 @@ zsh
 ## 8. Apply darwin config
 
 ```sh
+cd ~/git_repos/github.com/barleytea/dotfiles
 make nix-darwin-apply
+```
+
+---
+
+## NixOS Setup
+
+For NixOS systems, the installation process is different as NixOS manages the entire system configuration.
+
+### 1. Create dotfiles directory
+
+```sh
+cd ~
+mkdir -p git_repos/github.com/barleytea
+cd git_repos/github.com/barleytea
+git clone https://github.com/barleytea/dotfiles.git
+```
+
+### 2. Set up local nix.conf
+
+```sh
+mkdir -p "$HOME/.config/nix"
+echo 'experimental-features = nix-command flakes' > "$HOME/.config/nix/nix.conf"
+echo 'use-xdg-base-directories = true' >> "$HOME/.config/nix/nix.conf"
+echo 'warn-dirty = false' >> "$HOME/.config/nix/nix.conf"
+```
+
+### 3. Copy hardware configuration
+
+```sh
+cd ~/git_repos/github.com/barleytea/dotfiles/nixos
+sudo nixos-generate-config --show-hardware-config > hardware-configuration.nix
+```
+
+### 4. Update system configuration
+
+Edit `nixos/configuration.nix` and `nixos/flake.nix` to match your system.
+
+### 5. Build and apply NixOS configuration
+
+```sh
+cd ~/git_repos/github.com/barleytea/dotfiles
+sudo nixos-rebuild switch --flake ./nixos#desktop
+```
+
+This command applies both system and home-manager configurations.
+
+### 6. Reboot
+
+```sh
+sudo reboot
 ```

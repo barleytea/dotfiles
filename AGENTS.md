@@ -1,10 +1,10 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-- `flake.nix`/`flake.lock`: Nix flake entry; defines `home`, `darwin`, and `nixos` configs.
-- `home-manager/`: User-level configs (git, shell, editors, tools).
-- `darwin/`, `nixos/`: System-level modules per platform.
-- `shared/`: Reusable Nix fragments; `scripts/`: helper utilities.
+- `darwin/`: macOS configuration with its own `flake.nix`, `home-manager/`, and nix-darwin modules.
+- `nixos/`: NixOS configuration with its own `flake.nix`, `home-manager/`, and system modules.
+- `nixvim/`: Standalone Neovim configuration as a separate flake.
+- `scripts/`: Helper utilities for Makefile commands.
 - `docs/`: How‑to docs (installation, Nix, pre-commit, VSCode, mise, etc.).
 - `vscode/`: Settings and extension sync scripts.
 
@@ -14,18 +14,33 @@
 - Architecture is auto-detected at build time.
 
 ## Build, Test, and Development Commands
+
+### macOS (darwin)
 - `make help`: Interactive overview of available tasks.
-- `make home-manager-apply`: Update flake, apply user config (`.#home`).
-- `make nix-darwin-apply`: Apply full macOS (nix-darwin) config (`.#all`).
+- `make home-manager-apply`: Update darwin flake, apply user config (`darwin/.#home`).
+- `make nix-darwin-apply`: Apply full macOS (nix-darwin) config (`darwin/.#all`).
 - `make nix-darwin-check`: Build-check darwin config only (no apply).
 - `make nix-check-all`: CI-like sequence: channel update + HM apply + darwin check.
+- `make flake-update-darwin`: Update darwin/flake.lock.
+
+### NixOS
+- `make nixos-switch`: Apply NixOS system config (`nixos/.#desktop`).
+- `make nixos-build`: Build NixOS config without applying.
+- `make flake-update-nixos`: Update nixos/flake.lock.
+
+### Nixvim
+- `make flake-update-nixvim`: Update nixvim/flake.lock.
+- `nix run ./nixvim`: Run standalone Neovim with nixvim config.
+
+### Other
+- `make flake-update-all`: Update all flake.lock files (darwin, nixos, nixvim).
 - `make pre-commit-init` / `make pre-commit-run`: Install/run hooks locally.
 - `make vscode-apply` / `make vscode-save`: Apply or snapshot VSCode settings.
 - `make mise-install-all` / `make mise-install-npm-commitizen`: Tool installs.
 
 ## Coding Style & Naming Conventions
 - Use `.editorconfig` rules: UTF-8, LF, final newline, trim whitespace; 2 spaces for YAML/JS/Lua, 4 spaces default, tabs for `Makefile`.
-- Prefer small, self-contained modules under `home-manager/`, `darwin/`, `nixos/`.
+- Prefer small, self-contained modules under `darwin/home-manager/`, `nixos/home-manager/`, `darwin/`, `nixos/`.
 - Nix: keep attributes sorted and options grouped; avoid side effects in modules.
 - Shell/YAML: keep lines short and declarative; quote variables.
 
@@ -41,7 +56,8 @@
 
 ## Security & Configuration Tips
 - Secrets: never commit tokens; `gitleaks` runs via pre-commit and CI. Adjust `.gitleaks.toml` for allowlists.
-- Nix: use `nix flake update` in feature branches; avoid pin drift in unrelated PRs.
+- Nix: use `make flake-update-darwin` or `make flake-update-nixos` in feature branches; avoid pin drift in unrelated PRs.
+- Each OS has independent flake.lock files, allowing different nixpkgs versions if needed.
 
 ## Agent-Specific Notes
 - Prefer dry-run/build checks before apply. Touch only relevant modules.

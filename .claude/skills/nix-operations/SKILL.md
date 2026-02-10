@@ -28,13 +28,26 @@ This repository supports Apple Silicon, Intel Mac, and NixOS. The architecture i
 
 ## Nix
 
-### Apply home-manager settings
+### NixOS: Apply system and home-manager settings
+
+```sh
+# Apply all NixOS settings (includes home-manager)
+sudo nixos-rebuild switch --flake .#desktop
+
+# Build only (no activation)
+sudo nixos-rebuild build --flake .#desktop
+
+# Test configuration temporarily
+sudo nixos-rebuild test --flake .#desktop
+```
+
+### macOS: Apply home-manager settings (standalone)
 
 ```sh
 make home-manager-apply
 ```
 
-### Apply all nix-darwin settings
+### macOS: Apply all nix-darwin settings
 
 ```sh
 make nix-darwin-apply
@@ -58,9 +71,10 @@ make nix-darwin-system-apply
 make nix-darwin-service-apply
 ```
 
-### Apply all nix settings
+### macOS: Apply all nix settings
 
 ```sh
+# Update flake inputs and apply all darwin settings
 make nix-update-all
 ```
 
@@ -118,9 +132,17 @@ While most dotfiles configurations are managed through the Nix store for reprodu
 
 **Implementation:**
 The Claude configuration files are linked directly from the dotfiles repository:
+
+**macOS (darwin):**
 ```sh
-~/.claude/CLAUDE.md → ~/git_repos/github.com/barleytea/dotfiles/home-manager/claude/config/CLAUDE.md
-~/.claude/settings.json → ~/git_repos/github.com/barleytea/dotfiles/home-manager/claude/config/settings.json
+~/.claude/CLAUDE.md → ~/git_repos/github.com/barleytea/dotfiles/darwin/home-manager/claude/config/CLAUDE.md
+~/.claude/settings.json → ~/git_repos/github.com/barleytea/dotfiles/darwin/home-manager/claude/config/settings.json
+```
+
+**NixOS:**
+```sh
+~/.claude/CLAUDE.md → ~/git_repos/github.com/barleytea/dotfiles/nixos/home-manager/claude/config/CLAUDE.md
+~/.claude/settings.json → ~/git_repos/github.com/barleytea/dotfiles/nixos/home-manager/claude/config/settings.json
 ```
 
 This approach enables:
@@ -129,7 +151,8 @@ This approach enables:
 - Version control of Claude settings through git
 
 **Configuration Location:**
-- Dotfiles: `home-manager/claude/default.nix`
+- Dotfiles (darwin): `darwin/home-manager/claude/default.nix`
+- Dotfiles (NixOS): `nixos/home-manager/claude/default.nix`
 - Target directory: `~/.claude/`
 
 ### NixOS: Running Generic Linux Binaries

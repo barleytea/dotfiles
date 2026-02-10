@@ -1,5 +1,17 @@
 # dotfiles
 
+Personal dotfiles managed with Nix, structured as independent flakes per OS.
+
+## Repository Structure
+
+This repository is organized into OS-specific directories, each with its own `flake.nix`:
+
+- **`darwin/`** - macOS configuration (nix-darwin + home-manager)
+- **`nixos/`** - NixOS configuration (system + home-manager)
+- **`nixvim/`** - Standalone Neovim configuration (can be used independently)
+
+Each directory is a complete, standalone flake that can be applied independently.
+
 ## Supported Architectures
 
 | Architecture | nixpkgs | Status |
@@ -7,6 +19,41 @@
 | Apple Silicon (aarch64-darwin) | unstable | ✅ Full support |
 | Intel Mac (x86_64-darwin) | unstable | ✅ Full support |
 | NixOS (x86_64-linux) | unstable | ✅ Full support |
+
+## Quick Start
+
+### macOS (darwin)
+
+```bash
+# Apply home-manager configuration
+make home-manager-apply
+
+# Apply nix-darwin system configuration
+make nix-darwin-apply
+
+# Update flake inputs
+make flake-update-darwin
+```
+
+### NixOS
+
+```bash
+# Apply system configuration
+make nixos-switch
+
+# Update flake inputs
+make flake-update-nixos
+```
+
+### Nixvim (Standalone)
+
+```bash
+# Run Neovim with nixvim config
+nix run ./nixvim
+
+# Update nixvim flake
+make flake-update-nixvim
+```
 
 ## Documentation
 

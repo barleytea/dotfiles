@@ -38,24 +38,31 @@ git diff
 Based on the changes detected, determine which documentation needs updating:
 
 **Package/Tool Changes:**
-- Files: `home-manager/default.nix`, `darwin/default.nix`, `flake.nix`
+- Files (darwin): `darwin/home-manager/default.nix`, `darwin/flake.nix`
+- Files (NixOS): `nixos/home-manager/default.nix`, `nixos/flake.nix`, `nixos/configuration.nix`
 - Impact: README.md (Main Tools), `/nix-operations`, `/mise-guide`
 
 **Keybinding Changes:**
-- Files: `home-manager/skhd/`, `home-manager/yabai/`, `nixos/desktop/hyprland/`, `home-manager/zellij/`
+- Files (darwin): `darwin/home-manager/skhd/`, `darwin/home-manager/yabai/`, `darwin/home-manager/zellij/`
+- Files (NixOS): `nixos/home-manager/zellij/`, `nixos/desktop/hyprland/`
 - Impact: `/services-guide`, `/hyprland-cheatsheet`, `/nixos-keybindings`, `/zellij-worktree`
 
 **Configuration Structure Changes:**
-- Files: New modules, directory reorganization
+- Files: New modules, directory reorganization, `darwin/`, `nixos/`, `nixvim/`
 - Impact: `.claude/CLAUDE.md` (Architecture Overview, Configuration Structure)
 
 **Command/Task Changes:**
-- Files: `Makefile`, `home-manager/mise/`, scripts
+- Files: `Makefile`, `darwin/home-manager/mise/`, `nixos/home-manager/mise/`, scripts
 - Impact: `.claude/CLAUDE.md` (Common Commands), `/nix-operations`, `/mise-guide`
 
 **Service/Daemon Changes:**
-- Files: `darwin/service/`, `nixos/services/`
+- Files (darwin): `darwin/service/`
+- Files (NixOS): `nixos/services/`
 - Impact: `/services-guide`, `/fileserver-guide`, `/gitserver-guide`
+
+**Nixvim Configuration Changes:**
+- Files: `nixvim/config/`, `nixvim/flake.nix`
+- Impact: Consider updating nixvim-specific documentation if needed
 
 ### 3. Detection Patterns
 
@@ -63,7 +70,7 @@ Look for these specific change patterns:
 
 **New Package Added:**
 ```nix
-# In home-manager/default.nix
+# In darwin/home-manager/default.nix or nixos/home-manager/default.nix
 packages = with pkgs; [
   ...
   newpackage  # ← New addition
@@ -81,14 +88,14 @@ new-task:
 
 **New Keybinding:**
 ```nix
-# In skhd/default.nix
+# In darwin/home-manager/skhd/default.nix
 "alt - t" = "...";  # ← New keybinding
 ```
 → Update: `/services-guide` Keyboard Shortcuts table
 
 **New Nix Module:**
 ```nix
-# In configuration.nix
+# In darwin/flake.nix or nixos/configuration.nix
 imports = [
   ./new-module  # ← New import
 ];
@@ -140,6 +147,7 @@ Provide a summary:
 
 **Detected Change:**
 ```diff
+# In darwin/flake.nix or nixos/configuration.nix
 + imports = [ ./new-feature ];
 ```
 
@@ -147,6 +155,7 @@ Provide a summary:
 1. `.claude/CLAUDE.md` → Update imports list
 2. `.claude/CLAUDE.md` → Update Architecture Overview if significant
 3. Consider creating new skill if feature is complex
+4. Specify if darwin-only or nixos-only feature
 
 ### Scenario 4: New Make Task
 
