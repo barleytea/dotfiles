@@ -242,11 +242,10 @@
       "locked": {
         "lastModified": 1770699502,
         "narHash": "sha256-TYIGZtgRfecM6QtxaGj58wDrfnE3RXjP1dgjrBj6P5w=",
-        "ref": "refs/heads/main",
+        "owner": "barleytea",
+        "repo": "nixvim-config",
         "rev": "e5cc3a7500d014c4d852607c5b1a559ae1ff0a7e",
-        "revCount": 2,
-        "type": "git",
-        "url": "file:///Users/miyoshi_s/git_repos/github.com/barleytea/nixvim-config"
+        "type": "github"
       },
       "original": {
         "owner": "barleytea",
