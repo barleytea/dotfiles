@@ -27,7 +27,7 @@ get_version() {
     local version_flag="${2:---version}"
 
     if command_exists "$cmd"; then
-        $cmd $version_flag 2>/dev/null | head -n1 || echo "unknown"
+        $cmd "$version_flag" 2>/dev/null | head -n1 || echo "unknown"
     else
         echo "not installed"
     fi

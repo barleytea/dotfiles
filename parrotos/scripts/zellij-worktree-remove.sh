@@ -59,7 +59,7 @@ generate_worktree_list() {
         return 1
     fi
 
-    echo "$worktrees" | jq -r '.[] | "\(.branch)\t\(.path)"' | while IFS=$'\t' read -r branch path; do
+    echo "$worktrees" | jq -r '.[] | "\(.branch)\t\(.path)"' | while IFS=$'\t' read -r branch _; do
         if [ "$branch" = "$current_branch" ]; then
             echo "📍 $branch (current - cannot delete)"
         else
@@ -79,7 +79,7 @@ fi
 # 選択されたブランチを処理
 echo "$selected" | while read -r line; do
     # マークを除去してブランチ名を取得
-    branch=$(echo "$line" | sed 's/^🌳 //')
+    branch="${line#🌳 }"
 
     echo ""
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

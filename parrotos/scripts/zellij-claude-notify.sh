@@ -31,6 +31,9 @@ case "$NOTIFICATION_TYPE" in
     ;;
 esac
 
+# 将来の notify-send 等での利用を想定（現状は zellij タブ名・bell のみ使用）
+: "${ICON}" "${MESSAGE}"
+
 # Zellijタブ名の先頭に通知マークを追加（Zellij内で実行されている場合のみ）
 if command -v zellij &> /dev/null && [ -n "${ZELLIJ:-}" ]; then
   # 現在のタブのインデックスを取得（ZELLIJ_TAB_INDEXは0始まり、sedは1始まり）

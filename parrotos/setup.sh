@@ -18,6 +18,7 @@ if [[ ! -f /etc/os-release ]]; then
     exit 1
 fi
 
+# shellcheck source=/dev/null
 source /etc/os-release
 if [[ ! "$ID" =~ (debian|ubuntu|parrot) ]]; then
     echo -e "${YELLOW}⚠ Warning: This script is designed for Debian-based systems.${NC}"
