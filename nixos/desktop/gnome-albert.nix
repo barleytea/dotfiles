@@ -12,14 +12,14 @@
         command = "albert toggle";
         name = "Albert Launcher";
       };
-      
+
       # Enable custom keybindings
       "org/gnome/settings-daemon/plugins/media-keys" = {
         custom-keybindings = [
           "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
         ];
       };
-      
+
       # Disable GNOME's default Super key behavior to avoid conflicts
       "org/gnome/mutter" = {
         overlay-key = "";

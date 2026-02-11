@@ -84,9 +84,10 @@ parrotos/
 - **フォレンジック**: binwalk, foremost, exiftool, steghide
 - **その他**: metasploit-framework, python3-pwntools
 
-### non-apt ツール (GitHub Releases)
+### non-apt ツール (GitHub Releases / 公式インストーラー)
 
 - **ランタイム管理**: mise
+- **エディタ**: cursor (公式インストーラー、CI ではスキップ)
 - **プロンプト**: starship
 - **Shell 拡張**: sheldon, atuin, zoxide
 - **ターミナル**: zellij

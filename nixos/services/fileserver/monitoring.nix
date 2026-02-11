@@ -8,7 +8,7 @@
       # ログファイルサイズ制限
       SystemMaxUse=500M
       SystemMaxFileSize=50M
-      
+
       # ログ保持期間
       MaxRetentionSec=1month
     '';
@@ -24,16 +24,16 @@
     script = with pkgs; ''
       # ディスク使用率をチェック
       usage=$(${coreutils}/bin/df /mnt/sda1 | ${gawk}/bin/awk 'NR==2 {print $5}' | ${gnused}/bin/sed 's/%//')
-      
+
       if [ "$usage" -gt 90 ]; then
         echo "WARNING: Disk usage on /mnt/sda1 is $usage%" | ${systemd}/bin/systemd-cat -t disk-monitor -p warning
       elif [ "$usage" -gt 80 ]; then
         echo "INFO: Disk usage on /mnt/sda1 is $usage%" | ${systemd}/bin/systemd-cat -t disk-monitor -p info
       fi
-      
+
       # セカンダリディスクもチェック
       usage2=$(${coreutils}/bin/df /mnt/sdb1 | ${gawk}/bin/awk 'NR==2 {print $5}' | ${gnused}/bin/sed 's/%//')
-      
+
       if [ "$usage2" -gt 90 ]; then
         echo "WARNING: Disk usage on /mnt/sdb1 is $usage2%" | ${systemd}/bin/systemd-cat -t disk-monitor -p warning
       elif [ "$usage2" -gt 80 ]; then
@@ -62,7 +62,7 @@
     };
     script = with pkgs; ''
       status=$(${tailscale}/bin/tailscale status -json | ${jq}/bin/jq -r .BackendState)
-      
+
       if [ "$status" != "Running" ]; then
         echo "WARNING: Tailscale is not running (status: $status)" | ${systemd}/bin/systemd-cat -t tailscale-monitor -p warning
       else
@@ -88,4 +88,4 @@
     logrotate
     rsyslog
   ];
-} 
+}

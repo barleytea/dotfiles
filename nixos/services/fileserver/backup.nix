@@ -12,7 +12,7 @@
     script = with pkgs; ''
       # バックアップ開始ログ
       echo "Starting file server backup..." | ${systemd}/bin/systemd-cat -t fileserver-backup -p info
-      
+
       # メインストレージからセカンダリストレージへのミラーリング
       ${rsync}/bin/rsync -av --delete \
         --exclude="lost+found" \
@@ -20,15 +20,15 @@
         --exclude="Thumbs.db" \
         /mnt/sda1/shares/ \
         /mnt/sdb1/backup/sda1-mirror/
-      
+
       backup_status=$?
-      
+
       if [ $backup_status -eq 0 ]; then
         echo "Backup completed successfully" | ${systemd}/bin/systemd-cat -t fileserver-backup -p info
       else
         echo "Backup failed with status $backup_status" | ${systemd}/bin/systemd-cat -t fileserver-backup -p err
       fi
-      
+
       # バックアップ統計情報をログ出力
       backup_size=$(${coreutils}/bin/du -sh /mnt/sdb1/backup/sda1-mirror/ | ${coreutils}/bin/cut -f1)
       echo "Backup size: $backup_size" | ${systemd}/bin/systemd-cat -t fileserver-backup -p info
@@ -57,25 +57,25 @@
       # スナップショット日付
       snapshot_date=$(${coreutils}/bin/date +%Y%m%d)
       snapshot_dir="/mnt/sdb1/snapshots/$snapshot_date"
-      
+
       echo "Creating snapshot: $snapshot_dir" | ${systemd}/bin/systemd-cat -t fileserver-snapshot -p info
-      
+
       # スナップショットディレクトリ作成
       ${coreutils}/bin/mkdir -p "$snapshot_dir"
-      
+
       # ハードリンクを使用した効率的なスナップショット作成
       ${rsync}/bin/rsync -av --link-dest=/mnt/sdb1/backup/sda1-mirror/ \
         /mnt/sda1/shares/ \
         "$snapshot_dir/"
-      
+
       snapshot_status=$?
-      
+
       if [ $snapshot_status -eq 0 ]; then
         echo "Snapshot created successfully: $snapshot_dir" | ${systemd}/bin/systemd-cat -t fileserver-snapshot -p info
       else
         echo "Snapshot creation failed with status $snapshot_status" | ${systemd}/bin/systemd-cat -t fileserver-snapshot -p err
       fi
-      
+
       # 古いスナップショットの削除（4週間以上古いもの）
       ${findutils}/bin/find /mnt/sdb1/snapshots/ -maxdepth 1 -type d -mtime +28 -exec rm -rf {} \;
     '';
@@ -103,4 +103,4 @@
     "d /mnt/sdb1/backup/sda1-mirror 0755 root root -"
     "d /mnt/sdb1/snapshots 0755 root root -"
   ];
-} 
+}

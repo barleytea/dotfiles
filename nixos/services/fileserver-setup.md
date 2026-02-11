@@ -195,4 +195,4 @@ ls -la /mnt/sdb1/backup/sda1-mirror/
 journalctl -u tailscaled -f
 journalctl -u smbd -f
 journalctl -u fileserver-backup -f
-``` 
+```

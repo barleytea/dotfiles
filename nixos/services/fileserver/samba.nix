@@ -7,35 +7,35 @@
     # nmbdは無効化（NetBIOS不要、wsddで代替）
     nmbd.enable = false;
     smbd.enable = true;
-    
+
     # Global設定（新しいsettings形式）
     settings = {
       global = {
         # ワークグループ名
         workgroup = "WORKGROUP";
-        
+
         # サーバー説明
         "server string" = "NixOS File Server";
-        
+
         # ログレベル
         "log level" = "1";
         "log file" = "/var/log/samba/log.%m";
         "max log size" = "1000";
-        
+
         # セキュリティ設定（securityTypeはdeprecated）
         security = "user";
         "encrypt passwords" = "yes";
-        
+
         # ネットワーク設定はファイアウォールで制御（明示バインドは行わない）
-        
+
         # パフォーマンス設定
         "socket options" = "TCP_NODELAY IPTOS_LOWDELAY SO_RCVBUF=65536 SO_SNDBUF=65536";
-        
+
         # 文字エンコーディング
         "unix charset" = "UTF-8";
         "dos charset" = "CP932";
       };
-      
+
       # 共有フォルダ設定
       public = {
         path = "/mnt/sda1/shares/public";
@@ -47,7 +47,7 @@
         "valid users" = "miyoshi_s";
         comment = "Public file sharing";
       };
-      
+
       media = {
         path = "/mnt/sda1/shares/media";
         browseable = "yes";
@@ -62,7 +62,7 @@
         "valid users" = "miyoshi_s";
         comment = "Media files (read-write)";
       };
-      
+
       backup = {
         path = "/mnt/sda1/shares/backup";
         browseable = "yes";
@@ -72,13 +72,13 @@
         "directory mask" = "0775";
         "valid users" = "miyoshi_s";
         comment = "Backup storage (Time Machine compatible)";
-        
+
         # Time Machine対応設定
         "fruit:aapl" = "yes";
         "fruit:time machine" = "yes";
         "vfs objects" = "catia fruit streams_xattr";
       };
-      
+
       docker = {
         path = "/mnt/sda1/shares/docker";
         browseable = "yes";
@@ -94,7 +94,7 @@
 
   # Sambaサービスが起動するまでwinsを無効化
   services.samba-wsdd.enable = true;
-  
+
   # smbdの起動順序調整（ネットワークとディレクトリ準備後）
   systemd.services."samba-smbd" = {
     after = [ "network-online.target" "fileserver-directory-setup.service" ];
@@ -109,4 +109,4 @@
     };
     # ローカルLANに露出しないようにデフォルトでは他IFは開かない
   };
-} 
+}

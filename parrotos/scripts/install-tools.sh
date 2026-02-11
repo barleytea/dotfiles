@@ -242,6 +242,21 @@ else
     rm -rf "${TMP_DIR}"
 fi
 
+# Cursor (GUI エディタ - CI ではスキップ)
+echo -e "\n${BLUE}[cursor]${NC}"
+if [[ "${CI:-}" == "true" ]]; then
+    echo -e "${YELLOW}Skipping cursor (CI environment)${NC}"
+elif command_exists cursor; then
+    echo -e "${GREEN}✓${NC} cursor is already installed: $(get_version cursor)"
+else
+    echo "Installing cursor..."
+    if curl -fsSL https://cursor.com/install | bash; then
+        echo -e "${GREEN}✓${NC} cursor installed"
+    else
+        echo -e "${YELLOW}⚠${NC} cursor install failed (manual install: https://cursor.com)${NC}"
+    fi
+fi
+
 # fastfetch
 echo -e "\n${BLUE}[fastfetch]${NC}"
 if command_exists fastfetch; then

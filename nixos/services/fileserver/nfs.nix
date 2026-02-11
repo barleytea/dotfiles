@@ -10,7 +10,7 @@
     exports = ''
       # NFSv4 ルート（擬似ルート）
       /mnt/sda1/shares        100.64.0.0/10(ro,fsid=0,no_subtree_check,crossmnt)
-      
+
       # サブエクスポート（擬似ルート配下）
       /mnt/sda1/shares/docker 100.64.0.0/10(rw,sync,no_subtree_check)
       /mnt/sda1/shares/dev    100.64.0.0/10(rw,sync,no_subtree_check)
@@ -50,4 +50,4 @@
 
   # 起動安定化のためnfsdカーネルモジュールを事前ロード
   boot.kernelModules = [ "nfsd" ];
-} 
+}

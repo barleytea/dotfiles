@@ -11,7 +11,7 @@
     "d /mnt/sda1/shares/backup 0775 miyoshi_s backup -"
     "d /mnt/sda1/shares/docker 0775 miyoshi_s fileserver -"
     "d /mnt/sda1/shares/dev 0775 miyoshi_s fileserver -"
-    
+
     # セカンダリストレージディレクトリ
     "d /mnt/sdb1/backup 0755 root root -"
     "d /mnt/sdb1/backup/sda1-mirror 0755 root root -"
@@ -42,13 +42,13 @@
         "/mnt/sdb1/backup" \
         "/mnt/sdb1/shares" \
         "/mnt/sdb1/shares/archive"; do
-        
+
         if [ ! -d "$dir" ]; then
           echo "Creating directory: $dir" | ${systemd}/bin/systemd-cat -t directory-setup -p info
           ${coreutils}/bin/mkdir -p "$dir"
         fi
       done
-      
+
       # 権限設定
       ${coreutils}/bin/chown -R miyoshi_s:fileserver /mnt/sda1/shares/public
       ${coreutils}/bin/chown -R miyoshi_s:media /mnt/sda1/shares/media
@@ -56,7 +56,7 @@
       ${coreutils}/bin/chown -R miyoshi_s:fileserver /mnt/sda1/shares/docker
       ${coreutils}/bin/chown -R miyoshi_s:fileserver /mnt/sda1/shares/dev
       ${coreutils}/bin/chown -R miyoshi_s:fileserver /mnt/sdb1/shares/archive
-      
+
       # パーミッション設定
       ${coreutils}/bin/chmod 0775 /mnt/sda1/shares/public
       ${coreutils}/bin/chmod 0755 /mnt/sda1/shares/media
@@ -64,7 +64,7 @@
       ${coreutils}/bin/chmod 0775 /mnt/sda1/shares/docker
       ${coreutils}/bin/chmod 0775 /mnt/sda1/shares/dev
       ${coreutils}/bin/chmod 0775 /mnt/sdb1/shares/archive
-      
+
       # デフォルトACLの設定（新しいファイル/ディレクトリに自動適用）
       if command -v setfacl >/dev/null 2>&1; then
         ${acl}/bin/setfacl -d -m g:fileserver:rwx /mnt/sda1/shares/public
@@ -73,7 +73,7 @@
         ${acl}/bin/setfacl -d -m g:backup:rwx /mnt/sda1/shares/backup
         ${acl}/bin/setfacl -d -m g:media:rx /mnt/sda1/shares/media
       fi
-      
+
       echo "Directory setup completed" | ${systemd}/bin/systemd-cat -t directory-setup -p info
     '';
   };
@@ -158,4 +158,4 @@ EOF
   environment.systemPackages = with pkgs; [
     acl  # ACL管理ツール
   ];
-} 
+}

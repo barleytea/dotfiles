@@ -31,11 +31,11 @@
       # S.M.A.R.T.データチェック
       ${smartmontools}/bin/smartctl -H /dev/sda || echo "WARNING: sda health check failed" | ${systemd}/bin/systemd-cat -t storage-health -p warning
       ${smartmontools}/bin/smartctl -H /dev/sdb || echo "WARNING: sdb health check failed" | ${systemd}/bin/systemd-cat -t storage-health -p warning
-      
+
       # ファイルシステムチェック（読み取り専用）
       ${e2fsprogs}/bin/fsck.ext4 -n /dev/sda1 || echo "WARNING: sda1 filesystem check failed" | ${systemd}/bin/systemd-cat -t storage-health -p warning
       ${e2fsprogs}/bin/fsck.ext4 -n /dev/sdb1 || echo "WARNING: sdb1 filesystem check failed" | ${systemd}/bin/systemd-cat -t storage-health -p warning
-      
+
       echo "Storage health check completed" | ${systemd}/bin/systemd-cat -t storage-health -p info
     '';
   };
@@ -57,4 +57,4 @@
     parted         # パーティション管理
     hdparm         # ディスク管理
   ];
-} 
+}

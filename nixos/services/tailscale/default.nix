@@ -13,32 +13,32 @@
     enable = true;
     # Tailscaleインターフェースを信頼済みとして設定
     trustedInterfaces = [ "tailscale0" ];
-    
+
     # VPN経由のみ許可、外部アクセス無効
     allowedTCPPorts = [
       # SSH, SMB, NFSはTailscale経由のみアクセス可能
       18789  # Web server
     ];
-    allowedUDPPorts = [ 
+    allowedUDPPorts = [
       41641  # Tailscale
     ];
   };
 
   # systemd-resolvedとの統合
   services.resolved.enable = true;
-  
+
   # 自動接続サービス
   systemd.services.tailscale-autoconnect = {
     description = "Automatic connection to Tailscale";
     after = [ "network-online.target" "tailscaled.service" ];
     wants = [ "network-online.target" "tailscaled.service" ];
     wantedBy = [ "multi-user.target" ];
-    
+
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;
     };
-    
+
     script = with pkgs; ''
       # tailscaledが起動するまで待機
       sleep 2
@@ -65,4 +65,4 @@
   environment.systemPackages = with pkgs; [
     tailscale
   ];
-} 
+}

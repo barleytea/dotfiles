@@ -128,7 +128,6 @@ echo -e "\n${BLUE}[Scripts]${NC}"
 mkdir -p ~/.local/bin
 for script in "${DOTFILES_DIR}/scripts"/zellij-*.sh; do
     if [[ -f "$script" ]]; then
-        local script_name
         script_name="$(basename "$script" .sh)"
         create_link "$script" ~/.local/bin/"${script_name}"
         if [[ "$DRY_RUN" == false ]]; then
