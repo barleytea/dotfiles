@@ -1,0 +1,60 @@
+name: ParrotOS CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'parrotos/**'
+      - '.github/workflows/parrotos.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'parrotos/**'
+      - '.github/workflows/parrotos.yml'
+
+jobs:
+  shellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install ShellCheck
+        run: sudo apt-get install -y shellcheck
+
+      - name: Run ShellCheck on all shell scripts
+        run: |
+          find parrotos -name "*.sh" -type f -exec shellcheck {} +
+
+  test-link-dry-run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Test link.sh dry-run
+        run: |
+          cd parrotos
+          bash scripts/link.sh --dry-run
+
+  test-package-lists:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify package list files exist
+        run: |
+          test -f parrotos/packages/base.txt
+          test -f parrotos/packages/ctf.txt
+
+      - name: Check for empty lines in package lists
+        run: |
+          if grep -E '^\s*$' parrotos/packages/base.txt parrotos/packages/ctf.txt; then
+            echo "Error: Package lists contain empty lines"
+            exit 1
+          fi
+
+      - name: Verify package names (basic validation)
+        run: |
+          # Check that package names don't contain spaces or special chars (basic check)
+          if grep -E '[^a-z0-9._+-]' parrotos/packages/base.txt parrotos/packages/ctf.txt; then
+            echo "Warning: Suspicious characters in package names"
+          fi

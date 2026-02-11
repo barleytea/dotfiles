@@ -1,0 +1,18 @@
+[tools]
+node = "lts"
+go = "1.24.5"
+python = "system"
+"npm:corepack" = "latest"
+"pipx:pre-commit" = "latest"
+
+[settings]
+experimental = true
+plugin_autoupdate_last_check_duration = "7 days"
+
+[tasks.npm-commitizen]
+description = "Install commitizen and cz-git globally"
+run = ["npm install -g commitizen cz-git"]
+
+[tasks.pre-commit-init]
+description = "Install pre-commit hooks"
+run = ["pre-commit install"]

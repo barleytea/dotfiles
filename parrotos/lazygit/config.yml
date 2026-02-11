@@ -1,0 +1,19 @@
+gui:
+  language: 'ja'
+  showRandomTip: false
+
+git:
+  pagers:
+    - pager: delta --dark --paging=never
+
+os:
+  editCommand: 'vim'
+
+confirmOnQuit: false
+
+customCommands:
+  - command: git cz
+    context: files
+    output: terminal
+    key: C
+    description: 'Commit with commitizen (git-cz)'

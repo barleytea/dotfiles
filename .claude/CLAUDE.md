@@ -4,21 +4,33 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Architecture Overview
 
-これはNixとHome Managerを使用したmacOS/NixOS dotfilesリポジトリです。主な構造は以下の通りです：
+これはNixとHome Managerを使用したmacOS/NixOS dotfilesリポジトリ、およびシンボリックリンクベースのParrotOS設定を含むリポジトリです：
 
-- **Nix Flake**: flake.nixで全体の設定を管理
-- **Home Manager**: home-manager/以下でユーザー環境設定
-- **nix-darwin**: darwin/以下でmacOSシステム設定
-- **NixOS**: nixos/以下でLinuxシステム設定
-- **Package Management**: NixとMise（旧rtx）でツール管理
+**Nix-based Configurations:**
+- **darwin/**: macOS用の独立したflake（nix-darwin + home-manager）
+  - `darwin/flake.nix`: macOS設定のメインエントリポイント
+  - `darwin/home-manager/`: macOS用のHome Manager設定
+- **nixos/**: NixOS用の独立したflake（system + home-manager）
+  - `nixos/flake.nix`: NixOS設定のメインエントリポイント
+  - `nixos/home-manager/`: NixOS用のHome Manager設定
+- **nixvim/**: Neovim用の独立したflake（スタンドアロン使用可能）
+  - `nixvim/flake.nix`: Neovim設定のメインエントリポイント
+
+**Non-Nix Configuration:**
+- **parrotos/**: ParrotOS/Debian用の設定（シンボリックリンク + aptパッケージ管理）
+  - `parrotos/setup.sh`: ワンライナーブートストラップ
+  - `parrotos/install.sh`: メインインストーラー
+  - `parrotos/Makefile`: 独立したタスクランナー
+  - Nix依存なし、aptとGitHub Releasesでツール管理
 
 ### Supported Architectures
 
-| Architecture | nixpkgs | Status |
-|--------------|---------|--------|
-| Apple Silicon (aarch64-darwin) | unstable | Full support |
-| Intel Mac (x86_64-darwin) | unstable | Full support |
-| NixOS (x86_64-linux) | unstable | Full support |
+| Architecture | Package Manager | Status |
+|--------------|-----------------|--------|
+| Apple Silicon (aarch64-darwin) | Nix (unstable) | Full support |
+| Intel Mac (x86_64-darwin) | Nix (unstable) | Full support |
+| NixOS (x86_64-linux) | Nix (unstable) | Full support |
+| ParrotOS / Debian (x86_64, aarch64) | apt + GitHub Releases | Full support |
 
 ## Common Commands
 
@@ -27,10 +39,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **NixOS:**
 ```bash
 # NixOS設定を適用（Home Manager含む）
-sudo nixos-rebuild switch --flake .#desktop
+make nixos-switch
+# または: cd nixos && sudo nixos-rebuild switch --flake .#desktop
 
 # 設定をビルドのみ（実際の適用はしない）
-sudo nixos-rebuild build --flake .#desktop
+make nixos-build
+# または: cd nixos && sudo nixos-rebuild build --flake .#desktop
 ```
 
 **macOS (nix-darwin):**
@@ -68,16 +82,16 @@ make home-manager-diff
 
 **Flake管理:**
 ```bash
-# 全入力を更新
-make flake-update
+# 全flake.lockを更新（darwin, nixos, nixvim）
+make flake-update-all
 
-# nixpkgsのみ更新
-make flake-update-nixpkgs
+# darwin/flake.lockのみ更新
+make flake-update-darwin
 
-# home-managerのみ更新
-make flake-update-home-manager
+# nixos/flake.lockのみ更新
+make flake-update-nixos
 
-# nixvimのみ更新
+# nixvim/flake.lockのみ更新
 make flake-update-nixvim
 ```
 
@@ -93,7 +107,41 @@ make help
 make help-fzf
 ```
 
-### Development Tools
+### ParrotOS / Debian
+**ワンライナーセットアップ:**
+```bash
+curl -fsSL https://raw.githubusercontent.com/barleytea/dotfiles/main/parrotos/setup.sh | bash
+```
+
+**手動セットアップ（parrotosディレクトリ内で実行）:**
+```bash
+# 完全セットアップ
+make setup
+
+# 個別インストール
+make install-packages  # apt基本パッケージ
+make install-ctf       # CTFツール
+make install-tools     # non-aptツール (mise, starship, sheldon, etc.)
+make install-fonts     # Nerd Fonts
+
+# シンボリックリンク
+make link              # リンク作成
+make unlink            # リンク削除
+make link-dry-run      # dry-run
+
+# 更新
+make update-packages   # aptパッケージ更新
+make update-tools      # non-aptツール更新
+
+# mise
+make mise-install              # mise管理ツールをインストール
+make mise-run-commitizen       # commitizen/cz-git
+make mise-run-pre-commit       # pre-commitフック
+```
+
+詳細は `parrotos/README.md` または `parrotos/Makefile` を参照。
+
+### Development Tools (Nix環境)
 ```bash
 # miseでツール管理
 make mise-install-all
@@ -111,10 +159,20 @@ make vscode-insiders-apply
 ## Key Architecture Patterns
 
 ### Nix Configuration Structure
-- **flake.nix**: メインエントリポイント、inputs/outputsの定義
-- **home-manager/default.nix**: Home Manager設定のエントリポイント
+
+**macOS (darwin):**
+- **darwin/flake.nix**: macOS用flakeのメインエントリポイント、inputs/outputsの定義
+- **darwin/home-manager/default.nix**: macOS用Home Manager設定のエントリポイント
 - **darwin/default.nix**: nix-darwinシステム設定のエントリポイント
-- **nixos/configuration.nix**: NixOS設定のエントリポイント
+
+**NixOS:**
+- **nixos/flake.nix**: NixOS用flakeのメインエントリポイント、inputs/outputsの定義
+- **nixos/home-manager/default.nix**: NixOS用Home Manager設定のエントリポイント
+- **nixos/configuration.nix**: NixOSシステム設定のエントリポイント
+
+**Neovim (nixvim):**
+- **nixvim/flake.nix**: Neovim用flakeのメインエントリポイント
+- **nixvim/config/**: Neovim設定ファイル群
 
 ### Tool Management Strategy
 - **Nix**: システムレベルのパッケージ管理
@@ -129,19 +187,29 @@ make vscode-insiders-apply
 5. **Development**: pre-commit、gitleaks、commitizen
 
 ### Claude Code Configuration
-- **home-manager/claude/config/**: Claude Code設定の管理
+
+**macOS (darwin):**
+- **darwin/home-manager/claude/config/**: macOS用Claude Code設定の管理
   - **CLAUDE.md**: プロジェクト固有の指示
   - **settings.json**: Claude Code設定（hooks、permissions）
   - **commands/**: カスタムコマンド定義
   - **skills/**: カスタムスキル定義
-- **自動デプロイ**: `make home-manager-apply`で`~/.claude/`にシンボリックリンクを作成
+
+**NixOS:**
+- **nixos/home-manager/claude/config/**: NixOS用Claude Code設定の管理
+  - 構造はmacOSと同じ
+
+**デプロイメント:**
+- **自動デプロイ**: `make home-manager-apply`（macOS）または`sudo nixos-rebuild switch`（NixOS）で`~/.claude/`にシンボリックリンクを作成
 - **スキル追加手順**:
-  1. `home-manager/claude/config/skills/<skill-name>/`にスキルディレクトリを作成
+  1. OS別のディレクトリに配置（`darwin/home-manager/claude/config/skills/<skill-name>/` または `nixos/home-manager/claude/config/skills/<skill-name>/`）
   2. `SKILL.md`（必須）とオプションファイルを配置
-  3. `make home-manager-apply`で`~/.claude/skills/<skill-name>/`に自動展開
+  3. 設定を適用すると`~/.claude/skills/<skill-name>/`に自動展開
 
 #### Zellij通知機能
-- **home-manager/scripts/zellij-claude-notify.sh**: Claude Code通知スクリプト
+- **スクリプト場所**:
+  - macOS: `darwin/home-manager/scripts/zellij-claude-notify.sh`
+  - NixOS: `nixos/home-manager/scripts/zellij-claude-notify.sh`
 - **機能**: Claude Codeが入力待ちやパーミッション要求時にZellijタブ名に🔔を表示
 - **動作**:
   - `Stop`イベント: Claude Code処理完了時（⏸️ Waiting...）
@@ -151,7 +219,9 @@ make vscode-insiders-apply
 - **実装**: `ZELLIJ_TAB_INDEX`環境変数を使用して各タブを個別に管理
 
 #### Statusline（ステータスバー）機能
-- **home-manager/claude/config/statusline.sh**: カスタムstatuslineスクリプト
+- **スクリプト場所**:
+  - macOS: `darwin/home-manager/claude/config/statusline.sh`
+  - NixOS: `nixos/home-manager/claude/config/statusline.sh`
 - **表示内容**:
   - **1行目**: 🤖 モデル名 | 📁 ディレクトリ名 | 🌿 Gitブランチ
   - **2行目**: 💰 セッション費用/当日費用/ブロック費用 | 🔥 Burn rate（$/時） | 🧠 コンテキスト使用量
@@ -183,9 +253,9 @@ make vscode-insiders-apply
 ## Build and Deploy Process
 
 **NixOS:**
-1. **Development**: 設定ファイルを編集
-2. **Build Check**: `sudo nixos-rebuild build --flake .#desktop`でビルド確認
-3. **Apply**: `sudo nixos-rebuild switch --flake .#desktop`でシステム設定適用（Home Manager含む）
+1. **Development**: 設定ファイルを編集（nixos/ディレクトリ内）
+2. **Build Check**: `make nixos-build`でビルド確認
+3. **Apply**: `make nixos-switch`でシステム設定適用（Home Manager含む）
 4. **Verification**: 設定が正しく適用されているか確認
 
 **macOS (nix-darwin):**
@@ -298,7 +368,7 @@ When making changes to this dotfiles project, **ALWAYS** check and update relate
 
 **例1: 新しいパッケージを追加**
 ```
-変更: home-manager/default.nix に ripgrep を追加
+変更: darwin/home-manager/default.nix に ripgrep を追加
 更新箇所:
 - README.md → Main Tools > Development Tools
 - /nix-operations → Package installation examples
@@ -306,7 +376,7 @@ When making changes to this dotfiles project, **ALWAYS** check and update relate
 
 **例2: Yabaiのキーバインド追加**
 ```
-変更: home-manager/skhd/default.nix に alt+t を追加
+変更: darwin/home-manager/skhd/default.nix に alt+t を追加
 更新箇所:
 - /services-guide → Keyboard Shortcuts テーブル
 ```

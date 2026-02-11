@@ -4,7 +4,9 @@ Personal dotfiles managed with Nix, structured as independent flakes per OS.
 
 ## Repository Structure
 
-This repository is organized into OS-specific directories, each with its own `flake.nix`:
+This repository is organized into OS-specific directories:
+
+### Nix-based Configurations
 
 - **`darwin/`** - macOS configuration (nix-darwin + home-manager)
 - **`nixos/`** - NixOS configuration (system + home-manager)
@@ -12,13 +14,22 @@ This repository is organized into OS-specific directories, each with its own `fl
 
 Each directory is a complete, standalone flake that can be applied independently.
 
+### Non-Nix Configuration
+
+- **`parrotos/`** - ParrotOS/Debian configuration (symlink-based + apt packages)
+  - CTF-focused setup for ParrotOS
+  - One-liner bootstrap with `curl | bash`
+  - No Nix dependency, portable across Debian-based systems
+  - See [parrotos/README.md](parrotos/README.md) for details
+
 ## Supported Architectures
 
-| Architecture | nixpkgs | Status |
-|--------------|---------|--------|
-| Apple Silicon (aarch64-darwin) | unstable | ✅ Full support |
-| Intel Mac (x86_64-darwin) | unstable | ✅ Full support |
-| NixOS (x86_64-linux) | unstable | ✅ Full support |
+| Architecture | Package Manager | Status |
+|--------------|-----------------|--------|
+| Apple Silicon (aarch64-darwin) | Nix (unstable) | ✅ Full support |
+| Intel Mac (x86_64-darwin) | Nix (unstable) | ✅ Full support |
+| NixOS (x86_64-linux) | Nix (unstable) | ✅ Full support |
+| ParrotOS / Debian (x86_64, aarch64) | apt + GitHub Releases | ✅ Full support |
 
 ## Quick Start
 
@@ -38,8 +49,11 @@ make flake-update-darwin
 ### NixOS
 
 ```bash
-# Apply system configuration
+# Apply system configuration (includes home-manager)
 make nixos-switch
+
+# Build only (no activation)
+make nixos-build
 
 # Update flake inputs
 make flake-update-nixos
@@ -54,6 +68,23 @@ nix run ./nixvim
 # Update nixvim flake
 make flake-update-nixvim
 ```
+
+### ParrotOS / Debian
+
+One-liner bootstrap:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/barleytea/dotfiles/main/parrotos/setup.sh | bash
+```
+
+Or manual setup:
+
+```bash
+cd ~/git_repos/github.com/barleytea/dotfiles/parrotos
+make setup
+```
+
+See [parrotos/README.md](parrotos/README.md) for detailed documentation.
 
 ## Documentation
 

@@ -1,0 +1,33 @@
+# Appearance
+font-family = "Hack Nerd Font"
+font-size = 12
+theme = "Dracula"
+
+# Window
+window-decoration = auto
+window-padding-x = 10
+window-padding-y = 8
+background-opacity = 0.65
+
+# Cursor
+cursor-style = bar
+cursor-style-blink = true
+
+# Tabs & splits (aligned with wezterm habits)
+keybind = ctrl+tab=next_tab
+keybind = ctrl+shift+tab=previous_tab
+keybind = ctrl+shift+t=new_tab
+keybind = ctrl+shift+w=close_tab
+keybind = ctrl+shift+n=new_window
+keybind = ctrl+shift+enter=new_split:right
+keybind = ctrl+shift+d=new_split:down
+keybind = ctrl+shift+h=goto_split:left
+keybind = ctrl+shift+j=goto_split:down
+keybind = ctrl+shift+k=goto_split:up
+keybind = ctrl+shift+l=goto_split:right
+keybind = ctrl+shift+left=resize_split:left,3
+keybind = ctrl+shift+right=resize_split:right,3
+keybind = ctrl+shift+up=resize_split:up,3
+keybind = ctrl+shift+down=resize_split:down,3
+keybind = ctrl+shift+e=equalize_splits
+keybind = ctrl+shift+p=inspector:toggle
