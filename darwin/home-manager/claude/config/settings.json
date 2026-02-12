@@ -17,38 +17,5 @@
       "Bash(mv:*)"
     ],
     "deny": []
-  },
-  "hooks": {
-    "Notification": [
-      {
-        "matcher": "permission_prompt",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.local/bin/zellij-claude-notify permission"
-          }
-        ]
-      },
-      {
-        "matcher": "idle_prompt",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.local/bin/zellij-claude-notify idle"
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.local/bin/zellij-claude-notify idle",
-            "async": true
-          }
-        ]
-      }
-    ]
   }
 }

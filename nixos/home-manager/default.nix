@@ -126,11 +126,6 @@ in {
       text = builtins.readFile ./scripts/zellij-session-switcher.sh;
       executable = true;
     };
-
-    file.".local/bin/zellij-claude-notify" = {
-      text = builtins.readFile ./scripts/zellij-claude-notify.sh;
-      executable = true;
-    };
   };
 
   # Enable security tools (Kali Linux) on Linux systems

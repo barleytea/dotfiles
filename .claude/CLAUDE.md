@@ -206,18 +206,6 @@ make vscode-insiders-apply
   2. `SKILL.md`（必須）とオプションファイルを配置
   3. 設定を適用すると`~/.claude/skills/<skill-name>/`に自動展開
 
-#### Zellij通知機能
-- **スクリプト場所**:
-  - macOS: `darwin/home-manager/scripts/zellij-claude-notify.sh`
-  - NixOS: `nixos/home-manager/scripts/zellij-claude-notify.sh`
-- **機能**: Claude Codeが入力待ちやパーミッション要求時にZellijタブ名に🔔を表示
-- **動作**:
-  - `Stop`イベント: Claude Code処理完了時（⏸️ Waiting...）
-  - `permission_prompt`: パーミッション要求時（🔔 Permission Required）
-  - `idle_prompt`: アイドル状態（⏸️ Waiting...）
-  - 通知クリア: 次のコマンド実行時に自動的にタブ名から🔔を削除
-- **実装**: `ZELLIJ_TAB_INDEX`環境変数を使用して各タブを個別に管理
-
 #### Statusline（ステータスバー）機能
 - **スクリプト場所**:
   - macOS: `darwin/home-manager/claude/config/statusline.sh`

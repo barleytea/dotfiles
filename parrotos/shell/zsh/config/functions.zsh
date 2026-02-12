@@ -27,6 +27,23 @@ function peco_select_history() {
 
 zle -N ghq_repository_search
 
+# Search and cd into git worktree
+function worktree_search() {
+  local worktree_dir="${HOME}/worktrees"
+  if [[ ! -d "$worktree_dir" ]]; then
+    echo "Directory not found: $worktree_dir" >&2
+    return 1
+  fi
+
+  local select=$(find "$worktree_dir" -name ".git" -exec dirname {} \; | fzf --preview "ls -la {}")
+  if [[ -n "$select" ]]; then
+    cd "$select"
+    zle reset-prompt
+  fi
+}
+
+zle -N worktree_search
+
 # AWS SSO
 alias awsp=set_aws_profile
 function set_aws_profile() {
