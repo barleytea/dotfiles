@@ -68,6 +68,17 @@
   },
   "typescript.updateImportsOnFileMove.enabled": "always",
   "go.toolsManagement.autoUpdate": true,
+  "go.gopath": "~/.local/share/go",
+  "go.goroot": "~/.local/share/mise/installs/go/1.24.5",
+  "go.alternateTools": {
+    "go": "~/.local/share/mise/installs/go/1.24.5/bin/go",
+    "gopls": "~/.local/share/go/bin/gopls"
+  },
+  "go.useLanguageServer": true,
+  "gopls": {
+    "ui.semanticTokens": true,
+    "ui.completion.usePlaceholders": true
+  },
   "json.maxItemsComputed": 50000,
   "markdown-checkbox.typeOfBulletPoint": "-",
   "latex-workshop.intellisense.package.enabled": true,
