@@ -22,6 +22,22 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Free disk space
+        run: |
+          echo "Disk space before cleanup:"
+          df -h
+
+          # Remove unnecessary preinstalled software to free up ~30GB
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /opt/hostedtoolcache/CodeQL
+          sudo docker image prune --all --force
+
+          echo "Disk space after cleanup:"
+          df -h
+
       - name: Install Nix
         uses: cachix/install-nix-action@v30
         with:
@@ -29,6 +45,7 @@ jobs:
           extra_nix_config: |
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
             substituters = https://cache.nixos.org/
+
       - name: Nix cache
         uses: DeterminateSystems/magic-nix-cache-action@v8
       - name: Check flakes
@@ -49,13 +66,42 @@ jobs:
         run: |
           export NIX_CONFIG="access-tokens = github.com=$GITHUB_TOKEN"
           cd nixos
+
+          echo "Disk space before NixOS build:"
+          df -h
+
           # ビルドチェックのみ実行（実際の適用はしない）
           nix build .#nixosConfigurations.desktop.config.system.build.toplevel --impure
+
+          echo "Disk space after NixOS build:"
+          df -h
+
+          # Clean up after NixOS build
+          nix-collect-garbage -d
+          nix store optimise
+
+          echo "Disk space after NixOS cleanup:"
+          df -h
+
       - name: Check nixvim configuration
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           export NIX_CONFIG="access-tokens = github.com=$GITHUB_TOKEN"
           cd nixvim
+
+          echo "Disk space before nixvim build:"
+          df -h
+
           # nixvimのビルドチェック (x86_64-linux)
           nix build .#packages.x86_64-linux.default --impure
+
+          echo "Disk space after nixvim build:"
+          df -h
+
+          # Clean up after nixvim build
+          nix-collect-garbage -d
+          nix store optimise
+
+          echo "Disk space after nixvim cleanup:"
+          df -h
