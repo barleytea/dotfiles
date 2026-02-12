@@ -75,9 +75,6 @@ make home-manager-switch
 
 # 設定をビルドのみ
 make home-manager-build
-
-# 現在との差分を表示
-make home-manager-diff
 ```
 
 **Flake管理:**
@@ -93,6 +90,9 @@ make flake-update-nixos
 
 # nixvim/flake.lockのみ更新
 make flake-update-nixvim
+
+# Nixチャンネルを最新に更新
+make nix-channel-update
 ```
 
 **一括操作:**
@@ -100,11 +100,23 @@ make flake-update-nixvim
 # Nix関連の全設定を一括で更新・適用（macOS用）
 make nix-update-all
 
+# CI環境用：実際の適用なしでテストを実行（macOS）
+make nix-check-all
+
 # 利用可能なコマンド一覧
 make help
 
 # fzfでコマンド選択
 make help-fzf
+```
+
+**メンテナンス:**
+```bash
+# Nixのガーベジコレクションを実行
+make nix-gc
+
+# Nixを完全にアンインストール
+make nix-uninstall
 ```
 
 ### ParrotOS / Debian
@@ -132,6 +144,7 @@ make link-dry-run      # dry-run
 # 更新
 make update-packages   # aptパッケージ更新
 make update-tools      # non-aptツール更新
+make update-repo       # dotfilesリポジトリ更新
 
 # mise
 make mise-install              # mise管理ツールをインストール
@@ -146,6 +159,7 @@ make mise-run-pre-commit       # pre-commitフック
 # miseでツール管理
 make mise-install-all
 make mise-list
+make mise-config
 
 # pre-commitを実行
 make pre-commit-run
@@ -154,6 +168,24 @@ make pre-commit-init
 # VSCode設定を適用
 make vscode-apply
 make vscode-insiders-apply
+
+# VSCode拡張機能一覧を保存
+make vscode-save
+
+# VSCodeとNeovimの設定を同期
+make vscode-sync
+
+# VSCode用のNeovim初期化ファイルを設定
+make vscode-neovim-init
+```
+
+**パフォーマンス診断:**
+```bash
+# zshの起動時間を測定
+make zsh
+
+# 現在のPATH環境変数を見やすく表示
+make paths
 ```
 
 ## Key Architecture Patterns

@@ -114,6 +114,7 @@ make unlink            # シンボリックリンクを削除
 make link-dry-run      # リンク作成の dry-run
 make update-packages   # apt パッケージを更新
 make update-tools      # non-apt ツールを更新
+make update-repo       # dotfiles リポジトリを更新
 make mise-install      # mise 管理のツールをインストール
 ```
 

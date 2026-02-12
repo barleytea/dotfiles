@@ -123,14 +123,15 @@
         "nixvim": "nixvim"
       },
       "locked": {
+        "lastModified": 1,
+        "narHash": "sha256-TYIGZtgRfecM6QtxaGj58wDrfnE3RXjP1dgjrBj6P5w=",
         "path": "../nixvim",
         "type": "path"
       },
       "original": {
         "path": "../nixvim",
         "type": "path"
-      },
-      "parent": []
+      }
     },
     "root": {
       "inputs": {

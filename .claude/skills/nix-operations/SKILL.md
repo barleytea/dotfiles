@@ -44,7 +44,14 @@ sudo nixos-rebuild test --flake .#desktop
 ### macOS: Apply home-manager settings (standalone)
 
 ```sh
+# Apply home-manager configuration (update flake + switch)
 make home-manager-apply
+
+# Apply home-manager configuration (no flake update)
+make home-manager-switch
+
+# Build only (no activation)
+make home-manager-build
 ```
 
 ### macOS: Apply all nix-darwin settings
@@ -76,6 +83,42 @@ make nix-darwin-service-apply
 ```sh
 # Update flake inputs and apply all darwin settings
 make nix-update-all
+
+# CI environment: Test without actual activation (macOS)
+make nix-check-all
+```
+
+### Update Nix channels
+
+```sh
+# Update Nix channel to latest unstable
+make nix-channel-update
+```
+
+### Update flake inputs
+
+```sh
+# Update all flake.lock files (darwin, nixos, nixvim)
+make flake-update-all
+
+# Update darwin/flake.lock only
+make flake-update-darwin
+
+# Update nixos/flake.lock only
+make flake-update-nixos
+
+# Update nixvim/flake.lock only
+make flake-update-nixvim
+```
+
+### Maintenance
+
+```sh
+# Run Nix garbage collection
+make nix-gc
+
+# Completely uninstall Nix
+make nix-uninstall
 ```
 
 ### Install a new package
