@@ -128,29 +128,6 @@
     }
   ],
   "latex-workshop.view.pdf.viewer": "tab",
-  "vscode-neovim.neovimExecutablePaths.darwin": "/Users/miyoshi_s/.local/state/nix/profiles/profile/bin/nvim",
-  "vscode-neovim.neovimInitVimPaths.darwin": "/home/miyoshi_s/.config/nvim/vscode.lua",
-  "vscode-neovim.neovimClean": true,
-  "vscode-neovim.optimizeForLightTheme": false,
-  "vscode-neovim.useCtrlKeysForNormalMode": true,
-  "vscode-neovim.useCtrlKeysForInsertMode": true,
-  "vscode-neovim.logLevel": "error",
-  "vscode-neovim.textDecorationsAtTop": true,
-  "vscode-neovim.revealCursorScrollLine": true,
-  "vscode-neovim.mouseSelectionStartVisualMode": true,
-  "vscode-neovim.highlightGroups.cursor": true,
-  "vscode-neovim.highlightGroups.highlights": true,
-  "vscode-neovim.highlightGroups.search": true,
-  "vscode-neovim.highlightGroups.visual": true,
-  "vscode-neovim.excludedExtensions": [],
-  "vscode-neovim.leader": "<space>",
-  "vscode-neovim.useWSL": false,
-  "vscode-neovim.processBufferMaxSize": 10240,
-  "vscode-neovim.compositeKeys": {
-    "jj": {
-      "command": "vscode-neovim.escape"
-    }
-  },
   "update.showReleaseNotes": false,
   "cursor.cpp.disabledLanguages": [
     "plaintext",
@@ -224,5 +201,6 @@
   "makefile.configureOnOpen": true,
   "update.releaseTrack": "dev",
   "update.mode": "silentlyApplyOnQuit",
-  "chat.viewSessions.orientation": "stacked"
+  "chat.viewSessions.orientation": "stacked",
+  "cursor.composer.usageSummaryDisplay": "always"
 }

@@ -73,6 +73,7 @@ remove_link ~/.config/ghostty/config
 # Zellij
 echo -e "\n${BLUE}[Zellij]${NC}"
 remove_link ~/.config/zellij/config.kdl
+remove_link ~/.config/zellij/layouts/webdev.kdl
 
 # Yazi
 echo -e "\n${BLUE}[Yazi]${NC}"

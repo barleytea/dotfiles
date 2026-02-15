@@ -9,7 +9,6 @@ Personal Neovim configuration using [nixvim](https://github.com/nix-community/ni
 - **LSP support** - Pre-configured language servers (Lua, Nix, etc.)
 - **Modern UI** - Telescope, Neo-tree, Lualine, and more
 - **Git integration** - Gitsigns, Neogit, and Diffview
-- **VSCode integration** - VSCode-Neovim keybindings
 
 ## Usage
 
@@ -80,7 +79,6 @@ config/
 ├── options.nix        # Neovim basic options
 ├── keymaps.nix        # Key mappings
 ├── colorschemes.nix   # Color schemes (Dracula with transparency)
-├── vscode.nix         # VSCode integration
 └── plugins/
     ├── lsp.nix        # LSP configuration (nil_ls, lua_ls, etc.)
     ├── completion.nix # Completion (nvim-cmp, copilot, etc.)

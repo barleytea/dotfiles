@@ -1,3 +1,5 @@
+alias zw='zellij --layout webdev'
+
 # Alacrittyの場合のみZellijを自動起動
 # Zellij内、またはAlacritty以外のターミナルでは起動しない
 if [[ -z "$ZELLIJ" ]] && ( [[ "$TERM_PROGRAM" == "alacritty" ]] || [[ -n "$ALACRITTY_SOCKET" ]] ); then

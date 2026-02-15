@@ -114,11 +114,8 @@ vscode-insiders-apply: ## VSCode Insidersの設定と拡張機能を適用しま
 vscode-save: ## 現在のVSCode拡張機能一覧を保存します
 	bash vscode/extensions/save.sh
 
-vscode-sync: ## VSCodeとNeovimの設定を同期します
+vscode-sync: ## VSCodeの設定を同期します
 	bash vscode/settings/sync.sh
-
-vscode-neovim-init: ## VSCode用のNeovim初期化ファイルを設定します
-	bash vscode/settings/neovim-init.sh
 
 ## Mise ##
 mise-install-npm-commitizen: ## miseで管理しているnpmパッケージ（commitizen）をグローバルにインストールします

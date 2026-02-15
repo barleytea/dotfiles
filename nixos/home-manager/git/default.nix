@@ -21,14 +21,7 @@ gitConfig = ''
   ${if pkgs.stdenv.isLinux then ''
     [credential]
       helper =
-      helper = !${pkgs.git-credential-manager}/bin/git-credential-manager
-      credentialStore = secretservice
-
-    [credential "https://github.com"]
-      provider = github
-
-    [credential "https://gist.github.com"]
-      provider = github
+      helper = cache --timeout=7200
   '' else if pkgs.stdenv.isDarwin then ''
     [credential]
       helper = osxkeychain

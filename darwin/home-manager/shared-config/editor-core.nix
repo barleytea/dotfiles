@@ -89,13 +89,6 @@ let
     "terminal.integrated.fontSize" = settings.terminal.fontSize;
     "terminal.integrated.lineHeight" = settings.terminal.lineHeight;
     "terminal.integrated.scrollback" = settings.terminal.scrollback;
-
-    # VSCode-Neovim拡張機能の設定
-    "vscode-neovim.compositeKeys" = {
-      "${settings.keyBindings.escape}" = {
-        command = "vscode-neovim.escape";
-      };
-    };
   };
 
   # Neovim向け設定変換関数

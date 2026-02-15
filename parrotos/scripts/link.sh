@@ -112,6 +112,7 @@ create_link "${DOTFILES_DIR}/ghostty/config" ~/.config/ghostty/config
 # Zellij
 echo -e "\n${BLUE}[Zellij]${NC}"
 create_link "${DOTFILES_DIR}/zellij/config.kdl" ~/.config/zellij/config.kdl
+create_link "${DOTFILES_DIR}/zellij/layouts/webdev.kdl" ~/.config/zellij/layouts/webdev.kdl
 
 # Yazi
 echo -e "\n${BLUE}[Yazi]${NC}"

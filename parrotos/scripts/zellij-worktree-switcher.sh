@@ -174,9 +174,9 @@ if [ "$OPEN_MODE" = "session" ]; then
     echo "📦 Mode: New Session ($session_name)"
     zellij run --close-on-exit --name "switch-session" -- zellij attach --create "$session_name" options --default-cwd "$worktree_path"
 else
-    # ペインモード: 現在のセッション内に新しいペインを作成
-    echo "📦 Mode: New Pane"
-    zellij action new-pane --cwd "$worktree_path" --name "$branch" -- zsh
+    # ペインモード: 現在のセッション内にwebdevレイアウトで新しいタブを作成
+    echo "📦 Mode: New Tab (webdev layout)"
+    zellij action new-tab --layout webdev --cwd "$worktree_path" --name "$branch"
 fi
 
 # 完了メッセージを表示してユーザーの確認を待つ

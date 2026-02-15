@@ -64,7 +64,8 @@
       "Bash(chmod:*)",
       "Bash(nix-env:*)",
       "Bash(curl:*)",
-      "Bash(docker inspect:*)"
+      "Bash(docker inspect:*)",
+      "WebFetch(domain:zenn.dev)"
     ],
     "deny": []
   }

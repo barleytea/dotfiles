@@ -23,4 +23,5 @@ in {
   };
 
   home.file.".config/zellij/config.kdl".text = config;
+  home.file.".config/zellij/layouts/webdev.kdl".source = ./layouts/webdev.kdl;
 }

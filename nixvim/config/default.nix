@@ -8,7 +8,6 @@
     ./plugins/ui.nix
     ./plugins/editor.nix
     ./plugins/git.nix
-    ./vscode.nix
   ];
 
   extraPackages = with pkgs; [
