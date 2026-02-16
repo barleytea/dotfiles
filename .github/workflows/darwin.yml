@@ -70,11 +70,12 @@ jobs:
         shell: zsh {0}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NIXVIM_CONFIG_INPUT: path:${{ github.workspace }}/nixvim
         run: |
           export USER=runner
           source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
           cd darwin
-          nix build path:.#homeConfigurations.home.activationPackage --impure --no-write-lock-file
+          nix build path:.#homeConfigurations.home.activationPackage --impure --no-write-lock-file --override-input nixvim-config "$NIXVIM_CONFIG_INPUT"
           ./result/activate
       - name: Test mise install
         shell: zsh {0}
@@ -112,12 +113,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CI: true
           USER: runner
+          NIXVIM_CONFIG_INPUT: path:${{ github.workspace }}/nixvim
         run: |
           source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
           export NIX_CONFIG="access-tokens = github.com=$GITHUB_TOKEN"
           cd darwin
           # ビルドチェックのみ実行（実際の適用はしない）
-          nix --extra-experimental-features "nix-command flakes" build path:.#darwinConfigurations.all.system --impure --no-write-lock-file
+          nix --extra-experimental-features "nix-command flakes" build path:.#darwinConfigurations.all.system --impure --no-write-lock-file --override-input nixvim-config "$NIXVIM_CONFIG_INPUT"
       - name: Check nixvim configuration
         shell: zsh {0}
         env:
@@ -132,6 +134,7 @@ jobs:
         shell: zsh {0}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NIXVIM_CONFIG_INPUT: path:${{ github.workspace }}/nixvim
         run: |
           source $HOME/.zshenv
           source $HOME/.config/zsh/.zshrc
