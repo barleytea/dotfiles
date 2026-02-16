@@ -104,10 +104,11 @@
       },
       "locked": {
         "dir": "nixvim",
-        "dirtyRev": "39189716aac5ae6f6c3e9a01c59a7f345c4738eb-dirty",
-        "dirtyShortRev": "3918971-dirty",
-        "lastModified": 1771244656,
-        "narHash": "sha256-pynSJaMXVgNT8EN3DX2tCNmNIOoYWWC6DD4287Fkz/4=",
+        "lastModified": 1771248787,
+        "narHash": "sha256-2mGDa6uCTtqP4CgrjLQomp+KHCTp2d4UPsWVYfhVLQ8=",
+        "ref": "refs/heads/main",
+        "rev": "de9530e441aed8f510e2e33edabd80cae0f52e00",
+        "revCount": 450,
         "type": "git",
         "url": "file:.."
       },
