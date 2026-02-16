@@ -1,9 +1,4 @@
 {
-  "statusLine": {
-    "type": "command",
-    "command": "~/.claude/statusline.sh",
-    "padding": 1
-  },
   "permissions": {
     "allow": [
       "List(*)",
@@ -17,5 +12,10 @@
       "Bash(mv:*)"
     ],
     "deny": []
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/statusline.sh",
+    "padding": 1
   }
 }

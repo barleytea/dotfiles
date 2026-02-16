@@ -103,22 +103,25 @@
         "nixvim": "nixvim"
       },
       "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-7Fpeor3qsw+eauovGUwKONVK7sTbJiKVC8GYfjMmULs=",
-        "path": "../nixvim",
-        "type": "path"
+        "dir": "nixvim",
+        "dirtyRev": "39189716aac5ae6f6c3e9a01c59a7f345c4738eb-dirty",
+        "dirtyShortRev": "3918971-dirty",
+        "lastModified": 1771244656,
+        "narHash": "sha256-pynSJaMXVgNT8EN3DX2tCNmNIOoYWWC6DD4287Fkz/4=",
+        "type": "git",
+        "url": "file:.."
       },
       "original": {
-        "path": "../nixvim",
-        "type": "path"
+        "dir": "nixvim",
+        "type": "git",
+        "url": "file:.."
       }
     },
     "root": {
       "inputs": {
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
-        "nixvim-config": "nixvim-config",
-        "zellij-current-tab-index-src": "zellij-current-tab-index-src"
+        "nixvim-config": "nixvim-config"
       }
     },
     "systems": {
@@ -134,19 +137,6 @@
         "owner": "nix-systems",
         "repo": "default",
         "type": "github"
-      }
-    },
-    "zellij-current-tab-index-src": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-YNxc5NlyYYGJHT942xBQEUna4ceb0ELfTzWLxV+hTYA=",
-        "path": "../zellij-plugins/current-tab-index",
-        "type": "path"
-      },
-      "original": {
-        "path": "../zellij-plugins/current-tab-index",
-        "type": "path"
       }
     }
   },

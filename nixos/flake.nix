@@ -8,7 +8,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixvim-config = {
-      url = "path:../nixvim";
+      # Avoid path input escaping flake root during pure evaluation.
+      url = "git+file:..?dir=nixvim";
       flake = true;
     };
   };
