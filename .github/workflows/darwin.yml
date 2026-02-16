@@ -74,8 +74,7 @@ jobs:
           export USER=runner
           source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
           cd darwin
-          nix flake update
-          nix run nixpkgs#home-manager -- switch --flake .#home --impure
+          nix run nixpkgs#home-manager -- switch --flake .#home --impure --no-write-lock-file
       - name: Test mise install
         shell: zsh {0}
         env:
@@ -117,7 +116,7 @@ jobs:
           export NIX_CONFIG="access-tokens = github.com=$GITHUB_TOKEN"
           cd darwin
           # ビルドチェックのみ実行（実際の適用はしない）
-          nix --extra-experimental-features "nix-command flakes" build .#darwinConfigurations.all.system --impure
+          nix --extra-experimental-features "nix-command flakes" build .#darwinConfigurations.all.system --impure --no-write-lock-file
       - name: Check nixvim configuration
         shell: zsh {0}
         env:
@@ -127,7 +126,7 @@ jobs:
           export NIX_CONFIG="access-tokens = github.com=$GITHUB_TOKEN"
           cd nixvim
           # nixvimのビルドチェック
-          nix build .#packages.aarch64-darwin.default --impure
+          nix build .#packages.aarch64-darwin.default --impure --no-write-lock-file
       - name: Run nix-check-all
         shell: zsh {0}
         env:
@@ -135,7 +134,7 @@ jobs:
         run: |
           source $HOME/.zshenv
           source $HOME/.config/zsh/.zshrc
-          make nix-check-all
+          make nix-check-all-ci
       - name: Run vscode-settings
         shell: zsh {0}
         run: |

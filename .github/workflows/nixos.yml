@@ -71,7 +71,7 @@ jobs:
           df -h
 
           # ビルドチェックのみ実行（実際の適用はしない）
-          nix build .#nixosConfigurations.desktop.config.system.build.toplevel --impure
+          nix build .#nixosConfigurations.desktop.config.system.build.toplevel --impure --no-write-lock-file
 
           echo "Disk space after NixOS build:"
           df -h
@@ -94,7 +94,7 @@ jobs:
           df -h
 
           # nixvimのビルドチェック (x86_64-linux)
-          nix build .#packages.x86_64-linux.default --impure
+          nix build .#packages.x86_64-linux.default --impure --no-write-lock-file
 
           echo "Disk space after nixvim build:"
           df -h

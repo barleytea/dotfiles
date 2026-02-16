@@ -44,7 +44,7 @@ flake-update-all: flake-update-darwin flake-update-nixos flake-update-nixvim ## 
 ## ---- Home Manager Operations (macOS) ---- ##
 home-manager-switch: ## Home Manager設定を適用 (flake.lock を更新しない)
 	$(NIX_SOURCE_CMD) \
-	cd darwin && nix run nixpkgs#home-manager -- switch --flake .#home --impure
+	cd darwin && nix run nixpkgs#home-manager -- switch --flake .#home --impure --no-write-lock-file
 
 home-manager-build: ## Home Manager設定をビルドのみ (適用しない)
 	$(NIX_SOURCE_CMD) \
@@ -75,7 +75,7 @@ nix-darwin-service-apply: ## nix-darwinのサービス設定のみを適用し�
 
 nix-darwin-check: ## nix-darwinの設定をビルドのみ行います（実際の適用はしません）
 	$(NIX_SOURCE_CMD) \
-	cd darwin && nix --extra-experimental-features "nix-command flakes" build .#darwinConfigurations.all.system --impure
+	cd darwin && nix --extra-experimental-features "nix-command flakes" build .#darwinConfigurations.all.system --impure --no-write-lock-file
 
 ## ---- NixOS Operations ---- ##
 nixos-switch: ## NixOSシステム設定を適用します
@@ -84,12 +84,14 @@ nixos-switch: ## NixOSシステム設定を適用します
 
 nixos-build: ## NixOSシステム設定をビルドのみ行います（適用しない）
 	$(NIX_SOURCE_CMD) \
-	cd nixos && sudo nixos-rebuild build --flake .#desktop
+	cd nixos && sudo nixos-rebuild build --flake .#desktop --no-write-lock-file
 
 ## ---- All Operations ---- ##
 nix-update-all: nix-channel-update home-manager-apply nix-darwin-apply ## Nix関連の全設定を一括で更新・適用します (macOS)
 
 nix-check-all: nix-channel-update home-manager-apply nix-darwin-check ## CI環境用：実際の適用なしでテストを実行します (macOS)
+
+nix-check-all-ci: nix-channel-update home-manager-switch nix-darwin-check ## CI環境用：flake.lockを更新せずにテストを実行します (macOS)
 
 nix-gc: ## Nixのガーベジコレクションを実行します
 	$(NIX_SOURCE_CMD) \
