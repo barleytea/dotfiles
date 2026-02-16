@@ -17,6 +17,8 @@ input=$(cat)
 run_ccusage() {
     if command -v ccusage > /dev/null 2>&1; then
         ccusage "$@"
+    elif command -v npx > /dev/null 2>&1; then
+        npx --yes ccusage "$@"
     else
         return 127
     fi

@@ -65,7 +65,18 @@
       "Bash(nix-env:*)",
       "Bash(curl:*)",
       "Bash(docker inspect:*)",
-      "WebFetch(domain:zenn.dev)"
+      "WebFetch(domain:zenn.dev)",
+      "Bash({)",
+      "Bash(\"model\": {\"display_name\": \"Sonnet 4.5\"},)",
+      "Bash(\"workspace\": {\"current_dir\": \"/Users/miyoshi_s/git_repos/github.com/barleytea/dotfiles\"},)",
+      "Bash(\"context_window\": {\"used_percentage\": 35.2},)",
+      "Bash(\"cost\": {\"total_cost_usd\": 0.1234, \"total_duration_ms\": 3600000})",
+      "Bash(})",
+      "Bash(EOF)",
+      "Bash(ccusage --version:*)",
+      "Bash(zsh -c 'mise activate zsh > /dev/null 2>&1; command -v ccusage && ccusage --version')",
+      "Bash(mise which:*)",
+      "Bash(/Users/miyoshi_s/.local/share/mise/installs/npm-ccusage/18.0.5/bin/ccusage:*)"
     ],
     "deny": []
   }

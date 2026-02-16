@@ -24,6 +24,7 @@
         "npm:vibe-kanban" = "latest";
         "npm:@openai/codex" = "latest";
         "npm:@vibe-kit/grok-cli" = "latest";
+        "npm:ccusage" = "latest";
         "pipx:pre-commit" = "latest";
       };
 
