@@ -59,6 +59,57 @@ get_worktree_path() {
     gwq list --json 2>/dev/null | jq -r --arg b "$target_branch" '.[] | select(.branch == $b) | .path'
 }
 
+shorten_tab_name() {
+    local name="$1"
+    [[ -z "$name" ]] && name="tab"
+    if ((${#name} > 16)); then
+        name="${name:0:16}"
+    fi
+    printf '%s' "$name"
+}
+
+existing_tab_names() {
+    zellij action query-tab-names 2>/dev/null | sed -E 's/^[[:space:]]*[0-9]+[[:space:]]+//; s/[[:space:]]+\(current\)$//; s/^"//; s/"$//' || true
+}
+
+unique_tab_name() {
+    local base="$1"
+    local candidate suffix candidate_base_len index existing_names
+
+    base=$(shorten_tab_name "$base")
+    existing_names=$(existing_tab_names)
+    candidate="$base"
+
+    if ! printf '%s\n' "$existing_names" | grep -Fxq -- "$candidate"; then
+        printf '%s' "$candidate"
+        return
+    fi
+
+    index=2
+    while true; do
+        suffix="#${index}"
+        candidate_base_len=$((16 - ${#suffix}))
+        ((candidate_base_len < 1)) && candidate_base_len=1
+        candidate="${base:0:candidate_base_len}${suffix}"
+        if ! printf '%s\n' "$existing_names" | grep -Fxq -- "$candidate"; then
+            printf '%s' "$candidate"
+            return
+        fi
+        index=$((index + 1))
+    done
+}
+
+confirm_replace_tab() {
+    local answer
+    echo -n "♻️  Replace current tab with new webdev tab? [y/N]: "
+    read -r answer
+    [[ "$answer" =~ ^[Yy]$ ]]
+}
+
+replace_sentinel_name() {
+    printf '__zw-replace-%s-%s' "$RANDOM" "$(date +%s)"
+}
+
 # fzfに渡すブランチリストを生成
 generate_branch_list() {
     # 新規ブランチ作成オプション
@@ -175,8 +226,29 @@ if [ "$OPEN_MODE" = "session" ]; then
     zellij run --close-on-exit --name "switch-session" -- zellij attach --create "$session_name" options --default-cwd "$worktree_path"
 else
     # ペインモード: 現在のセッション内にwebdevレイアウトで新しいタブを作成
-    echo "📦 Mode: New Tab (webdev layout)"
-    zellij action new-tab --layout webdev --cwd "$worktree_path" --name "$branch"
+    should_replace=false
+    sentinel_name=""
+    tab_name=$(unique_tab_name "$(basename "$worktree_path")")
+    echo "📦 Mode: New Tab (webdev layout: $tab_name)"
+
+    if confirm_replace_tab; then
+        should_replace=true
+        sentinel_name=$(replace_sentinel_name)
+        if ! zellij action rename-tab "$sentinel_name"; then
+            echo "⚠️  Could not mark current tab. Replace skipped."
+            should_replace=false
+        fi
+    fi
+
+    zellij action new-tab --layout webdev --cwd "$worktree_path" --name "$tab_name"
+
+    if [ "$should_replace" = true ]; then
+        if zellij action go-to-tab-name "$sentinel_name"; then
+            zellij action close-tab
+        else
+            echo "⚠️  Failed to focus marked tab (${sentinel_name}). Replace skipped."
+        fi
+    fi
 fi
 
 # 完了メッセージを表示してユーザーの確認を待つ

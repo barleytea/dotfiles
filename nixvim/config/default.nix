@@ -11,6 +11,8 @@
   ];
 
   extraPackages = with pkgs; [
+    go
+    gopls
     lua-language-server
     stylua
     nil # unstable 前提なので常に含める

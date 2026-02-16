@@ -41,7 +41,15 @@
     hostName = "nixos"; # Define your hostname.
     networkmanager.enable = true;
     # ファイアウォール設定はTailscaleとファイルサーバモジュールで管理
-    firewall.enable = true;
+    firewall = {
+      enable = true;
+      allowedUDPPortRanges = [
+        {
+          from = 60000;
+          to = 61000;
+        }
+      ];
+    };
   };
 
   # Time zone and internationalization

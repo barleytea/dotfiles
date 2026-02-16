@@ -157,5 +157,15 @@
       vim.cmd('command! -nargs=* T split | wincmd j | resize 20 | terminal <args>')
       vim.cmd('autocmd TermOpen * startinsert')
     end
+
+    -- Format Go files on save via LSP (gopls)
+    local go_lsp_format = vim.api.nvim_create_augroup("GoLspFormat", { clear = true })
+    vim.api.nvim_create_autocmd("BufWritePre", {
+      group = go_lsp_format,
+      pattern = "*.go",
+      callback = function()
+        vim.lsp.buf.format({ async = false })
+      end,
+    })
   '';
 }

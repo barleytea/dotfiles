@@ -74,7 +74,8 @@ jobs:
           export USER=runner
           source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
           cd darwin
-          nix run nixpkgs#home-manager -- switch --flake .#home --impure --no-write-lock-file
+          nix build path:.#homeConfigurations.home.activationPackage --impure --no-write-lock-file
+          ./result/activate
       - name: Test mise install
         shell: zsh {0}
         env:
@@ -116,7 +117,7 @@ jobs:
           export NIX_CONFIG="access-tokens = github.com=$GITHUB_TOKEN"
           cd darwin
           # ビルドチェックのみ実行（実際の適用はしない）
-          nix --extra-experimental-features "nix-command flakes" build .#darwinConfigurations.all.system --impure --no-write-lock-file
+          nix --extra-experimental-features "nix-command flakes" build path:.#darwinConfigurations.all.system --impure --no-write-lock-file
       - name: Check nixvim configuration
         shell: zsh {0}
         env:

@@ -76,6 +76,7 @@ in {
       mecab
       minikube
       mise
+      mosh
       # mpv  # Temporarily disabled due to Swift build failure in nixpkgs unstable
       nerd-fonts.hack
       neofetch
@@ -121,6 +122,16 @@ in {
 
     file.".local/bin/zellij-session-switcher" = {
       text = builtins.readFile ./scripts/zellij-session-switcher.sh;
+      executable = true;
+    };
+
+    file.".local/bin/send-to-pane" = {
+      text = builtins.readFile ./scripts/send-to-pane.sh;
+      executable = true;
+    };
+
+    file.".local/bin/send-to-tab" = {
+      text = builtins.readFile ./scripts/send-to-tab.sh;
       executable = true;
     };
   };

@@ -29,6 +29,18 @@
           };
         };
 
+        # Go language server
+        gopls = {
+          enable = true;
+          settings = {
+            gopls = {
+              semanticTokens = true;
+              usePlaceholders = true;
+              staticcheck = true;
+            };
+          };
+        };
+
         # Add more language servers as needed
       };
 

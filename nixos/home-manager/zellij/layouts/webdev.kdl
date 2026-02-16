@@ -6,7 +6,7 @@ layout {
         children
     }
 
-    tab name="Code" focus=true {
+    tab focus=true {
         pane split_direction="vertical" {
             pane size="60%" name="editor" command="zsh" {
                 args "-ic" "nvim"

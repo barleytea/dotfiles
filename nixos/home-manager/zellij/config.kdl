@@ -158,6 +158,30 @@ keybinds {
             };
             SwitchToMode "Normal"
         }
+        // choose-tree
+        bind "t" {
+            LaunchOrFocusPlugin "choose_tree" {
+                floating true
+                move_to_focused_tab true
+            };
+            SwitchToMode "Normal"
+        }
+        // workspace switcher
+        bind "l" {
+            LaunchOrFocusPlugin "workspace" {
+                floating true
+                move_to_focused_tab true
+            };
+            SwitchToMode "Normal"
+        }
+        // send keys
+        bind "k" {
+            LaunchOrFocusPlugin "send_keys" {
+                floating true
+                move_to_focused_tab true
+            };
+            SwitchToMode "Normal"
+        }
         bind "w" {
             LaunchOrFocusPlugin "session-manager" {
                 floating true
@@ -261,6 +285,9 @@ plugins {
     }
     configuration location="zellij:configuration"
     plugin-manager location="zellij:plugin-manager"
+    workspace location="https://github.com/vdbulcke/zellij-workspace/releases/latest/download/zellij-workspace.wasm"
+    choose_tree location="https://github.com/laperlej/zellij-choose-tree/releases/latest/download/zellij-choose-tree.wasm"
+    send_keys location="https://github.com/atani/zellij-send-keys/releases/latest/download/zellij-send-keys.wasm"
 }
 
 // Plugins to load in the background when a new session starts

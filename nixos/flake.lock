@@ -29,11 +29,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1770818644,
-        "narHash": "sha256-DYS4jIRpRoKOzJjnR/QqEd/MlT4OZZpt8CrBLv+cjsE=",
+        "lastModified": 1771188132,
+        "narHash": "sha256-qLXxN/tPrZtnekaLBQuVtxQfvqqs5cT5WbyH4zZaTGI=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "0acbd1180697de56724821184ad2c3e6e7202cd7",
+        "rev": "ae8003d8b61d0d373e7ca3da1a48f9c870d15df9",
         "type": "github"
       },
       "original": {
@@ -44,11 +44,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1770562336,
-        "narHash": "sha256-ub1gpAONMFsT/GU2hV6ZWJjur8rJ6kKxdm9IlCT0j84=",
+        "lastModified": 1771008912,
+        "narHash": "sha256-gf2AmWVTs8lEq7z/3ZAsgnZDhWIckkb+ZnAo5RzSxJg=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "d6c71932130818840fc8fe9509cf50be8c64634f",
+        "rev": "a82ccc39b39b621151d6732718e3e250109076fa",
         "type": "github"
       },
       "original": {
@@ -103,20 +103,22 @@
         "nixvim": "nixvim"
       },
       "locked": {
+        "lastModified": 1,
+        "narHash": "sha256-7Fpeor3qsw+eauovGUwKONVK7sTbJiKVC8GYfjMmULs=",
         "path": "../nixvim",
         "type": "path"
       },
       "original": {
         "path": "../nixvim",
         "type": "path"
-      },
-      "parent": []
+      }
     },
     "root": {
       "inputs": {
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
-        "nixvim-config": "nixvim-config"
+        "nixvim-config": "nixvim-config",
+        "zellij-current-tab-index-src": "zellij-current-tab-index-src"
       }
     },
     "systems": {
@@ -132,6 +134,19 @@
         "owner": "nix-systems",
         "repo": "default",
         "type": "github"
+      }
+    },
+    "zellij-current-tab-index-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1,
+        "narHash": "sha256-YNxc5NlyYYGJHT942xBQEUna4ceb0ELfTzWLxV+hTYA=",
+        "path": "../zellij-plugins/current-tab-index",
+        "type": "path"
+      },
+      "original": {
+        "path": "../zellij-plugins/current-tab-index",
+        "type": "path"
       }
     }
   },

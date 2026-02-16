@@ -35,7 +35,7 @@
           args = [
             "-l"
             "-c"
-            "${pkgs.zellij}/bin/zellij attach --index 0 --create"
+            "${pkgs.zellij}/bin/zellij attach --create main"
           ];
         };
       };

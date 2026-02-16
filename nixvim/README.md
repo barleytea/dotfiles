@@ -6,7 +6,8 @@ Personal Neovim configuration using [nixvim](https://github.com/nix-community/ni
 
 - **Standalone nixvim configuration** - Works independently without dotfiles
 - **Cross-platform** - Supports macOS (both Intel and Apple Silicon), Linux, and NixOS
-- **LSP support** - Pre-configured language servers (Lua, Nix, etc.)
+- **LSP support** - Pre-configured language servers (Lua, Nix, Go, etc.)
+- **Go development ready** - gopls with definition/references/rename and format-on-save
 - **Modern UI** - Telescope, Neo-tree, Lualine, and more
 - **Git integration** - Gitsigns, Neogit, and Diffview
 
@@ -80,7 +81,7 @@ config/
 ├── keymaps.nix        # Key mappings
 ├── colorschemes.nix   # Color schemes (Dracula with transparency)
 └── plugins/
-    ├── lsp.nix        # LSP configuration (nil_ls, lua_ls, etc.)
+    ├── lsp.nix        # LSP configuration (nil_ls, lua_ls, gopls, etc.)
     ├── completion.nix # Completion (nvim-cmp, copilot, etc.)
     ├── ui.nix         # UI plugins (telescope, neo-tree, lualine, etc.)
     ├── editor.nix     # Editor plugins (treesitter, surround, comment, etc.)
@@ -121,6 +122,11 @@ config/
 - `K` - Hover documentation
 - `<leader>ca` - Code actions
 - `<leader>rn` - Rename symbol
+
+### Go
+
+- `gopls` enabled by default
+- Format on save (`*.go`) via LSP
 
 ### Git
 
