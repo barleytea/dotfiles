@@ -176,8 +176,23 @@ else
         exit 1
     fi
 
-    DELTA_VERSION=$(curl -fsSL https://api.github.com/repos/dandavison/delta/releases/latest | grep '"tag_name"' | sed -E 's/.*"([^"]+)".*/\1/')
-    DELTA_URL="https://github.com/dandavison/delta/releases/download/${DELTA_VERSION}/git-delta_${DELTA_VERSION}_${DELTA_ARCH}-unknown-linux-musl.tar.gz"
+    DELTA_TAG=$(curl -fsSL https://api.github.com/repos/dandavison/delta/releases/latest | grep '"tag_name"' | sed -E 's/.*"([^"]+)".*/\1/')
+    DELTA_VERSION="${DELTA_TAG#v}"
+
+    DELTA_URL_MUSL="https://github.com/dandavison/delta/releases/download/${DELTA_TAG}/git-delta_${DELTA_VERSION}_${DELTA_ARCH}-unknown-linux-musl.tar.gz"
+    DELTA_URL_GNU="https://github.com/dandavison/delta/releases/download/${DELTA_TAG}/git-delta_${DELTA_VERSION}_${DELTA_ARCH}-unknown-linux-gnu.tar.gz"
+    DELTA_URL=""
+    if curl -fsI "$DELTA_URL_MUSL" >/dev/null; then
+        DELTA_URL="$DELTA_URL_MUSL"
+    elif curl -fsI "$DELTA_URL_GNU" >/dev/null; then
+        DELTA_URL="$DELTA_URL_GNU"
+    else
+        echo -e "${RED}✗${NC} delta release asset not found for architecture: ${DELTA_ARCH}"
+        echo "Tried:"
+        echo "  - ${DELTA_URL_MUSL}"
+        echo "  - ${DELTA_URL_GNU}"
+        exit 1
+    fi
 
     TMP_DIR=$(mktemp -d)
     curl -fL "$DELTA_URL" | tar xz -C "${TMP_DIR}"
