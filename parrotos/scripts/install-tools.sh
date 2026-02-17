@@ -169,37 +169,43 @@ else
     ARCH=$(uname -m)
     if [[ "$ARCH" == "x86_64" ]]; then
         DELTA_ARCH="x86_64"
+        DELTA_DEB_ARCH="amd64"
     elif [[ "$ARCH" == "aarch64" ]] || [[ "$ARCH" == "arm64" ]]; then
         DELTA_ARCH="aarch64"
+        DELTA_DEB_ARCH="arm64"
     else
         echo -e "${RED}✗${NC} Unsupported architecture: $ARCH"
         exit 1
     fi
 
-    DELTA_TAG=$(curl -fsSL https://api.github.com/repos/dandavison/delta/releases/latest | grep '"tag_name"' | sed -E 's/.*"([^"]+)".*/\1/')
+    DELTA_RELEASE_JSON=$(curl -fsSL https://api.github.com/repos/dandavison/delta/releases/latest)
+    DELTA_TAG=$(printf '%s' "$DELTA_RELEASE_JSON" | grep '"tag_name"' | sed -E 's/.*"([^"]+)".*/\1/')
     DELTA_VERSION="${DELTA_TAG#v}"
+    DELTA_TGZ_URL=$(printf '%s' "$DELTA_RELEASE_JSON" \
+        | grep -oE "https://[^\"[:space:]]*git-delta_${DELTA_VERSION}_${DELTA_ARCH}-unknown-linux-(musl|gnu)\\.tar\\.gz" \
+        | head -n1 || true)
 
-    DELTA_URL_MUSL="https://github.com/dandavison/delta/releases/download/${DELTA_TAG}/git-delta_${DELTA_VERSION}_${DELTA_ARCH}-unknown-linux-musl.tar.gz"
-    DELTA_URL_GNU="https://github.com/dandavison/delta/releases/download/${DELTA_TAG}/git-delta_${DELTA_VERSION}_${DELTA_ARCH}-unknown-linux-gnu.tar.gz"
-    DELTA_URL=""
-    if curl -fsI "$DELTA_URL_MUSL" >/dev/null; then
-        DELTA_URL="$DELTA_URL_MUSL"
-    elif curl -fsI "$DELTA_URL_GNU" >/dev/null; then
-        DELTA_URL="$DELTA_URL_GNU"
+    if [[ -n "$DELTA_TGZ_URL" ]]; then
+        TMP_DIR=$(mktemp -d)
+        curl -fL "$DELTA_TGZ_URL" | tar xz -C "${TMP_DIR}"
+        mkdir -p ~/.local/bin
+        mv "${TMP_DIR}"/delta ~/.local/bin/
+        chmod +x ~/.local/bin/delta
+        rm -rf "${TMP_DIR}"
     else
-        echo -e "${RED}✗${NC} delta release asset not found for architecture: ${DELTA_ARCH}"
-        echo "Tried:"
-        echo "  - ${DELTA_URL_MUSL}"
-        echo "  - ${DELTA_URL_GNU}"
-        exit 1
-    fi
+        DELTA_DEB_URL=$(printf '%s' "$DELTA_RELEASE_JSON" \
+            | grep -oE "https://[^\"[:space:]]*git-delta_${DELTA_VERSION}_${DELTA_DEB_ARCH}\\.deb" \
+            | head -n1 || true)
+        if [[ -z "$DELTA_DEB_URL" ]]; then
+            echo -e "${RED}✗${NC} delta release asset not found for architecture: ${ARCH}"
+            exit 1
+        fi
 
-    TMP_DIR=$(mktemp -d)
-    curl -fL "$DELTA_URL" | tar xz -C "${TMP_DIR}"
-    mkdir -p ~/.local/bin
-    mv "${TMP_DIR}"/delta ~/.local/bin/
-    chmod +x ~/.local/bin/delta
-    rm -rf "${TMP_DIR}"
+        TMP_DIR=$(mktemp -d)
+        curl -fL "$DELTA_DEB_URL" -o "${TMP_DIR}/delta.deb"
+        sudo dpkg -i "${TMP_DIR}/delta.deb" || sudo apt-get install -f -y
+        rm -rf "${TMP_DIR}"
+    fi
 fi
 
 # ghq
