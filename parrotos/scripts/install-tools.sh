@@ -257,6 +257,31 @@ else
     fi
 fi
 
+# Google Chrome (GUI ブラウザ - CI ではスキップ)
+echo -e "\n${BLUE}[google-chrome]${NC}"
+if [[ "${CI:-}" == "true" ]]; then
+    echo -e "${YELLOW}Skipping google-chrome (CI environment)${NC}"
+elif [[ "$(uname -m)" != "x86_64" ]]; then
+    echo -e "${YELLOW}⚠${NC} google-chrome is only supported on x86_64; skipping${NC}"
+elif command_exists google-chrome; then
+    echo -e "${GREEN}✓${NC} google-chrome is already installed: $(get_version google-chrome)"
+    if [[ "$UPDATE_MODE" == true ]]; then
+        echo "Updating google-chrome..."
+        TMP_DIR=$(mktemp -d)
+        curl -L "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb" \
+            -o "${TMP_DIR}/google-chrome.deb"
+        sudo apt install -y "${TMP_DIR}/google-chrome.deb"
+        rm -rf "${TMP_DIR}"
+    fi
+else
+    echo "Installing google-chrome..."
+    TMP_DIR=$(mktemp -d)
+    curl -L "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb" \
+        -o "${TMP_DIR}/google-chrome.deb"
+    sudo apt install -y "${TMP_DIR}/google-chrome.deb"
+    rm -rf "${TMP_DIR}"
+fi
+
 # fastfetch
 echo -e "\n${BLUE}[fastfetch]${NC}"
 if command_exists fastfetch; then

@@ -88,6 +88,7 @@ parrotos/
 
 - **ランタイム管理**: mise
 - **エディタ**: cursor (公式インストーラー、CI ではスキップ)
+- **ブラウザ**: google-chrome (公式 .deb、CI ではスキップ)
 - **プロンプト**: starship
 - **Shell 拡張**: sheldon, atuin, zoxide
 - **ターミナル**: zellij
