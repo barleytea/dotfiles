@@ -100,11 +100,11 @@ else
         exit 1
     fi
 
-    ZELLIJ_VERSION=$(curl -s https://api.github.com/repos/zellij-org/zellij/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/')
+    ZELLIJ_VERSION=$(curl -fsSL https://api.github.com/repos/zellij-org/zellij/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/')
     ZELLIJ_URL="https://github.com/zellij-org/zellij/releases/download/v${ZELLIJ_VERSION}/zellij-${ZELLIJ_ARCH}-unknown-linux-musl.tar.gz"
 
     mkdir -p ~/.local/bin
-    curl -L "$ZELLIJ_URL" | tar xz -C ~/.local/bin
+    curl -fL "$ZELLIJ_URL" | tar xz -C ~/.local/bin
     chmod +x ~/.local/bin/zellij
 fi
 
@@ -124,11 +124,11 @@ else
         exit 1
     fi
 
-    YAZI_VERSION=$(curl -s https://api.github.com/repos/sxyazi/yazi/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/')
+    YAZI_VERSION=$(curl -fsSL https://api.github.com/repos/sxyazi/yazi/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/')
     YAZI_URL="https://github.com/sxyazi/yazi/releases/download/v${YAZI_VERSION}/yazi-${YAZI_ARCH}-unknown-linux-musl.zip"
 
     TMP_DIR=$(mktemp -d)
-    curl -L "$YAZI_URL" -o "${TMP_DIR}/yazi.zip"
+    curl -fL "$YAZI_URL" -o "${TMP_DIR}/yazi.zip"
     unzip -q "${TMP_DIR}/yazi.zip" -d "${TMP_DIR}"
     mkdir -p ~/.local/bin
     mv "${TMP_DIR}"/yazi-*/yazi ~/.local/bin/
@@ -152,11 +152,11 @@ else
         exit 1
     fi
 
-    EZA_VERSION=$(curl -s https://api.github.com/repos/eza-community/eza/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/')
+    EZA_VERSION=$(curl -fsSL https://api.github.com/repos/eza-community/eza/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/')
     EZA_URL="https://github.com/eza-community/eza/releases/download/v${EZA_VERSION}/eza_${EZA_ARCH}-unknown-linux-musl.tar.gz"
 
     mkdir -p ~/.local/bin
-    curl -L "$EZA_URL" | tar xz -C ~/.local/bin
+    curl -fL "$EZA_URL" | tar xz -C ~/.local/bin
     chmod +x ~/.local/bin/eza
 fi
 
@@ -176,11 +176,11 @@ else
         exit 1
     fi
 
-    DELTA_VERSION=$(curl -s https://api.github.com/repos/dandavison/delta/releases/latest | grep '"tag_name"' | sed -E 's/.*"([^"]+)".*/\1/')
+    DELTA_VERSION=$(curl -fsSL https://api.github.com/repos/dandavison/delta/releases/latest | grep '"tag_name"' | sed -E 's/.*"([^"]+)".*/\1/')
     DELTA_URL="https://github.com/dandavison/delta/releases/download/${DELTA_VERSION}/git-delta_${DELTA_VERSION}_${DELTA_ARCH}-unknown-linux-musl.tar.gz"
 
     TMP_DIR=$(mktemp -d)
-    curl -L "$DELTA_URL" | tar xz -C "${TMP_DIR}"
+    curl -fL "$DELTA_URL" | tar xz -C "${TMP_DIR}"
     mkdir -p ~/.local/bin
     mv "${TMP_DIR}"/delta ~/.local/bin/
     chmod +x ~/.local/bin/delta
@@ -203,11 +203,11 @@ else
         exit 1
     fi
 
-    GHQ_VERSION=$(curl -s https://api.github.com/repos/x-motemen/ghq/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/')
+    GHQ_VERSION=$(curl -fsSL https://api.github.com/repos/x-motemen/ghq/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/')
     GHQ_URL="https://github.com/x-motemen/ghq/releases/download/v${GHQ_VERSION}/ghq_linux_${GHQ_ARCH}.zip"
 
     TMP_DIR=$(mktemp -d)
-    curl -L "$GHQ_URL" -o "${TMP_DIR}/ghq.zip"
+    curl -fL "$GHQ_URL" -o "${TMP_DIR}/ghq.zip"
     unzip -q "${TMP_DIR}/ghq.zip" -d "${TMP_DIR}"
     mkdir -p ~/.local/bin
     mv "${TMP_DIR}"/ghq_*/ghq ~/.local/bin/
@@ -231,11 +231,11 @@ else
         exit 1
     fi
 
-    LAZYGIT_VERSION=$(curl -s https://api.github.com/repos/jesseduffield/lazygit/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/')
+    LAZYGIT_VERSION=$(curl -fsSL https://api.github.com/repos/jesseduffield/lazygit/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/')
     LAZYGIT_URL="https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_${LAZYGIT_ARCH}.tar.gz"
 
     TMP_DIR=$(mktemp -d)
-    curl -L "$LAZYGIT_URL" | tar xz -C "${TMP_DIR}"
+    curl -fL "$LAZYGIT_URL" | tar xz -C "${TMP_DIR}"
     mkdir -p ~/.local/bin
     mv "${TMP_DIR}"/lazygit ~/.local/bin/
     chmod +x ~/.local/bin/lazygit
@@ -268,7 +268,7 @@ elif command_exists google-chrome; then
     if [[ "$UPDATE_MODE" == true ]]; then
         echo "Updating google-chrome..."
         TMP_DIR=$(mktemp -d)
-        curl -L "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb" \
+        curl -fL "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb" \
             -o "${TMP_DIR}/google-chrome.deb"
         sudo apt install -y "${TMP_DIR}/google-chrome.deb"
         rm -rf "${TMP_DIR}"
@@ -276,7 +276,7 @@ elif command_exists google-chrome; then
 else
     echo "Installing google-chrome..."
     TMP_DIR=$(mktemp -d)
-    curl -L "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb" \
+    curl -fL "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb" \
         -o "${TMP_DIR}/google-chrome.deb"
     sudo apt install -y "${TMP_DIR}/google-chrome.deb"
     rm -rf "${TMP_DIR}"
@@ -298,11 +298,11 @@ else
         exit 1
     fi
 
-    FASTFETCH_VERSION=$(curl -s https://api.github.com/repos/fastfetch-cli/fastfetch/releases/latest | grep '"tag_name"' | sed -E 's/.*"([^"]+)".*/\1/')
+    FASTFETCH_VERSION=$(curl -fsSL https://api.github.com/repos/fastfetch-cli/fastfetch/releases/latest | grep '"tag_name"' | sed -E 's/.*"([^"]+)".*/\1/')
     FASTFETCH_URL="https://github.com/fastfetch-cli/fastfetch/releases/download/${FASTFETCH_VERSION}/fastfetch-linux-${FASTFETCH_ARCH}.deb"
 
     TMP_DIR=$(mktemp -d)
-    curl -L "$FASTFETCH_URL" -o "${TMP_DIR}/fastfetch.deb"
+    curl -fL "$FASTFETCH_URL" -o "${TMP_DIR}/fastfetch.deb"
     sudo dpkg -i "${TMP_DIR}/fastfetch.deb" || sudo apt-get install -f -y
     rm -rf "${TMP_DIR}"
 fi
