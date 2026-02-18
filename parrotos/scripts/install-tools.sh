@@ -295,6 +295,12 @@ fi
 
 # OpenAI Codex CLI
 echo -e "\n${BLUE}[codex]${NC}"
+if ! command_exists npm; then
+    echo "npm not found. Installing npm..."
+    sudo apt update
+    sudo apt install -y npm
+fi
+
 if command_exists codex; then
     echo -e "${GREEN}✓${NC} codex is already installed: $(get_version codex)"
 else
