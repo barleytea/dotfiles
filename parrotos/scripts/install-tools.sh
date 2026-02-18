@@ -295,6 +295,7 @@ fi
 
 # OpenAI Codex CLI
 echo -e "\n${BLUE}[codex]${NC}"
+export PATH="$HOME/.local/bin:$PATH"
 if ! command_exists npm; then
     echo "npm not found. Installing npm..."
     sudo apt update
@@ -306,10 +307,10 @@ if command_exists codex; then
 else
     echo "Installing codex..."
     if command_exists npm; then
-        npm install -g @openai/codex
+        NPM_CONFIG_PREFIX="$HOME/.local" npm install -g @openai/codex
         echo -e "${GREEN}✓${NC} codex installed"
     elif command_exists mise; then
-        mise x node@lts -- npm install -g @openai/codex
+        NPM_CONFIG_PREFIX="$HOME/.local" mise x node@lts -- npm install -g @openai/codex
         echo -e "${GREEN}✓${NC} codex installed via mise"
     else
         echo -e "${YELLOW}⚠${NC} npm/mise not found; skipping codex install${NC}"
