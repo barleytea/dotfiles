@@ -278,6 +278,38 @@ else
     fi
 fi
 
+# Claude Code CLI (agent)
+echo -e "\n${BLUE}[claude]${NC}"
+if [[ "${CI:-}" == "true" ]]; then
+    echo -e "${YELLOW}Skipping claude (CI environment)${NC}"
+elif command_exists claude; then
+    echo -e "${GREEN}✓${NC} claude is already installed: $(get_version claude)"
+else
+    echo "Installing claude..."
+    if curl -fsSL https://claude.ai/install.sh | bash; then
+        echo -e "${GREEN}✓${NC} claude installed"
+    else
+        echo -e "${YELLOW}⚠${NC} claude install failed (manual install: https://claude.ai/download)${NC}"
+    fi
+fi
+
+# OpenAI Codex CLI
+echo -e "\n${BLUE}[codex]${NC}"
+if command_exists codex; then
+    echo -e "${GREEN}✓${NC} codex is already installed: $(get_version codex)"
+else
+    echo "Installing codex..."
+    if command_exists npm; then
+        npm install -g @openai/codex
+        echo -e "${GREEN}✓${NC} codex installed"
+    elif command_exists mise; then
+        mise x node@lts -- npm install -g @openai/codex
+        echo -e "${GREEN}✓${NC} codex installed via mise"
+    else
+        echo -e "${YELLOW}⚠${NC} npm/mise not found; skipping codex install${NC}"
+    fi
+fi
+
 # Google Chrome (GUI ブラウザ - CI ではスキップ)
 echo -e "\n${BLUE}[google-chrome]${NC}"
 if [[ "${CI:-}" == "true" ]]; then

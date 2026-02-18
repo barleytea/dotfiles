@@ -87,6 +87,7 @@ parrotos/
 ### non-apt ツール (GitHub Releases / 公式インストーラー)
 
 - **ランタイム管理**: mise
+- **AI CLI**: codex (npm), claude (公式インストーラー)
 - **エディタ**: cursor (公式インストーラー、CI ではスキップ)
 - **ブラウザ**: google-chrome (公式 .deb、CI ではスキップ)
 - **プロンプト**: starship
