@@ -37,8 +37,8 @@ _zellij_unique_tab_name() {
 }
 
 _zellij_confirm_replace() {
-  local answer
-  echo -n "♻️  Replace current tab with new webdev tab? [y/N]: "
+  local layout_name="${1:-tab}" answer
+  echo -n "♻️  Replace current tab with new $layout_name tab? [y/N]: "
   read -r answer
   [[ "$answer" =~ ^[Yy]$ ]]
 }
@@ -58,7 +58,7 @@ zw() {
   base_name="${PWD:t}"
   tab_name="$(_zellij_unique_tab_name "$base_name")"
 
-  if _zellij_confirm_replace; then
+  if _zellij_confirm_replace "webdev"; then
     should_replace=true
     sentinel_name="$(_zellij_replace_sentinel_name)"
     if ! zellij action rename-tab "$sentinel_name"; then
@@ -68,6 +68,37 @@ zw() {
   fi
 
   zellij action new-tab --layout webdev --cwd "$PWD" --name "$tab_name"
+
+  if [[ "$should_replace" == "true" ]]; then
+    if zellij action go-to-tab-name "$sentinel_name"; then
+      zellij action close-tab
+    else
+      echo "⚠️  Failed to focus marked tab (${sentinel_name}). Replace skipped."
+    fi
+  fi
+}
+
+zi() {
+  local base_name tab_name should_replace=false sentinel_name=""
+
+  if [[ -z "$ZELLIJ" ]]; then
+    zellij --layout investigate
+    return
+  fi
+
+  base_name="investigate_${PWD:t}"
+  tab_name="$(_zellij_unique_tab_name "$base_name")"
+
+  if _zellij_confirm_replace "investigate"; then
+    should_replace=true
+    sentinel_name="$(_zellij_replace_sentinel_name)"
+    if ! zellij action rename-tab "$sentinel_name"; then
+      echo "⚠️  Could not mark current tab. Replace skipped."
+      should_replace=false
+    fi
+  fi
+
+  zellij action new-tab --layout investigate --cwd "$PWD" --name "$tab_name"
 
   if [[ "$should_replace" == "true" ]]; then
     if zellij action go-to-tab-name "$sentinel_name"; then

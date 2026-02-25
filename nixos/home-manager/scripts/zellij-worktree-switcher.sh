@@ -8,6 +8,7 @@
 #   zellij-worktree-switcher.sh          # 新しいペインで開く（デフォルト）
 #   zellij-worktree-switcher.sh --pane   # 新しいペインで開く
 #   zellij-worktree-switcher.sh --session # 新しいセッションで開く
+#   zellij-worktree-switcher.sh --layout investigate # investigateレイアウトで開く
 
 set -euo pipefail
 
@@ -16,6 +17,7 @@ exec < /dev/tty > /dev/tty 2>&1
 
 # オプション解析
 OPEN_MODE="pane"  # デフォルトはペイン
+LAYOUT="webdev"   # デフォルトはwebdev
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -27,9 +29,13 @@ while [[ $# -gt 0 ]]; do
             OPEN_MODE="pane"
             shift
             ;;
+        --layout|-l)
+            LAYOUT="$2"
+            shift 2
+            ;;
         *)
             echo "Unknown option: $1"
-            echo "Usage: $0 [--pane|-p|--session|-s]"
+            echo "Usage: $0 [--pane|-p|--session|-s] [--layout|-l <name>]"
             exit 1
             ;;
     esac
@@ -101,7 +107,7 @@ unique_tab_name() {
 
 confirm_replace_tab() {
     local answer
-    echo -n "♻️  Replace current tab with new webdev tab? [y/N]: "
+    echo -n "♻️  Replace current tab with new $LAYOUT tab? [y/N]: "
     read -r answer
     [[ "$answer" =~ ^[Yy]$ ]]
 }
@@ -164,6 +170,12 @@ if [[ "$selected" == "✨ [新規ブランチを作成]" ]]; then
         echo "Failed to create branch: $branch"
         exit 1
     }
+    # mainブランチをベースにリセット
+    _worktree_path=$(get_worktree_path "$branch")
+    if [ -n "$_worktree_path" ] && git rev-parse --verify main &>/dev/null; then
+        git -C "$_worktree_path" reset --hard main --quiet
+        echo "📌 Based on: main"
+    fi
     worktree_created=true
 else
     # マークを除去してブランチ名を取得
@@ -175,6 +187,12 @@ else
         gwq add "$branch" || {
             echo "Failed to create worktree. Creating new branch..."
             gwq add -b "$branch" || exit 1
+            # mainブランチをベースにリセット
+            _worktree_path=$(get_worktree_path "$branch")
+            if [ -n "$_worktree_path" ] && git rev-parse --verify main &>/dev/null; then
+                git -C "$_worktree_path" reset --hard main --quiet
+                echo "📌 Based on: main"
+            fi
         }
         worktree_created=true
     fi
@@ -225,11 +243,11 @@ if [ "$OPEN_MODE" = "session" ]; then
     echo "📦 Mode: New Session ($session_name)"
     zellij run --close-on-exit --name "switch-session" -- zellij attach --create "$session_name" options --default-cwd "$worktree_path"
 else
-    # ペインモード: 現在のセッション内にwebdevレイアウトで新しいタブを作成
+    # ペインモード: 現在のセッション内に指定されたレイアウトで新しいタブを作成
     should_replace=false
     sentinel_name=""
     tab_name=$(unique_tab_name "$(basename "$worktree_path")")
-    echo "📦 Mode: New Tab (webdev layout: $tab_name)"
+    echo "📦 Mode: New Tab ($LAYOUT layout: $tab_name)"
 
     if confirm_replace_tab; then
         should_replace=true
@@ -240,7 +258,7 @@ else
         fi
     fi
 
-    zellij action new-tab --layout webdev --cwd "$worktree_path" --name "$tab_name"
+    zellij action new-tab --layout "$LAYOUT" --cwd "$worktree_path" --name "$tab_name"
 
     if [ "$should_replace" = true ]; then
         if zellij action go-to-tab-name "$sentinel_name"; then

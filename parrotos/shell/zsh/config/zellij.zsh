@@ -1,4 +1,5 @@
 alias zw='zellij --layout webdev'
+alias zi='zellij --layout investigate'
 
 # Alacrittyの場合のみZellijを自動起動
 # CI環境、Zellij内、またはAlacritty以外のターミナルでは起動しない

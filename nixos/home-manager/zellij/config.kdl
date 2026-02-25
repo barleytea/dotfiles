@@ -134,6 +134,14 @@ keybinds {
             };
             SwitchToMode "Normal"
         }
+        // git worktree切り替え - investigateレイアウトで開く
+        bind "i" {
+            Run "zsh" "-ic" "~/.local/bin/zellij-worktree-switcher --pane --layout investigate; exec zsh" {
+                floating true
+                close_on_exit true
+            };
+            SwitchToMode "Normal"
+        }
         // git worktree削除（worktree + ブランチ）
         bind "x" {
             Run "zsh" "-ic" "~/.local/bin/zellij-worktree-remove --branch; exec zsh" {

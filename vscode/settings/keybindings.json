@@ -1,4 +1,12 @@
 [
+    {
+        "key": "ctrl+enter",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus",
+        "args": {
+            "text": "\\\r\n"
+        }
+    },
   // ファイル・フォルダ削除
   {
     "key": "d",

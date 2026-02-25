@@ -44,6 +44,7 @@ in {
       arp-scan
       bat
       bottom
+      bubblewrap
       bun
       cairo
       curl

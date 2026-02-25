@@ -76,8 +76,14 @@
       "Bash(ccusage --version:*)",
       "Bash(zsh -c 'mise activate zsh > /dev/null 2>&1; command -v ccusage && ccusage --version')",
       "Bash(mise which:*)",
-      "Bash(/Users/miyoshi_s/.local/share/mise/installs/npm-ccusage/18.0.5/bin/ccusage:*)"
+      "Bash(/Users/miyoshi_s/.local/share/mise/installs/npm-ccusage/18.0.5/bin/ccusage:*)",
+      "Bash(gwq add --help:*)",
+      "Bash(gwq help:*)"
     ],
     "deny": []
+  },
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": true
   }
 }

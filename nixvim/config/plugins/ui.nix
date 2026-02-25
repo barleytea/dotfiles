@@ -1,4 +1,18 @@
 {...}: {
+  autoCmd = [
+    {
+      event = ["VimEnter"];
+      callback.__raw = ''
+        function()
+          vim.schedule(function()
+            vim.cmd("Neotree show")
+          end)
+        end
+      '';
+      desc = "Open Neo-tree on startup";
+    }
+  ];
+
   plugins = {
     # Status line
     lualine = {

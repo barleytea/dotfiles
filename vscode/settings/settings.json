@@ -202,5 +202,6 @@
   "update.releaseTrack": "dev",
   "update.mode": "silentlyApplyOnQuit",
   "chat.viewSessions.orientation": "stacked",
-  "cursor.composer.usageSummaryDisplay": "always"
+  "cursor.composer.usageSummaryDisplay": "always",
+  "claudeCode.selectedModel": "haiku"
 }

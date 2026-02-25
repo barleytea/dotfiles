@@ -13,7 +13,9 @@ layout {
             }
             pane split_direction="horizontal" size="40%" {
                 pane name="server"
-                pane name="terminal"
+                pane name="terminal" command="zsh" {
+                    args "-ic" "lazygit"
+                }
             }
         }
     }
