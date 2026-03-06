@@ -10,18 +10,27 @@ if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
 }
 
 Write-Host '==> Installing Windows host UX apps via winget'
-$ids = Get-Content $manifestPath | Where-Object {
+$entries = Get-Content $manifestPath | ForEach-Object {
   $line = $_.Trim()
-  $line -and -not $line.StartsWith('#')
+  if (-not $line -or $line.StartsWith('#')) { return }
+  [pscustomobject]@{
+    Optional = $line.StartsWith('?')
+    Id = if ($line.StartsWith('?')) { $line.Substring(1) } else { $line }
+  }
 }
 
-foreach ($id in $ids) {
+foreach ($entry in $entries) {
+  $id = $entry.Id
   Write-Host "--> $id"
   try {
     winget install --id $id --accept-package-agreements --accept-source-agreements --silent --disable-interactivity | Out-Host
   }
   catch {
-    Write-Warning "winget install failed for $id (continuing): $($_.Exception.Message)"
+    if ($entry.Optional) {
+      Write-Warning "Optional package install failed for $id (continuing): $($_.Exception.Message)"
+    } else {
+      Write-Warning "Required package install failed for $id (continuing): $($_.Exception.Message)"
+    }
   }
 }
 

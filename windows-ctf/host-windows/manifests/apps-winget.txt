@@ -8,8 +8,9 @@ QL-Win.QuickLook
 voidtools.Everything
 
 # Terminal and shell helpers
-Ghostty.Ghostty
 Microsoft.WindowsTerminal
 
 # Optional quality-of-life
-JanDeDobbeleer.OhMyPosh
+# Prefix optional package IDs with "?".
+?Ghostty.Ghostty
+?JanDeDobbeleer.OhMyPosh

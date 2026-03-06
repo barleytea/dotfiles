@@ -17,7 +17,7 @@ This module standardizes the Windows host experience so daily operations feel cl
 - Launcher: `Flow Launcher`
 - Search: `Everything`
 - Quick preview: `QuickLook`
-- Terminal: `Ghostty`
+- Terminal: `Ghostty` (optional) / `Windows Terminal` (required fallback)
 
 ## Key Policy
 
@@ -69,3 +69,4 @@ Verify host UX state:
 - This module intentionally keeps `Caps Lock -> Ctrl` always on.
 - If `Win -> Ctrl` is on, Windows-native shortcuts like `Win+R` are unavailable until toggled off.
 - If komorebi is not installed or not running, AHK keybindings still load; only window commands fail.
+- In `manifests/apps-winget.txt`, lines prefixed with `?` are optional packages.
