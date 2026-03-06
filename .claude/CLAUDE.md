@@ -325,6 +325,7 @@ make paths
 
 **チートシート:**
 - `/hyprland-cheatsheet` - Hyprland shortcuts
+- `/nixvim-cheatsheet` - Nixvim (Neovim) keybindings and plugins
 
 ## Documentation Maintenance Policy
 

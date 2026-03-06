@@ -146,6 +146,43 @@
       end,
     })
 
+    -- render-markdown highlight groups (transparency autocmdの後に配置)
+    vim.api.nvim_create_autocmd('ColorScheme', {
+      pattern = '*',
+      callback = function()
+        vim.api.nvim_set_hl(0, 'RenderMarkdownCode', { bg = '#282a36' })
+        vim.api.nvim_set_hl(0, 'RenderMarkdownCodeBorder', { fg = '#6272a4', bg = '#282a36' })
+        vim.api.nvim_set_hl(0, 'RenderMarkdownCodeInline', { bg = '#343746' })
+        vim.api.nvim_set_hl(0, 'RenderMarkdownCodeInfo', { fg = '#bd93f9', bg = '#282a36' })
+        vim.api.nvim_set_hl(0, 'RenderMarkdownH1Bg', { bg = '#3b2d4f' })
+        vim.api.nvim_set_hl(0, 'RenderMarkdownH2Bg', { bg = '#2d3b4f' })
+        vim.api.nvim_set_hl(0, 'RenderMarkdownH3Bg', { bg = '#2d4f3b' })
+      end,
+    })
+
+    -- 初回ロード時のフォールバック
+    vim.schedule(function()
+      vim.api.nvim_set_hl(0, 'RenderMarkdownCode', { bg = '#282a36' })
+      vim.api.nvim_set_hl(0, 'RenderMarkdownCodeBorder', { fg = '#6272a4', bg = '#282a36' })
+      vim.api.nvim_set_hl(0, 'RenderMarkdownCodeInline', { bg = '#343746' })
+      vim.api.nvim_set_hl(0, 'RenderMarkdownCodeInfo', { fg = '#bd93f9', bg = '#282a36' })
+      vim.api.nvim_set_hl(0, 'RenderMarkdownH1Bg', { bg = '#3b2d4f' })
+      vim.api.nvim_set_hl(0, 'RenderMarkdownH2Bg', { bg = '#2d3b4f' })
+      vim.api.nvim_set_hl(0, 'RenderMarkdownH3Bg', { bg = '#2d4f3b' })
+    end)
+
+    -- Markdown用 FileType autocmd
+    local markdown_group = vim.api.nvim_create_augroup("MarkdownSettings", { clear = true })
+    vim.api.nvim_create_autocmd("FileType", {
+      group = markdown_group,
+      pattern = { "markdown" },
+      callback = function()
+        vim.opt_local.wrap = true
+        vim.opt_local.linebreak = true
+        vim.opt_local.breakindent = true
+      end,
+    })
+
     -- Highlighting
     vim.cmd('highlight SpecialKey ctermbg=235 guibg=#2c2d27')
     vim.cmd('highlight ColorColumn ctermbg=235 guibg=#2c2d27')

@@ -104,6 +104,7 @@ Documentation is available as Claude Code skills in `.claude/skills/`. These ski
 
 **Cheatsheets:**
 - `/hyprland-cheatsheet` - Hyprland shortcuts and configuration
+- `/nixvim-cheatsheet` - Nixvim (Neovim) keybindings and plugins
 
 ### Usage
 

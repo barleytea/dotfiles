@@ -1,18 +1,4 @@
 {
-  "sandbox": {
-    "enabled": true,
-    "autoAllowBashIfSandboxed": true,
-    "excludedCommands": ["docker"],
-    "network": {
-      "allowedDomains": ["github.com", "*.npmjs.org", "registry.npmjs.org"],
-      "allowLocalBinding": true
-    }
-  },
-  "statusLine": {
-    "type": "command",
-    "command": "~/.claude/statusline.sh",
-    "padding": 1
-  },
   "permissions": {
     "allow": [
       "List(*)",
@@ -26,5 +12,25 @@
       "Bash(mv:*)"
     ],
     "deny": []
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/statusline.sh",
+    "padding": 1
+  },
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": true,
+    "network": {
+      "allowedDomains": [
+        "github.com",
+        "*.npmjs.org",
+        "registry.npmjs.org"
+      ],
+      "allowLocalBinding": true
+    },
+    "excludedCommands": [
+      "docker"
+    ]
   }
 }

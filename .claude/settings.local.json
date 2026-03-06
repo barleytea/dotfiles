@@ -78,7 +78,8 @@
       "Bash(mise which:*)",
       "Bash(/Users/miyoshi_s/.local/share/mise/installs/npm-ccusage/18.0.5/bin/ccusage:*)",
       "Bash(gwq add --help:*)",
-      "Bash(gwq help:*)"
+      "Bash(gwq help:*)",
+      "WebFetch(domain:raw.githubusercontent.com)"
     ],
     "deny": []
   },

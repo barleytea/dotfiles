@@ -8,6 +8,7 @@
     ./plugins/ui.nix
     ./plugins/editor.nix
     ./plugins/git.nix
+    ./plugins/markdown.nix
   ];
 
   extraPackages = with pkgs; [
