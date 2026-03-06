@@ -23,9 +23,12 @@ jobs:
         run: |
           $errors = @()
           Get-ChildItem -Path windows-ctf -Recurse -Filter *.ps1 | ForEach-Object {
-            $null = [System.Management.Automation.Language.Parser]::ParseFile($_.FullName, [ref]$null, [ref]$parseErrors)
-            if ($parseErrors.Count -gt 0) {
-              $errors += "Parse error in $($_.FullName): $($parseErrors | ForEach-Object { $_.Message } | Join-String -Separator '; ')"
+            $tokens = $null
+            $parseErrors = $null
+            $null = [System.Management.Automation.Language.Parser]::ParseFile($_.FullName, [ref]$tokens, [ref]$parseErrors)
+            if ($parseErrors -and $parseErrors.Count -gt 0) {
+              $messages = $parseErrors | ForEach-Object { $_.Message }
+              $errors += "Parse error in $($_.FullName): $($messages -join '; ')"
             }
           }
 
