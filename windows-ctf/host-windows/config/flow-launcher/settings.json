@@ -1,0 +1,13 @@
+{
+  "ActivateTimes": 0,
+  "AlwaysStartEn": false,
+  "AnimationSpeed": 0,
+  "AutoUpdates": true,
+  "HideOnDeactive": true,
+  "Hotkey": "Ctrl + Space",
+  "IgnoreHotkeysOnFullscreen": true,
+  "Language": "en",
+  "RememberLastLaunchLocation": true,
+  "Theme": "Dark",
+  "UseDropShadowEffect": true
+}

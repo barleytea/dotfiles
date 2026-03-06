@@ -1,0 +1,15 @@
+# One package id per line
+# Required core UX components
+AutoHotkey.AutoHotkey
+Flow-Launcher.Flow-Launcher
+LGUG2Z.komorebi
+Microsoft.PowerToys
+QL-Win.QuickLook
+voidtools.Everything
+
+# Terminal and shell helpers
+Ghostty.Ghostty
+Microsoft.WindowsTerminal
+
+# Optional quality-of-life
+JanDeDobbeleer.OhMyPosh

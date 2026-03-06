@@ -1,0 +1,11 @@
+{
+  "$schema": "https://raw.githubusercontent.com/LGUG2Z/komorebi/master/schema.json",
+  "default_workspace_padding": 12,
+  "default_container_padding": 6,
+  "focus_follows_mouse": false,
+  "mouse_follows_focus": false,
+  "border": false,
+  "stackbar": {
+    "mode": "Never"
+  }
+}

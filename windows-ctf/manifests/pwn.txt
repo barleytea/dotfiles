@@ -1,0 +1,8 @@
+# Binary exploitation
+binutils
+gdb
+gdb-multiarch
+python3-pwntools
+qemu-user-static
+radare2
+strace

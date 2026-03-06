@@ -1,0 +1,4 @@
+# GUI tools for WSLg or VMware desktop sessions
+burpsuite
+ghidra
+wireshark

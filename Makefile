@@ -139,3 +139,10 @@ zsh: ## zshの起動時間を測定します
 
 paths: ## 現在のPATH環境変数を見やすく表示します
 	echo $$PATH | tr ':' '\n'
+
+## Windows CTF ##
+windows-ctf-help: ## windows-ctf用のヘルプを表示します
+	cd windows-ctf && make help
+
+windows-host-help: ## windowsホストUX設定ガイドを表示します
+	@echo "Open windows-ctf/host-windows/README.md"

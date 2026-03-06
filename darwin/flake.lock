@@ -123,14 +123,20 @@
         "nixvim": "nixvim"
       },
       "locked": {
-        "path": "../nixvim",
-        "type": "path"
+        "dir": "nixvim",
+        "lastModified": 1771248787,
+        "narHash": "sha256-2mGDa6uCTtqP4CgrjLQomp+KHCTp2d4UPsWVYfhVLQ8=",
+        "ref": "refs/heads/main",
+        "rev": "de9530e441aed8f510e2e33edabd80cae0f52e00",
+        "revCount": 450,
+        "type": "git",
+        "url": "file:.."
       },
       "original": {
-        "path": "../nixvim",
-        "type": "path"
-      },
-      "parent": []
+        "dir": "nixvim",
+        "type": "git",
+        "url": "file:.."
+      }
     },
     "root": {
       "inputs": {

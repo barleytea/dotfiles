@@ -1,0 +1,22 @@
+# Windows host Ghostty profile (Mac-like)
+font-family = "Hack Nerd Font"
+font-size = 12
+theme = "Dracula"
+
+window-padding-x = 10
+window-padding-y = 8
+background-opacity = 0.85
+cursor-style = bar
+cursor-style-blink = true
+
+keybind = ctrl+tab=next_tab
+keybind = ctrl+shift+tab=previous_tab
+keybind = ctrl+shift+t=new_tab
+keybind = ctrl+shift+w=close_tab
+keybind = ctrl+shift+n=new_window
+keybind = ctrl+shift+enter=new_split:right
+keybind = ctrl+shift+d=new_split:down
+keybind = ctrl+shift+h=goto_split:left
+keybind = ctrl+shift+j=goto_split:down
+keybind = ctrl+shift+k=goto_split:up
+keybind = ctrl+shift+l=goto_split:right

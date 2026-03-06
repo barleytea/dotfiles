@@ -1,0 +1,9 @@
+# Web security / recon
+burpsuite
+ffuf
+gobuster
+nikto
+nmap
+sqlmap
+whatweb
+wfuzz

@@ -1,0 +1,7 @@
+# Install order: core first, then CTF categories
+@core
+@web
+@pwn
+@rev
+@forensics
+@gui

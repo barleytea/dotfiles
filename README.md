@@ -16,11 +16,12 @@ Each directory is a complete, standalone flake that can be applied independently
 
 ### Non-Nix Configuration
 
-- **`parrotos/`** - ParrotOS/Debian configuration (symlink-based + apt packages)
-  - CTF-focused setup for ParrotOS
-  - One-liner bootstrap with `curl | bash`
-  - No Nix dependency, portable across Debian-based systems
-  - See [parrotos/README.md](parrotos/README.md) for details
+- **`windows-ctf/`** - Windows 11 + Kali (WSL2 + VMware) CTF environment
+  - Dual-layer workflow: WSL for daily usage, VMware for isolation/snapshots
+  - Windows host UX module (komorebi + AutoHotkey + Ghostty + Flow Launcher)
+  - Manifest-driven package bootstrap for Kali (core + category bundles)
+  - Verification and dotfiles sync scripts
+  - See [windows-ctf/README.md](windows-ctf/README.md) for details
 
 ## Supported Architectures
 
@@ -29,7 +30,7 @@ Each directory is a complete, standalone flake that can be applied independently
 | Apple Silicon (aarch64-darwin) | Nix (unstable) | ✅ Full support |
 | Intel Mac (x86_64-darwin) | Nix (unstable) | ✅ Full support |
 | NixOS (x86_64-linux) | Nix (unstable) | ✅ Full support |
-| ParrotOS / Debian (x86_64, aarch64) | apt + GitHub Releases | ✅ Full support |
+| Windows 11 + Kali (WSL2 / VMware) | apt + scripts | ✅ Supported |
 
 ## Quick Start
 
@@ -68,23 +69,6 @@ nix run ./nixvim
 # Update nixvim flake
 make flake-update-nixvim
 ```
-
-### ParrotOS / Debian
-
-One-liner bootstrap:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/barleytea/dotfiles/main/parrotos/setup.sh | bash
-```
-
-Or manual setup:
-
-```bash
-cd ~/git_repos/github.com/barleytea/dotfiles/parrotos
-make setup
-```
-
-See [parrotos/README.md](parrotos/README.md) for detailed documentation.
 
 ## Documentation
 

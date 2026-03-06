@@ -1,0 +1,5 @@
+# Reverse engineering
+binwalk
+ghidra
+ltrace
+radare2

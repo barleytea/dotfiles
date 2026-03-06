@@ -1,0 +1,7 @@
+# Forensics / incident response
+exiftool
+foremost
+sleuthkit
+steghide
+tcpdump
+wireshark
