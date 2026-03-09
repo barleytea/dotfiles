@@ -1,30 +1,53 @@
 {
+  "env": {},
   "sandbox": {
     "enabled": true,
     "autoAllowBashIfSandboxed": true,
     "excludedCommands": ["docker"],
+    "allowUnsandboxedCommands": false,
+    "filesystem": {
+      "read": {
+        "denyOnly": [
+          "/var/run/docker.sock",
+          ".env*",
+          "*.env",
+          "*credential*",
+          "*.pem",
+          "*.key",
+          "*.secret"
+        ],
+        "allowLocalBinding": true
+      },
+      "write": {
+        "allowOnly": [
+          ".",
+          "/tmp/claude",
+          "/private/tmp/claude",
+          "/dev/stdout",
+          "/dev/stderr",
+          "/dev/null"
+        ],
+        "denyWithinAllow": [
+          ".claude/settings.json",
+          ".claude/settings.local.json"
+        ]
+      }
+    },
     "network": {
-      "allowedDomains": ["github.com", "*.npmjs.org", "registry.npmjs.org"],
-      "allowLocalBinding": true
+      "allowedHosts": []
     }
   },
   "permissions": {
-    "allow": [
-      "List(*)",
-      "Fetch(https://*)",
-      "Edit(*)",
-      "Bash(git:*)",
-      "Bash(npm:*)",
-      "Bash(ls:*)",
-      "Bash(cat:*)",
-      "Bash(mkdir:*)",
-      "Bash(mv:*)"
-    ],
+    "allow": [],
     "deny": []
   },
+  "model": "sonnet",
   "statusLine": {
     "type": "command",
     "command": "~/.claude/statusline.sh",
     "padding": 1
-  }
+  },
+  "enabledPlugins": {},
+  "language": "Japanese",
+  "effortLevel": "medium"
 }

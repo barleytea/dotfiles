@@ -211,6 +211,14 @@ keybinds {
             };
             SwitchToMode "Normal"
         }
+        // Claude Code を --add-dir 付きで起動
+        bind "a" {
+            Run "zsh" "-ic" "~/.local/bin/claude-add-dir; exec zsh" {
+                floating true
+                close_on_exit true
+            };
+            SwitchToMode "Normal"
+        }
     }
     tmux {
         bind "[" { SwitchToMode "Scroll"; }

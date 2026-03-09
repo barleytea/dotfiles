@@ -134,6 +134,11 @@ in {
       text = builtins.readFile ./scripts/send-to-tab.sh;
       executable = true;
     };
+
+    file.".local/bin/claude-add-dir" = {
+      text = builtins.readFile ./scripts/claude-add-dir.sh;
+      executable = true;
+    };
   };
 
   # Enable security tools (Kali Linux) on Linux systems

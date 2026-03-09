@@ -44,6 +44,36 @@ function worktree_search() {
 
 zle -N worktree_search
 
+# Launch Claude Code with --add-dir (fzf multi-select from ghq + worktrees)
+function claude_add_dir_search() {
+  local current_dir=$(pwd -P)
+  local worktree_dir="${HOME}/worktrees"
+
+  local candidates=$({
+    ghq list --full-path 2>/dev/null || true
+    if [[ -d "$worktree_dir" ]]; then
+      find "$worktree_dir" -name ".git" -maxdepth 3 -exec dirname {} \; 2>/dev/null || true
+    fi
+  } | grep -v "^${current_dir}$" | sort -u)
+
+  local selected=$(echo "$candidates" | fzf --multi \
+    --prompt="Add dirs (Tab=select, Enter=confirm) > " \
+    --header="Main: ${current_dir}" \
+    --preview "bat --color=always --style=header,grid --line-range :80 {}/README.* 2>/dev/null || ls -la {}" \
+    --height=60% --reverse --border)
+
+  if [[ -n "$selected" ]]; then
+    local add_dir_args=""
+    while IFS= read -r dir; do
+      [[ -n "$dir" ]] && add_dir_args+=" --add-dir ${(q)dir}"
+    done <<< "$selected"
+    BUFFER="claude${add_dir_args}"
+    zle accept-line
+  fi
+}
+
+zle -N claude_add_dir_search
+
 # AWS SSO
 alias awsp=set_aws_profile
 function set_aws_profile() {
