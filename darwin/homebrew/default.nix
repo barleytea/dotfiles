@@ -19,25 +19,27 @@
       "sanemat/font"
       "aquaproj/aqua"
       "daipeihust/tap"
+      "FelixKratz/formulae"
       "harelba/q"
-      "koekeishiya/formulae"
+      "nikitabobko/tap"
     ];
     brews = [
       "aqua"
       "daipeihust/tap/im-select"
+      "FelixKratz/formulae/borders"
       "mas"
       "mise"
       "n"
       "uv"
       "harelba/q/q"
-      "koekeishiya/formulae/skhd"
-      "koekeishiya/formulae/yabai"
     ];
     casks = [
       "android-studio"
+      "alt-tab"
       "apparency"
       "appcleaner"
       "caffeine"
+      "cmux"
       "cursor"
       "devutils"
       "dbeaver-community"
@@ -57,6 +59,7 @@
       "raycast"
       "the-unarchiver"
       "xquartz"
+      "nikitabobko/tap/aerospace"
     ];
     masApps = {
       # LINE = 539883307;

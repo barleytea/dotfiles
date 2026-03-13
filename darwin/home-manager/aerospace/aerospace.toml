@@ -1,0 +1,124 @@
+after-startup-command = []
+start-at-login = true
+
+enable-normalization-flatten-containers = true
+enable-normalization-opposite-orientation-for-nested-containers = true
+
+accordion-padding = 30
+default-root-container-layout = "tiles"
+default-root-container-orientation = "auto"
+
+key-mapping.preset = "qwerty"
+on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+
+[workspace-to-monitor-force-assignment]
+1 = 1
+2 = 1
+3 = 1
+4 = 1
+5 = 1
+6 = 1
+7 = 1
+8 = 1
+9 = 1
+A = 2
+B = 2
+C = 2
+D = 2
+E = 2
+F = 2
+G = 2
+
+[gaps]
+inner.horizontal = 8
+inner.vertical = 8
+outer.left = 8
+outer.bottom = 8
+outer.top = 36
+outer.right = 8
+
+[mode.main.binding]
+alt-slash = "layout tiles horizontal vertical"
+alt-comma = "layout accordion horizontal vertical"
+
+alt-h = "focus left"
+alt-j = "focus down"
+alt-k = "focus up"
+alt-l = "focus right"
+
+alt-shift-h = "move left"
+alt-shift-j = "move down"
+alt-shift-k = "move up"
+alt-shift-l = "move right"
+
+alt-minus = "resize smart -64"
+alt-equal = "resize smart +64"
+alt-shift-minus = "resize smart -128"
+alt-shift-equal = "resize smart +128"
+
+alt-1 = "workspace 1"
+alt-2 = "workspace 2"
+alt-3 = "workspace 3"
+alt-4 = "workspace 4"
+alt-5 = "workspace 5"
+alt-6 = "workspace 6"
+alt-7 = "workspace 7"
+alt-8 = "workspace 8"
+alt-9 = "workspace 9"
+alt-a = "workspace A"
+alt-b = "workspace B"
+alt-c = "workspace C"
+alt-d = "workspace D"
+alt-e = "workspace E"
+alt-f = "workspace F"
+alt-g = "workspace G"
+
+alt-shift-1 = "move-node-to-workspace 1 --focus-follows-window"
+alt-shift-2 = "move-node-to-workspace 2 --focus-follows-window"
+alt-shift-3 = "move-node-to-workspace 3 --focus-follows-window"
+alt-shift-4 = "move-node-to-workspace 4 --focus-follows-window"
+alt-shift-5 = "move-node-to-workspace 5 --focus-follows-window"
+alt-shift-6 = "move-node-to-workspace 6 --focus-follows-window"
+alt-shift-7 = "move-node-to-workspace 7 --focus-follows-window"
+alt-shift-8 = "move-node-to-workspace 8 --focus-follows-window"
+alt-shift-9 = "move-node-to-workspace 9 --focus-follows-window"
+alt-shift-a = "move-node-to-workspace A --focus-follows-window"
+alt-shift-b = "move-node-to-workspace B --focus-follows-window"
+alt-shift-c = "move-node-to-workspace C --focus-follows-window"
+alt-shift-d = "move-node-to-workspace D --focus-follows-window"
+alt-shift-e = "move-node-to-workspace E --focus-follows-window"
+alt-shift-f = "move-node-to-workspace F --focus-follows-window"
+alt-shift-g = "move-node-to-workspace G --focus-follows-window"
+
+alt-tab = "workspace-back-and-forth"
+alt-z = "fullscreen"
+alt-shift-z = "layout floating tiling"
+alt-enter = '''exec-and-forget osascript -e '
+tell application "Ghostty"
+  create window with default profile
+  activate
+end tell'
+'''
+alt-r = "mode resize"
+alt-semicolon = "mode service"
+
+[mode.service.binding]
+esc = ["reload-config", "mode main"]
+r = ["flatten-workspace-tree", "mode main"]
+f = ["layout floating tiling", "mode main"]
+backspace = ["close-all-windows-but-current", "mode main"]
+left = ["join-with left", "mode main"]
+down = ["join-with down", "mode main"]
+up = ["join-with up", "mode main"]
+right = ["join-with right", "mode main"]
+
+[mode.resize.binding]
+esc = "mode main"
+h = "resize width -64"
+j = "resize height +64"
+k = "resize height -64"
+l = "resize width +64"
+shift-h = "resize width -16"
+shift-j = "resize height +16"
+shift-k = "resize height -16"
+shift-l = "resize width +16"

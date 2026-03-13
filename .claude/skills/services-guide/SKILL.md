@@ -1,173 +1,218 @@
 ---
 name: services-guide
-description: System services configuration guide including Yabai tiling window manager, skhd keyboard shortcuts, and macOS window management
+description: System services configuration guide including AeroSpace, JankyBorders, and AltTab on macOS
 ---
 
 # Services Configuration
 
-This document provides information about the services configured in this dotfiles repository, focusing on window management with yabai and keyboard shortcuts with skhd.
+This document provides information about the macOS window-management stack configured in this repository: AeroSpace, JankyBorders, and AltTab.
 
 **Note:** This guide is specific to macOS (darwin). For NixOS window management, see `/hyprland-cheatsheet` and `/nixos-keybindings`.
 
-## Yabai
+## Stack Overview
 
-[Yabai](https://github.com/koekeishiya/yabai) is a tiling window manager for macOS that allows you to organize your windows in a more efficient way.
+- [AeroSpace](https://nikitabobko.github.io/AeroSpace/guide) manages tiling, workspaces, and keybindings
+- [JankyBorders](https://github.com/FelixKratz/JankyBorders) highlights the focused window
+- [AltTab](https://alt-tab-macos.netlify.app/) provides a macOS app/window switcher with previews
 
-### Installation and Setup
+## Installation and Setup
 
-Yabai is installed and configured through Nix using both nix-darwin and home-manager:
+Packages are managed via Homebrew in `darwin/homebrew/default.nix`:
 
-- The system-level service is configured in `darwin/service/yabai/default.nix`
-- The user-level configuration is in `darwin/home-manager/yabai/yabairc`
+- `nikitabobko/tap/aerospace`
+- `FelixKratz/formulae/borders`
+- `alt-tab`
 
-### Starting and Stopping Yabai
+User configuration is managed via Home Manager:
 
-To start, stop, or restart the yabai service:
+- `darwin/home-manager/aerospace/aerospace.toml`
+- `darwin/home-manager/borders/bordersrc`
 
-```bash
-# Start yabai
-yabai --start-service
-
-# Stop yabai
-yabai --stop-service
-
-# Restart yabai
-yabai --restart-service
-```
-
-When using Nix, the service is managed by launchd:
+Apply changes with:
 
 ```bash
-# Check status
-launchctl list | grep yabai
-
-# Manual restart
-launchctl kickstart -k gui/$(id -u)/org.nixos.yabai
+make home-manager-apply
+make nix-darwin-apply
 ```
 
-### Key Features
+## AeroSpace
 
-- Tiling window management with BSP (Binary Space Partitioning) layout
-- Automatic window organization
-- Workspace (Space) management with labels
-- Mouse and keyboard control
-- Application-specific rules
+- Runtime config: `~/.aerospace.toml`
+- Source of truth in this repo: `darwin/home-manager/aerospace/aerospace.toml`
 
-## Skhd
+### Current Behavior
 
-[Simple Hotkey Daemon (skhd)](https://github.com/koekeishiya/skhd) is a hotkey daemon for macOS that works well with yabai to provide keyboard shortcuts for window management.
+- Starts automatically at login
+- Uses US keyboard key names such as `/`, `,`, `;`, `-`, `=`
+- Default layout is `tiles`
+- `alt + f` is not native fullscreen; it switches the current workspace into an accordion-style focused view
 
-### Installation and Setup
+### Daily Usage
 
-Skhd is configured through Nix:
+Use AeroSpace with these mental models:
 
-- System-level service configuration (if applicable)
-- User-level configuration in home-manager
+- `alt + /` returns the current container to normal tiling
+- `alt + ,` switches to accordion layout
+- `alt + f` is a stable pseudo-fullscreen inside AeroSpace, not macOS native fullscreen
+- `alt + shift + f` toggles the focused window between floating and tiling
+- `alt + ;` enters service mode for less common operations
+
+Common flows:
+
+- Make one window effectively dominant: `alt + f`
+- Return from pseudo-fullscreen to tiling: `alt + /`
+- Clean up a messy workspace tree: `alt + ;`, then `r`
+- Move a window to another workspace and follow it: `alt + shift + 1..9`
+- Jump back to the previous workspace: `alt + tab`
+- Use real macOS fullscreen: `alt + ;`, then `shift + f`
 
 ### Keyboard Shortcuts
 
-Below are the key shortcuts configured for window management with yabai:
+Below are the primary shortcuts configured for AeroSpace in this repo.
 
 #### Window Navigation
 
 | Shortcut | Action |
 |----------|--------|
-| `alt + h` | Focus window to the left |
-| `alt + j` | Focus window below |
-| `alt + k` | Focus window above |
-| `alt + l` | Focus window to the right |
+| `alt + h` | Focus left |
+| `alt + j` | Focus down |
+| `alt + k` | Focus up |
+| `alt + l` | Focus right |
 
 #### Window Movement
 
 | Shortcut | Action |
 |----------|--------|
-| `shift + alt + h` | Swap window with the one to the left |
-| `shift + alt + j` | Swap window with the one below |
-| `shift + alt + k` | Swap window with the one above |
-| `shift + alt + l` | Swap window with the one to the right |
+| `alt + shift + h` | Move window left |
+| `alt + shift + j` | Move window down |
+| `alt + shift + k` | Move window up |
+| `alt + shift + l` | Move window right |
 
-#### Window Resizing
-
-| Shortcut | Action |
-|----------|--------|
-| `alt + r` | Toggle resize mode |
-| `h` | Resize left (in resize mode) |
-| `j` | Resize down (in resize mode) |
-| `k` | Resize up (in resize mode) |
-| `l` | Resize right (in resize mode) |
-| `escape` | Exit resize mode |
-
-#### Space Management
+#### Workspaces
 
 | Shortcut | Action |
 |----------|--------|
-| `ctrl + alt + 1-9` | Focus space 1-9 |
-| `ctrl + alt + shift + 1-9` | Move window to space 1-9 |
-| `alt + f` | Toggle window fullscreen |
-| `alt + shift + f` | Toggle window native fullscreen |
+| `alt + 1..9` | Switch to workspace 1..9 |
+| `alt + shift + 1..9` | Move window to workspace 1..9 and follow it |
+| `alt + tab` | Toggle between recent workspaces |
 
-#### Layout Management
+#### Layout and Resize
 
 | Shortcut | Action |
 |----------|--------|
-| `alt + e` | Toggle split orientation (vertical/horizontal) |
-| `alt + shift + space` | Toggle floating mode for window |
-| `alt + shift + r` | Rotate layout clockwise |
+| `alt + /` | Switch current container to tiles layout |
+| `alt + ,` | Switch current container to accordion layout |
+| `alt + f` | Flatten workspace tree and emphasize the focused window in accordion layout |
+| `alt + shift + f` | Toggle floating / tiling |
+| `alt + enter` | Open Ghostty |
+| `alt + r` | Enter resize mode |
+| `alt + ;` | Enter service mode |
 
-### Starting and Stopping Skhd
+#### Resize Mode
 
-To start, stop, or restart the skhd service:
+| Shortcut | Action |
+|----------|--------|
+| `h` / `l` | Resize width |
+| `j` / `k` | Resize height |
+| `shift + h/j/k/l` | Fine-grained resize |
+| `esc` | Return to main mode |
 
-```bash
-# Start skhd
-skhd --start-service
+#### Service Mode
 
-# Stop skhd
-skhd --stop-service
+| Shortcut | Action |
+|----------|--------|
+| `esc` | Reload config and return to main mode |
+| `r` | Flatten workspace tree |
+| `f` | Toggle floating / tiling |
+| `shift + f` | Toggle macOS native fullscreen |
+| `backspace` | Close all windows except current |
+| `arrow keys` | Join with adjacent container |
 
-# Restart skhd
-skhd --restart-service
+### Fullscreen and Layout Notes
+
+- `alt + f` is the recommended "focus one window" shortcut in this setup
+- `alt + f` is intentionally implemented without AeroSpace `fullscreen`, because AeroSpace fullscreen can collapse when focus changes across workspaces
+- To go back to ordinary tiling after `alt + f`, press `alt + /`
+- To use true macOS fullscreen, enter service mode with `alt + ;` and press `shift + f`
+- If a workspace feels structurally odd, run `alt + ;` then `r`, and then choose `alt + /` or `alt + ,` again
+
+### Startup and Reload
+
+This configuration enables automatic startup at login:
+
+```toml
+start-at-login = true
 ```
 
-When using Nix, the service is managed by launchd:
+Typical maintenance flow:
 
 ```bash
-# Check status
-launchctl list | grep skhd
+# Apply dotfiles changes
+make home-manager-apply
+make nix-darwin-apply
 
-# Manual restart
-launchctl kickstart -k gui/$(id -u)/org.nixos.skhd
+# Reload AeroSpace config manually if needed
+aerospace reload-config
 ```
+
+## JankyBorders
+
+- Runtime config: `~/.config/borders/bordersrc`
+- Source of truth: `darwin/home-manager/borders/bordersrc`
+
+Current settings:
+
+- rounded borders
+- width `4.0`
+- HiDPI enabled
+- pink-ish active color and blue inactive color inspired by the article setup
+
+Manual restart if needed:
+
+```bash
+pkill borders || true
+/opt/homebrew/bin/borders
+```
+
+## AltTab
+
+AltTab is installed as a cask and used for app/window switching. Detailed preferences are not repo-managed yet.
+
+Typical first-run steps:
+
+1. Open `AltTab`
+2. Grant Accessibility permission
+3. Enable launch at login from AltTab preferences if desired
 
 ## Troubleshooting
 
-### Common Issues with Yabai
+- **AeroSpace keybindings do not work:** Check Accessibility permissions for AeroSpace
+- **`aerospace reload-config` cannot connect to server:** Make sure `AeroSpace.app` is running, then reopen it if necessary
+- **A window was pseudo-fullscreen and you want tiling back:** Press `alt + /`
+- **A workspace looks split strangely after moving windows around:** Press `alt + ;`, then `r`, then reapply `alt + /` or `alt + ,`
+- **Native fullscreen and AeroSpace layout feel inconsistent:** Prefer `alt + f` for normal use and reserve `alt + ;` + `shift + f` for apps that truly need macOS fullscreen
+- **Borders are missing:** Restart `borders` and verify `~/.config/borders/bordersrc`
+- **AltTab does not appear:** Open the app once manually and grant Accessibility permissions
+- **Config changes do not apply:** Run `aerospace reload-config`; for border changes restart `borders`
 
-- **Scripting Addition not loaded**: Ensure System Integrity Protection (SIP) is properly configured
-- **Windows not tiling**: Check if the application has a rule to be managed
-- **Keyboard shortcuts not working**: Verify skhd is running and check for conflicts with system shortcuts
-
-### Logs and Debugging
-
-To view logs for troubleshooting:
+### Verification
 
 ```bash
-# Yabai logs
-tail -f /tmp/yabai_$(whoami).log
+# Confirm packages are installed
+brew list --cask | grep aerospace
+brew list --cask | grep alt-tab
+brew list --formula | grep borders
 
-# Skhd logs
-tail -f /tmp/skhd_$(whoami).log
+# Confirm managed config exists
+ls -l ~/.aerospace.toml
+ls -l ~/.config/borders/bordersrc
 ```
 
 ## Customization
 
-To customize the configuration:
+To customize the setup:
 
-1. Edit `darwin/home-manager/yabai/yabairc` for yabai settings
-2. Edit `darwin/home-manager/skhd/skhdrc` for keyboard shortcuts
-3. Run `make home-manager-apply` or `make nix-darwin-apply` to apply changes
-4. Restart the services to apply the new configuration:
-   ```bash
-   yabai --restart-service
-   skhd --restart-service
-   ```
+1. Edit `darwin/home-manager/aerospace/aerospace.toml`
+2. Edit `darwin/home-manager/borders/bordersrc` for border style/colors
+3. Run `make home-manager-apply`
+4. Reload AeroSpace or restart the affected process

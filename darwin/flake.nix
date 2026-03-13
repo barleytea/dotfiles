@@ -94,7 +94,6 @@
       all = mkDarwinConfig [ ./default.nix ];
       homebrew = mkDarwinConfig [ ./homebrew/default.nix ];
       system = mkDarwinConfig [ ./system/default.nix ];
-      service = mkDarwinConfig [ ./service/default.nix ];
     };
   };
 }

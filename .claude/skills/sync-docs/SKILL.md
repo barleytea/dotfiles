@@ -43,7 +43,7 @@ Based on the changes detected, determine which documentation needs updating:
 - Impact: README.md (Main Tools), `/nix-operations`, `/mise-guide`
 
 **Keybinding Changes:**
-- Files (darwin): `darwin/home-manager/skhd/`, `darwin/home-manager/yabai/`, `darwin/home-manager/zellij/`
+- Files (darwin): `darwin/home-manager/aerospace/`, `darwin/home-manager/zellij/`
 - Files (NixOS): `nixos/home-manager/zellij/`, `nixos/desktop/hyprland/`
 - Impact: `/services-guide`, `/hyprland-cheatsheet`, `/nixos-keybindings`, `/zellij-worktree`
 
@@ -56,7 +56,7 @@ Based on the changes detected, determine which documentation needs updating:
 - Impact: `.claude/CLAUDE.md` (Common Commands), `/nix-operations`, `/mise-guide`
 
 **Service/Daemon Changes:**
-- Files (darwin): `darwin/service/`
+- Files (darwin): `darwin/homebrew/`, `darwin/home-manager/aerospace/`, `darwin/home-manager/borders/`
 - Files (NixOS): `nixos/services/`
 - Impact: `/services-guide`, `/fileserver-guide`, `/gitserver-guide`
 
@@ -87,9 +87,9 @@ new-task:
 → Update: `.claude/CLAUDE.md` Common Commands
 
 **New Keybinding:**
-```nix
-# In darwin/home-manager/skhd/default.nix
-"alt - t" = "...";  # ← New keybinding
+```toml
+# In darwin/home-manager/aerospace/aerospace.toml
+alt-shift-s = 'exec-and-forget screencapture -i -c' # ← New keybinding
 ```
 → Update: `/services-guide` Keyboard Shortcuts table
 
@@ -136,7 +136,7 @@ Provide a summary:
 
 **Detected Change:**
 ```diff
-+ "alt - t" = "yabai -m window --toggle float";
++ alt-shift-s = 'exec-and-forget screencapture -i -c'
 ```
 
 **Updates Required:**

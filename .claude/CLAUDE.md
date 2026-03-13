@@ -215,7 +215,7 @@ make paths
 1. **Editors**: Neovim、VSCode、Cursor
 2. **Terminals**: Alacritty、WezTerm、Ghostty
 3. **Shell**: Zsh + Starship + Sheldon + Atuin
-4. **Window Management**: Yabai + skhd
+4. **Window Management**: AeroSpace + JankyBorders + AltTab
 5. **Development**: pre-commit、gitleaks、commitizen
 
 ### Claude Code Configuration
@@ -318,7 +318,7 @@ make paths
 - `/zellij-worktree` - Zellij git worktree workflow
 
 **サービス・デーモン:**
-- `/services-guide` - Yabai and skhd (macOS)
+- `/services-guide` - AeroSpace, JankyBorders, AltTab (macOS)
 - `/fileserver-guide` - NixOS file server (Tailscale)
 - `/gitserver-guide` - Git SSH server (NixOS)
 - `/tailscale-acl` - Tailscale ACL
@@ -346,7 +346,7 @@ When making changes to this dotfiles project, **ALWAYS** check and update relate
 3. **キーバインド・ショートカットを変更**
    - → `/hyprland-cheatsheet` スキル（Hyprland）
    - → `/nixos-keybindings` スキル（NixOS keyd設定）
-   - → `/services-guide` スキル（Yabai/skhd）
+   - → `/services-guide` スキル（AeroSpace / Borders / AltTab）
    - → `/zellij-worktree` スキル（Zellij）
 
 4. **新しいMakeタスク・コマンドを追加**
@@ -395,9 +395,9 @@ When making changes to this dotfiles project, **ALWAYS** check and update relate
 - /nix-operations → Package installation examples
 ```
 
-**例2: Yabaiのキーバインド追加**
+**例2: AeroSpaceのキーバインド変更**
 ```
-変更: darwin/home-manager/skhd/default.nix に alt+t を追加
+変更: darwin/home-manager/aerospace/aerospace.toml に alt-shift-s を追加
 更新箇所:
 - /services-guide → Keyboard Shortcuts テーブル
 ```

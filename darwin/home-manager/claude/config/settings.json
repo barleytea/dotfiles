@@ -3,7 +3,9 @@
   "sandbox": {
     "enabled": true,
     "autoAllowBashIfSandboxed": true,
-    "excludedCommands": ["docker"],
+    "excludedCommands": [
+      "docker"
+    ],
     "allowUnsandboxedCommands": false,
     "filesystem": {
       "read": {
@@ -38,7 +40,9 @@
     }
   },
   "permissions": {
-    "allow": [],
+    "allow": [
+      "mcp__pencil"
+    ],
     "deny": []
   },
   "model": "opusplan",

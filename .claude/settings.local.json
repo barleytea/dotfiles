@@ -79,7 +79,13 @@
       "Bash(/Users/miyoshi_s/.local/share/mise/installs/npm-ccusage/18.0.5/bin/ccusage:*)",
       "Bash(gwq add --help:*)",
       "Bash(gwq help:*)",
-      "WebFetch(domain:raw.githubusercontent.com)"
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:gist.github.com)",
+      "WebFetch(domain:api.github.com)",
+      "WebFetch(domain:gist.githubusercontent.com)",
+      "WebFetch(domain:eu-central-1-1.aws.cloud2.influxdata.com)",
+      "WebFetch(domain:registry.npmjs.org)",
+      "WebFetch(domain:cmux.app)"
     ],
     "deny": []
   },

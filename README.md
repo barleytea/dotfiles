@@ -97,7 +97,7 @@ Documentation is available as Claude Code skills in `.claude/skills/`. These ski
 - `/zellij-worktree` - Zellij git worktree workflow
 
 **Services:**
-- `/services-guide` - Yabai and skhd window management
+- `/services-guide` - AeroSpace window management (macOS)
 - `/fileserver-guide` - NixOS file server with Tailscale
 - `/gitserver-guide` - Git SSH server (NixOS)
 - `/tailscale-acl` - Tailscale ACL configuration
@@ -169,8 +169,9 @@ Documentation is available as Claude Code skills in `.claude/skills/`. These ski
 
 ### Window Management
 
-- [yabai](https://github.com/koekeishiya/yabai) - window manager
-- [skhd](https://github.com/koekeishiya/skhd) - hotkey daemon
+- [AeroSpace](https://nikitabobko.github.io/AeroSpace/guide) - tiling window manager for macOS
+- [JankyBorders](https://github.com/FelixKratz/JankyBorders) - focused window borders
+- [AltTab](https://alt-tab-macos.netlify.app/) - window switcher with previews
 
 ### Task Runner
 

@@ -70,10 +70,6 @@ nix-darwin-system-apply: ## nix-darwinのシステム設定のみを適用しま
 	$(NIX_SOURCE_CMD) \
 	cd darwin && sudo nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake path:.#system --impure --no-write-lock-file --override-input nixvim-config "$(NIXVIM_CONFIG_INPUT)"
 
-nix-darwin-service-apply: ## nix-darwinのサービス設定のみを適用します
-	$(NIX_SOURCE_CMD) \
-	cd darwin && sudo nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake path:.#service --impure --no-write-lock-file --override-input nixvim-config "$(NIXVIM_CONFIG_INPUT)"
-
 nix-darwin-check: ## nix-darwinの設定をビルドのみ行います（実際の適用はしません）
 	$(NIX_SOURCE_CMD) \
 	cd darwin && nix --extra-experimental-features "nix-command flakes" build path:.#darwinConfigurations.all.system --impure --no-write-lock-file --override-input nixvim-config "$(NIXVIM_CONFIG_INPUT)"

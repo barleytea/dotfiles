@@ -12,24 +12,25 @@ in {
   imports = [
     inputs.nixvim-config.homeManagerModules.default
     ./alacritty
+    ./aerospace
     ./atuin
+    ./borders
     ./claude
     ./cz-git
     ./editorconfig
     ./gemini
     ./git
     ./ghostty
+    ./hammerspoon
     ./k9s
     ./lazygit
     ./helix
     ./mise
     ./shell
     ./sheldon
-    ./skhd
     ./starship
     ./tmux
     ./wezterm
-    ./yabai
     ./yazi
     ./zellij
   ];
@@ -137,6 +138,11 @@ in {
 
     file.".local/bin/claude-add-dir" = {
       text = builtins.readFile ./scripts/claude-add-dir.sh;
+      executable = true;
+    };
+
+    file.".local/bin/difit-cmux" = {
+      text = builtins.readFile ./scripts/difit-auto-detect.sh;
       executable = true;
     };
   };

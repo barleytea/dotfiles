@@ -25,6 +25,7 @@
         "npm:@openai/codex" = "latest";
         "npm:@vibe-kit/grok-cli" = "latest";
         "npm:ccusage" = "latest";
+        "npm:difit" = "latest";
         "pipx:pre-commit" = "latest";
       };
 
