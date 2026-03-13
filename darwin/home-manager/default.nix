@@ -80,7 +80,7 @@ in {
       mosh
       # mpv  # Temporarily disabled due to Swift build failure in nixpkgs unstable
       nerd-fonts.hack
-      neofetch
+      fastfetch
       neovim-remote
       obsidian
       peco
