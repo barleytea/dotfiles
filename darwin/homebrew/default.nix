@@ -22,6 +22,7 @@
       "FelixKratz/formulae"
       "harelba/q"
       "nikitabobko/tap"
+      "tasuku43/kra"
     ];
     brews = [
       "aqua"
@@ -32,6 +33,7 @@
       "n"
       "uv"
       "harelba/q/q"
+      "kra"
     ];
     casks = [
       "android-studio"
