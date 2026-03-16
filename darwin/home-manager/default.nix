@@ -13,6 +13,7 @@ in {
     inputs.nixvim-config.homeManagerModules.default
     ./alacritty
     ./aerospace
+    ./cmux
     ./atuin
     ./borders
     ./claude
@@ -141,10 +142,6 @@ in {
       executable = true;
     };
 
-    file.".local/bin/difit-cmux" = {
-      text = builtins.readFile ./scripts/difit-auto-detect.sh;
-      executable = true;
-    };
   };
 
   # Enable security tools (Kali Linux) on Linux systems

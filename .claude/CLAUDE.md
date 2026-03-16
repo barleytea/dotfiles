@@ -316,6 +316,7 @@ make paths
 - `/atuin-guide` - Atuin shell history (SQLite)
 - `/zoxide-guide` - Zoxide directory navigation
 - `/zellij-worktree` - Zellij git worktree workflow
+- `/cmux-guide` - cmux terminal multiplexer (Ghostty-based) and difit-cmux command
 
 **サービス・デーモン:**
 - `/services-guide` - AeroSpace, JankyBorders, AltTab (macOS)

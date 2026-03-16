@@ -37,6 +37,7 @@ set -euo pipefail
 # =============================================================================
 
 CMUX="/Applications/cmux.app/Contents/Resources/bin/cmux"
+DIFIT_PORT="${DIFIT_PORT:-4966}"
 
 extract_json_value() {
     local json="$1"
@@ -114,14 +115,16 @@ if [[ -z "$defaultBranch" ]]; then
     fi
 fi
 
-# Kill any process using port 4966
+# Kill any process using the difit port
 kill_difit() {
-    lsof -ti:4966 | xargs kill 2>/dev/null
+    local pids
+    pids=$(lsof -ti:"$DIFIT_PORT" 2>/dev/null || true)
+    [[ -n "$pids" ]] && echo "$pids" | xargs kill 2>/dev/null || true
 }
 
 trap kill_difit EXIT INT TERM
 
-difitArgs=(--mode unified --no-open --clean --include-untracked --port 4966)
+difitArgs=(--mode unified --no-open --clean --include-untracked --port "$DIFIT_PORT")
 
 echo "🚀 Starting difit server..."
 
@@ -139,13 +142,20 @@ else
     fi
 fi
 
-# Wait until the difit server is ready
-while ! curl -s http://localhost:4966/ > /dev/null 2>&1; do
+# Wait until the difit server is ready (timeout: 30s)
+_difit_wait_timeout=30
+_difit_waited=0
+until curl -s "http://localhost:${DIFIT_PORT}/" > /dev/null 2>&1; do
     sleep 0.5
+    _difit_waited=$(( _difit_waited + 1 ))
+    if (( _difit_waited >= _difit_wait_timeout * 2 )); then
+        echo "Error: difit server did not start within ${_difit_wait_timeout}s" >&2
+        exit 1
+    fi
 done
 
 # Open in a cmux browser split and get the surface ID
-browserSurface=$("$CMUX" --json browser open-split "http://localhost:4966/" | grep -o '"ref" *: *"surface:[^"]*"' | head -1 | grep -o 'surface:[0-9]*')
+browserSurface=$("$CMUX" --json browser open-split "http://localhost:${DIFIT_PORT}/" | grep -o '"ref" *: *"surface:[^"]*"' | head -1 | grep -o 'surface:[0-9]*')
 
 if [[ -z "$browserSurface" ]]; then
     echo "Warning: Could not get browser surface ID, difit server running in background" >&2
@@ -153,9 +163,16 @@ if [[ -z "$browserSurface" ]]; then
     exit 0
 fi
 
-# Wait until the browser pane is closed, then shut down the server
+# Wait until the browser pane is closed, then shut down the server (timeout: 8h)
+_browser_watch_timeout=$(( 8 * 3600 ))
+_browser_watched=0
 while "$CMUX" surface-health 2>&1 | grep -q "$browserSurface"; do
     sleep 1
+    _browser_watched=$(( _browser_watched + 1 ))
+    if (( _browser_watched >= _browser_watch_timeout )); then
+        echo "Warning: browser watch timed out after 8h, shutting down difit" >&2
+        break
+    fi
 done
 
 kill_difit
