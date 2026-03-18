@@ -1,10 +1,14 @@
 {
-  "env": {},
+  "env": {
+    "EDITOR": "nvim"
+  },
   "sandbox": {
     "enabled": true,
     "autoAllowBashIfSandboxed": true,
     "excludedCommands": [
-      "docker"
+      "docker",
+      "gh",
+      "security"
     ],
     "allowUnsandboxedCommands": false,
     "filesystem": {
@@ -41,7 +45,8 @@
   },
   "permissions": {
     "allow": [
-      "mcp__pencil"
+      "mcp__pencil",
+      "Bash(gh*)"
     ],
     "deny": []
   },
@@ -54,5 +59,29 @@
   },
   "enabledPlugins": {},
   "language": "Japanese",
-  "effortLevel": "medium"
+  "effortLevel": "medium",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Skill",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/log-skill.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.local/bin/difit-cmux-hook",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
 }

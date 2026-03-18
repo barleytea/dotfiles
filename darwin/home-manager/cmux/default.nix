@@ -8,4 +8,9 @@
     text = builtins.readFile ../scripts/difit-auto-detect.sh;
     executable = true;
   };
+
+  home.file.".local/bin/difit-cmux-hook" = {
+    text = builtins.readFile ../scripts/difit-cmux-hook.sh;
+    executable = true;
+  };
 }

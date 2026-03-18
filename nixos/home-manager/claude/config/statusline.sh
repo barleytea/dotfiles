@@ -10,6 +10,15 @@
 # 6. 1時間あたりの消費ペース（burn rate）
 # 7. コンテキスト使用率（%）
 
+# ANSIカラー定義
+RED='\033[0;31m'
+YELLOW='\033[0;33m'
+GREEN='\033[0;32m'
+CYAN='\033[0;36m'
+BOLD='\033[1m'
+DIM='\033[2m'
+RESET='\033[0m'
+
 # 入力JSONを読み込み
 input=$(cat)
 
@@ -46,6 +55,16 @@ MODEL=$(echo "$input" | jq -r '.model.display_name // "Unknown"')
 DIR=$(echo "$input" | jq -r '.workspace.current_dir // "~"')
 DIR_NAME=$(basename "$DIR")
 CONTEXT_PCT=$(echo "$input" | jq -r '.context_window.used_percentage // 0' | awk '{printf "%.0f", $1}')
+CONTEXT_USED=$(echo "$input" | jq -r '.context_window.total_input_tokens // 0')
+CONTEXT_MAX=$(echo "$input" | jq -r '.context_window.context_window_size // 0')
+# K単位に変換。0の場合はトークン表示を省略するためフラグを立てる
+if [ "$CONTEXT_MAX" != "0" ] && [ -n "$CONTEXT_MAX" ]; then
+    CONTEXT_USED_K=$(awk "BEGIN {printf \"%.0fK\", $CONTEXT_USED / 1000}" 2>/dev/null || echo "?K")
+    CONTEXT_MAX_K=$(awk "BEGIN {printf \"%.0fK\", $CONTEXT_MAX / 1000}" 2>/dev/null || echo "?K")
+    CONTEXT_TOKEN_DISPLAY=" (${CONTEXT_USED_K}/${CONTEXT_MAX_K})"
+else
+    CONTEXT_TOKEN_DISPLAY=""
+fi
 
 # Gitブランチ名を取得（キャッシュで高速化）
 # ディレクトリパスをハッシュ化してキャッシュファイル名を作成
@@ -84,39 +103,69 @@ CCUSAGE_OUTPUT=$(echo "$input" | run_ccusage statusline --offline 2>/dev/null ||
 
 # セッション費用とburn rateをClaude Code APIから取得（フォールバック）
 SESSION_COST=$(echo "$input" | jq -r '.cost.total_cost_usd // 0')
-DURATION_MS=$(echo "$input" | jq -r '.cost.total_duration_ms // 0')
 
-# Burn rate計算（1時間あたりの消費ペース）
-if [ "$DURATION_MS" != "0" ] && [ -n "$DURATION_MS" ]; then
-    # awkを使用してbc非依存で計算（より移植性が高い）
-    BURN_RATE=$(awk "BEGIN {printf \"%.2f\", $SESSION_COST / ($DURATION_MS / 3600000)}" 2>/dev/null || echo "0.00")
-else
-    BURN_RATE="0.00"
-fi
+# コンテキスト使用率に応じた色とプログレスバーを生成
+make_context_bar() {
+    local pct="$1"
+    local filled=$(awk "BEGIN {printf \"%d\", $pct / 10}" 2>/dev/null || echo 0)
+    [ "$filled" -gt 10 ] && filled=10
+    local empty=$(( 10 - filled ))
+    local bar=""
+    local i
+    for (( i=0; i<filled; i++ )); do bar+="█"; done
+    for (( i=0; i<empty; i++ )); do bar+="░"; done
+    if [ "$pct" -ge 80 ]; then
+        echo -e "${RED}[${bar}]${RESET}"
+    elif [ "$pct" -ge 50 ]; then
+        echo -e "${YELLOW}[${bar}]${RESET}"
+    else
+        echo -e "${GREEN}[${bar}]${RESET}"
+    fi
+}
+
+# 費用に応じた色を返す（セッション費用用）
+cost_color() {
+    local cost="$1"
+    local high="${2:-0.50}"
+    local mid="${3:-0.10}"
+    if awk "BEGIN {exit !($cost >= $high)}"; then
+        echo -e "${RED}"
+    elif awk "BEGIN {exit !($cost >= $mid)}"; then
+        echo -e "${YELLOW}"
+    else
+        echo -e "${GREEN}"
+    fi
+}
 
 # 出力フォーマット
-# 1行目: モデル名 | ディレクトリ名 | Gitブランチ
+# 1行目: モデル名 | ディレクトリ名 | Gitブランチ（カラー付き）
 if [ -n "$BRANCH" ]; then
-    LINE1="🤖 ${MODEL} | 📁 ${DIR_NAME} | 🌿 ${BRANCH}"
+    LINE1="🤖 ${CYAN}${BOLD}${MODEL}${RESET} │ 📁 ${BOLD}${DIR_NAME}${RESET} │ 🌿 ${GREEN}${BRANCH}${RESET}"
 else
-    LINE1="🤖 ${MODEL} | 📁 ${DIR_NAME}"
+    LINE1="🤖 ${CYAN}${BOLD}${MODEL}${RESET} │ 📁 ${BOLD}${DIR_NAME}${RESET}"
 fi
 
 # 2行目: ccusageの出力（セッション費用/当日費用/burn rate等が含まれる）
-# または、ccusageが失敗した場合はフォールバック
+# または、ccusageが失敗した場合はフォールバック（カラー+プログレスバー付き）
 if [ -n "$CCUSAGE_OUTPUT" ]; then
-    # ccusageの出力からモデル名部分を削除（重複を避けるため）
-    LINE2=$(echo "$CCUSAGE_OUTPUT" | sed 's/^🤖 [^|]* | //')
+    # ccusageの出力からモデル名部分とburn rateを削除
+    LINE2=$(echo "$CCUSAGE_OUTPUT" | sed 's/^🤖 [^|]* | //' | sed 's/ | 🔥 [^|]*//')
+    # プログレスバーとトークン数を末尾に追加（%はccusageのものをそのまま使用）
+    CTX_BAR=$(make_context_bar "$CONTEXT_PCT")
+    LINE2="${LINE2} ${CTX_BAR}${CONTEXT_TOKEN_DISPLAY}"
 else
-    # フォールバック: 基本情報のみ表示
-    LINE2="💰 \$$(printf '%.4f' "$SESSION_COST") session | 🔥 \$${BURN_RATE}/hr | 🧠 ${CONTEXT_PCT}%"
+    # フォールバック: カラー+プログレスバー付きで表示
+    SESSION_COLOR=$(cost_color "$SESSION_COST" "0.50" "0.10")
+    CTX_BAR=$(make_context_bar "$CONTEXT_PCT")
+    LINE2="💰 ${SESSION_COLOR}\$$(printf '%.4f' "$SESSION_COST")${RESET} session │ 🧠 ${CTX_BAR} ${CONTEXT_PCT}%${CONTEXT_TOKEN_DISPLAY}"
 fi
 
-# 3行目: 今月の累計費用
+# 3行目: 今月の累計費用（閾値ベースのカラー付き）
 MONTHLY_FMT=$(printf '%.2f' "$MONTHLY_COST")
-LINE3="📊 今月累計: \$${MONTHLY_FMT}"
+MONTHLY_COLOR=$(cost_color "$MONTHLY_COST" "50.00" "10.00")
+LINE3="📊 今月累計: ${MONTHLY_COLOR}\$${MONTHLY_FMT}${RESET}"
 
 # 最終出力（複数行）
-echo "$LINE1"
-echo "$LINE2"
-echo "$LINE3"
+echo -e "$LINE1"
+echo -e "$LINE2"
+echo -e "$LINE3"

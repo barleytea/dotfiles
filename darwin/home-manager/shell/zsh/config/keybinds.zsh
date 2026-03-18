@@ -5,3 +5,4 @@ bindkey -v
 bindkey '^G' ghq_repository_search
 bindkey '^W' worktree_search
 bindkey '^\]' claude_add_dir_search
+bindkey '^F' difit_cmux_widget

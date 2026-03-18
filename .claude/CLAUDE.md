@@ -317,6 +317,7 @@ make paths
 - `/zoxide-guide` - Zoxide directory navigation
 - `/zellij-worktree` - Zellij git worktree workflow
 - `/cmux-guide` - cmux terminal multiplexer (Ghostty-based) and difit-cmux command
+- `/kra-guide` - kra ticket-driven workspace management with cmux integration
 
 **サービス・デーモン:**
 - `/services-guide` - AeroSpace, JankyBorders, AltTab (macOS)

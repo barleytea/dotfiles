@@ -14,6 +14,7 @@
 - Create detailed plans before implementation
 - Use iterative approaches
 - Course-correct early and frequently
+- After completing code changes, always suggest a commit message following gitmoji + conventional commits format (e.g. `feat: :sparkles: add feature`) at the end of your response
 
 ## Context Management
 - Provide visual references

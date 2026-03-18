@@ -86,7 +86,9 @@
       "WebFetch(domain:eu-central-1-1.aws.cloud2.influxdata.com)",
       "WebFetch(domain:registry.npmjs.org)",
       "WebFetch(domain:cmux.app)",
-      "WebFetch(domain:ghostty.org)"
+      "WebFetch(domain:ghostty.org)",
+      "WebFetch(domain:oauth2.googleapis.com)",
+      "WebFetch(domain:us-east5-aiplatform.googleapis.com)"
     ],
     "deny": []
   },

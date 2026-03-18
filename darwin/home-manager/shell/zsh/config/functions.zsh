@@ -74,6 +74,20 @@ function claude_add_dir_search() {
 
 zle -N claude_add_dir_search
 
+# Launch difit-cmux to view git diff in cmux browser pane
+function difit_cmux_widget() {
+  if [[ -x "/Applications/cmux.app/Contents/Resources/bin/cmux" ]]; then
+    "${HOME}/.local/bin/difit-cmux" &>/dev/null &
+    disown
+  else
+    zle -M "difit-cmux: cmux not found"
+    return 1
+  fi
+  zle reset-prompt
+}
+
+zle -N difit_cmux_widget
+
 # AWS SSO
 alias awsp=set_aws_profile
 function set_aws_profile() {

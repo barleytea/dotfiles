@@ -93,12 +93,97 @@ Deployed by Home Manager to `~/.local/bin/difit-cmux` from:
 
 Managed via `darwin/home-manager/cmux/default.nix`.
 
+### Keyboard Shortcuts
+
+| Shortcut | Action |
+|----------|--------|
+| `Ctrl+F` | Launch difit-cmux from any zsh prompt (zle widget) |
+
+The `Ctrl+F` binding is registered as a zle widget in zsh:
+
+```zsh
+# darwin/home-manager/shell/zsh/config/functions.zsh
+function difit_cmux_widget() {
+  if [[ -x "/Applications/cmux.app/Contents/Resources/bin/cmux" ]]; then
+    "${HOME}/.local/bin/difit-cmux" &>/dev/null &
+    disown
+  else
+    zle -M "difit-cmux: cmux not found"
+    return 1
+  fi
+  zle reset-prompt
+}
+```
+
+The widget launches difit-cmux in the background so the shell prompt is not blocked.
+
+### Claude Code Stop Hook
+
+difit-cmux is automatically triggered when a Claude Code session ends:
+
+- **Hook script**: `~/.local/bin/difit-cmux-hook` (deployed from `darwin/home-manager/scripts/difit-cmux-hook.sh`)
+- **Registered in**: `darwin/home-manager/claude/config/settings.json` under `hooks.Stop`
+
+The hook only runs when:
+1. cmux is installed and running (`pgrep -x "cmux"` succeeds)
+2. The session `cwd` is inside a git repository
+3. `jq` is available on `$PATH`
+
+This gives automatic diff review after every Claude Code session with zero manual effort.
+
 ### Binding to a Global Shortcut (Optional)
 
-You can bind `difit-cmux` to a keyboard shortcut via:
+You can also bind `difit-cmux` to a keyboard shortcut via:
 - **Raycast**: Create a Script Command pointing to `~/.local/bin/difit-cmux`
 - **Alfred**: Create a workflow action
 - **Karabiner Elements**: Map a key to run the script
+
+## Development Flow with difit-cmux
+
+### When to Use difit
+
+| Timing | Action | Trigger |
+|--------|--------|---------|
+| During coding | Spot-check current diff | `Ctrl+F` |
+| After Claude Code session | Automatic diff review | Stop hook (auto) |
+| Before commit | Review staged + unstaged diff | `Ctrl+F` → stage → commit |
+| Before PR creation | Full branch diff vs merge-base | `Ctrl+F` on feature branch |
+
+### Complete Branch-to-PR Flow
+
+```
+# 1. Create a new branch
+git checkout -b feat/my-feature
+
+# 2. Code with Claude Code
+claude
+
+# 3. difit auto-launches after session ends (Stop hook)
+#    Or press Ctrl+F at any time to review diff
+
+# 4. Stage changes and generate commit message
+git add -p
+# Then use /generate-commit-msg skill:
+# /generate-commit-msg
+
+# 5. Commit
+git commit
+
+# 6. Before PR: press Ctrl+F to review full branch diff
+#    (difit-cmux auto-detects merge-base diff for feature branches)
+
+# 7. Create PR
+gh pr create
+```
+
+### Integration with /generate-commit-msg
+
+After reviewing the diff with `Ctrl+F`:
+
+1. Stage your changes: `git add -p`
+2. Run `/generate-commit-msg` in Claude Code
+3. Claude analyzes `git diff --staged` and proposes a gitmoji commit message
+4. Edit and commit
 
 ## Troubleshooting
 

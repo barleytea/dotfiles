@@ -138,7 +138,7 @@ else
         difit working "${difitArgs[@]}" &
     else
         echo "🔀 Branch: $currentBranch (base: ${defaultBranch#origin/})"
-        difit "$mergeBase" . "${difitArgs[@]}" &
+        difit . "$mergeBase" "${difitArgs[@]}" &
     fi
 fi
 
@@ -155,7 +155,7 @@ until curl -s "http://localhost:${DIFIT_PORT}/" > /dev/null 2>&1; do
 done
 
 # Open in a cmux browser split and get the surface ID
-browserSurface=$("$CMUX" --json browser open-split "http://localhost:${DIFIT_PORT}/" | grep -o '"ref" *: *"surface:[^"]*"' | head -1 | grep -o 'surface:[0-9]*')
+browserSurface=$("$CMUX" --json browser open-split "http://localhost:${DIFIT_PORT}/" | jq -r '.surface_ref // empty')
 
 if [[ -z "$browserSurface" ]]; then
     echo "Warning: Could not get browser surface ID, difit server running in background" >&2
