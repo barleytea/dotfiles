@@ -53,9 +53,22 @@ Copy-Item $generatedAhkPath $startupAhk -Force
 Get-Process AutoHotkey64 -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
 Get-Process AutoHotkey  -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
 
-$ahkExe = (Get-Command AutoHotkey64.exe -ErrorAction SilentlyContinue)?.Source
+$ahkCmd = Get-Command AutoHotkey64.exe -ErrorAction SilentlyContinue
+$ahkExe = if ($ahkCmd) { $ahkCmd.Source } else { $null }
 if (-not $ahkExe) {
-  $ahkExe = (Get-Command AutoHotkey.exe -ErrorAction SilentlyContinue)?.Source
+  $ahkCmd = Get-Command AutoHotkey.exe -ErrorAction SilentlyContinue
+  $ahkExe = if ($ahkCmd) { $ahkCmd.Source } else { $null }
+}
+if (-not $ahkExe) {
+  $candidates = @(
+    'C:\Program Files\AutoHotkey\v2\AutoHotkey64.exe'
+    'C:\Program Files\AutoHotkey\v2\AutoHotkey.exe'
+    'C:\Program Files\AutoHotkey\AutoHotkey64.exe'
+    'C:\Program Files\AutoHotkey\AutoHotkey.exe'
+  )
+  foreach ($c in $candidates) {
+    if (Test-Path $c) { $ahkExe = $c; break }
+  }
 }
 if ($ahkExe) {
   Start-Process -FilePath $ahkExe -ArgumentList @($generatedAhkPath)
@@ -63,15 +76,15 @@ if ($ahkExe) {
   Write-Warning 'AutoHotkey executable not found. Install AutoHotkey then re-run apply-host-settings.ps1.'
 }
 
-# Start/restart komorebi if available.
-$komorebiCmd = Get-Command komorebic -ErrorAction SilentlyContinue
-if ($komorebiCmd) {
-  try { & $komorebiCmd.Source stop | Out-Null } catch {}
-  try { & $komorebiCmd.Source start --config (Join-Path $komorebiDir 'komorebi.json') | Out-Null } catch {
-    Write-Warning "komorebi start failed: $($_.Exception.Message)"
-  }
-} else {
-  Write-Warning 'komorebic command not found. Install komorebi then re-run apply-host-settings.ps1.'
-}
+# komorebi is intentionally disabled. Uncomment to re-enable.
+# $komorebiCmd = Get-Command komorebic -ErrorAction SilentlyContinue
+# if ($komorebiCmd) {
+#   try { & $komorebiCmd.Source stop | Out-Null } catch {}
+#   try { & $komorebiCmd.Source start --config (Join-Path $komorebiDir 'komorebi.json') | Out-Null } catch {
+#     Write-Warning "komorebi start failed: $($_.Exception.Message)"
+#   }
+# } else {
+#   Write-Warning 'komorebic command not found. Install komorebi then re-run apply-host-settings.ps1.'
+# }
 
 Write-Host "Applied host settings (profile=$($state.profile), caps_as_ctrl=$($state.caps_as_ctrl), win_as_ctrl=$($state.win_as_ctrl))."

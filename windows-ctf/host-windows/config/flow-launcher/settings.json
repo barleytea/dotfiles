@@ -4,7 +4,7 @@
   "AnimationSpeed": 0,
   "AutoUpdates": true,
   "HideOnDeactive": true,
-  "Hotkey": "Ctrl + Space",
+  "Hotkey": "Alt + Space",
   "IgnoreHotkeysOnFullscreen": true,
   "Language": "en",
   "RememberLastLaunchLocation": true,

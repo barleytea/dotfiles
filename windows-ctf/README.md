@@ -68,6 +68,14 @@ windows-ctf/
 
 ### 0) Host UX setup (Windows, PowerShell)
 
+**初回のみ**: デフォルト設定ではスクリプト実行が無効なため、事前に以下を実行してください。
+
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+その後：
+
 ```powershell
 cd path\to\dotfiles\windows-ctf\host-windows\scripts
 .\bootstrap-host.ps1

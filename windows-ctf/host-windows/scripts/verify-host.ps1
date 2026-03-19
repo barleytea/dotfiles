@@ -30,7 +30,18 @@ function Test-RequiredPath {
 }
 
 Test-RequiredCommand winget
-Test-RequiredCommand AutoHotkey64.exe
+# AutoHotkey may not be in PATH; check well-known install locations as fallback
+if (Get-Command AutoHotkey64.exe -ErrorAction SilentlyContinue) {
+  Write-Host '[OK] command: AutoHotkey64.exe'
+} elseif (
+  (Test-Path 'C:\Program Files\AutoHotkey\v2\AutoHotkey64.exe') -or
+  (Test-Path 'C:\Program Files\AutoHotkey\AutoHotkey64.exe')
+) {
+  Write-Host '[OK] AutoHotkey64.exe (found via install path, not in PATH)'
+} else {
+  Write-Host '[NG] AutoHotkey64.exe not found'
+  $script:errors++
+}
 Test-RequiredCommand komorebic
 
 Test-RequiredPath $statePath

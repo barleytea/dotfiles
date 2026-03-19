@@ -1,3 +1,5 @@
+﻿; AUTO-GENERATED. DO NOT EDIT DIRECTLY.
+; profile: default
 #Requires AutoHotkey v2.0
 #SingleInstance Force
 SetCapsLockState "AlwaysOff"
@@ -8,7 +10,7 @@ CapsLock::Ctrl
 ; Quick emergency: suspend all AHK remaps.
 ^!Pause::Suspend -1
 
-; IME toggle (英かな切り替え) - real Ctrl+Space.
+; IME toggle (闍ｱ縺九↑蛻・ｊ譖ｿ縺・ - real Ctrl+Space.
 ^Space::{
     Send "{Ctrl Up}"
     hwnd := WinActive("A")
@@ -22,7 +24,7 @@ CapsLock::Ctrl
         Send "{vkF3}"  ; IME on (hiragana)
 }
 
-; IME toggle (英かな切り替え) - only when CapsLock is physically held.
+; IME toggle (闍ｱ縺九↑蛻・ｊ譖ｿ縺・ - only when CapsLock is physically held.
 #HotIf GetKeyState("CapsLock", "P")
 *Space::{
     Send "{Ctrl Up}"
@@ -56,3 +58,6 @@ CapsLock::Ctrl
 !d::RunWait 'komorebic resize-axis horizontal increase', , 'Hide'
 !w::RunWait 'komorebic resize-axis vertical decrease', , 'Hide'
 !s::RunWait 'komorebic resize-axis vertical increase', , 'Hide'
+
+; Win->Ctrl remap disabled in this profile.
+
