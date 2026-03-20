@@ -66,7 +66,14 @@ install_manifest() {
 
         update_apt_once
         echo "  - ${line}"
-        sudo apt-get install -y "${line}"
+        # Pre-answer debconf prompts for known interactive packages.
+        case "${line}" in
+            wireshark|wireshark-common)
+                echo "wireshark-common wireshark-common/install-setuid boolean true" \
+                    | sudo debconf-set-selections
+                ;;
+        esac
+        sudo DEBIAN_FRONTEND=noninteractive apt-get install -y "${line}"
     done < "${manifest_path}"
 }
 

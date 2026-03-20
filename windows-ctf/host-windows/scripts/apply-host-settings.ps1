@@ -30,6 +30,18 @@ Copy-Item (Join-Path $configDir 'ghostty/config') (Join-Path $ghosttyDir 'config
 Copy-Item (Join-Path $configDir 'flow-launcher/settings.json') (Join-Path $flowDir 'Settings.json') -Force
 Copy-Item (Join-Path $configDir 'komorebi/komorebi.json') (Join-Path $komorebiDir 'komorebi.json') -Force
 
+$wtSettingsSrc = Join-Path $configDir 'windows-terminal/settings.json'
+$wtPaths = @(
+    (Join-Path $env:LOCALAPPDATA 'Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState'),
+    (Join-Path $env:LOCALAPPDATA 'Microsoft\Windows Terminal')
+)
+foreach ($p in $wtPaths) {
+    if (Test-Path $p) {
+        Copy-Item $wtSettingsSrc (Join-Path $p 'settings.json') -Force
+        Write-Host "  Windows Terminal settings applied to: $p"
+    }
+}
+
 $base = Get-Content (Join-Path $configDir 'ahk/keymap.base.ahk') -Raw
 $winMap = if ($state.win_as_ctrl) {
   Get-Content (Join-Path $configDir 'ahk/winctrl.on.ahk') -Raw
@@ -50,8 +62,41 @@ $startupAhk = Join-Path $startupDir 'windows-ctf-keymap.ahk'
 Copy-Item $generatedAhkPath $startupAhk -Force
 
 # Restart AHK with the generated script.
+# Step 1: WM_CLOSE (0x10) で AHK に OnExit フックを実行させてから終了させる
+Add-Type -TypeDefinition @'
+using System;
+using System.Runtime.InteropServices;
+public class WinMsg {
+    [DllImport("user32.dll")]
+    public static extern bool PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+}
+'@ -ErrorAction SilentlyContinue
+
+$ahkProcs = @(
+    Get-Process AutoHotkey64 -ErrorAction SilentlyContinue
+    Get-Process AutoHotkey   -ErrorAction SilentlyContinue
+) | Where-Object { $_ -ne $null }
+
+foreach ($proc in $ahkProcs) {
+    if ($proc.MainWindowHandle -ne [IntPtr]::Zero) {
+        [WinMsg]::PostMessage($proc.MainWindowHandle, 0x0010, [IntPtr]::Zero, [IntPtr]::Zero) | Out-Null
+    }
+}
+
+# Step 2: グレースフルな終了を最大 2 秒待つ
+$deadline = (Get-Date).AddSeconds(2)
+while ((Get-Date) -lt $deadline) {
+    $still = @(
+        Get-Process AutoHotkey64 -ErrorAction SilentlyContinue
+        Get-Process AutoHotkey   -ErrorAction SilentlyContinue
+    ) | Where-Object { $_ -ne $null }
+    if (-not $still) { break }
+    Start-Sleep -Milliseconds 200
+}
+
+# Step 3: 残存プロセスを強制終了（フォールバック）
 Get-Process AutoHotkey64 -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
-Get-Process AutoHotkey  -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+Get-Process AutoHotkey   -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
 
 $ahkCmd = Get-Command AutoHotkey64.exe -ErrorAction SilentlyContinue
 $ahkExe = if ($ahkCmd) { $ahkCmd.Source } else { $null }

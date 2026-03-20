@@ -26,3 +26,6 @@ install-core: ## Install core package manifest only
 
 install-all: ## Install all manifests (core + category + gui)
 	bash ./scripts/install-manifest.sh all
+
+install-mise: ## Install mise, Node.js LTS, and global npm tools (codex etc.)
+	bash ./scripts/install-mise.sh
