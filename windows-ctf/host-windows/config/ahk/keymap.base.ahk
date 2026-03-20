@@ -32,6 +32,7 @@ SetTimer(ValidateCapsCtrlState, 500)
 ValidateCapsCtrlState() {
     global g_capsCtrlDown
     physCapsDown  := GetKeyState("CapsLock", "P")
+    physCtrlDown  := GetKeyState("LCtrl",    "P")
     logicCtrlDown := GetKeyState("LCtrl",    "L")
 
     if g_capsCtrlDown and !physCapsDown {
@@ -42,6 +43,9 @@ ValidateCapsCtrlState() {
         ; CapsLock は押下中だが Ctrl が発行されていない → 再注入
         g_capsCtrlDown := true
         DllCall("keybd_event", "uchar", 0xA2, "uchar", 0, "uint", 0, "uptr", 0)
+    } else if !g_capsCtrlDown and !physCapsDown and !physCtrlDown and logicCtrlDown {
+        ; AHK は正常と思っているが LCtrl が論理的にスタックしているケース
+        DllCall("keybd_event", "uchar", 0xA2, "uchar", 0, "uint", 2, "uptr", 0)
     }
 }
 
@@ -50,14 +54,14 @@ ValidateCapsCtrlState() {
     if g_capsCtrlDown  ; suppress key-repeat re-fire
         return
     g_capsCtrlDown := true
-    Send "{LCtrl Down}"
+    DllCall("keybd_event", "uchar", 0xA2, "uchar", 0, "uint", 0, "uptr", 0)
 }
 
 *CapsLock up::{
     global g_capsCtrlDown
     if g_capsCtrlDown {
+        DllCall("keybd_event", "uchar", 0xA2, "uchar", 0, "uint", 2, "uptr", 0)
         g_capsCtrlDown := false
-        Send "{LCtrl Up}"
     }
 }
 
@@ -77,8 +81,8 @@ ValidateCapsCtrlState() {
 *Space::{
     global g_capsCtrlDown
     if g_capsCtrlDown {
+        DllCall("keybd_event", "uchar", 0xA2, "uchar", 0, "uint", 2, "uptr", 0)
         g_capsCtrlDown := false
-        Send "{LCtrl Up}"
     }
     hwnd := WinActive("A")
     ctx := DllCall("imm32\ImmGetContext", "ptr", hwnd, "ptr")
@@ -97,8 +101,8 @@ ValidateCapsCtrlState() {
 ^Space::{
     global g_capsCtrlDown
     if g_capsCtrlDown {
+        DllCall("keybd_event", "uchar", 0xA2, "uchar", 0, "uint", 2, "uptr", 0)
         g_capsCtrlDown := false
-        Send "{LCtrl Up}"
     }
     hwnd := WinActive("A")
     ctx := DllCall("imm32\ImmGetContext", "ptr", hwnd, "ptr")
