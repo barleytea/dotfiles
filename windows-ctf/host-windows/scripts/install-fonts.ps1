@@ -9,17 +9,8 @@ $userFontsDir = Join-Path $env:LOCALAPPDATA 'Microsoft\Windows\Fonts'
 $systemFontsDir = Join-Path $env:WINDIR 'Fonts'
 
 function Test-FontInstalled {
-  # ユーザーフォントフォルダ（管理者不要）
-  if (Get-ChildItem -Path $userFontsDir -Filter 'HackNerdFont*' -ErrorAction SilentlyContinue) { return $true }
-  # システムフォントフォルダ（管理者でインストール済みの場合）
-  if (Get-ChildItem -Path $systemFontsDir -Filter 'HackNerdFont*' -ErrorAction SilentlyContinue) { return $true }
-  # レジストリ確認（HKCU: ユーザーインストール）
-  $hkcu = Get-ItemProperty 'HKCU:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts' -ErrorAction SilentlyContinue
-  if ($hkcu -and $hkcu.PSObject.Properties.Name -like '*Hack Nerd Font*') { return $true }
-  # レジストリ確認（HKLM: システムインストール）
-  $hklm = Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts' -ErrorAction SilentlyContinue
-  if ($hklm -and $hklm.PSObject.Properties.Name -like '*Hack Nerd Font*') { return $true }
-  return $false
+  return (Test-Path (Join-Path $userFontsDir 'HackNerdFont-Regular.ttf')) -or
+         (Test-Path (Join-Path $systemFontsDir 'HackNerdFont-Regular.ttf'))
 }
 
 if (Test-FontInstalled) {
