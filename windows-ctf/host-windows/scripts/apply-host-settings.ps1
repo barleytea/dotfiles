@@ -132,9 +132,15 @@ if ($ahkExe) {
 #   Write-Warning 'komorebic command not found. Install komorebi then re-run apply-host-settings.ps1.'
 # }
 
-# Font check
-$fontInstalled = (Test-Path (Join-Path $env:WINDIR 'Fonts\HackNerdFont-Regular.ttf')) -or
-  ((Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts' -ErrorAction SilentlyContinue).PSObject.Properties.Name -like '*Hack Nerd Font*')
+# Font check (user fonts and system fonts both)
+$userFontsDir = Join-Path $env:LOCALAPPDATA 'Microsoft\Windows\Fonts'
+$hkcu = Get-ItemProperty 'HKCU:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts' -ErrorAction SilentlyContinue
+$hklm = Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts' -ErrorAction SilentlyContinue
+$fontInstalled =
+  (Get-ChildItem -Path $userFontsDir -Filter 'HackNerdFont*' -ErrorAction SilentlyContinue) -or
+  (Get-ChildItem -Path (Join-Path $env:WINDIR 'Fonts') -Filter 'HackNerdFont*' -ErrorAction SilentlyContinue) -or
+  ($hkcu -and $hkcu.PSObject.Properties.Name -like '*Hack Nerd Font*') -or
+  ($hklm -and $hklm.PSObject.Properties.Name -like '*Hack Nerd Font*')
 if (-not $fontInstalled) {
   Write-Warning 'Hack Nerd Font is not installed. Run: .\scripts\install-fonts.ps1'
 }
