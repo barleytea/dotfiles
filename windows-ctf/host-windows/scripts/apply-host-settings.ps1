@@ -132,4 +132,11 @@ if ($ahkExe) {
 #   Write-Warning 'komorebic command not found. Install komorebi then re-run apply-host-settings.ps1.'
 # }
 
+# Font check
+$fontInstalled = (Test-Path (Join-Path $env:WINDIR 'Fonts\HackNerdFont-Regular.ttf')) -or
+  ((Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts' -ErrorAction SilentlyContinue).PSObject.Properties.Name -like '*Hack Nerd Font*')
+if (-not $fontInstalled) {
+  Write-Warning 'Hack Nerd Font is not installed. Run: .\scripts\install-fonts.ps1'
+}
+
 Write-Host "Applied host settings (profile=$($state.profile), caps_as_ctrl=$($state.caps_as_ctrl), win_as_ctrl=$($state.win_as_ctrl))."

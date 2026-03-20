@@ -41,6 +41,9 @@ foreach ($entry in $entries) {
   }
 }
 
+Write-Host '==> Installing fonts'
+& (Join-Path $scriptDir 'install-fonts.ps1') | Out-Host
+
 Write-Host '==> Applying host settings'
 & (Join-Path $scriptDir 'set-caps-ctrl.ps1') | Out-Host
 & (Join-Path $scriptDir 'apply-host-settings.ps1') | Out-Host

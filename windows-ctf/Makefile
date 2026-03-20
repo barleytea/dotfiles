@@ -29,3 +29,6 @@ install-all: ## Install all manifests (core + category + gui)
 
 install-mise: ## Install mise, Node.js LTS, and global npm tools (codex etc.)
 	bash ./scripts/install-mise.sh
+
+setup-github-ssh: ## Set up SSH key and configure git remote for GitHub
+	bash ./scripts/setup-github-ssh.sh
