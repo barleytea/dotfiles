@@ -10,9 +10,9 @@ export PATH="${HOME}/.local/bin:${PATH}"
 # Install Node.js LTS and activate
 mise use --global node@lts
 
-# Install Codex CLI
-mise exec -- npm install -g @openai/codex
+# Install npm global tools
+mise exec -- npm install -g @openai/codex commitizen cz-git
 
-echo "==> mise + Node.js + codex installed"
+echo "==> mise + Node.js + codex + commitizen installed"
 echo "    Add the following to your shell rc:"
 echo '    eval "$(~/.local/bin/mise activate bash)"'

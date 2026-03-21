@@ -23,6 +23,9 @@ GIT_CONFIG_DEST="${HOME}/.config/git/config"
 GIT_IGNORE_SRC="${DOTFILES_DIR}/config/git/ignore"
 GIT_IGNORE_DEST="${HOME}/.config/git/ignore"
 
+CZRC_SRC="${DOTFILES_DIR}/config/cz-git/czrc"
+CZRC_DEST="${HOME}/.czrc"
+
 echo "==> Installing bash tools first..."
 bash "${SCRIPT_DIR}/install-bash-tools.sh"
 
@@ -61,6 +64,10 @@ ln -sf "${GIT_CONFIG_SRC}" "${GIT_CONFIG_DEST}"
 echo "  Linked: ${GIT_CONFIG_DEST}"
 ln -sf "${GIT_IGNORE_SRC}" "${GIT_IGNORE_DEST}"
 echo "  Linked: ${GIT_IGNORE_DEST}"
+
+echo "==> Linking cz-git config..."
+ln -sf "${CZRC_SRC}" "${CZRC_DEST}"
+echo "  Linked: ${CZRC_DEST}"
 
 echo "==> Adding .bashrc source snippet..."
 BASHRC="${HOME}/.bashrc"
