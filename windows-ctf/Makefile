@@ -32,3 +32,12 @@ install-mise: ## Install mise, Node.js LTS, and global npm tools (codex etc.)
 
 setup-github-ssh: ## Set up SSH key and configure git remote for GitHub
 	bash ./scripts/setup-github-ssh.sh
+
+dump-wt-settings: ## Dump current Windows Terminal settings from Windows filesystem to dotfiles
+	bash ./host-windows/scripts/dump-wt-settings.sh
+
+install-bash-tools: ## Install bash terminal tools (starship, atuin, zoxide, eza, bat, ghq)
+	bash ./scripts/install-bash-tools.sh
+
+setup-bash: ## Link bash configs (starship/atuin/tmux) and install bash tools
+	bash ./scripts/setup-bash.sh

@@ -1,0 +1,17 @@
+mcp.json
+.mcp.json
+.cursor/rules/
+.cursorrules
+.clinerules
+.local.memo.md
+.local_memos/
+.idea/
+.vscode/
+*.log
+node_modules/
+.tool-versions
+__debug*
+copilot-instructions.md
+.ai/
+.kiro/
+.DS_Store

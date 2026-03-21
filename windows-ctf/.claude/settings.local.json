@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(echo:*)",
+      "Bash(ssh-add -l)",
+      "Bash(find /home/barleytea -name *ssh* -o -name *keychain*)",
+      "Bash(git config:*)",
+      "Bash(git --version)",
+      "Bash(ssh -V)",
+      "Bash(openssl version:*)",
+      "Bash(chmod:*)"
+    ]
+  }
+}

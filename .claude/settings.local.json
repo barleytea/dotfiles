@@ -88,7 +88,9 @@
       "WebFetch(domain:cmux.app)",
       "WebFetch(domain:ghostty.org)",
       "WebFetch(domain:oauth2.googleapis.com)",
-      "WebFetch(domain:us-east5-aiplatform.googleapis.com)"
+      "WebFetch(domain:us-east5-aiplatform.googleapis.com)",
+      "Bash(wc:*)",
+      "Read(//mnt/c/Users/**)"
     ],
     "deny": []
   },

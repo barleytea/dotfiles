@@ -142,3 +142,6 @@ windows-ctf-help: ## windows-ctf用のヘルプを表示します
 
 windows-host-help: ## windowsホストUX設定ガイドを表示します
 	@echo "Open windows-ctf/host-windows/README.md"
+
+windows-ctf-dump-wt-settings: ## Windows Terminalの現在の設定をdotfilesにdumpします（WSL2から実行）
+	cd windows-ctf && make dump-wt-settings
