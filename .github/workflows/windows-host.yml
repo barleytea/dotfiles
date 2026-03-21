@@ -1,4 +1,4 @@
-name: Windows Host UX CI
+name: Windows CTF CI
 
 on:
   push:
@@ -13,157 +13,62 @@ on:
       - '.github/workflows/windows-host.yml'
 
 jobs:
-  pwsh-parse:
-    runs-on: windows-latest
+  bash-check:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Parse all PowerShell scripts
-        shell: pwsh
+      - name: Bash syntax check
         run: |
-          $errors = @()
-          Get-ChildItem -Path windows-ctf -Recurse -Filter *.ps1 | ForEach-Object {
-            $tokens = $null
-            $parseErrors = $null
-            $null = [System.Management.Automation.Language.Parser]::ParseFile($_.FullName, [ref]$tokens, [ref]$parseErrors)
-            if ($parseErrors -and $parseErrors.Count -gt 0) {
-              $messages = $parseErrors | ForEach-Object { $_.Message }
-              $errors += "Parse error in $($_.FullName): $($messages -join '; ')"
-            }
-          }
+          find windows-ctf -name '*.sh' | while IFS= read -r f; do
+            bash -n "$f" || exit 1
+            echo "[OK] $f"
+          done
 
-          if ($errors.Count -gt 0) {
-            $errors | ForEach-Object { Write-Error $_ }
-            exit 1
-          }
+      - name: Validate JSON files
+        run: |
+          find windows-ctf -name '*.json' | while IFS= read -r f; do
+            jq . "$f" > /dev/null || exit 1
+            echo "[OK] $f"
+          done
 
-  ps-lint:
-    runs-on: windows-latest
+  setup-dry-run:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install PSScriptAnalyzer
-        shell: pwsh
+      - name: Stub install-bash-tools.sh (skip network installs in CI)
         run: |
-          Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
-          Install-Module PSScriptAnalyzer -Scope CurrentUser -Force
+          cat > windows-ctf/scripts/install-bash-tools.sh <<'EOF'
+          #!/usr/bin/env bash
+          echo "[STUB] install-bash-tools skipped in CI"
+          EOF
 
-      - name: Run PSScriptAnalyzer (Error severity)
-        shell: pwsh
+      - name: Run setup-bash.sh
+        run: bash windows-ctf/scripts/setup-bash.sh
+
+      - name: Verify symlinks exist
         run: |
-          $results = Invoke-ScriptAnalyzer -Path windows-ctf/host-windows/scripts/*.ps1 -Severity Error
-          if ($results) {
-            $results | Format-Table -AutoSize | Out-String | Write-Host
-            throw "PSScriptAnalyzer reported $($results.Count) error(s)."
-          }
+          for f in \
+            "$HOME/.config/bash/bashrc.sh" \
+            "$HOME/.config/starship/starship.toml" \
+            "$HOME/.config/atuin/config.toml" \
+            "$HOME/.tmux.conf" \
+            "$HOME/.config/git/config" \
+            "$HOME/.config/git/ignore" \
+            "$HOME/.czrc"; do
+            if [ -e "$f" ]; then
+              echo "[OK] $f"
+            else
+              echo "[NG] missing: $f" && exit 1
+            fi
+          done
 
-      - name: Run PSScriptAnalyzer (Warning severity report)
-        shell: pwsh
+      - name: Verify .bashrc snippet
         run: |
-          $results = Invoke-ScriptAnalyzer -Path windows-ctf/host-windows/scripts/*.ps1 -Severity Warning
-          if ($results) {
-            $results | Format-Table -AutoSize | Out-String | Write-Host
-          } else {
-            Write-Host "No warnings."
-          }
+          grep -q '\.config/bash/bashrc\.sh' "$HOME/.bashrc" \
+            && echo "[OK] .bashrc snippet present" \
+            || { echo "[NG] .bashrc snippet missing"; exit 1; }
 
-  json-validate:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Validate JSON config files
-        shell: pwsh
-        run: |
-          $failed = $false
-          Get-ChildItem -Path windows-ctf -Recurse -Filter *.json | ForEach-Object {
-            try {
-              Get-Content $_.FullName -Raw | ConvertFrom-Json | Out-Null
-              Write-Host "[OK] $($_.FullName)"
-            }
-            catch {
-              Write-Error "[NG] Invalid JSON: $($_.FullName) - $($_.Exception.Message)"
-              $failed = $true
-            }
-          }
-
-          if ($failed) {
-            exit 1
-          }
-
-  ahk-policy-check:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Enforce AHK and state policy
-        shell: pwsh
-        run: |
-          $ahkBase = 'windows-ctf/host-windows/config/ahk/keymap.base.ahk'
-          $statePath = 'windows-ctf/host-windows/config/ahk/state.json'
-
-          if (-not (Test-Path $ahkBase)) { throw "Missing file: $ahkBase" }
-          if (-not (Test-Path $statePath)) { throw "Missing file: $statePath" }
-
-          $ahk = Get-Content $ahkBase -Raw
-          if ($ahk -notmatch 'CapsLock::Ctrl') {
-            throw 'Policy violation: CapsLock::Ctrl must exist in keymap.base.ahk'
-          }
-
-          if ($ahk -notmatch '\^!Pause::Suspend\s-1') {
-            throw 'Policy violation: emergency suspend hotkey (^!Pause::Suspend -1) must exist'
-          }
-
-          $state = Get-Content $statePath -Raw | ConvertFrom-Json
-          if ($state.caps_as_ctrl -ne $true) {
-            throw 'Policy violation: state.json caps_as_ctrl must be true'
-          }
-
-          Write-Host 'AHK policy checks passed.'
-
-  winget-manifest-check:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Validate winget package IDs
-        shell: pwsh
-        run: |
-          $manifest = 'windows-ctf/host-windows/manifests/apps-winget.txt'
-          if (-not (Test-Path $manifest)) {
-            throw "Missing manifest: $manifest"
-          }
-
-          $entries = Get-Content $manifest | ForEach-Object {
-            $line = $_.Trim()
-            if (-not $line -or $line.StartsWith('#')) { return }
-            [pscustomobject]@{
-              Optional = $line.StartsWith('?')
-              Id = if ($line.StartsWith('?')) { $line.Substring(1) } else { $line }
-            }
-          }
-
-          $missing = @()
-          $optionalMissing = @()
-          foreach ($entry in $entries) {
-            $id = $entry.Id
-            Write-Host "Checking $id"
-            winget show --id $id --exact --accept-source-agreements *> $null
-            if ($LASTEXITCODE -ne 0) {
-              if ($entry.Optional) {
-                $optionalMissing += $id
-              } else {
-                $missing += $id
-              }
-            }
-          }
-
-          if ($missing.Count -gt 0) {
-            throw "Invalid or unresolved winget IDs: $($missing -join ', ')"
-          }
-
-          if ($optionalMissing.Count -gt 0) {
-            Write-Warning "Optional winget IDs unresolved on this runner: $($optionalMissing -join ', ')"
-          }
-
-          Write-Host 'winget manifest checks passed.'
+      - name: Source bashrc.sh without errors
+        run: bash "$HOME/.config/bash/bashrc.sh"
