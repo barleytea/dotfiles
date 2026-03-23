@@ -22,7 +22,6 @@ in {
     ./gemini
     ./git
     ./ghostty
-    ./hammerspoon
     ./k9s
     ./lazygit
     ./helix

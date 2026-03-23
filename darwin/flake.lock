@@ -29,11 +29,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1773367248,
-        "narHash": "sha256-FFMc1uAwy2GYasd0rdNDVxKyAgzuoJH2M+GglBQbqf0=",
+        "lastModified": 1773422513,
+        "narHash": "sha256-MPjR48roW7CUMU6lu0+qQGqj92Kuh3paIulMWFZy+NQ=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "be0c641a6a5564caa33982faa1fe2c60d92131c7",
+        "rev": "ef12a9a2b0f77c8fa3dda1e7e494fca668909056",
         "type": "github"
       },
       "original": {
@@ -124,18 +124,18 @@
       },
       "locked": {
         "dir": "nixvim",
-        "lastModified": 1773368157,
-        "narHash": "sha256-IO0l0nIydGf19iKbN7VNQ6zV96aRqlEyqX22Vst5Qs0=",
+        "lastModified": 1773391861,
+        "narHash": "sha256-MlJBJWMb+qtrh0CSPRi8P3aphubD6Y2PJMbsJbGfPZk=",
         "ref": "refs/heads/main",
-        "rev": "e5556929c696d8578aba3817ec5caa708d2fc762",
-        "revCount": 466,
+        "rev": "7b77c4eba73f15748f85cab4ea960a0dcbab3c14",
+        "revCount": 467,
         "type": "git",
-        "url": "file:.."
+        "url": "file:..?dir=nixvim"
       },
       "original": {
         "dir": "nixvim",
         "type": "git",
-        "url": "file:.."
+        "url": "file:..?dir=nixvim"
       }
     },
     "root": {
