@@ -40,15 +40,13 @@
       }
     },
     "network": {
-      "allowedHosts": []
+      "allowedDomains": ["*"]
     }
   },
   "permissions": {
-    "allow": [
-      "Bash(gh*)",
-      "mcp__pencil"
-    ],
-    "deny": []
+    "allow": [],
+    "deny": [],
+    "defaultMode": "dontAsk"
   },
   "model": "opusplan",
   "permissionMode": "plan",
