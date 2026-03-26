@@ -35,6 +35,9 @@
         trusted_config_paths = [
           config.home.homeDirectory
         ];
+        python = {
+          freethreaded = false;
+        };
       };
 
       # タスク定義でnpmグローバルインストールを実行
