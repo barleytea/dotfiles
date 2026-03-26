@@ -36,7 +36,7 @@
           config.home.homeDirectory
         ];
         python = {
-          freethreaded = false;
+          precompiled_flavor = "install_only";
         };
       };
 
