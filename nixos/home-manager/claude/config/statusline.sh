@@ -5,10 +5,10 @@
 # 1. model.display_name を表示
 # 2. 現在の作業ディレクトリ名（basename）を表示
 # 3. Gitブランチ名を表示
-# 4. セッション費用 / 当日費用
-# 5. 今月の累計費用
-# 6. 1時間あたりの消費ペース（burn rate）
-# 7. コンテキスト使用率（%）
+# 4. コンテキスト使用率（ctx bar）
+# 5. 5時間/7日間ウィンドウ使用率（rate_limits bar）
+# 6. ブロック残り時間
+# 7. 今月の累計費用
 
 # ANSIカラー定義
 RED='\033[0;31m'
@@ -16,7 +16,6 @@ YELLOW='\033[0;33m'
 GREEN='\033[0;32m'
 CYAN='\033[0;36m'
 BOLD='\033[1m'
-DIM='\033[2m'
 RESET='\033[0m'
 
 # 入力JSONを読み込み
@@ -57,17 +56,15 @@ DIR_NAME=$(basename "$DIR")
 CONTEXT_PCT=$(echo "$input" | jq -r '.context_window.used_percentage // 0' | awk '{printf "%.0f", $1}')
 CONTEXT_USED=$(echo "$input" | jq -r '.context_window.total_input_tokens // 0')
 CONTEXT_MAX=$(echo "$input" | jq -r '.context_window.context_window_size // 0')
-# K単位に変換。0の場合はトークン表示を省略するためフラグを立てる
-if [ "$CONTEXT_MAX" != "0" ] && [ -n "$CONTEXT_MAX" ]; then
-    CONTEXT_USED_K=$(awk "BEGIN {printf \"%.0fK\", $CONTEXT_USED / 1000}" 2>/dev/null || echo "?K")
-    CONTEXT_MAX_K=$(awk "BEGIN {printf \"%.0fK\", $CONTEXT_MAX / 1000}" 2>/dev/null || echo "?K")
-    CONTEXT_TOKEN_DISPLAY=" (${CONTEXT_USED_K}/${CONTEXT_MAX_K})"
-else
-    CONTEXT_TOKEN_DISPLAY=""
-fi
+
+# rate_limits (v2.1.80+)
+WINDOW_5H_PCT=$(echo "$input" | jq -r '.rate_limits.five_hour.used_percentage // empty' \
+    | awk '{printf "%.0f", $1}' 2>/dev/null || echo "")
+
+WINDOW_7D_PCT=$(echo "$input" | jq -r '.rate_limits.seven_day.used_percentage // empty' \
+    | awk '{printf "%.0f", $1}' 2>/dev/null || echo "")
 
 # Gitブランチ名を取得（キャッシュで高速化）
-# ディレクトリパスをハッシュ化してキャッシュファイル名を作成
 DIR_HASH=$(echo -n "$DIR" | md5sum 2>/dev/null | cut -d' ' -f1 || echo -n "$DIR" | md5 2>/dev/null || echo "default")
 CACHE_FILE="/tmp/statusline-git-cache-${DIR_HASH}"
 CACHE_MAX_AGE=5
@@ -98,18 +95,25 @@ if ! [[ "$MONTHLY_COST" =~ ^[0-9]+([.][0-9]+)?$ ]]; then
     MONTHLY_COST="0"
 fi
 
-# ccusage statuslineを呼び出して費用情報を取得
-CCUSAGE_OUTPUT=$(echo "$input" | run_ccusage statusline --offline 2>/dev/null || echo "")
+# ブロック残り時間を取得（キャッシュ: 30秒）
+BLOCK_CACHE="/tmp/statusline-block-cache"
+BLOCK_CACHE_MAX_AGE=30
 
-# セッション費用とburn rateをClaude Code APIから取得（フォールバック）
-SESSION_COST=$(echo "$input" | jq -r '.cost.total_cost_usd // 0')
+if [ ! -f "$BLOCK_CACHE" ] || [ $(( $(date +%s) - $(get_mtime "$BLOCK_CACHE") )) -gt $BLOCK_CACHE_MAX_AGE ]; then
+    BLOCK_REMAINING=$(run_ccusage blocks --json --active --offline 2>/dev/null \
+        | jq -r '.blocks[]? | select(.isActive == true) | .projection.remainingMinutes // ""' 2>/dev/null || echo "")
+    echo "$BLOCK_REMAINING" > "$BLOCK_CACHE"
+else
+    BLOCK_REMAINING=$(cat "$BLOCK_CACHE" 2>/dev/null || echo "")
+fi
 
-# コンテキスト使用率に応じた色とプログレスバーを生成
+# コンテキスト使用率に応じた色とプログレスバーを生成（幅6）
 make_context_bar() {
     local pct="$1"
-    local filled=$(awk "BEGIN {printf \"%d\", $pct / 10}" 2>/dev/null || echo 0)
-    [ "$filled" -gt 10 ] && filled=10
-    local empty=$(( 10 - filled ))
+    local width=6
+    local filled=$(awk "BEGIN {printf \"%d\", $pct * $width / 100}" 2>/dev/null || echo 0)
+    [ "$filled" -gt "$width" ] && filled=$width
+    local empty=$(( width - filled ))
     local bar=""
     local i
     for (( i=0; i<filled; i++ )); do bar+="█"; done
@@ -123,7 +127,7 @@ make_context_bar() {
     fi
 }
 
-# 費用に応じた色を返す（セッション費用用）
+# 費用に応じた色を返す
 cost_color() {
     local cost="$1"
     local high="${2:-0.50}"
@@ -137,35 +141,63 @@ cost_color() {
     fi
 }
 
-# 出力フォーマット
-# 1行目: モデル名 | ディレクトリ名 | Gitブランチ（カラー付き）
+# LINE1: モデル名 | ディレクトリ名  Gitブランチ
 if [ -n "$BRANCH" ]; then
-    LINE1="🤖 ${CYAN}${BOLD}${MODEL}${RESET} │ 📁 ${BOLD}${DIR_NAME}${RESET} │ 🌿 ${GREEN}${BRANCH}${RESET}"
+    LINE1="${CYAN}${MODEL}${RESET} │ 📁 ${BOLD}${DIR_NAME}${RESET}  🌿 ${GREEN}${BRANCH}${RESET}"
 else
-    LINE1="🤖 ${CYAN}${BOLD}${MODEL}${RESET} │ 📁 ${BOLD}${DIR_NAME}${RESET}"
+    LINE1="${CYAN}${MODEL}${RESET} │ 📁 ${BOLD}${DIR_NAME}${RESET}"
 fi
 
-# 2行目: ccusageの出力（セッション費用/当日費用/burn rate等が含まれる）
-# または、ccusageが失敗した場合はフォールバック（カラー+プログレスバー付き）
-if [ -n "$CCUSAGE_OUTPUT" ]; then
-    # ccusageの出力からモデル名部分とburn rateを削除
-    LINE2=$(echo "$CCUSAGE_OUTPUT" | sed 's/^🤖 [^|]* | //' | sed 's/ | 🔥 [^|]*//')
-    # プログレスバーとトークン数を末尾に追加（%はccusageのものをそのまま使用）
-    CTX_BAR=$(make_context_bar "$CONTEXT_PCT")
-    LINE2="${LINE2} ${CTX_BAR}${CONTEXT_TOKEN_DISPLAY}"
-else
-    # フォールバック: カラー+プログレスバー付きで表示
-    SESSION_COLOR=$(cost_color "$SESSION_COST" "0.50" "0.10")
-    CTX_BAR=$(make_context_bar "$CONTEXT_PCT")
-    LINE2="💰 ${SESSION_COLOR}\$$(printf '%.4f' "$SESSION_COST")${RESET} session │ 🧠 ${CTX_BAR} ${CONTEXT_PCT}%${CONTEXT_TOKEN_DISPLAY}"
+# コンテキストバー
+CTX_BAR=$(make_context_bar "$CONTEXT_PCT")
+CTX_PART="ctx${CTX_BAR}${CONTEXT_PCT}%"
+
+# 5hウィンドウバー（値が存在する場合のみ）
+WIN_5H_PART=""
+if [[ "$WINDOW_5H_PCT" =~ ^[0-9]+$ ]]; then
+    WIN_5H_BAR=$(make_context_bar "$WINDOW_5H_PCT")
+    WIN_5H_PART="5h${WIN_5H_BAR}${WINDOW_5H_PCT}%"
 fi
 
-# 3行目: 今月の累計費用（閾値ベースのカラー付き）
+# 7dウィンドウバー（値が存在する場合のみ）
+WIN_7D_PART=""
+if [[ "$WINDOW_7D_PCT" =~ ^[0-9]+$ ]]; then
+    WIN_7D_BAR=$(make_context_bar "$WINDOW_7D_PCT")
+    WIN_7D_PART="7d${WIN_7D_BAR}${WINDOW_7D_PCT}%"
+fi
+
+# ブロック残り時間パート（分→h/m形式、色付き）
+BLOCK_PART=""
+if [[ "$BLOCK_REMAINING" =~ ^[0-9]+$ ]]; then
+    if [ "$BLOCK_REMAINING" -ge 60 ]; then
+        BLOCK_H=$(( BLOCK_REMAINING / 60 ))
+        BLOCK_M=$(( BLOCK_REMAINING % 60 ))
+        BLOCK_FMT="${BLOCK_H}h${BLOCK_M}m"
+    else
+        BLOCK_FMT="${BLOCK_REMAINING}m"
+    fi
+    if [ "$BLOCK_REMAINING" -le 30 ]; then
+        TIME_COLOR="${RED}"
+    elif [ "$BLOCK_REMAINING" -le 60 ]; then
+        TIME_COLOR="${YELLOW}"
+    else
+        TIME_COLOR="${GREEN}"
+    fi
+    BLOCK_PART="⏳ ${TIME_COLOR}${BLOCK_FMT}${RESET}"
+fi
+
+# 今月累計
 MONTHLY_FMT=$(printf '%.2f' "$MONTHLY_COST")
 MONTHLY_COLOR=$(cost_color "$MONTHLY_COST" "50.00" "10.00")
-LINE3="📊 今月累計: ${MONTHLY_COLOR}\$${MONTHLY_FMT}${RESET}"
+MONTHLY_PART="${MONTHLY_COLOR}\$${MONTHLY_FMT}/mo${RESET}"
 
-# 最終出力（複数行）
+# LINE2 組み立て
+LINE2="${CTX_PART}"
+[ -n "$WIN_5H_PART" ] && LINE2="${LINE2} │ ${WIN_5H_PART}"
+[ -n "$WIN_7D_PART" ] && LINE2="${LINE2} │ ${WIN_7D_PART}"
+[ -n "$BLOCK_PART" ]  && LINE2="${LINE2} │ ${BLOCK_PART}"
+LINE2="${LINE2} │ ${MONTHLY_PART}"
+
+# 最終出力（2行）
 echo -e "$LINE1"
 echo -e "$LINE2"
-echo -e "$LINE3"

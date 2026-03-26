@@ -242,15 +242,18 @@ make paths
 - **スクリプト場所**:
   - macOS: `darwin/home-manager/claude/config/statusline.sh`
   - NixOS: `nixos/home-manager/claude/config/statusline.sh`
-- **表示内容**:
-  - **1行目**: 🤖 モデル名 | 📁 ディレクトリ名 | 🌿 Gitブランチ
-  - **2行目**: 💰 セッション費用/当日費用/ブロック費用 | 🔥 Burn rate（$/時） | 🧠 コンテキスト使用量
-  - **3行目**: 📊 今月の累計費用
+- **表示内容（2行）**:
+  - **1行目**: モデル名 | 📁 ディレクトリ名  🌿 Gitブランチ
+  - **2行目**: ctx[バー]% │ 5h[バー]% │ 7d[バー]% │ ⏳ブロック残時間 │ $今月累計/mo
+- **バー仕様**:
+  - `ctx`: コンテキストウィンドウ使用率（幅6文字）
+  - `5h`: 5時間ウィンドウ使用率（rate_limits.five_hour.used_percentage、v2.1.80+）
+  - `7d`: 7日間ウィンドウ使用率（rate_limits.seven_day.used_percentage、v2.1.80+）
+  - 5h/7dは値が存在する場合のみ表示（古いバージョンへのフォールバック）
 - **機能**:
-  - `npx ccusage`と統合し、リアルタイムで費用・トークン使用状況を表示
+  - `ccusage monthly`で今月累計費用を取得（60秒キャッシュ）
+  - `ccusage blocks`でブロック残り時間を取得（30秒キャッシュ）
   - Gitブランチ情報をキャッシュ（5秒間隔）
-  - 月間累計費用をキャッシュ（60秒間隔）
-  - Burn rate（1時間あたりの消費ペース）を自動計算
 - **パフォーマンス最適化**: キャッシュによりGitコマンドとccusageの実行頻度を抑制
 
 ## Important Notes

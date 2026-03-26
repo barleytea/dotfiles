@@ -90,7 +90,8 @@
       "WebFetch(domain:oauth2.googleapis.com)",
       "WebFetch(domain:us-east5-aiplatform.googleapis.com)",
       "Bash(wc:*)",
-      "Read(//mnt/c/Users/**)"
+      "Read(//mnt/c/Users/**)",
+      "WebFetch(domain:nyosegawa.com)"
     ],
     "deny": []
   },

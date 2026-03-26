@@ -5,10 +5,10 @@
 # 1. model.display_name を表示
 # 2. 現在の作業ディレクトリ名（basename）を表示
 # 3. Gitブランチ名を表示
-# 4. セッション費用 / 当日費用
-# 5. 今月の累計費用
-# 6. 1時間あたりの消費ペース（burn rate）
-# 7. コンテキスト使用率（%）
+# 4. コンテキスト使用率（ctx bar）
+# 5. 5時間/7日間ウィンドウ使用率（rate_limits bar）
+# 6. ブロック残り時間
+# 7. 今月の累計費用
 
 # ANSIカラー定義
 RED='\033[0;31m'
@@ -16,7 +16,6 @@ YELLOW='\033[0;33m'
 GREEN='\033[0;32m'
 CYAN='\033[0;36m'
 BOLD='\033[1m'
-DIM='\033[2m'
 RESET='\033[0m'
 
 # 入力JSONを読み込み
@@ -56,23 +55,21 @@ DIR=$(echo "$input" | jq -r '.workspace.current_dir // "~"')
 DIR_NAME=$(basename "$DIR")
 CONTEXT_USED=$(echo "$input" | jq -r '.context_window.total_input_tokens // 0')
 CONTEXT_MAX=$(echo "$input" | jq -r '.context_window.context_window_size // 0')
-# used_percentage ではなく total_input_tokens / context_window_size から計算（バーと数値を一致させる）
+# total_input_tokens / context_window_size から計算
 if [ "$CONTEXT_MAX" != "0" ] && [ -n "$CONTEXT_MAX" ] && [ "$CONTEXT_MAX" -gt 0 ] 2>/dev/null; then
     CONTEXT_PCT=$(awk "BEGIN {printf \"%.0f\", $CONTEXT_USED / $CONTEXT_MAX * 100}" 2>/dev/null || echo 0)
 else
     CONTEXT_PCT=0
 fi
-# K単位に変換。0の場合はトークン表示を省略するためフラグを立てる
-if [ "$CONTEXT_MAX" != "0" ] && [ -n "$CONTEXT_MAX" ]; then
-    CONTEXT_USED_K=$(awk "BEGIN {printf \"%.0fK\", $CONTEXT_USED / 1000}" 2>/dev/null || echo "?K")
-    CONTEXT_MAX_K=$(awk "BEGIN {printf \"%.0fK\", $CONTEXT_MAX / 1000}" 2>/dev/null || echo "?K")
-    CONTEXT_TOKEN_DISPLAY=" (${CONTEXT_USED_K}/${CONTEXT_MAX_K})"
-else
-    CONTEXT_TOKEN_DISPLAY=""
-fi
+
+# rate_limits (v2.1.80+)
+WINDOW_5H_PCT=$(echo "$input" | jq -r '.rate_limits.five_hour.used_percentage // empty' \
+    | awk '{printf "%.0f", $1}' 2>/dev/null || echo "")
+
+WINDOW_7D_PCT=$(echo "$input" | jq -r '.rate_limits.seven_day.used_percentage // empty' \
+    | awk '{printf "%.0f", $1}' 2>/dev/null || echo "")
 
 # Gitブランチ名を取得（キャッシュで高速化）
-# ディレクトリパスをハッシュ化してキャッシュファイル名を作成
 DIR_HASH=$(echo -n "$DIR" | md5sum 2>/dev/null | cut -d' ' -f1 || echo -n "$DIR" | md5 2>/dev/null || echo "default")
 CACHE_FILE="/tmp/statusline-git-cache-${DIR_HASH}"
 CACHE_MAX_AGE=5
@@ -115,19 +112,13 @@ else
     BLOCK_REMAINING=$(cat "$BLOCK_CACHE" 2>/dev/null || echo "")
 fi
 
-# ccusage statuslineを呼び出して費用情報を取得
-CCUSAGE_OUTPUT=$(echo "$input" | run_ccusage statusline --offline 2>/dev/null || echo "")
-
-# セッション費用とburn rateをClaude Code APIから取得（フォールバック）
-SESSION_COST=$(echo "$input" | jq -r '.cost.total_cost_usd // 0')
-
-
-# コンテキスト使用率に応じた色とプログレスバーを生成
+# コンテキスト使用率に応じた色とプログレスバーを生成（幅6）
 make_context_bar() {
     local pct="$1"
-    local filled=$(awk "BEGIN {printf \"%d\", $pct / 10}" 2>/dev/null || echo 0)
-    [ "$filled" -gt 10 ] && filled=10
-    local empty=$(( 10 - filled ))
+    local width=6
+    local filled=$(awk "BEGIN {printf \"%d\", $pct * $width / 100}" 2>/dev/null || echo 0)
+    [ "$filled" -gt "$width" ] && filled=$width
+    local empty=$(( width - filled ))
     local bar=""
     local i
     for (( i=0; i<filled; i++ )); do bar+="█"; done
@@ -141,7 +132,7 @@ make_context_bar() {
     fi
 }
 
-# 費用に応じた色を返す（セッション費用用）
+# 費用に応じた色を返す
 cost_color() {
     local cost="$1"
     local high="${2:-0.50}"
@@ -155,12 +146,29 @@ cost_color() {
     fi
 }
 
-# 出力フォーマット
-# 1行目: モデル名 | ディレクトリ名 | Gitブランチ（カラー付き）
+# LINE1: モデル名 | ディレクトリ名  Gitブランチ
 if [ -n "$BRANCH" ]; then
-    LINE1="🤖 ${CYAN}${BOLD}${MODEL}${RESET} │ 📁 ${BOLD}${DIR_NAME}${RESET} │ 🌿 ${GREEN}${BRANCH}${RESET}"
+    LINE1="${CYAN}${MODEL}${RESET} │ 📁 ${BOLD}${DIR_NAME}${RESET}  🌿 ${GREEN}${BRANCH}${RESET}"
 else
-    LINE1="🤖 ${CYAN}${BOLD}${MODEL}${RESET} │ 📁 ${BOLD}${DIR_NAME}${RESET}"
+    LINE1="${CYAN}${MODEL}${RESET} │ 📁 ${BOLD}${DIR_NAME}${RESET}"
+fi
+
+# コンテキストバー
+CTX_BAR=$(make_context_bar "$CONTEXT_PCT")
+CTX_PART="ctx${CTX_BAR}${CONTEXT_PCT}%"
+
+# 5hウィンドウバー（値が存在する場合のみ）
+WIN_5H_PART=""
+if [[ "$WINDOW_5H_PCT" =~ ^[0-9]+$ ]]; then
+    WIN_5H_BAR=$(make_context_bar "$WINDOW_5H_PCT")
+    WIN_5H_PART="5h${WIN_5H_BAR}${WINDOW_5H_PCT}%"
+fi
+
+# 7dウィンドウバー（値が存在する場合のみ）
+WIN_7D_PART=""
+if [[ "$WINDOW_7D_PCT" =~ ^[0-9]+$ ]]; then
+    WIN_7D_BAR=$(make_context_bar "$WINDOW_7D_PCT")
+    WIN_7D_PART="7d${WIN_7D_BAR}${WINDOW_7D_PCT}%"
 fi
 
 # ブロック残り時間パート（分→h/m形式、色付き）
@@ -183,28 +191,18 @@ if [[ "$BLOCK_REMAINING" =~ ^[0-9]+$ ]]; then
     BLOCK_PART="⏳ ${TIME_COLOR}${BLOCK_FMT}${RESET}"
 fi
 
-# 2行目: コンテキストを左端に、費用を続ける（burn rate削除）
-CTX_BAR=$(make_context_bar "$CONTEXT_PCT")
-CTX_PART="🧠 ${CTX_BAR} ${CONTEXT_PCT}%${CONTEXT_TOKEN_DISPLAY}"
-
-if [ -n "$CCUSAGE_OUTPUT" ]; then
-    # ccusage出力から💰パートをawkで抽出（ | 区切りでフィールド分割）
-    COST_PART=$(echo "$CCUSAGE_OUTPUT" | awk -F' \\| ' '{for(i=1;i<=NF;i++) if($i ~ /💰/) {gsub(/^ +| +$/, "", $i); print $i}}' | sed 's/ ([^)]*left)//')
-    LINE2="${CTX_PART}"
-    [ -n "$COST_PART" ] && LINE2="${LINE2} │ ${COST_PART}"
-else
-    # フォールバック: セッション費用のみ
-    SESSION_COLOR=$(cost_color "$SESSION_COST" "0.50" "0.10")
-    LINE2="${CTX_PART} │ 💰 ${SESSION_COLOR}\$$(printf '%.4f' "$SESSION_COST")${RESET} session"
-fi
-[ -n "$BLOCK_PART" ] && LINE2="${LINE2} │ ${BLOCK_PART}"
-
-# 3行目: 今月の累計費用（閾値ベースのカラー付き）
+# 今月累計
 MONTHLY_FMT=$(printf '%.2f' "$MONTHLY_COST")
 MONTHLY_COLOR=$(cost_color "$MONTHLY_COST" "50.00" "10.00")
-LINE3="📊 今月累計: ${MONTHLY_COLOR}\$${MONTHLY_FMT}${RESET}"
+MONTHLY_PART="${MONTHLY_COLOR}\$${MONTHLY_FMT}/mo${RESET}"
 
-# 最終出力（複数行）
+# LINE2 組み立て
+LINE2="${CTX_PART}"
+[ -n "$WIN_5H_PART" ] && LINE2="${LINE2} │ ${WIN_5H_PART}"
+[ -n "$WIN_7D_PART" ] && LINE2="${LINE2} │ ${WIN_7D_PART}"
+[ -n "$BLOCK_PART" ]  && LINE2="${LINE2} │ ${BLOCK_PART}"
+LINE2="${LINE2} │ ${MONTHLY_PART}"
+
+# 最終出力（2行）
 echo -e "$LINE1"
 echo -e "$LINE2"
-echo -e "$LINE3"
