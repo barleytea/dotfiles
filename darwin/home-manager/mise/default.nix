@@ -12,7 +12,7 @@
       tools = {
         node = "lts";
         go = "1.24.5";
-        python = "latest";
+        python = "3.13";
         # Pin to a concrete release; "latest" URL 404s in CI on macOS runners.
         awscli = "2.22.28";
         jujutsu = "latest";
