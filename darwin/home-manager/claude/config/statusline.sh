@@ -51,6 +51,8 @@ get_mtime() {
 
 # 基本情報を取得
 MODEL=$(echo "$input" | jq -r '.model.display_name // "Unknown"')
+# "Claude Sonnet 4.6" → "Sonnet4.6" のように短縮
+MODEL_SHORT=$(echo "$MODEL" | sed 's/^Claude //' | tr -d ' ')
 DIR=$(echo "$input" | jq -r '.workspace.current_dir // "~"')
 DIR_NAME=$(basename "$DIR")
 CONTEXT_USED=$(echo "$input" | jq -r '.context_window.total_input_tokens // 0')
@@ -85,12 +87,13 @@ else
     BRANCH=$(cat "$CACHE_FILE" 2>/dev/null || echo "")
 fi
 
-# 今月の累計費用を取得（キャッシュで高速化、60秒間隔）
+# 今月の累計費用を取得（キャッシュで高速化、300秒間隔）
+# --offline を外してネットワーク経由で最新モデル価格を取得
 MONTHLY_CACHE="/tmp/statusline-monthly-cache"
-MONTHLY_CACHE_MAX_AGE=60
+MONTHLY_CACHE_MAX_AGE=300
 
 if [ ! -f "$MONTHLY_CACHE" ] || [ $(( $(date +%s) - $(get_mtime "$MONTHLY_CACHE") )) -gt $MONTHLY_CACHE_MAX_AGE ]; then
-    MONTHLY_COST=$(run_ccusage monthly --json --offline 2>/dev/null | jq -r --arg month "$(date +%Y-%m)" '([.monthly[]? | select(.month == $month) | .totalCost] | first) // 0' 2>/dev/null || echo "0")
+    MONTHLY_COST=$(run_ccusage monthly --json 2>/dev/null | jq -r --arg month "$(date +%Y-%m)" '([.monthly[]? | select(.month == $month) | .totalCost] | first) // 0' 2>/dev/null || echo "0")
     echo "$MONTHLY_COST" > "$MONTHLY_CACHE"
 else
     MONTHLY_COST=$(cat "$MONTHLY_CACHE" 2>/dev/null || echo "0")
@@ -112,23 +115,18 @@ else
     BLOCK_REMAINING=$(cat "$BLOCK_CACHE" 2>/dev/null || echo "")
 fi
 
-# コンテキスト使用率に応じた色とプログレスバーを生成（幅6）
-make_context_bar() {
+# 使用率をリングアイコン（5段階）で表現（パターン3: Ring Meter）
+make_ring() {
     local pct="$1"
-    local width=6
-    local filled=$(awk "BEGIN {printf \"%d\", $pct * $width / 100}" 2>/dev/null || echo 0)
-    [ "$filled" -gt "$width" ] && filled=$width
-    local empty=$(( width - filled ))
-    local bar=""
-    local i
-    for (( i=0; i<filled; i++ )); do bar+="█"; done
-    for (( i=0; i<empty; i++ )); do bar+="░"; done
+    local idx=$(awk "BEGIN {idx = int($pct / 25); if (idx > 4) idx = 4; print idx}" 2>/dev/null || echo 0)
+    local rings=('○' '◔' '◑' '◕' '●')
+    local ring="${rings[$idx]}"
     if [ "$pct" -ge 80 ]; then
-        echo -e "${RED}[${bar}]${RESET}"
+        echo -e "${RED}${ring}${RESET}"
     elif [ "$pct" -ge 50 ]; then
-        echo -e "${YELLOW}[${bar}]${RESET}"
+        echo -e "${YELLOW}${ring}${RESET}"
     else
-        echo -e "${GREEN}[${bar}]${RESET}"
+        echo -e "${GREEN}${ring}${RESET}"
     fi
 }
 
@@ -146,32 +144,32 @@ cost_color() {
     fi
 }
 
-# LINE1: モデル名 | ディレクトリ名  Gitブランチ
+# ディレクトリ＆ブランチ
 if [ -n "$BRANCH" ]; then
-    LINE1="${CYAN}${MODEL}${RESET} │ 📁 ${BOLD}${DIR_NAME}${RESET}  🌿 ${GREEN}${BRANCH}${RESET}"
+    LOCATION_PART="${BOLD}${DIR_NAME}${RESET} ${GREEN}${BRANCH}${RESET}"
 else
-    LINE1="${CYAN}${MODEL}${RESET} │ 📁 ${BOLD}${DIR_NAME}${RESET}"
+    LOCATION_PART="${BOLD}${DIR_NAME}${RESET}"
 fi
 
-# コンテキストバー
-CTX_BAR=$(make_context_bar "$CONTEXT_PCT")
-CTX_PART="ctx${CTX_BAR}${CONTEXT_PCT}%"
+# コンテキストリング
+CTX_RING=$(make_ring "$CONTEXT_PCT")
+CTX_PART="ctx ${CTX_RING} ${CONTEXT_PCT}%"
 
-# 5hウィンドウバー（値が存在する場合のみ）
+# 5hウィンドウリング（値が存在する場合のみ）
 WIN_5H_PART=""
 if [[ "$WINDOW_5H_PCT" =~ ^[0-9]+$ ]]; then
-    WIN_5H_BAR=$(make_context_bar "$WINDOW_5H_PCT")
-    WIN_5H_PART="5h${WIN_5H_BAR}${WINDOW_5H_PCT}%"
+    WIN_5H_RING=$(make_ring "$WINDOW_5H_PCT")
+    WIN_5H_PART="5h ${WIN_5H_RING} ${WINDOW_5H_PCT}%"
 fi
 
-# 7dウィンドウバー（値が存在する場合のみ）
+# 7dウィンドウリング（値が存在する場合のみ）
 WIN_7D_PART=""
 if [[ "$WINDOW_7D_PCT" =~ ^[0-9]+$ ]]; then
-    WIN_7D_BAR=$(make_context_bar "$WINDOW_7D_PCT")
-    WIN_7D_PART="7d${WIN_7D_BAR}${WINDOW_7D_PCT}%"
+    WIN_7D_RING=$(make_ring "$WINDOW_7D_PCT")
+    WIN_7D_PART="7d ${WIN_7D_RING} ${WINDOW_7D_PCT}%"
 fi
 
-# ブロック残り時間パート（分→h/m形式、色付き）
+# ブロック残り時間パート（⏳直後スペースなし）
 BLOCK_PART=""
 if [[ "$BLOCK_REMAINING" =~ ^[0-9]+$ ]]; then
     if [ "$BLOCK_REMAINING" -ge 60 ]; then
@@ -188,21 +186,21 @@ if [[ "$BLOCK_REMAINING" =~ ^[0-9]+$ ]]; then
     else
         TIME_COLOR="${GREEN}"
     fi
-    BLOCK_PART="⏳ ${TIME_COLOR}${BLOCK_FMT}${RESET}"
+    BLOCK_PART="${TIME_COLOR}${BLOCK_FMT}${RESET}"
 fi
 
-# 今月累計
+# 今月累計（/mo省略、$マークで月額と明示）
 MONTHLY_FMT=$(printf '%.2f' "$MONTHLY_COST")
 MONTHLY_COLOR=$(cost_color "$MONTHLY_COST" "50.00" "10.00")
 MONTHLY_PART="${MONTHLY_COLOR}\$${MONTHLY_FMT}/mo${RESET}"
 
-# LINE2 組み立て
-LINE2="${CTX_PART}"
-[ -n "$WIN_5H_PART" ] && LINE2="${LINE2} │ ${WIN_5H_PART}"
-[ -n "$WIN_7D_PART" ] && LINE2="${LINE2} │ ${WIN_7D_PART}"
-[ -n "$BLOCK_PART" ]  && LINE2="${LINE2} │ ${BLOCK_PART}"
-LINE2="${LINE2} │ ${MONTHLY_PART}"
+# 1行に組み立て（区切りを · に変更してコンパクト化）
+SEP=" | "
+LINE="${CYAN}${MODEL_SHORT}${RESET}${SEP}${LOCATION_PART}${SEP}${CTX_PART}"
+[ -n "$WIN_5H_PART" ] && LINE="${LINE}${SEP}${WIN_5H_PART}"
+[ -n "$WIN_7D_PART" ] && LINE="${LINE}${SEP}${WIN_7D_PART}"
+[ -n "$BLOCK_PART" ]  && LINE="${LINE}${SEP}${BLOCK_PART}"
+LINE="${LINE}${SEP}${MONTHLY_PART}"
 
-# 最終出力（2行）
-echo -e "$LINE1"
-echo -e "$LINE2"
+# 最終出力（1行）
+echo -e "$LINE"

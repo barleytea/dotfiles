@@ -45,8 +45,8 @@
   },
   "permissions": {
     "allow": [
-      "mcp__pencil",
-      "Bash(gh*)"
+      "Bash(gh*)",
+      "mcp__pencil"
     ],
     "deny": []
   },

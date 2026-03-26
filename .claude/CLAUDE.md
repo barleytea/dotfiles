@@ -242,11 +242,11 @@ make paths
 - **スクリプト場所**:
   - macOS: `darwin/home-manager/claude/config/statusline.sh`
   - NixOS: `nixos/home-manager/claude/config/statusline.sh`
-- **表示内容（2行）**:
-  - **1行目**: モデル名 | 📁 ディレクトリ名  🌿 Gitブランチ
-  - **2行目**: ctx[バー]% │ 5h[バー]% │ 7d[バー]% │ ⏳ブロック残時間 │ $今月累計/mo
-- **バー仕様**:
-  - `ctx`: コンテキストウィンドウ使用率（幅6文字）
+- **表示内容（1行）**:
+  - モデル名 │ 📁 ディレクトリ名 🌿 Gitブランチ │ ctx ◔ % │ 5h ◕ % │ 7d ● % │ ⏳ブロック残時間 │ $今月累計/mo
+- **リングメーター仕様（パターン3: Ring Meter）**:
+  - 使用率を5段階のリングアイコンで表現: ○(0-24%) ◔(25-49%) ◑(50-74%) ◕(75-99%) ●(100%)
+  - `ctx`: コンテキストウィンドウ使用率
   - `5h`: 5時間ウィンドウ使用率（rate_limits.five_hour.used_percentage、v2.1.80+）
   - `7d`: 7日間ウィンドウ使用率（rate_limits.seven_day.used_percentage、v2.1.80+）
   - 5h/7dは値が存在する場合のみ表示（古いバージョンへのフォールバック）
