@@ -88,6 +88,19 @@ function difit_cmux_widget() {
 
 zle -N difit_cmux_widget
 
+# Open cmux workspace from fzf branch picker
+function cmux_workspace_widget() {
+  if [[ -x "/Applications/cmux.app/Contents/Resources/bin/cmux" ]]; then
+    "${HOME}/.local/bin/cmux-workspace" </dev/tty >/dev/tty 2>&1
+  else
+    zle -M "cmux-workspace: cmux not found"
+    return 1
+  fi
+  zle reset-prompt
+}
+
+zle -N cmux_workspace_widget
+
 # AWS SSO
 alias awsp=set_aws_profile
 function set_aws_profile() {

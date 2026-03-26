@@ -185,6 +185,53 @@ After reviewing the diff with `Ctrl+F`:
 3. Claude analyzes `git diff --staged` and proposes a gitmoji commit message
 4. Edit and commit
 
+## cmux-workspace Command
+
+The `cmux-workspace` command provides a simple branch-based workspace switcher for cmux.
+It replaces the kra ticket-driven workflow with a minimal branch = workspace model.
+
+### Usage
+
+Run from any directory inside a git repository:
+
+```bash
+# Open branch picker and create/switch to a cmux workspace
+cmux-workspace
+
+# Also launch Claude Code in the new workspace
+cmux-workspace --claude
+```
+
+### Features
+
+- **fzf branch picker**: Lists local branches, remote branches, and existing worktrees
+- **New branch creation**: Select `[新規ブランチを作成]` to create a new branch + worktree
+- **git worktree management**: Uses `gwq` to create/reuse worktrees automatically
+- **cmux workspace**: Opens the worktree directory in a new cmux workspace
+- **Auto-rename**: Renames the workspace to `<repo>/<branch>` for easy identification
+- **Claude Code integration**: Pass `--claude` to auto-start Claude Code in the new workspace
+
+### Gitignored Files
+
+When creating a new worktree, environment files (`.env`, `node_modules`, etc.) are NOT
+automatically copied. Set these up manually or use your project's bootstrap script.
+
+### Script Location
+
+Deployed by Home Manager to `~/.local/bin/cmux-workspace` from:
+`darwin/home-manager/scripts/cmux-workspace.sh`
+
+Managed via `darwin/home-manager/cmux/default.nix`.
+
+### Comparison with Zellij Worktree
+
+| Feature | cmux-workspace | zellij-worktree |
+|---------|---------------|-----------------|
+| Terminal | cmux (Ghostty) | Zellij |
+| Workspace unit | branch | worktree (tab/session) |
+| Ticket management | None (branch-only) | None |
+| Claude Code | `--claude` flag | Manual |
+
 ## Troubleshooting
 
 ### "No git repository detected"

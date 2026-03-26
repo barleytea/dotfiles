@@ -13,4 +13,9 @@
     text = builtins.readFile ../scripts/difit-cmux-hook.sh;
     executable = true;
   };
+
+  home.file.".local/bin/cmux-workspace" = {
+    text = builtins.readFile ../scripts/cmux-workspace.sh;
+    executable = true;
+  };
 }
