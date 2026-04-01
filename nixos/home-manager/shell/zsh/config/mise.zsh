@@ -19,3 +19,9 @@ if [[ -o interactive ]] && [[ -x "$(command -v mise)" ]]; then
     fpath=("$MISE_DATA_DIR/completions" $fpath)
   fi
 fi
+
+# safe-chain: npm/pip/bun 等をラップしてサプライチェーン攻撃を防御
+# `mise run safe-chain-setup` でセットアップ済みの場合のみ有効
+if [[ -f "$HOME/.safe-chain/scripts/init-posix.sh" ]]; then
+  source "$HOME/.safe-chain/scripts/init-posix.sh"
+fi

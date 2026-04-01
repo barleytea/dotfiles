@@ -3,7 +3,9 @@
   lib,
   pkgs,
   ...
-}: {
+}: let
+  zshrcBase = pkgs.writeText "zshrc" (builtins.readFile ./.zshrc);
+in {
   home.file.".zshenv".source = ./.zshenv;
 
   xdg = {
@@ -32,8 +34,15 @@
       # 4. Alias settings
       "zsh/config/900-aliases.zsh".source = ./config/aliases.zsh;
 
-      # 5. Main .zshrc
-      "zsh/.zshrc".source = ./.zshrc;
+      # 5. .zshrc は activation script で書き込み可能なファイルとして配置
+      #    (safe-chain setup が書き込めるよう symlink ではなく実ファイルにする)
     };
   };
+
+  # .zshrc を Nix store からコピーして書き込み可能な実ファイルとして配置
+  home.activation.writeZshrc = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    $DRY_RUN_CMD rm -f '${config.xdg.configHome}/zsh/.zshrc'
+    $DRY_RUN_CMD ${pkgs.coreutils}/bin/install -D -m 644 \
+      '${zshrcBase}' '${config.xdg.configHome}/zsh/.zshrc'
+  '';
 }

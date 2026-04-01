@@ -120,6 +120,9 @@ vscode-sync: ## VSCodeの設定を同期します
 mise-install-npm-commitizen: ## miseで管理しているnpmパッケージ（commitizen）をグローバルにインストールします
 	mise run npm-commitizen
 
+mise-run-safe-chain-setup: ## aikido safe-chain のセットアップ（CA証明書 + npmプロキシ）
+	mise run safe-chain-setup
+
 mise-install-all: ## miseで管理している全ツールをインストールします
 	mise install
 

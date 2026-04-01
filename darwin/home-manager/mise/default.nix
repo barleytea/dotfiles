@@ -26,6 +26,7 @@
         "npm:@vibe-kit/grok-cli" = "latest";
         "npm:ccusage" = "latest";
         "npm:difit" = "latest";
+        "npm:@aikidosec/safe-chain" = "latest";
         "pipx:pre-commit" = "latest";
       };
 
@@ -45,7 +46,7 @@
         npm-commitizen = {
           description = "Install commitizen and cz-git globally";
           run = [
-            "npm install -g commitizen cz-git"
+            "aikido-npm install -g commitizen cz-git"
           ];
         };
         copilot-install = {
@@ -64,6 +65,12 @@
           description = "Install pre-commit hooks";
           run = [
             "pre-commit install"
+          ];
+        };
+        safe-chain-setup = {
+          description = "Set up aikido safe-chain (CA cert + npm proxy)";
+          run = [
+            "safe-chain setup"
           ];
         };
       };

@@ -11,7 +11,7 @@ export PATH="${HOME}/.local/bin:${PATH}"
 mise use --global node@lts
 
 # Install npm global tools
-mise exec -- npm install -g @openai/codex commitizen cz-git
+mise exec -- aikido-npm install -g @openai/codex commitizen cz-git
 
 echo "==> mise + Node.js + codex + commitizen installed"
 echo "    Add the following to your shell rc:"

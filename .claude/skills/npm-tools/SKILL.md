@@ -7,11 +7,53 @@ description: NPM tools and package management using mise including commitizen, c
 
 [Install npm tools](#install-npm-tools)
 
+## .npmrc の管理方法
+
+`.npmrc` はシークレット（`_authToken` 等）を含むため、**ベース設定（Nix管理）＋ローカル設定（手動管理）の合成**で管理します。
+
+### 設計方針
+
+| ファイル | 管理者 | 内容 |
+|---------|--------|------|
+| `~/.npmrc` | activation script が自動生成 | 最終的に使われるファイル |
+| Nix store (npmrcBase) | Nix管理（darwin/nixos default.nix） | 非シークレット設定（prefix, min-release-age） |
+| `~/.npmrc_local` | ユーザーが手動管理 | シークレット専用（`_authToken` 等） |
+
+### 初回セットアップ
+
+```sh
+# 既存の ~/.npmrc をシークレット専用ファイルにリネーム
+mv ~/.npmrc ~/.npmrc_local
+
+# ~/.npmrc_local にはシークレットのみ残す（例）
+# tokyucorp:registry=https://npm.pkg.github.com
+# //npm.pkg.github.com/:_authToken=YOUR_TOKEN
+
+# home-manager 適用で activation script が ~/.npmrc を自動生成
+make home-manager-apply
+```
+
+### 生成される ~/.npmrc（activation 後）
+
+```
+prefix=/Users/miyoshi_s/.npm-global
+min-release-age=7
+tokyucorp:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=YOUR_TOKEN
+```
+
+### 注意事項
+
+- `prefix` は Nix activation script が自動で設定するため、手動で `npm config set prefix` は不要
+- `~/.npmrc_local` が存在しない場合はベース設定のみで `~/.npmrc` を生成（エラーにならない）
+- `_authToken` などシークレットは絶対に Nix store（dotfiles リポジトリ）に含めないこと
+
 ## Create directory for global npm packages
 
 ```sh
+# ~/.npm-global ディレクトリは自動作成されるが、手動で作る場合:
 mkdir -p ~/.npm-global
-npm config set prefix ~/.npm-global
+# ※ prefix は Nix activation script で自動設定されるため npm config set は不要
 ```
 
 ## Install npm tools

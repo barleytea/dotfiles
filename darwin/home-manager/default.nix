@@ -1,10 +1,15 @@
 {
   config,
+  lib,
   pkgs,
   inputs,
   ...
 }: let
   utils = import ./utils/utils.nix { inherit pkgs; };
+  npmrcBase = pkgs.writeText "npmrc-base" ''
+    prefix=${config.home.homeDirectory}/.npm-global
+    min-release-age=7
+  '';
 in {
 
   # nixpkgs config is supplied by the caller (darwin flake sets allowUnfree)
@@ -142,6 +147,16 @@ in {
     };
 
   };
+
+  home.activation.mergeNpmrc = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    local_npmrc="$HOME/.npmrc_local"
+    if [ -f "$local_npmrc" ]; then
+      $DRY_RUN_CMD ${pkgs.bash}/bin/bash -c \
+        "cat '${npmrcBase}' '$local_npmrc' > '$HOME/.npmrc'"
+    else
+      $DRY_RUN_CMD ${pkgs.coreutils}/bin/cp '${npmrcBase}' '$HOME/.npmrc'
+    fi
+  '';
 
   # Enable security tools (Kali Linux) on Linux systems
 }

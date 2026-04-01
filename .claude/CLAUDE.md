@@ -268,6 +268,13 @@ make paths
 - npm-commitizenタスクでcommitizen/cz-gitをインストール
 - experimentalモードが有効
 
+### .npmrc Management (Secret-safe)
+- `home.file.".npmrc"` は使わない（既存ファイルの clobber 問題 + シークレット漏洩リスク）
+- **ベース設定**（`prefix`, `min-release-age`）は `pkgs.writeText "npmrc-base"` で Nix store に置く
+- **シークレット**（`_authToken` 等）は `~/.npmrc_local` でユーザーが手動管理（Nix管理外）
+- `home.activation.mergeNpmrc` が activation 時にベース + `~/.npmrc_local` をマージして `~/.npmrc` を生成
+- 詳細は `/npm-tools` スキルを参照
+
 ### File Paths
 - dotfiles root: ~/git_repos/github.com/barleytea/dotfiles
 - Nix設定: ~/.config/nix/nix.conf
