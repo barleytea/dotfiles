@@ -1,0 +1,72 @@
+{
+  "env": {
+    "EDITOR": "nvim"
+  },
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": true,
+    "excludedCommands": [
+      "docker",
+      "gh"
+    ],
+    "allowUnsandboxedCommands": false,
+    "filesystem": {
+      "read": {
+        "denyOnly": [
+          "/var/run/docker.sock",
+          ".env*",
+          "*.env",
+          "*credential*",
+          "*.pem",
+          "*.key",
+          "*.secret"
+        ],
+        "allowLocalBinding": true
+      },
+      "write": {
+        "allowOnly": [
+          ".",
+          "/tmp/claude",
+          "/dev/stdout",
+          "/dev/stderr",
+          "/dev/null"
+        ],
+        "denyWithinAllow": [
+          ".claude/settings.json",
+          ".claude/settings.local.json"
+        ]
+      }
+    },
+    "network": {
+      "allowedDomains": ["*"]
+    }
+  },
+  "permissions": {
+    "allow": [],
+    "deny": [],
+    "defaultMode": "dontAsk"
+  },
+  "model": "opusplan",
+  "permissionMode": "plan",
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/statusline.sh",
+    "padding": 1
+  },
+  "enabledPlugins": {},
+  "language": "Japanese",
+  "effortLevel": "medium",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Skill",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/log-skill.sh"
+          }
+        ]
+      }
+    ]
+  }
+}

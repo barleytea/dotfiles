@@ -1,5 +1,4 @@
 [tools]
 node = "lts"
 "npm:@openai/codex" = "latest"
-"github:tasuku43/kra" = "latest"
 python = "latest"

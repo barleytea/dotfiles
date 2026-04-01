@@ -15,8 +15,13 @@ sudo apt-get dist-upgrade -y
 
 "${SCRIPT_DIR}/install-mise.sh"
 
+"${SCRIPT_DIR}/install-tailscale.sh"
+
 # Setup bash environment (tools + config symlinks)
 "${SCRIPT_DIR}/setup-bash.sh"
+
+# Setup Claude Code configuration (symlinks)
+"${SCRIPT_DIR}/setup-claude.sh"
 
 cat <<'EOM'
 WSL bootstrap complete.

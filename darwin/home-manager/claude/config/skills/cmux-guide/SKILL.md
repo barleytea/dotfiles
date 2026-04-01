@@ -188,7 +188,7 @@ After reviewing the diff with `Ctrl+F`:
 ## cmux-workspace Command
 
 The `cmux-workspace` command provides a simple branch-based workspace switcher for cmux.
-It replaces the kra ticket-driven workflow with a minimal branch = workspace model.
+It provides a minimal branch = workspace model.
 
 ### Usage
 

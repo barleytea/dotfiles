@@ -35,13 +35,9 @@ mkdir -p "${HOME}/.config/bash" "${HOME}/.config/starship" "${HOME}/.config/atui
 mkdir -p "${HOME}/.local/state/bash" "${HOME}/.local/state/less"
 
 echo "==> Linking bash config directory..."
-# Link bashrc.d directory (link individual files to allow additions)
-mkdir -p "${BASH_CONFIG_DEST}/bashrc.d"
-for f in "${BASH_CONFIG_SRC}/bashrc.d/"*.sh; do
-  dest="${BASH_CONFIG_DEST}/bashrc.d/$(basename "$f")"
-  ln -sf "$f" "$dest"
-  echo "  Linked: $dest"
-done
+# Link bashrc.d as a directory symlink so new files are picked up automatically
+ln -sfn "${BASH_CONFIG_SRC}/bashrc.d" "${BASH_CONFIG_DEST}/bashrc.d"
+echo "  Linked: ${BASH_CONFIG_DEST}/bashrc.d -> ${BASH_CONFIG_SRC}/bashrc.d"
 
 # Link main bashrc.sh
 ln -sf "${BASH_CONFIG_SRC}/bashrc.sh" "${BASH_CONFIG_DEST}/bashrc.sh"

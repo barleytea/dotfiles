@@ -37,12 +37,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Stub install-bash-tools.sh (skip network installs in CI)
+      - name: Stub network install scripts (skip in CI)
         run: |
-          cat > windows-ctf/scripts/install-bash-tools.sh <<'EOF'
+          for script in install-bash-tools.sh install-tailscale.sh; do
+            cat > "windows-ctf/scripts/${script}" <<'EOF'
           #!/usr/bin/env bash
-          echo "[STUB] install-bash-tools skipped in CI"
+          echo "[STUB] ${0##*/} skipped in CI"
           EOF
+          done
 
       - name: Run setup-bash.sh
         run: bash windows-ctf/scripts/setup-bash.sh
@@ -72,3 +74,21 @@ jobs:
 
       - name: Source bashrc.sh without errors
         run: bash "$HOME/.config/bash/bashrc.sh"
+
+      - name: Run setup-claude.sh
+        run: bash windows-ctf/scripts/setup-claude.sh
+
+      - name: Verify Claude symlinks
+        run: |
+          for f in \
+            "$HOME/.claude/CLAUDE.md" \
+            "$HOME/.claude/settings.json" \
+            "$HOME/.claude/statusline.sh" \
+            "$HOME/.claude/hooks/log-skill.sh" \
+            "$HOME/.claude/skills/generate-commit-msg/SKILL.md"; do
+            if [ -e "$f" ]; then
+              echo "[OK] $f"
+            else
+              echo "[NG] missing: $f" && exit 1
+            fi
+          done

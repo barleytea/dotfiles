@@ -14,3 +14,4 @@ Microsoft.WindowsTerminal
 # Prefix optional package IDs with "?".
 ?Ghostty.Ghostty
 ?JanDeDobbeleer.OhMyPosh
+?Notion.Notion
