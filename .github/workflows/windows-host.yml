@@ -16,7 +16,7 @@ jobs:
   bash-check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Bash syntax check
         run: |
@@ -35,7 +35,7 @@ jobs:
   setup-dry-run:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Stub network install scripts (skip in CI)
         run: |
