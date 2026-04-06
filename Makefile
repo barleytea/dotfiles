@@ -117,11 +117,16 @@ vscode-sync: ## VSCodeの設定を同期します
 	bash vscode/settings/sync.sh
 
 ## Mise ##
+MISE_NPM_MIN_AGE_DAYS ?= 7
+
 mise-install-npm-commitizen: ## miseで管理しているnpmパッケージ（commitizen）をグローバルにインストールします
 	mise run npm-commitizen
 
 mise-run-safe-chain-setup: ## aikido safe-chain のセットアップ（CA証明書 + npmプロキシ）
 	mise run safe-chain-setup
+
+mise-update-npm-tools: ## npm CLI の pin を min age を満たす最新安定版へ更新します
+	bash scripts/update-mise-npm-tools.sh --min-age-days $(MISE_NPM_MIN_AGE_DAYS)
 
 mise-install-all: ## miseで管理している全ツールをインストールします
 	mise install

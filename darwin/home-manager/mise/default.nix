@@ -16,17 +16,18 @@
         # Pin to a concrete release; "latest" URL 404s in CI on macOS runners.
         awscli = "2.22.28";
         jujutsu = "latest";
-        "npm:aws-cdk" = "latest";
-        "npm:@redocly/cli" = "latest";
-        "npm:corepack" = "latest";
-        "npm:@google/gemini-cli" = "latest";
-        "npm:reviewit" = "latest";
-        "npm:vibe-kanban" = "latest";
-        "npm:@openai/codex" = "latest";
-        "npm:@vibe-kit/grok-cli" = "latest";
-        "npm:ccusage" = "latest";
-        "npm:difit" = "latest";
-        "npm:@aikidosec/safe-chain" = "latest";
+        # Pin npm CLIs so CI remains reproducible and npm min-release-age stays effective.
+        "npm:aws-cdk" = "2.1034.0";
+        "npm:@redocly/cli" = "1.34.4";
+        "npm:corepack" = "0.33.0";
+        "npm:@google/gemini-cli" = "0.1.7";
+        "npm:reviewit" = "1.1.9";
+        "npm:vibe-kanban" = "0.0.104";
+        "npm:@openai/codex" = "0.114.0";
+        "npm:@vibe-kit/grok-cli" = "0.0.34";
+        "npm:ccusage" = "18.0.10";
+        "npm:difit" = "3.1.15";
+        "npm:@aikidosec/safe-chain" = "1.4.4";
         "pipx:pre-commit" = "latest";
       };
 
