@@ -40,11 +40,15 @@
       }
     },
     "network": {
-      "allowedDomains": ["*"]
+      "allowedDomains": [
+        "*"
+      ]
     }
   },
   "permissions": {
-    "allow": [],
+    "allow": [
+      "mcp__pencil"
+    ],
     "deny": [],
     "defaultMode": "dontAsk"
   },

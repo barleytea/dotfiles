@@ -268,6 +268,14 @@ make paths
 - npm-commitizenタスクでcommitizen/cz-gitをインストール
 - experimentalモードが有効
 
+### zsh Configuration Management
+- `~/.config/zsh/.zshrc` は Home Manager が activation script で実ファイルとして管理（`home.activation.writeZshrc`）
+- **外部ツールが `.zshrc` を書き換えることがある**（例: safe-chain setup）→ `make home-manager-apply` で復元可能
+- ローカル設定（外部ツールの init スクリプト等）は `~/.zshrc_local` に記述する
+  - `~/.zshrc` 末尾で `~/.zshrc_local` を自動 source する設計
+- safe-chain の init: `source ~/.safe-chain/scripts/init-posix.sh` → `~/.zshrc_local` に記述
+- 詳細は `/safe-chain-guide` スキルを参照
+
 ### .npmrc Management (Secret-safe)
 - `home.file.".npmrc"` は使わない（既存ファイルの clobber 問題 + シークレット漏洩リスク）
 - **ベース設定**（`prefix`, `min-release-age`）は `pkgs.writeText "npmrc-base"` で Nix store に置く
@@ -327,6 +335,7 @@ make paths
 - `/zoxide-guide` - Zoxide directory navigation
 - `/zellij-worktree` - Zellij git worktree workflow
 - `/cmux-guide` - cmux terminal multiplexer (Ghostty-based), difit-cmux command, and cmux-workspace branch switcher
+- `/safe-chain-guide` - Aikido safe-chain supply chain security tool setup
 
 **サービス・デーモン:**
 - `/services-guide` - AeroSpace, JankyBorders, AltTab (macOS)

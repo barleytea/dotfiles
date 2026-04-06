@@ -149,12 +149,10 @@ in {
   };
 
   home.activation.mergeNpmrc = lib.hm.dag.entryAfter ["writeBoundary"] ''
-    local_npmrc="$HOME/.npmrc_local"
-    if [ -f "$local_npmrc" ]; then
-      $DRY_RUN_CMD ${pkgs.bash}/bin/bash -c \
-        "cat '${npmrcBase}' '$local_npmrc' > '$HOME/.npmrc'"
+    if [ -f "$HOME/.npmrc_local" ]; then
+      ${pkgs.coreutils}/bin/cat '${npmrcBase}' "$HOME/.npmrc_local" > "$HOME/.npmrc"
     else
-      $DRY_RUN_CMD ${pkgs.coreutils}/bin/cp '${npmrcBase}' '$HOME/.npmrc'
+      ${pkgs.coreutils}/bin/cp '${npmrcBase}' "$HOME/.npmrc"
     fi
   '';
 
