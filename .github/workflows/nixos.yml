@@ -63,6 +63,7 @@ jobs:
       - name: Check NixOS configuration
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NIXVIM_CONFIG_INPUT: path:${{ github.workspace }}/nixvim
         run: |
           export NIX_CONFIG="access-tokens = github.com=$GITHUB_TOKEN"
           cd nixos
@@ -71,7 +72,7 @@ jobs:
           df -h
 
           # ビルドチェックのみ実行（実際の適用はしない）
-          nix build path:.#nixosConfigurations.desktop.config.system.build.toplevel --impure --no-write-lock-file
+          nix build path:.#nixosConfigurations.desktop.config.system.build.toplevel --impure --no-write-lock-file --override-input nixvim-config "$NIXVIM_CONFIG_INPUT"
 
           echo "Disk space after NixOS build:"
           df -h
