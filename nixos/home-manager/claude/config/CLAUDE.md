@@ -29,3 +29,5 @@
 ## Tool and Resource Optimization
 - Optimize tool usage with parallel calling for maximum efficiency
 - Use subagents for complex problem verification
+- When you need the user to choose from explicit options, use `AskQuestionTool` instead of presenting plain-text multiple-choice lists.
+- Use plain-text questions only for open-ended input or when `AskQuestionTool` is unavailable.

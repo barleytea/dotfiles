@@ -60,6 +60,9 @@
 - Each OS has independent flake.lock files, allowing different nixpkgs versions if needed.
 
 ## Agent-Specific Notes
+- Codex-specific interaction guidance is also maintained in `.github/instructions/codex.instructions.md`.
 - Prefer dry-run/build checks before apply. Touch only relevant modules.
 - Update docs in `docs/` when changing workflows or commands.
 - Test on the appropriate target (`darwin` vs `nixos`) and keep cross-platform changes isolated.
+- When presenting explicit user choices, use `AskQuestionTool` instead of plain-text multiple-choice lists whenever the tool is available.
+- Reserve plain-text questions for cases where `AskQuestionTool` is unavailable or the user is asking for open-ended input rather than selecting from options.
