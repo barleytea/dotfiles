@@ -151,14 +151,19 @@ in {
 
   };
 
+  # .npmrc を実ファイルとして配置し、safe-chain や npm が追記できるようにする
   home.activation.mergeNpmrc = lib.hm.dag.entryAfter ["writeBoundary"] ''
     local_npmrc="$HOME/.npmrc_local"
+    tmp_npmrc="$(${pkgs.coreutils}/bin/mktemp)"
     if [ -f "$local_npmrc" ]; then
-      $DRY_RUN_CMD ${pkgs.bash}/bin/bash -c \
-        "cat '${npmrcBase}' '$local_npmrc' > '$HOME/.npmrc'"
+      ${pkgs.coreutils}/bin/cat '${npmrcBase}' "$local_npmrc" > "$tmp_npmrc"
     else
-      $DRY_RUN_CMD ${pkgs.coreutils}/bin/cp '${npmrcBase}' '$HOME/.npmrc'
+      ${pkgs.coreutils}/bin/cp '${npmrcBase}' "$tmp_npmrc"
     fi
+
+    $DRY_RUN_CMD rm -f "$HOME/.npmrc"
+    $DRY_RUN_CMD ${pkgs.coreutils}/bin/install -m 600 "$tmp_npmrc" "$HOME/.npmrc"
+    $DRY_RUN_CMD rm -f "$tmp_npmrc"
   '';
 
   # Enable security tools (Kali Linux) on Linux systems
