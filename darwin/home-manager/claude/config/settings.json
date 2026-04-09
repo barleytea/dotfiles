@@ -41,16 +41,76 @@
     },
     "network": {
       "allowedDomains": [
+<<<<<<< HEAD
         "*"
+=======
+        "github.com",
+        "api.github.com",
+        "raw.githubusercontent.com",
+        "objects.githubusercontent.com",
+        "cache.nixos.org",
+        "nixos.org",
+        "search.nixos.org",
+        "registry.npmjs.org",
+        "nodejs.org",
+        "*.googleapis.com",
+        "*.pkg.dev",
+        "*.amazonaws.com",
+        "*.aws.amazon.com"
+>>>>>>> bf98b3b (feat: :sparkles: update)
       ]
     }
   },
   "permissions": {
     "allow": [
+<<<<<<< HEAD
       "mcp__pencil"
     ],
     "deny": [],
     "defaultMode": "dontAsk"
+=======
+      "Bash(git log:*)",
+      "Bash(git diff:*)",
+      "Bash(git status:*)",
+      "Bash(git branch:*)",
+      "Bash(git show:*)",
+      "Bash(git add:*)",
+      "Bash(git stash:*)",
+      "Bash(git checkout -b:*)",
+      "Bash(git pull:*)",
+      "Bash(find:*)",
+      "Bash(fd:*)",
+      "Bash(rg:*)",
+      "Bash(grep:*)",
+      "Bash(ls:*)",
+      "Bash(touch:*)",
+      "Bash(mkdir:*)",
+      "Bash(mv:*)",
+      "Bash(awk:*)",
+      "Bash(make:*)",
+      "Bash(go test:*)",
+      "Bash(go build:*)",
+      "Bash(nix build:*)",
+      "Bash(nix flake check:*)",
+      "Bash(nixos-rebuild build:*)",
+      "Bash(gh issue view:*)",
+      "Bash(gh pr checks:*)",
+      "Bash(gh pr list:*)",
+      "Bash(gh pr view:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run:*)",
+      "Bash(npm test:*)",
+      "Bash(npx eslint:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npx tsx:*)",
+      "Bash(npx vitest:*)",
+      "Bash(npx cdk synth:*)"
+    ],
+    "deny": [
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
+    ]
+>>>>>>> bf98b3b (feat: :sparkles: update)
   },
   "model": "opusplan",
   "permissionMode": "plan",
@@ -81,6 +141,11 @@
             "type": "command",
             "command": "~/.local/bin/difit-cmux-hook",
             "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/save-session.sh",
+            "timeout": 30
           }
         ]
       }

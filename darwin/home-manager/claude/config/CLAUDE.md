@@ -30,5 +30,31 @@
 ## Tool and Resource Optimization
 - Optimize tool usage with parallel calling for maximum efficiency
 - Use subagents for complex problem verification
+<<<<<<< HEAD
 - When you need the user to choose from explicit options, use `AskQuestionTool` instead of presenting plain-text multiple-choice lists.
 - Use plain-text questions only for open-ended input or when `AskQuestionTool` is unavailable.
+=======
+
+## Important Notes
+
+### gh コマンドの認証（サンドボックス回避）
+
+Claude Code のサンドボックスは `~/.config/gh` へのアクセスを拒否するため、
+`GH_TOKEN` 環境変数を使って認証する。
+
+```bash
+# macOS Keychain にトークンを登録（一回限り）
+security add-generic-password -s "gh-token" -a "$USER" -w "ghp_xxxx"
+
+# ~/.zshrc_local に追記（既存の .zshrc が source している）
+_gh_token=$(security find-generic-password -s "gh-token" -a "$USER" -w 2>/dev/null)
+if [[ -n "$_gh_token" ]]; then
+  export GH_TOKEN="$_gh_token"
+fi
+unset _gh_token
+```
+
+Claude Code はシェルの環境変数を継承するため、
+`GH_TOKEN` が設定されたシェルから起動すれば `gh` コマンドが正常に動作する。
+トークンは dotfiles（Nix 管理ファイル）には書かず、macOS Keychain で管理する。
+>>>>>>> bf98b3b (feat: :sparkles: update)

@@ -31,6 +31,7 @@ in {
     ./lazygit
     ./helix
     ./mise
+    ./zed
     ./shell
     ./sheldon
     ./starship

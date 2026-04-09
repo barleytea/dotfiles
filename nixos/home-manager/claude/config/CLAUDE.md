@@ -31,3 +31,20 @@
 - Use subagents for complex problem verification
 - When you need the user to choose from explicit options, use `AskQuestionTool` instead of presenting plain-text multiple-choice lists.
 - Use plain-text questions only for open-ended input or when `AskQuestionTool` is unavailable.
+
+## Important Notes
+
+### gh コマンドの認証（サンドボックス回避）
+
+Claude Code のサンドボックスは `~/.config/gh` へのアクセスを拒否するため、
+`GH_TOKEN` 環境変数を使って認証する。
+
+```bash
+# ~/.zshrc_local に追記（既存の .zshrc が source している）
+# シークレットの管理方法はOSによって異なる（macOS: Keychain、Linux: pass/gpg等）
+export GH_TOKEN="ghp_xxxx"  # 実際のトークンに置き換え
+```
+
+Claude Code はシェルの環境変数を継承するため、
+`GH_TOKEN` が設定されたシェルから起動すれば `gh` コマンドが正常に動作する。
+トークンは dotfiles（Nix 管理ファイル）には書かず、環境変数として引き継ぐ。

@@ -58,6 +58,7 @@
       "plain-clip"
       "raycast"
       "the-unarchiver"
+      "zed"
       "xquartz"
       "nikitabobko/tap/aerospace"
     ];

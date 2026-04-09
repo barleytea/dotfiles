@@ -29,6 +29,7 @@ in {
     ./lazygit
     ./helix
     ./mise
+    ./zed
     ./hyprland
     ./shell
     ./sheldon

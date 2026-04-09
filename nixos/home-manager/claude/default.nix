@@ -32,5 +32,17 @@ in
         fi
       done
     fi
+
+    $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir -p "${config.home.homeDirectory}/.claude/hooks"
+
+    # Link hook scripts from hooks directory
+    if [ -d "${claudeConfigPath}/hooks" ]; then
+      for file in "${claudeConfigPath}/hooks"/*; do
+        if [ -f "$file" ]; then
+          filename=$(${pkgs.coreutils}/bin/basename "$file")
+          $DRY_RUN_CMD ${pkgs.coreutils}/bin/ln -sfn "$file" "${config.home.homeDirectory}/.claude/hooks/$filename"
+        fi
+      done
+    fi
   '';
 }
