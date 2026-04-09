@@ -1,9 +1,11 @@
 {
   "env": {
-    "EDITOR": "nvim"
+    "EDITOR": "nvim",
+    "GH_CONFIG_DIR": "~/.config/github-cli"
   },
   "sandbox": {
     "enabled": true,
+    "enableWeakerNetworkIsolation": true,
     "autoAllowBashIfSandboxed": true,
     "excludedCommands": [
       "docker",
@@ -41,9 +43,6 @@
     },
     "network": {
       "allowedDomains": [
-<<<<<<< HEAD
-        "*"
-=======
         "github.com",
         "api.github.com",
         "raw.githubusercontent.com",
@@ -57,18 +56,11 @@
         "*.pkg.dev",
         "*.amazonaws.com",
         "*.aws.amazon.com"
->>>>>>> bf98b3b (feat: :sparkles: update)
       ]
     }
   },
   "permissions": {
     "allow": [
-<<<<<<< HEAD
-      "mcp__pencil"
-    ],
-    "deny": [],
-    "defaultMode": "dontAsk"
-=======
       "Bash(git log:*)",
       "Bash(git diff:*)",
       "Bash(git status:*)",
@@ -110,7 +102,6 @@
       "Bash(git commit:*)",
       "Bash(git push:*)"
     ]
->>>>>>> bf98b3b (feat: :sparkles: update)
   },
   "model": "opusplan",
   "permissionMode": "plan",

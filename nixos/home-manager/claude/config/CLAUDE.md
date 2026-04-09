@@ -34,10 +34,21 @@
 
 ## Important Notes
 
+### ツール実行時の注意事項（サンドボックス）
+
+Bash tool はサンドボックス上で実行されるため、ファイルアクセスや
+ネットワーク接続がエラーになることがある。
+そのような状況では、自動的に解決を試みず、ユーザーに状況を説明して指示を仰ぐこと。
+
 ### gh コマンドの認証（サンドボックス回避）
 
-Claude Code のサンドボックスは `~/.config/gh` へのアクセスを拒否するため、
-`GH_TOKEN` 環境変数を使って認証する。
+サンドボックスは `~/.config/gh` へのアクセスを拒否するため、
+`GH_CONFIG_DIR=~/.config/github-cli` を `settings.json` の `env` に設定済み。
+`~/.config/github-cli` は denyOnly に含まれないため読み取り可能。
+
+- `nixos-rebuild switch` 時に `~/.config/github-cli/config.yml` が自動生成される
+- 認証は `GH_TOKEN` 環境変数で行う
+- `dangerouslyDisableSandbox: true` は不要
 
 ```bash
 # ~/.zshrc_local に追記（既存の .zshrc が source している）

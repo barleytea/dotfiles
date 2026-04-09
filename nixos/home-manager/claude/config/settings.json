@@ -1,9 +1,11 @@
 {
   "env": {
-    "EDITOR": "nvim"
+    "EDITOR": "nvim",
+    "GH_CONFIG_DIR": "~/.config/github-cli"
   },
   "sandbox": {
     "enabled": true,
+    "enableWeakerNetworkIsolation": true,
     "autoAllowBashIfSandboxed": true,
     "excludedCommands": ["docker", "gh", "security"],
     "allowUnsandboxedCommands": false,

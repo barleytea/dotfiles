@@ -130,12 +130,12 @@
         "rev": "31729da1d5d2cf67ee0e640db2044335cda23566",
         "revCount": 501,
         "type": "git",
-        "url": "file:..?dir=nixvim"
+        "url": "file:.."
       },
       "original": {
         "dir": "nixvim",
         "type": "git",
-        "url": "file:..?dir=nixvim"
+        "url": "file:.."
       }
     },
     "root": {

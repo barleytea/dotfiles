@@ -3,8 +3,21 @@
 let
   dotfilesPath = "${config.home.homeDirectory}/git_repos/github.com/barleytea/dotfiles";
   claudeConfigPath = "${dotfilesPath}/darwin/home-manager/claude/config";
+  ghConfigBase = pkgs.writeText "gh-config" ''
+    version: 1
+    git_protocol: https
+  '';
 in
 {
+  home.activation.setupGhConfigDir = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir -p \
+      "${config.home.homeDirectory}/.config/github-cli"
+    if [ ! -f "${config.home.homeDirectory}/.config/github-cli/config.yml" ]; then
+      $DRY_RUN_CMD ${pkgs.coreutils}/bin/install -m 644 \
+        '${ghConfigBase}' "${config.home.homeDirectory}/.config/github-cli/config.yml"
+    fi
+  '';
+
   home.activation.createClaudeSymlinks = lib.hm.dag.entryAfter ["writeBoundary"] ''
     $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir -p "${config.home.homeDirectory}/.config/claude"
     $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir -p "${config.home.homeDirectory}/.claude/commands"
