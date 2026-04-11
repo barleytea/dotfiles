@@ -26,9 +26,26 @@ New-Item -ItemType Directory -Force -Path $flowDir | Out-Null
 New-Item -ItemType Directory -Force -Path $komorebiDir | Out-Null
 New-Item -ItemType Directory -Force -Path $startupDir | Out-Null
 
-Copy-Item (Join-Path $configDir 'ghostty/config') (Join-Path $ghosttyDir 'config') -Force
-Copy-Item (Join-Path $configDir 'flow-launcher/settings.json') (Join-Path $flowDir 'Settings.json') -Force
-Copy-Item (Join-Path $configDir 'komorebi/komorebi.json') (Join-Path $komorebiDir 'komorebi.json') -Force
+$ghosttyConfig = Join-Path $configDir 'ghostty/config'
+if (Test-Path $ghosttyConfig) {
+  Copy-Item $ghosttyConfig (Join-Path $ghosttyDir 'config') -Force
+} else {
+  Write-Host "  Skipped Ghostty: $ghosttyConfig not found"
+}
+
+$flowLauncherConfig = Join-Path $configDir 'flow-launcher/settings.json'
+if (Test-Path $flowLauncherConfig) {
+  Copy-Item $flowLauncherConfig (Join-Path $flowDir 'Settings.json') -Force
+} else {
+  Write-Host "  Skipped Flow Launcher: $flowLauncherConfig not found"
+}
+
+$komorebiConfig = Join-Path $configDir 'komorebi/komorebi.json'
+if (Test-Path $komorebiConfig) {
+  Copy-Item $komorebiConfig (Join-Path $komorebiDir 'komorebi.json') -Force
+} else {
+  Write-Host "  Skipped komorebi: $komorebiConfig not found"
+}
 
 $wtSettingsSrc = Join-Path $configDir 'windows-terminal/settings.json'
 $wtPaths = @(
