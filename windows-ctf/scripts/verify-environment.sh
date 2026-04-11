@@ -23,11 +23,21 @@ check_cmd wireshark
 check_cmd python3
 check_cmd zsh
 check_cmd tmux
+check_cmd docker
 
 if grep -qi "microsoft" /proc/version 2>/dev/null; then
     echo "[INFO] Environment: WSL"
 else
     echo "[INFO] Environment: non-WSL (likely VM or bare metal)"
+fi
+
+if command -v docker >/dev/null 2>&1; then
+    if docker compose version >/dev/null 2>&1; then
+        echo "[OK] docker compose"
+    else
+        echo "[NG] docker compose (missing or unavailable)"
+        errors=$((errors + 1))
+    fi
 fi
 
 if [[ ${errors} -gt 0 ]]; then

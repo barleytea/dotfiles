@@ -39,6 +39,9 @@ dump-wt-settings: ## Dump current Windows Terminal settings from Windows filesys
 install-tailscale: ## Install Tailscale (WSL userspace-networking mode)
 	bash ./scripts/install-tailscale.sh
 
+install-docker: ## Install Docker Engine and Docker Compose on Kali/WSL
+	bash ./scripts/install-docker.sh
+
 install-bash-tools: ## Install bash terminal tools (starship, atuin, zoxide, eza, bat, ghq)
 	bash ./scripts/install-bash-tools.sh
 
@@ -47,3 +50,6 @@ setup-bash: ## Link bash configs (starship/atuin/tmux) and install bash tools
 
 setup-claude: ## Link Claude Code config (settings, statusline, skills, hooks)
 	bash ./scripts/setup-claude.sh
+
+install-nixvim: ## Install Nix + nixvim (Kali/WSL)
+	bash ./scripts/install-nixvim.sh

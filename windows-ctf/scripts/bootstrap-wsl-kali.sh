@@ -17,6 +17,8 @@ sudo apt-get dist-upgrade -y
 
 "${SCRIPT_DIR}/install-tailscale.sh"
 
+"${SCRIPT_DIR}/install-docker.sh"
+
 # Setup bash environment (tools + config symlinks)
 "${SCRIPT_DIR}/setup-bash.sh"
 
@@ -28,5 +30,7 @@ WSL bootstrap complete.
 Next:
 1. Run ./scripts/sync-dotfiles.sh
 2. Run ./scripts/verify-environment.sh
-3. For GUI apps, verify WSLg with: xclock or wireshark
+3. Re-open the shell or run: newgrp docker
+4. Verify Docker with: docker run hello-world
+5. For GUI apps, verify WSLg with: xclock or wireshark
 EOM

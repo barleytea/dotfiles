@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 # Aliases (equivalent to aliases.zsh)
 
+# Neovim aliases (nixvim)
+if command -v nvim >/dev/null 2>&1; then
+  alias vim='nvim'
+  alias vi='nvim'
+  export EDITOR=nvim
+  export VISUAL=nvim
+fi
+
 # General aliases
 alias reload='source ${HOME}/.bashrc'
 alias rgrep='grep -r --color=always --exclude-dir={.svn,tmp,tools,docs,.buildtool} --with-filename --line-number'
@@ -17,12 +25,12 @@ alias tac='tmux new-session -A -s main'
 
 # eza aliases
 if command -v eza >/dev/null 2>&1; then
-  alias e='eza --icons --git'
+  alias e='eza --icons'
   alias l=e
   alias ls=e
-  alias ea='eza -a --icons --git'
+  alias ea='eza -a --icons'
   alias la=ea
-  alias ee='eza -aahl --icons --git'
+  alias ee='eza -aahl --icons'
   alias ll=ee
   alias et='eza -T -L 3 -a -I "node_modules|.git|.cache" --icons'
   alias lt=et

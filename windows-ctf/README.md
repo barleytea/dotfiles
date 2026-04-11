@@ -58,6 +58,7 @@ windows-ctf/
 └── scripts/
     ├── setup-host.ps1
     ├── install-manifest.sh
+    ├── install-docker.sh
     ├── bootstrap-wsl-kali.sh
     ├── bootstrap-vm-kali.sh
     ├── sync-dotfiles.sh
@@ -101,6 +102,19 @@ make bootstrap-wsl
 make sync-dotfiles
 make verify-environment
 ```
+
+`make bootstrap-wsl` now installs Docker Engine and Docker Compose for Kali on WSL2.
+If you only need Docker later, run:
+
+```bash
+cd ~/git_repos/github.com/barleytea/dotfiles/windows-ctf
+make install-docker
+newgrp docker
+docker run hello-world
+```
+
+If your WSL distro has systemd enabled, the bootstrap uses `systemctl enable --now docker`.
+Otherwise it falls back to `service docker start`.
 
 ### 3) VMware Kali setup
 

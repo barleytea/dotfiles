@@ -10,20 +10,41 @@ function mkcd() {
   fi
 }
 
+# キャンセル時に\C-mマクロが生む余分行を打ち消すPROMPT_COMMANDフック
+_FZF_SAVED_PROMPT_COMMAND=""
+_fzf_cancel_cleanup() {
+  printf '\033[1A\033[2K\r'
+  PROMPT_COMMAND="${_FZF_SAVED_PROMPT_COMMAND}"
+}
+
 # Search and cd into ghq repository (using fzf, bash version of ghq_repository_search)
 function ghq_repository_search() {
   if ! command -v ghq >/dev/null 2>&1 || ! command -v fzf >/dev/null 2>&1; then
     echo "ghq or fzf not found" >&2
     return 1
   fi
-  local select
+  local tmpfile
+  tmpfile=$(mktemp) || return 1
   if command -v bat >/dev/null 2>&1; then
-    select=$(ghq list --full-path | fzf --preview "bat --color=always --style=header,grid --line-range :80 {}/README.* 2>/dev/null || ls -la {}")
+    ghq list --full-path | fzf --preview "bat --color=always --style=header,grid --line-range :80 {}/README.* 2>/dev/null || ls -la {}" > "$tmpfile"
   else
-    select=$(ghq list --full-path | fzf --preview "ls -la {}")
+    ghq list --full-path | fzf --preview "ls -la {}" > "$tmpfile"
   fi
-  if [[ -n "$select" ]]; then
-    cd "$select"
+  local fzf_exit=$?
+  local select
+  select=$(<"$tmpfile")
+  rm -f "$tmpfile"
+  if [[ $fzf_exit -eq 0 ]] && [[ -n "$select" ]]; then
+    # 選択時: READLINE_LINEにcdコマンドを注入 → マクロの\C-mで実行
+    READLINE_LINE="cd $(printf '%q' "$select")"
+    READLINE_POINT=${#READLINE_LINE}
+  else
+    # キャンセル時: PROMPT_COMMANDを差し替えて\C-mが生む余分行を打ち消す
+    printf '\r\033[K'
+    READLINE_LINE=""
+    READLINE_POINT=0
+    _FZF_SAVED_PROMPT_COMMAND="${PROMPT_COMMAND}"
+    PROMPT_COMMAND="_fzf_cancel_cleanup"
   fi
 }
 
@@ -34,10 +55,22 @@ function worktree_search() {
     echo "Directory not found: $worktree_dir" >&2
     return 1
   fi
+  local tmpfile
+  tmpfile=$(mktemp) || return 1
+  find "$worktree_dir" -name ".git" -exec dirname {} \; | fzf --preview "ls -la {}" > "$tmpfile"
+  local fzf_exit=$?
   local select
-  select=$(find "$worktree_dir" -name ".git" -exec dirname {} \; | fzf --preview "ls -la {}")
-  if [[ -n "$select" ]]; then
-    cd "$select"
+  select=$(<"$tmpfile")
+  rm -f "$tmpfile"
+  if [[ $fzf_exit -eq 0 ]] && [[ -n "$select" ]]; then
+    READLINE_LINE="cd $(printf '%q' "$select")"
+    READLINE_POINT=${#READLINE_LINE}
+  else
+    printf '\r\033[K'
+    READLINE_LINE=""
+    READLINE_POINT=0
+    _FZF_SAVED_PROMPT_COMMAND="${PROMPT_COMMAND}"
+    PROMPT_COMMAND="_fzf_cancel_cleanup"
   fi
 }
 

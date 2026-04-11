@@ -21,20 +21,7 @@ if ! ssh-add -l &>/dev/null; then
 fi
 ssh-add "$KEY_PATH" 2>/dev/null || true
 
-# 3. ~/.zshrc に SSH エージェント自動起動を追記（べき等）
-ZSHRC="$HOME/.zshrc"
-MARKER="# ssh-agent auto-start (added by setup-github-ssh.sh)"
-if ! grep -qF "$MARKER" "$ZSHRC" 2>/dev/null; then
-    cat >> "$ZSHRC" << 'EOF'
-
-# ssh-agent auto-start (added by setup-github-ssh.sh)
-if [ -z "$SSH_AUTH_SOCK" ] || ! ssh-add -l &>/dev/null; then
-    eval "$(ssh-agent -s)" > /dev/null
-    ssh-add "$HOME/.ssh/id_ed25519" 2>/dev/null || true
-fi
-EOF
-    echo "✓ SSH agent auto-start added to $ZSHRC"
-fi
+# 3. bashrc.d は bashrc.sh 経由で自動ロードされるため追記不要
 
 # 4. 公開鍵を表示
 echo ""

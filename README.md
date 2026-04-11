@@ -20,6 +20,7 @@ Each directory is a complete, standalone flake that can be applied independently
   - Dual-layer workflow: WSL for daily usage, VMware for isolation/snapshots
   - Windows host UX module (komorebi + AutoHotkey + Ghostty + Flow Launcher)
   - Manifest-driven package bootstrap for Kali (core + category bundles)
+  - WSL2 Kali bootstrap includes Docker Engine + Docker Compose setup
   - Verification and dotfiles sync scripts
   - See [windows-ctf/README.md](windows-ctf/README.md) for details
 
