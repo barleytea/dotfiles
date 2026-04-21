@@ -22,7 +22,7 @@ in
     $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir -p "${config.home.homeDirectory}/.config/claude"
     $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir -p "${config.home.homeDirectory}/.claude/commands"
     $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir -p "${config.home.homeDirectory}/.claude/skills"
-    $DRY_RUN_CMD ${pkgs.coreutils}/bin/ln -sf "${claudeConfigPath}/CLAUDE.md" "${config.home.homeDirectory}/.claude/CLAUDE.md"
+    $DRY_RUN_CMD ${pkgs.coreutils}/bin/ln -sf "${claudeConfigPath}/AGENTS.md" "${config.home.homeDirectory}/.claude/CLAUDE.md"
     $DRY_RUN_CMD ${pkgs.coreutils}/bin/ln -sf "${claudeConfigPath}/settings.json" "${config.home.homeDirectory}/.claude/settings.json"
     $DRY_RUN_CMD ${pkgs.coreutils}/bin/ln -sf "${claudeConfigPath}/statusline.sh" "${config.home.homeDirectory}/.claude/statusline.sh"
 

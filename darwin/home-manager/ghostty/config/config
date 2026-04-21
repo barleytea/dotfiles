@@ -17,6 +17,9 @@ macos-titlebar-style = hidden
 macos-option-as-alt = true
 copy-on-select = clipboard
 
+# Scrollback
+scrollback-limit = 104857600
+
 # Cursor
 cursor-style = bar
 cursor-style-blink = true

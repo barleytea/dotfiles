@@ -1,0 +1,58 @@
+{ pkgs }:
+(with pkgs; [
+  anki-bin
+  arp-scan
+  bat
+  bottom
+  bubblewrap
+  bun
+  curl
+  delta
+  direnv
+  docker
+  eza
+  fastfetch
+  fd
+  fzf
+  gat
+  gh
+  ghq
+  git
+  gitleaks
+  gnugrep
+  google-chrome
+  grpcurl
+  jpegoptim
+  jq
+  lazygit
+  mecab
+  mise
+  mosh
+  nerd-fonts.hack
+  obsidian
+  pipx
+  pnpm
+  postgresql
+  postman
+  protobuf
+  protoc-gen-go
+  protoc-gen-go-grpc
+  ripgrep
+  rustup
+  sheldon
+  slack
+  socat
+  tmux
+  tree
+  vscode
+  xan
+  xdg-ninja
+  zoom-us
+  zoxide
+  zsh
+  # NixOS 専用パッケージ
+  lmstudio
+  git-credential-manager
+]) ++ [
+  (pkgs.callPackage ./gwq.nix {})
+]

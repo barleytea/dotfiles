@@ -218,18 +218,26 @@ make paths
 4. **Window Management**: AeroSpace + JankyBorders + AltTab
 5. **Development**: pre-commit、gitleaks、commitizen
 
-### Claude Code Configuration
+### AI ツール設定（AGENTS.md）
 
-**macOS (darwin):**
-- **darwin/home-manager/claude/config/**: macOS用Claude Code設定の管理
-  - **CLAUDE.md**: プロジェクト固有の指示
+AI エージェント向けの行動原則は **AGENTS.md** を唯一の真のソースとして管理。
+`~/.claude/CLAUDE.md` と `~/.gemini/GEMINI.md` は AGENTS.md へのシンボリックリンク。
+
+**ファイル配置:**
+- **darwin/home-manager/claude/config/**: macOS用AI設定の管理
+  - **AGENTS.md**: 行動原則（Claude・Gemini 共通の単一ソース）
   - **settings.json**: Claude Code設定（hooks、permissions）
   - **commands/**: カスタムコマンド定義
   - **skills/**: カスタムスキル定義
 
-**NixOS:**
-- **nixos/home-manager/claude/config/**: NixOS用Claude Code設定の管理
+- **nixos/home-manager/claude/config/**: NixOS用AI設定の管理
   - 構造はmacOSと同じ
+
+**シンボリックリンク構造:**
+```
+~/.claude/CLAUDE.md  → .../claude/config/AGENTS.md  ← Claude Code が読む
+~/.gemini/GEMINI.md  → .../claude/config/AGENTS.md  ← Gemini CLI が読む
+```
 
 **デプロイメント:**
 - **自動デプロイ**: `make home-manager-apply`（macOS）または`sudo nixos-rebuild switch`（NixOS）で`~/.claude/`にシンボリックリンクを作成
@@ -336,6 +344,7 @@ make paths
 - `/zellij-worktree` - Zellij git worktree workflow
 - `/cmux-guide` - cmux terminal multiplexer (Ghostty-based), difit-cmux command, and cmux-workspace branch switcher
 - `/safe-chain-guide` - Aikido safe-chain supply chain security tool setup
+- `/renovate-guide` - Renovate Bot setup for automatic mise version updates
 
 **サービス・デーモン:**
 - `/services-guide` - AeroSpace, JankyBorders, AltTab (macOS)

@@ -34,7 +34,6 @@
       "harelba/q/q"
     ];
     casks = [
-      "android-studio"
       "alt-tab"
       "apparency"
       "appcleaner"
@@ -43,14 +42,12 @@
       "cursor"
       "devutils"
       "dbeaver-community"
-      "fig"
       "finicky"
       "font-hack-nerd-font"
       "gfxcardstatus"
       "ghostty"
       "google-japanese-ime"
       "hammerspoon"
-      "iterm2"
       "lm-studio"
       "miro"
       "nosql-workbench"

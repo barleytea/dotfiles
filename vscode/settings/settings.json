@@ -205,5 +205,6 @@
   "cursor.composer.usageSummaryDisplay": "always",
   "claudeCode.selectedModel": "sonnet",
   "claudeCode.preferredLocation": "panel",
-  "chat.viewSessions.orientation": "stacked"
+  "chat.viewSessions.orientation": "stacked",
+  "workbench.browser.enableChatTools": true
 }
