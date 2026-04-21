@@ -7,9 +7,10 @@ function mkcd() {
   fi
 }
 
-# Search and cd into ghq repository
+# Search and cd into ghq repository (worktrees included when gwq basedir == ghq root)
 function ghq_repository_search() {
-  local select=$(ghq list --full-path | fzf --preview "bat --color=always --style=header,grid --line-range :80 {}/README.*")
+  local select=$(ghq list --full-path | fzf \
+    --preview "bat --color=always --style=header,grid --line-range :80 {}/README.* 2>/dev/null || ls -la {}")
   if [[ -n "$select" ]]; then
     cd "$select"
     zle reset-prompt
@@ -27,15 +28,9 @@ function peco_select_history() {
 
 zle -N ghq_repository_search
 
-# Search and cd into git worktree
+# Search and cd into git worktree (gwq basedir == ghq root, worktrees have '=' in path)
 function worktree_search() {
-  local worktree_dir="${HOME}/worktrees"
-  if [[ ! -d "$worktree_dir" ]]; then
-    echo "Directory not found: $worktree_dir" >&2
-    return 1
-  fi
-
-  local select=$(find "$worktree_dir" -name ".git" -exec dirname {} \; | fzf --preview "ls -la {}")
+  local select=$(ghq list --full-path | grep '=' | fzf --preview "ls -la {}")
   if [[ -n "$select" ]]; then
     cd "$select"
     zle reset-prompt
@@ -47,14 +42,8 @@ zle -N worktree_search
 # Launch Claude Code with --add-dir (fzf multi-select from ghq + worktrees)
 function claude_add_dir_search() {
   local current_dir=$(pwd -P)
-  local worktree_dir="${HOME}/worktrees"
 
-  local candidates=$({
-    ghq list --full-path 2>/dev/null || true
-    if [[ -d "$worktree_dir" ]]; then
-      find "$worktree_dir" -name ".git" -maxdepth 3 -exec dirname {} \; 2>/dev/null || true
-    fi
-  } | grep -v "^${current_dir}$" | sort -u)
+  local candidates=$(ghq list --full-path 2>/dev/null | grep -v "^${current_dir}$")
 
   local selected=$(echo "$candidates" | fzf --multi \
     --prompt="Add dirs (Tab=select, Enter=confirm) > " \

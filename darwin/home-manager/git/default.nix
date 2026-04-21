@@ -160,4 +160,43 @@ gitIgnore = ''
 in {
   home.file.".config/git/config".text = gitConfig;
   home.file.".config/git/ignore".text = gitIgnore;
+  home.file.".config/gwq/config.toml" = {
+    force = true;
+    text = ''
+      [claude]
+      config_dir = '~/.config/gwq/claude'
+      executable = 'claude'
+      max_development_tasks = 2
+      max_parallel = 3
+
+      [claude.execution]
+      auto_cleanup = true
+
+      [claude.queue]
+      queue_dir = '~/.config/gwq/claude/queue'
+
+      [claude.worktree]
+      auto_create_worktree = true
+      require_existing_worktree = false
+      validate_branch_exists = true
+
+      [finder]
+      preview = true
+
+      [naming]
+      template = '{{.Host}}/{{.Owner}}/{{.Repository}}={{.Branch}}'
+
+      [naming.sanitize_chars]
+      '/' = '-'
+      ':' = '-'
+
+      [ui]
+      icons = true
+      tilde_home = true
+
+      [worktree]
+      auto_mkdir = true
+      basedir = '~/git_repos'
+    '';
+  };
 }
