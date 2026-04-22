@@ -130,11 +130,6 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.local/bin/difit-cmux-hook",
-            "timeout": 10
-          },
-          {
-            "type": "command",
             "command": "~/.claude/hooks/save-session.sh",
             "timeout": 30
           }
