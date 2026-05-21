@@ -16,6 +16,11 @@
       url = "git+file:..?dir=nixvim";
       flake = true;
     };
+    dotfiles-shared = {
+      # 共通 HM モジュール群（OS 横断の素モジュール）
+      url = "git+file:..?dir=modules";
+      flake = false;
+    };
   };
 
   outputs = {
@@ -24,6 +29,7 @@
     home-manager,
     nix-darwin,
     nixvim-config,
+    dotfiles-shared,
   } @ inputs: let
     darwinSystems = [
       "aarch64-darwin"
