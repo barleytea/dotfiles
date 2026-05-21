@@ -45,23 +45,15 @@ require_cmd node
 require_cmd npm
 require_cmd perl
 
-DARWIN_FILE="$ROOT_DIR/darwin/home-manager/mise/default.nix"
-NIXOS_FILE="$ROOT_DIR/nixos/home-manager/mise/default.nix"
+CONFIG_FILE="$ROOT_DIR/modules/home/mise/config.toml"
 
 COMMON_TOOLS=(
   "npm:aws-cdk"
   "npm:@redocly/cli"
   "npm:corepack"
   "npm:@google/gemini-cli"
-  "npm:reviewit"
-  "npm:vibe-kanban"
   "npm:@openai/codex"
-  "npm:@vibe-kit/grok-cli"
   "npm:ccusage"
-  "npm:@aikidosec/safe-chain"
-)
-
-DARWIN_ONLY_TOOLS=(
   "npm:difit"
 )
 
@@ -140,8 +132,8 @@ update_tool_version() {
 
   TOOL="$tool" VERSION="$version" perl -0pi -e '
     my $tool = quotemeta($ENV{TOOL});
-    my $replacement = "\"$ENV{TOOL}\" = \"$ENV{VERSION}\";";
-    my $count = s/"$tool" = "[^"]+";/$replacement/g;
+    my $replacement = "\"$ENV{TOOL}\" = \"$ENV{VERSION}\"";
+    my $count = s/"$tool" = "[^"]+"/$replacement/g;
     if ($count == 0) {
       die "Failed to update $ENV{TOOL} in " . $ARGV . "\n";
     }
@@ -169,10 +161,5 @@ process_tool() {
 echo "Updating pinned npm CLI versions with min age ${MIN_AGE_DAYS} days"
 
 for tool in "${COMMON_TOOLS[@]}"; do
-  process_tool "$DARWIN_FILE" "$tool"
-  process_tool "$NIXOS_FILE" "$tool"
-done
-
-for tool in "${DARWIN_ONLY_TOOLS[@]}"; do
-  process_tool "$DARWIN_FILE" "$tool"
+  process_tool "$CONFIG_FILE" "$tool"
 done
