@@ -12,10 +12,16 @@ let
   else
     "pbcopy";
 
-  # テンプレート内の copy_command を置換
+  # mouse_mode は Darwin のみ true（旧 nixos 側は false）
+  mouseMode = if pkgs.stdenv.isDarwin then "true" else "false";
+
   config = builtins.replaceStrings
-    ["copy_command \"pbcopy\""]
-    ["copy_command \"${copyCommand}\""]
+    [ "copy_command \"pbcopy\""
+      "mouse_mode true"
+    ]
+    [ "copy_command \"${copyCommand}\""
+      "mouse_mode ${mouseMode}"
+    ]
     configTemplate;
 in {
   programs.zellij = {

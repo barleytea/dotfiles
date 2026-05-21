@@ -37,9 +37,9 @@ in {
     "${shared}/home/git"
     ./ghostty
     ./hyprland
-    ./mise
+    "${shared}/home/mise"
     ./shell
-    ./zellij
+    "${shared}/home/zellij"
   ];
 
   home = {
