@@ -1,0 +1,71 @@
+name: Setup Nix
+description: |
+  Install Nix (cachix/install-nix-action), enable magic-nix-cache, run
+  flake-checker, and write local + global nix.conf. Shared by darwin.yml and
+  nixos.yml to avoid duplicating boilerplate.
+
+inputs:
+  github-token:
+    description: GitHub token for nix.conf access-tokens and flake-checker
+    required: true
+  configure-global-nixconf:
+    description: |
+      Whether to write /etc/nix/nix.conf (use-xdg-base-directories,
+      extra-trusted-users, access-tokens). Only macOS jobs need this.
+    required: false
+    default: "false"
+  add-channel:
+    description: Whether to add and update the nixpkgs-unstable channel.
+    required: false
+    default: "false"
+
+runs:
+  using: composite
+  steps:
+    - name: Install Nix
+      uses: cachix/install-nix-action@v31
+      with:
+        nix_path: nixpkgs=channel:nixos-unstable
+        extra_nix_config: |
+          access-tokens = github.com=${{ inputs.github-token }}
+          substituters = https://cache.nixos.org/
+
+    - name: Nix cache
+      uses: DeterminateSystems/magic-nix-cache-action@v13
+
+    - name: Check flakes
+      uses: DeterminateSystems/flake-checker-action@v12
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+
+    - name: Set local nix.conf
+      shell: bash
+      run: |
+        mkdir -p "$HOME/.config/nix"
+        {
+          echo 'experimental-features = nix-command flakes'
+          echo 'warn-dirty = false'
+          echo "access-tokens = github.com=${{ inputs.github-token }}"
+        } > "$HOME/.config/nix/nix.conf"
+
+    - name: Add nixpkgs channel
+      if: inputs.add-channel == 'true'
+      shell: bash
+      run: |
+        source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+        nix-channel --add https://nixos.org/channels/nixpkgs-unstable
+        nix-channel --update
+
+    - name: Set global nix.conf
+      if: inputs.configure-global-nixconf == 'true'
+      shell: bash
+      run: |
+        sudo mkdir -p /etc/nix
+        if [ -f /etc/nix/nix.conf ]; then
+          sudo mv /etc/nix/nix.conf /etc/nix/nix.conf.before-nix-darwin
+        fi
+        {
+          echo 'use-xdg-base-directories = true'
+          echo 'extra-trusted-users = runner'
+          echo "access-tokens = github.com=${{ inputs.github-token }}"
+        } | sudo tee /etc/nix/nix.conf > /dev/null

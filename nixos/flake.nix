@@ -12,6 +12,11 @@
       url = "git+file:..?dir=nixvim";
       flake = true;
     };
+    dotfiles-shared = {
+      # 共通 HM モジュール群（modules/ 以下を直接参照）
+      url = "git+file:..?dir=modules";
+      flake = false;
+    };
   };
 
   outputs = {
@@ -19,6 +24,7 @@
     nixpkgs,
     home-manager,
     nixvim-config,
+    dotfiles-shared,
   } @ inputs: let
     system = "x86_64-linux";
 

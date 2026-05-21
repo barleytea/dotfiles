@@ -16,6 +16,11 @@
       url = "git+file:..?dir=nixvim";
       flake = true;
     };
+    dotfiles-shared = {
+      # 共通 HM モジュール群（modules/ 以下を直接参照）
+      url = "git+file:..?dir=modules";
+      flake = false;
+    };
   };
 
   outputs = {
@@ -24,6 +29,7 @@
     home-manager,
     nix-darwin,
     nixvim-config,
+    dotfiles-shared,
   } @ inputs: let
     darwinSystems = [
       "aarch64-darwin"
@@ -71,15 +77,6 @@
       modules = modules;
     };
   in {
-    devShells.${system}.default = pkgs.mkShell {
-      packages = with pkgs; [
-        # TODO: Add your development packages here
-      ];
-      shellHook = ''
-        $SHELL
-      '';
-    };
-
     homeConfigurations = {
       home = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgsWithOverlays;

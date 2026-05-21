@@ -11,32 +11,35 @@
     prefix=${config.home.homeDirectory}/.npm-global
     min-release-age=7
   '';
+  shared = inputs.dotfiles-shared;
 in {
 
   # nixpkgs config is supplied by the caller (NixOS flake sets allowUnfree)
 
   imports = [
     inputs.nixvim-config.homeManagerModules.default
-    ./alacritty
-    ./atuin
-    ./claude
-    ./cz-git
-    ./editorconfig
-    ./gemini
+    # 共通 HM モジュール（modules/home/ から）
+    "${shared}/home/alacritty"
+    "${shared}/home/atuin"
+    "${shared}/home/cz-git"
+    "${shared}/home/editorconfig"
+    "${shared}/home/helix"
+    "${shared}/home/lazygit"
+    "${shared}/home/sheldon"
+    "${shared}/home/starship"
+    "${shared}/home/tmux"
+    "${shared}/home/yazi"
+    "${shared}/home/zed"
+    # OS 固有・差分ありモジュール
+    "${shared}/home/claude"
     ./fcitx5
-    ./git
+    "${shared}/home/gemini"
+    "${shared}/home/git"
     ./ghostty
-    ./lazygit
-    ./helix
-    ./mise
-    ./zed
     ./hyprland
+    "${shared}/home/mise"
     ./shell
-    ./sheldon
-    ./starship
-    ./tmux
-    ./yazi
-    ./zellij
+    "${shared}/home/zellij"
   ];
 
   home = {
