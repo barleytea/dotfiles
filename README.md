@@ -8,11 +8,12 @@ This repository is organized into OS-specific directories:
 
 ### Nix-based Configurations
 
-- **`darwin/`** - macOS configuration (nix-darwin + home-manager)
-- **`nixos/`** - NixOS configuration (system + home-manager)
+- **`darwin/`** - macOS configuration (nix-darwin + home-manager). OS 固有モジュールのみ
+- **`nixos/`** - NixOS configuration (system + home-manager). OS 固有モジュールのみ
+- **`modules/home/`** - 両 OS 共通の home-manager モジュール（alacritty / atuin / claude / gemini / git / mise / zellij など）。両 flake から `inputs.dotfiles-shared` 経由で参照
 - **`nixvim/`** - Standalone Neovim configuration (can be used independently)
 
-Each directory is a complete, standalone flake that can be applied independently.
+darwin / nixos は独立した flake のまま、共通 HM モジュールだけ `modules/` に集約する構成。詳細は [docs/architecture.md](docs/architecture.md) を参照。
 
 ### Non-Nix Configuration
 

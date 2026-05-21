@@ -38,8 +38,9 @@
 
 ```
 .
-├── darwin/           macOS 用 flake（nix-darwin + home-manager）
-├── nixos/            NixOS 用 flake（system + home-manager）
+├── darwin/           macOS 用 flake（nix-darwin + OS 固有 HM モジュール）
+├── nixos/            NixOS 用 flake（system + OS 固有 HM モジュール）
+├── modules/home/     両 OS 共通の Home Manager モジュール（flake input で参照）
 ├── nixvim/           Neovim 用スタンドアロン flake
 ├── windows-ctf/      Windows + WSL2 Kali / VMware Kali CTF 環境
 ├── vscode/           VSCode 設定・拡張機能の sync スクリプト
@@ -50,7 +51,7 @@
 └── AGENTS.md         ★このファイル
 ```
 
-各 OS ディレクトリは独立した flake で、単体で apply できる。詳細な配置と責務は **`docs/architecture.md`** を参照。
+各 OS ディレクトリは独立した flake のまま、HM モジュールの共通部分だけ `modules/home/` に集約して `inputs.dotfiles-shared` 経由で参照する。詳細は **`docs/architecture.md`** を参照。
 
 ---
 
@@ -74,7 +75,7 @@
 ## 4. コーディングスタイル
 
 - `.editorconfig` を尊重: UTF-8、LF、末尾改行、末尾空白除去、YAML/JS/Lua は 2 spaces、デフォルトは 4 spaces、`Makefile` のみタブ
-- Nix モジュールは小さく自己完結に。`darwin/home-manager/`, `nixos/home-manager/`, `darwin/`, `nixos/` 配下に配置
+- Nix モジュールは小さく自己完結に。共通 HM モジュールは `modules/home/`、OS 固有は `darwin/home-manager/`, `nixos/home-manager/`, `darwin/`, `nixos/` 配下に配置
 - Nix: 属性はソート、オプションはグループ化、モジュール内で副作用を起こさない
 - Shell / YAML: 行を短く宣言的に、変数は必ずクォート
 

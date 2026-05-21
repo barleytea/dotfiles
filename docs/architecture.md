@@ -6,34 +6,35 @@
 
 | スコープ | パス | 説明 | ビルド単位 |
 |---------|------|------|-----------|
-| Darwin（macOS） | `darwin/` | nix-darwin システム + Home Manager | 独立 flake |
-| NixOS | `nixos/` | NixOS システム + Home Manager（NixOS module 統合型） | 独立 flake |
+| Darwin（macOS） | `darwin/` | nix-darwin システム + OS 固有 HM モジュール | 独立 flake |
+| NixOS | `nixos/` | NixOS システム + OS 固有 HM モジュール（NixOS module 統合型） | 独立 flake |
+| Shared HM modules | `modules/home/` | OS 横断の Home Manager モジュール（両 flake から `inputs.dotfiles-shared` で参照） | flake 入力 |
 | Nixvim | `nixvim/` | スタンドアロン Neovim 設定。`nix run` 単体可、HM モジュールとしても再利用 | 独立 flake |
 | Windows CTF | `windows-ctf/` | WSL2 Kali / VMware Kali / Windows ホストUX | Nix 非依存（apt + bash） |
 | VSCode | `vscode/` | 設定・拡張機能の sync 用シェルスクリプト | スクリプト |
 | Zellij plugins | `zellij-plugins/` | 自作プラグイン（Rust） | cargo |
 
-`darwin/` と `nixos/` の `home-manager/` 配下は **大部分が同一内容**（個別モジュールはバイト一致しているものが多い）。OS 固有の差分は以下の通り。
+`darwin/home-manager/` と `nixos/home-manager/` は OS 固有 / OS 差分が大きいモジュールのみを残し、共通モジュールは `modules/home/` に集約済み（両 flake が `dotfiles-shared` input 経由で同じソースを取り込む）。
 
-### Darwin 専用 HM モジュール
+### `modules/home/` に集約済みの共通モジュール
+- `alacritty/`, `atuin/`, `cz-git/`, `editorconfig/`, `helix/`, `lazygit/`, `sheldon/`, `starship/`, `tmux/`, `yazi/`, `zed/`
+- `claude/`, `gemini/`, `git/`, `mise/`, `zellij/`
+  - うち `mise/config.toml` と `zellij/config.kdl` は `pkgs.stdenv.isDarwin` で差分を Nix 側から差し替え
+
+### Darwin 専用 HM モジュール（`darwin/home-manager/`）
 - `aerospace/` … タイル型ウィンドウマネージャ（macOS）
 - `borders/` … JankyBorders 連携
 - `cmux/` … cmux 連携 + difit-cmux スクリプト
 
-### NixOS 専用 HM モジュール
+### NixOS 専用 HM モジュール（`nixos/home-manager/`）
 - `fcitx5/` … 日本語入力
 - `hyprland/` … Wayland WM
 
-### OS 固有挙動を含む HM モジュール
-- `claude/default.nix`, `gemini/default.nix` … `dotfilesPath` の OS 部分のみ違う
-- `pwd.nix` … home 配下のパスのみ違う
-- `git/default.nix` … credential helper（macOS=GCM、Linux=cache）
-- `mise/config.toml` … python の指定方法
-- `packages/packages.nix` … OS 専用パッケージ数行
-- `shell/zsh/config/*` … macOS 専用ウィジェット、Linux 専用 asdf 設定
-- `ghostty/config/config`, `zellij/config.kdl` … 1〜3 行の OS 差分
-
-> 注: この重複は将来的な共通化対象。詳細は AGENTS.md の改善計画を参照。
+### OS 差分が大きく OS 固有のまま残しているモジュール
+- `ghostty/` … `config/config` に macOS 専用 3 行 + `pwd.nix` を経由する `mkOutOfStoreSymlink` のパス差
+- `packages/packages.nix` … OS 専用パッケージ（bubblewrap / lmstudio / git-credential-manager 等）
+- `shell/zsh/config/*` … macOS 専用ウィジェット、Linux 専用 asdf 設定、Zellij 起動条件
+- `pwd.nix` … home 配下のパスのみ違う（ghostty が消費）
 
 ## 2. Darwin の構成
 
