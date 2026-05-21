@@ -77,15 +77,6 @@
       modules = modules;
     };
   in {
-    devShells.${system}.default = pkgs.mkShell {
-      packages = with pkgs; [
-        # TODO: Add your development packages here
-      ];
-      shellHook = ''
-        $SHELL
-      '';
-    };
-
     homeConfigurations = {
       home = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgsWithOverlays;
