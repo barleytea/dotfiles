@@ -12,7 +12,6 @@
 | Nixvim | `nixvim/` | スタンドアロン Neovim 設定。`nix run` 単体可、HM モジュールとしても再利用 | 独立 flake |
 | Windows CTF | `windows-ctf/` | WSL2 Kali / VMware Kali / Windows ホストUX | Nix 非依存（apt + bash） |
 | VSCode | `vscode/` | 設定・拡張機能の sync 用シェルスクリプト | スクリプト |
-| Zellij plugins | `zellij-plugins/` | 自作プラグイン（Rust） | cargo |
 
 `darwin/home-manager/` と `nixos/home-manager/` は OS 固有 / OS 差分が大きいモジュールのみを残し、共通モジュールは `modules/home/` に集約済み（両 flake が `dotfiles-shared` input 経由で同じソースを取り込む）。
 

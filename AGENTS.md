@@ -45,7 +45,6 @@
 ├── windows-ctf/      Windows + WSL2 Kali / VMware Kali CTF 環境
 ├── vscode/           VSCode 設定・拡張機能の sync スクリプト
 ├── scripts/          Makefile から呼ぶヘルパ群
-├── zellij-plugins/   自作 Zellij プラグイン
 ├── .claude/skills/   AI スキル群（人間も markdown として読める）
 ├── docs/             詳細ドキュメント（このファイルから参照）
 └── AGENTS.md         ★このファイル
