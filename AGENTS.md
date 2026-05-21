@@ -1,6 +1,13 @@
 # AGENTS.md
 
-このファイルはこのリポジトリで作業する全てのコーディングエージェント（Claude Code / Codex / Cursor / Gemini / Copilot 等）が **最初に読む正典** である。Claude Code が必須参照する `CLAUDE.md` はルートに置いた **このファイルへのシンボリックリンク**。
+このファイルはこのリポジトリで作業する全てのコーディングエージェント（Claude Code / Codex / Cursor / Gemini / Copilot 等）が **最初に読む正典** である。各エージェント固有のエントリポイントは本ファイルへの参照として機能する。
+
+| エージェント | エントリポイント |
+|---|---|
+| Claude Code | `CLAUDE.md`（本ファイルへのシンボリックリンク） |
+| Gemini CLI | `.gemini/GEMINI.md` |
+| Cursor | `.cursor/rules/00_agent.mdc` |
+| GitHub Copilot | `.github/instructions/basic.instructions.md` |
 
 詳細は `docs/` 配下に分割しており、該当セクションの参照リンクをたどること。
 
@@ -38,16 +45,20 @@
 
 ```
 .
-├── darwin/           macOS 用 flake（nix-darwin + OS 固有 HM モジュール）
-├── nixos/            NixOS 用 flake（system + OS 固有 HM モジュール）
-├── modules/home/     両 OS 共通の Home Manager モジュール（flake input で参照）
-├── nixvim/           Neovim 用スタンドアロン flake
-├── windows-ctf/      Windows + WSL2 Kali / VMware Kali CTF 環境
-├── vscode/           VSCode 設定・拡張機能の sync スクリプト
-├── scripts/          Makefile から呼ぶヘルパ群
-├── .claude/skills/   AI スキル群（人間も markdown として読める）
-├── docs/             詳細ドキュメント（このファイルから参照）
-└── AGENTS.md         ★このファイル
+├── darwin/                macOS 用 flake（nix-darwin + OS 固有 HM モジュール）
+├── nixos/                 NixOS 用 flake（system + OS 固有 HM モジュール）
+├── modules/home/          両 OS 共通の Home Manager モジュール（flake input で参照）
+├── nixvim/                Neovim 用スタンドアロン flake
+├── windows-ctf/           Windows + WSL2 Kali / VMware Kali CTF 環境
+├── vscode/                VSCode 設定・拡張機能の sync スクリプト
+├── scripts/               Makefile から呼ぶヘルパ群
+├── .claude/skills/        AI スキル群（人間も markdown として読める）
+├── .gemini/GEMINI.md      Gemini CLI 向けエントリポイント（本ファイルへの参照）
+├── .cursor/rules/         Cursor 向けルール（本ファイルへの参照）
+├── .github/instructions/  GitHub Copilot 向け指示（本ファイルへの参照）
+├── docs/                  詳細ドキュメント（このファイルから参照）
+├── AGENTS.md              ★このファイル
+└── CLAUDE.md              AGENTS.md へのシンボリックリンク（Claude Code 用）
 ```
 
 各 OS ディレクトリは独立した flake のまま、HM モジュールの共通部分だけ `modules/home/` に集約して `inputs.dotfiles-shared` 経由で参照する。詳細は **`docs/architecture.md`** を参照。
@@ -129,5 +140,8 @@
 | `docs/commands.md` | 全 Make ターゲットと CI 想定の使い分け |
 | `README.md` | 利用者向けの Quick Start とツール一覧 |
 | `.claude/skills/*/SKILL.md` | 個別トピック（mise / pre-commit / VSCode / 各種サービス etc.） |
+| `.gemini/GEMINI.md` | Gemini CLI 向けエントリポイント |
+| `.cursor/rules/00_agent.mdc` | Cursor 向けルール |
+| `.github/instructions/basic.instructions.md` | GitHub Copilot 向け指示 |
 | `windows-ctf/README.md` | Windows CTF 環境専用ガイド |
 | `nixvim/` | スタンドアロン Neovim 設定（独立 flake） |
