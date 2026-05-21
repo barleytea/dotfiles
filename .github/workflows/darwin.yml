@@ -4,8 +4,10 @@ on:
     branches: [main]
     paths:
       - 'darwin/**'
+      - 'modules/**'
       - 'nixvim/**'
       - '.github/workflows/darwin.yml'
+      - '.github/actions/setup-nix/**'
       - 'Makefile'
       - 'vscode/**'
       - 'scripts/**'
@@ -13,8 +15,10 @@ on:
     branches: [main]
     paths:
       - 'darwin/**'
+      - 'modules/**'
       - 'nixvim/**'
       - '.github/workflows/darwin.yml'
+      - '.github/actions/setup-nix/**'
       - 'Makefile'
       - 'vscode/**'
       - 'scripts/**'
@@ -28,44 +32,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-      - name: Install Nix
-        uses: cachix/install-nix-action@v31
+
+      - name: Setup Nix
+        uses: ./.github/actions/setup-nix
         with:
-          nix_path: nixpkgs=channel:nixos-unstable
-          extra_nix_config: |
-            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-            substituters = https://cache.nixos.org/
-      - name: Nix cache
-        uses: DeterminateSystems/magic-nix-cache-action@v13
-      - name: Check flakes
-        uses: DeterminateSystems/flake-checker-action@v12
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Set Local nix.conf
-        shell: zsh {0}
-        run: |
-          if [ ! -d "$HOME/.config/nix" ]; then
-            mkdir -p "$HOME/.config/nix"
-          fi
-          echo 'experimental-features = nix-command flakes' > "$HOME/.config/nix/nix.conf"
-          echo 'warn-dirty = false' >> "$HOME/.config/nix/nix.conf"
-      - name: Prepare Nix
-        shell: zsh {0}
-        run: |
-          echo "access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}" >> $HOME/.config/nix/nix.conf
-          source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-          nix-channel --add https://nixos.org/channels/nixpkgs-unstable
-          nix-channel --update
-      - name: Set global nix.conf
-        shell: zsh {0}
-        run: |
-          sudo mkdir -p /etc/nix
-          if [ -f /etc/nix/nix.conf ]; then
-            sudo mv /etc/nix/nix.conf /etc/nix/nix.conf.before-nix-darwin
-          fi
-          echo 'use-xdg-base-directories = true' | sudo tee /etc/nix/nix.conf
-          echo 'extra-trusted-users = runner' | sudo tee -a /etc/nix/nix.conf
-          echo "access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}" | sudo tee -a /etc/nix/nix.conf
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          configure-global-nixconf: "true"
+          add-channel: "true"
+
       - name: Apply home-manager
         shell: zsh {0}
         env:
@@ -77,6 +51,7 @@ jobs:
           cd darwin
           nix build path:.#homeConfigurations.home.activationPackage --impure --no-write-lock-file --override-input nixvim-config "$NIXVIM_CONFIG_INPUT"
           ./result/activate
+
       - name: Test mise install
         shell: zsh {0}
         env:
@@ -89,24 +64,19 @@ jobs:
         run: |
           source $HOME/.zshenv
           source $HOME/.config/zsh/.zshrc
-          # Import Node.js release GPG key used for tarball signatures
           mkdir -p "$HOME/.gnupg"
           chmod 700 "$HOME/.gnupg"
           gpg --batch --keyserver hkps://keyserver.ubuntu.com --recv-keys 86C8D74642E67846F8E120284DAA80D1E737BC9F
-          # miseで管理している全ツールをインストール
           mise install
-          # shimを再生成してPATHを更新
           mise reshim
-          # PATH更新のため再度mise activate
           eval "$(mise activate zsh)"
-          # pre-commitが正しくインストールされたか確認
           which pre-commit
           pre-commit --version
-          # その他の主要ツールも確認
           mise exec -- which node
           mise exec -- which go
           mise exec -- node --version
           mise exec -- go version
+
       - name: Check nix-darwin configuration
         shell: zsh {0}
         env:
@@ -118,8 +88,8 @@ jobs:
           source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
           export NIX_CONFIG="access-tokens = github.com=$GITHUB_TOKEN"
           cd darwin
-          # ビルドチェックのみ実行（実際の適用はしない）
           nix --extra-experimental-features "nix-command flakes" build path:.#darwinConfigurations.all.system --impure --no-write-lock-file --override-input nixvim-config "$NIXVIM_CONFIG_INPUT"
+
       - name: Check nixvim configuration
         shell: zsh {0}
         env:
@@ -128,8 +98,8 @@ jobs:
           source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
           export NIX_CONFIG="access-tokens = github.com=$GITHUB_TOKEN"
           cd nixvim
-          # nixvimのビルドチェック
           nix build .#packages.aarch64-darwin.default --impure --no-write-lock-file
+
       - name: Run nix-check-all
         shell: zsh {0}
         env:
@@ -139,6 +109,7 @@ jobs:
           source $HOME/.zshenv
           source $HOME/.config/zsh/.zshrc
           make nix-check-all-ci
+
       - name: Run vscode-settings
         shell: zsh {0}
         run: |

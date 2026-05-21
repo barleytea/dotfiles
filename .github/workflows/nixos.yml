@@ -4,14 +4,18 @@ on:
     branches: [main]
     paths:
       - 'nixos/**'
+      - 'modules/**'
       - 'nixvim/**'
       - '.github/workflows/nixos.yml'
+      - '.github/actions/setup-nix/**'
   pull_request:
     branches: [main]
     paths:
       - 'nixos/**'
+      - 'modules/**'
       - 'nixvim/**'
       - '.github/workflows/nixos.yml'
+      - '.github/actions/setup-nix/**'
 
 jobs:
   build:
@@ -27,39 +31,19 @@ jobs:
         run: |
           echo "Disk space before cleanup:"
           df -h
-
-          # Remove unnecessary preinstalled software to free up ~30GB
           sudo rm -rf /usr/share/dotnet
           sudo rm -rf /usr/local/lib/android
           sudo rm -rf /opt/ghc
           sudo rm -rf /opt/hostedtoolcache/CodeQL
           sudo docker image prune --all --force
-
           echo "Disk space after cleanup:"
           df -h
 
-      - name: Install Nix
-        uses: cachix/install-nix-action@v31
+      - name: Setup Nix
+        uses: ./.github/actions/setup-nix
         with:
-          nix_path: nixpkgs=channel:nixos-unstable
-          extra_nix_config: |
-            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-            substituters = https://cache.nixos.org/
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Nix cache
-        uses: DeterminateSystems/magic-nix-cache-action@v13
-      - name: Check flakes
-        uses: DeterminateSystems/flake-checker-action@v12
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Set Local nix.conf
-        run: |
-          mkdir -p "$HOME/.config/nix"
-          echo 'experimental-features = nix-command flakes' > "$HOME/.config/nix/nix.conf"
-          echo 'warn-dirty = false' >> "$HOME/.config/nix/nix.conf"
-      - name: Prepare Nix
-        run: |
-          echo "access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}" >> $HOME/.config/nix/nix.conf
       - name: Check NixOS configuration
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -71,13 +55,11 @@ jobs:
           echo "Disk space before NixOS build:"
           df -h
 
-          # ビルドチェックのみ実行（実際の適用はしない）
           nix build path:.#nixosConfigurations.desktop.config.system.build.toplevel --impure --no-write-lock-file --override-input nixvim-config "$NIXVIM_CONFIG_INPUT"
 
           echo "Disk space after NixOS build:"
           df -h
 
-          # Clean up after NixOS build
           nix-collect-garbage -d
           nix store optimise
 
@@ -94,13 +76,11 @@ jobs:
           echo "Disk space before nixvim build:"
           df -h
 
-          # nixvimのビルドチェック (x86_64-linux)
           nix build .#packages.x86_64-linux.default --impure --no-write-lock-file
 
           echo "Disk space after nixvim build:"
           df -h
 
-          # Clean up after nixvim build
           nix-collect-garbage -d
           nix store optimise
 
