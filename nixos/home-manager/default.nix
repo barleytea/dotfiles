@@ -31,9 +31,9 @@ in {
     "${shared}/home/yazi"
     "${shared}/home/zed"
     # OS 固有・差分ありモジュール
-    ./claude
+    "${shared}/home/claude"
     ./fcitx5
-    ./gemini
+    "${shared}/home/gemini"
     ./ghostty
     ./git
     ./hyprland

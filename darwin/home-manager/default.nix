@@ -34,8 +34,8 @@ in {
     ./aerospace
     ./cmux
     ./borders
-    ./claude
-    ./gemini
+    "${shared}/home/claude"
+    "${shared}/home/gemini"
     ./ghostty
     ./git
     ./mise

@@ -2,8 +2,8 @@
 
 let
   dotfilesPath = "${config.home.homeDirectory}/git_repos/github.com/barleytea/dotfiles";
-  claudeConfigPath = "${dotfilesPath}/nixos/home-manager/claude/config";
-  geminiConfigPath = "${dotfilesPath}/nixos/home-manager/gemini/config";
+  claudeConfigPath = "${dotfilesPath}/modules/home/claude/config";
+  geminiConfigPath = "${dotfilesPath}/modules/home/gemini/config";
 in
 {
   home.activation.creategeminiSymlinks = lib.hm.dag.entryAfter ["writeBoundary"] ''

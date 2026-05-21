@@ -2,7 +2,7 @@
 
 let
   dotfilesPath = "${config.home.homeDirectory}/git_repos/github.com/barleytea/dotfiles";
-  claudeConfigPath = "${dotfilesPath}/darwin/home-manager/claude/config";
+  claudeConfigPath = "${dotfilesPath}/modules/home/claude/config";
   ghConfigBase = pkgs.writeText "gh-config" ''
     version: 1
     git_protocol: https
