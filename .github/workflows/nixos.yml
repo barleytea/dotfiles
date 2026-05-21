@@ -52,20 +52,7 @@ jobs:
         run: |
           export NIX_CONFIG="access-tokens = github.com=$GITHUB_TOKEN"
           cd nixos
-
-          echo "Disk space before NixOS build:"
-          df -h
-
-          nix build path:.#nixosConfigurations.desktop.config.system.build.toplevel --impure --no-write-lock-file --override-input nixvim-config "$NIXVIM_CONFIG_INPUT" --override-input dotfiles-shared "$DOTFILES_SHARED_INPUT"
-
-          echo "Disk space after NixOS build:"
-          df -h
-
-          nix-collect-garbage -d
-          nix store optimise
-
-          echo "Disk space after NixOS cleanup:"
-          df -h
+          nix build path:.#nixosConfigurations.desktop.config.system.build.toplevel --dry-run --impure --no-write-lock-file --override-input nixvim-config "$NIXVIM_CONFIG_INPUT" --override-input dotfiles-shared "$DOTFILES_SHARED_INPUT"
 
       - name: Check nixvim configuration
         env:
@@ -73,17 +60,4 @@ jobs:
         run: |
           export NIX_CONFIG="access-tokens = github.com=$GITHUB_TOKEN"
           cd nixvim
-
-          echo "Disk space before nixvim build:"
-          df -h
-
-          nix build .#packages.x86_64-linux.default --impure --no-write-lock-file
-
-          echo "Disk space after nixvim build:"
-          df -h
-
-          nix-collect-garbage -d
-          nix store optimise
-
-          echo "Disk space after nixvim cleanup:"
-          df -h
+          nix build .#packages.x86_64-linux.default --dry-run --impure --no-write-lock-file
