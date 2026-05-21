@@ -48,6 +48,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NIXVIM_CONFIG_INPUT: path:${{ github.workspace }}/nixvim
+          DOTFILES_SHARED_INPUT: path:${{ github.workspace }}/modules
         run: |
           export NIX_CONFIG="access-tokens = github.com=$GITHUB_TOKEN"
           cd nixos
@@ -55,7 +56,7 @@ jobs:
           echo "Disk space before NixOS build:"
           df -h
 
-          nix build path:.#nixosConfigurations.desktop.config.system.build.toplevel --impure --no-write-lock-file --override-input nixvim-config "$NIXVIM_CONFIG_INPUT"
+          nix build path:.#nixosConfigurations.desktop.config.system.build.toplevel --impure --no-write-lock-file --override-input nixvim-config "$NIXVIM_CONFIG_INPUT" --override-input dotfiles-shared "$DOTFILES_SHARED_INPUT"
 
           echo "Disk space after NixOS build:"
           df -h

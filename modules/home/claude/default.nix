@@ -78,7 +78,10 @@ let
     [ ghAuthSection ]
     tpl;
 
-  renderedAgents = pkgs.writeText "claude-AGENTS.md" (renderTemplate "${claudeConfigPath}/AGENTS.md");
+  # 評価時にテンプレートを読むためのパスは、モジュール自身の相対パス
+  # （Nix store にコピーされる）を使う。ランタイムのシンボリックリンク先は
+  # `claudeConfigPath`（ユーザのワーキングコピー）のまま据え置く。
+  renderedAgents = pkgs.writeText "claude-AGENTS.md" (renderTemplate (./config/AGENTS.md));
 in
 {
   home.activation.setupGhConfigDir = lib.hm.dag.entryAfter ["writeBoundary"] ''

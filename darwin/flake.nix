@@ -17,7 +17,7 @@
       flake = true;
     };
     dotfiles-shared = {
-      # 共通 HM モジュール群（OS 横断の素モジュール）
+      # 共通 HM モジュール群（modules/ 以下を直接参照）
       url = "git+file:..?dir=modules";
       flake = false;
     };
