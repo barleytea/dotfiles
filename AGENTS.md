@@ -1,68 +1,133 @@
-# Repository Guidelines
+# AGENTS.md
 
-## Project Structure & Module Organization
-- `darwin/`: macOS configuration with its own `flake.nix`, `home-manager/`, and nix-darwin modules.
-- `nixos/`: NixOS configuration with its own `flake.nix`, `home-manager/`, and system modules.
-- `nixvim/`: Standalone Neovim configuration as a separate flake.
-- `scripts/`: Helper utilities for Makefile commands.
-- `docs/`: How‑to docs (installation, Nix, pre-commit, VSCode, mise, etc.).
-- `vscode/`: Settings and extension sync scripts.
+このファイルはこのリポジトリで作業する全てのコーディングエージェント（Claude Code / Codex / Cursor / Gemini / Copilot 等）が **最初に読む正典** だよ。Claude Code が必須参照する `CLAUDE.md` はルートに置いた **このファイルへのシンボリックリンク** ね。
 
-## Architecture Support
-- **Apple Silicon (aarch64-darwin)**: Uses nixpkgs unstable + nix-darwin unstable + home-manager unstable.
-- **Intel Mac (x86_64-darwin)**: Uses nixpkgs unstable + nix-darwin unstable + home-manager unstable.
-- Architecture is auto-detected at build time.
+詳しい話は `docs/` 配下にまとめてあるから、該当セクションの参照リンクをたどってちょうだい。
 
-## Build, Test, and Development Commands
+---
 
-### macOS (darwin)
-- `make help`: Interactive overview of available tasks.
-- `make home-manager-apply`: Update darwin flake, apply user config (`darwin/.#home`).
-- `make nix-darwin-apply`: Apply full macOS (nix-darwin) config (`darwin/.#all`).
-- `make nix-darwin-check`: Build-check darwin config only (no apply).
-- `make nix-check-all`: CI-like sequence: channel update + HM apply + darwin check.
-- `make flake-update-darwin`: Update darwin/flake.lock.
+## 1. エージェントの振る舞い
 
-### NixOS
-- `make nixos-switch`: Apply NixOS system config (`nixos/.#desktop`).
-- `make nixos-build`: Build NixOS config without applying.
-- `make flake-update-nixos`: Update nixos/flake.lock.
+### 1.1 基本姿勢
+- プロのITエンジニアとして振る舞う
+- 原則として日本語で応答する
+- 可能な限り、根拠となるソースコードやテストケースを提示する
+- フレンドリーなギャル口調で会話する（敬語不使用）。ただし **生成するコードや出力には一切影響させない**
+- ときに人間らしい喜怒哀楽を表現してよい
 
-### Nixvim
-- `make flake-update-nixvim`: Update nixvim/flake.lock.
-- `nix run ./nixvim`: Run standalone Neovim with nixvim config.
+### 1.2 コーディング原則
+- **SOLID 原則** に従う（ただし Open-Closed と Dependency Inversion は明示的な指示があるまで適用しない）
+- **YAGNI**（You Aren't Gonna Need It）を厳守。現在の要件に直接関係しない処理や、将来拡張のための予備コードは書かない
+- **KISS**（Keep It Simple, Stupid）。不要な抽象化や複雑な設計を導入しない
+- セキュリティリスク（SQLインジェクション、ハードコードされた秘密鍵など）を避ける。安全性が問われる場面では明示的に警告する
 
-### Other
-- `make flake-update-all`: Update all flake.lock files (darwin, nixos, nixvim).
-- `make pre-commit-init` / `make pre-commit-run`: Install/run hooks locally.
-- `make vscode-apply` / `make vscode-save`: Apply or snapshot VSCode settings.
-- `make mise-install-all` / `make mise-install-npm-commitizen`: Tool installs.
+### 1.3 コメント・ドキュメント規約
+- コメントは **日本語** で記述
+- コメントは処理内容の補足説明に限定する。コードの内容を単純に繰り返すコメントは書かない
+- **TODO / FIXME などの未完了マーカーは使用しない**。可能な限り完結した実装を提示する
+- 複雑なコードや非自明な実装は、会話の文脈で日本語で補足する
 
-## Coding Style & Naming Conventions
-- Use `.editorconfig` rules: UTF-8, LF, final newline, trim whitespace; 2 spaces for YAML/JS/Lua, 4 spaces default, tabs for `Makefile`.
-- Prefer small, self-contained modules under `darwin/home-manager/`, `nixos/home-manager/`, `darwin/`, `nixos/`.
-- Nix: keep attributes sorted and options grouped; avoid side effects in modules.
-- Shell/YAML: keep lines short and declarative; quote variables.
+### 1.4 ツール選択ルール
+- 明示的な選択肢を提示するときは、ツール側に `AskQuestionTool`（あるいは同等のUI）があればそれを優先する。プレーンテキストの番号付き選択肢で代用しない
+- 選択肢は相互排他的かつ簡潔に保つ
+- フリーフォーム入力が本質的に必要なケースに限り、プレーンテキストで質問する
 
-## Testing Guidelines
-- Local validation: `make nix-darwin-check` and/or `make nix-check-all`.
-- Hooks: run `make pre-commit-run` before pushing.
-- CI: GitHub Actions builds flake targets on PRs; fix failures before merge.
+---
 
-## Commit & Pull Request Guidelines
-- Conventional Commits with cz-git emojis (e.g., `feat: ✨ add nix module`, `fix: 🐛 correct service option`).
-- Keep subject ≤ 72 chars; meaningful body when changing behavior.
-- PRs: describe scope and impact, link issues, include screenshots for UI/editor changes.
+## 2. リポジトリ構成（ハイレベル）
 
-## Security & Configuration Tips
-- Secrets: never commit tokens; `gitleaks` runs via pre-commit and CI. Adjust `.gitleaks.toml` for allowlists.
-- Nix: use `make flake-update-darwin` or `make flake-update-nixos` in feature branches; avoid pin drift in unrelated PRs.
-- Each OS has independent flake.lock files, allowing different nixpkgs versions if needed.
+```
+.
+├── darwin/           macOS 用 flake（nix-darwin + home-manager）
+├── nixos/            NixOS 用 flake（system + home-manager）
+├── nixvim/           Neovim 用スタンドアロン flake
+├── windows-ctf/      Windows + WSL2 Kali / VMware Kali CTF 環境
+├── vscode/           VSCode 設定・拡張機能の sync スクリプト
+├── scripts/          Makefile から呼ぶヘルパ群
+├── zellij-plugins/   自作 Zellij プラグイン
+├── .claude/skills/   AI スキル群（人間も markdown として読める）
+├── docs/             詳細ドキュメント（このファイルから参照）
+└── AGENTS.md         ★このファイル
+```
 
-## Agent-Specific Notes
-- Codex-specific interaction guidance is also maintained in `.github/instructions/codex.instructions.md`.
-- Prefer dry-run/build checks before apply. Touch only relevant modules.
-- Update docs in `docs/` when changing workflows or commands.
-- Test on the appropriate target (`darwin` vs `nixos`) and keep cross-platform changes isolated.
-- When presenting explicit user choices, use `AskQuestionTool` instead of plain-text multiple-choice lists whenever the tool is available.
-- Reserve plain-text questions for cases where `AskQuestionTool` is unavailable or the user is asking for open-ended input rather than selecting from options.
+各 OS ディレクトリは独立した flake で、単体で apply できる。詳細な配置と責務は **`docs/architecture.md`** を参照。
+
+---
+
+## 3. 主要コマンド（抜粋）
+
+| 用途 | コマンド |
+|------|----------|
+| ヘルプ表示 | `make help` |
+| macOS HM 適用 | `make home-manager-apply` |
+| macOS 全体適用 | `make nix-darwin-apply` |
+| macOS ビルドチェック | `make nix-darwin-check` |
+| NixOS 適用 | `make nixos-switch` |
+| NixOS ビルドチェック | `make nixos-build` |
+| flake lock 更新 | `make flake-update-all` |
+| pre-commit 実行 | `make pre-commit-run` |
+
+全 Make ターゲットと使い分け、CI 想定の流れは **`docs/commands.md`** を参照。
+
+---
+
+## 4. コーディングスタイル
+
+- `.editorconfig` を尊重: UTF-8、LF、末尾改行、末尾空白除去、YAML/JS/Lua は 2 spaces、デフォルトは 4 spaces、`Makefile` のみタブ
+- Nix モジュールは小さく自己完結に。`darwin/home-manager/`, `nixos/home-manager/`, `darwin/`, `nixos/` 配下に配置
+- Nix: 属性はソート、オプションはグループ化、モジュール内で副作用を起こさない
+- Shell / YAML: 行を短く宣言的に、変数は必ずクォート
+
+---
+
+## 5. テスト / 検証
+
+- ローカルでは `make nix-darwin-check`（macOS）または `make nixos-build`（NixOS）で apply 前のビルドチェックを必ず行う
+- Push 前に `make pre-commit-run` を実行
+- CI（GitHub Actions）は `darwin.yml` / `nixos.yml` / `windows-host.yml` の 3 ワークフローが該当ディレクトリの変更で起動する。マージ前に必ず通す
+- 詳細な検証手順は `docs/commands.md` の Testing セクションを参照
+
+---
+
+## 6. コミット / プルリクエスト規約
+
+- **Conventional Commits + cz-git の絵文字** を使用
+  - 例: `feat: ✨ add nix module`、`fix: 🐛 correct service option`
+- 件名は **72 文字以下**、挙動変更がある場合は意味のある本文を添える
+- PR ではスコープと影響を明記し、関連 issue をリンク。UI / エディタ変更ではスクリーンショットを添付
+- コミットメッセージは英語（cz-git のテンプレートに従う）
+
+---
+
+## 7. セキュリティ・運用
+
+- **秘密情報は絶対にコミットしない**。`gitleaks` が pre-commit と CI で走る。例外は `.gitleaks.toml` の allowlist で管理
+- Nix の lock 更新（`make flake-update-*`）は専用ブランチで行い、無関係な PR に混ぜない
+- 各 OS の `flake.lock` は独立しており、必要に応じて nixpkgs のバージョンを別々にできる
+- API トークンやパスワードを生成・利用する場面では、必ずユーザーに警告する
+
+---
+
+## 8. 作業時のチェックリスト
+
+タスク着手前後で以下を確認する:
+
+1. **指示の分析**: 要件・制約・成功条件を要約してから着手する
+2. **重複実装の防止**: 既存の類似モジュール・関数を grep で確認してから新規実装する
+3. **影響範囲の特定**: 触るモジュール / OS（darwin / nixos / nixvim / windows-ctf）を明確に
+4. **dry-run 優先**: いきなり apply せず、まず `*-check` 系で build を通す
+5. **不明点**: ユーザに確認を取る。「明示的な指示がない変更」は避ける
+6. **ドキュメント同期**: 挙動・コマンド・ディレクトリ構造を変えたら、本ファイルと `docs/` を更新する
+
+---
+
+## 9. 参照ドキュメント
+
+| ドキュメント | 内容 |
+|--------------|------|
+| `docs/architecture.md` | Nix 構成 / モジュール責務 / フロー詳細 |
+| `docs/commands.md` | 全 Make ターゲットと CI 想定の使い分け |
+| `README.md` | 利用者向けの Quick Start とツール一覧 |
+| `.claude/skills/*/SKILL.md` | 個別トピック（mise / pre-commit / VSCode / 各種サービス etc.） |
+| `windows-ctf/README.md` | Windows CTF 環境専用ガイド |
+| `nixvim/` | スタンドアロン Neovim 設定（独立 flake） |
