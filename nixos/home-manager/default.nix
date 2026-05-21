@@ -34,8 +34,8 @@ in {
     "${shared}/home/claude"
     ./fcitx5
     "${shared}/home/gemini"
+    "${shared}/home/git"
     ./ghostty
-    ./git
     ./hyprland
     ./mise
     ./shell
