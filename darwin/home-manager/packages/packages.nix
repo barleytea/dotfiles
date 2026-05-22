@@ -27,6 +27,7 @@
   mecab
   mise
   mosh
+  multitail
   # mpv  # Temporarily disabled due to Swift build failure in nixpkgs unstable
   nerd-fonts.hack
   obsidian

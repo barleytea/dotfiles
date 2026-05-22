@@ -155,6 +155,7 @@ gitIgnore = ''
   .ai/
   .kiro/
   .DS_Store
+  .envrc
 '';
 
 in {

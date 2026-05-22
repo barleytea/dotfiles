@@ -33,6 +33,11 @@ in {
       # 4. Alias settings
       "zsh/config/900-aliases.zsh".source = ./config/aliases.zsh;
 
+      # direnv global stdlib: .envrc がある任意のディレクトリで .env を自動ロード
+      "direnv/direnvrc".text = ''
+        dotenv_if_exists
+      '';
+
       # 5. .zshrc は activation script で書き込み可能なファイルとして配置
       #    (safe-chain setup が書き込めるよう symlink ではなく実ファイルにする)
     };
