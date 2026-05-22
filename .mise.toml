@@ -1,4 +1,3 @@
 [tools]
 node = "lts"
-"npm:@openai/codex" = "0.114.0"
-python = "latest"
+python = "3.13"

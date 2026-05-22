@@ -1,7 +1,7 @@
 [tools]
 node = "lts"
 go = "1.24.5"
-python = "3.13"
+python = "system"
 # renovate: datasource=github-releases depName=aws/aws-cli
 awscli = "2.22.28"
 # Pin npm CLIs so CI remains reproducible and npm min-release-age stays effective.
@@ -18,9 +18,6 @@ awscli = "2.22.28"
 experimental = true
 plugin_autoupdate_last_check_duration = "7 days"
 trusted_config_paths = ["~"]
-
-[settings.python]
-precompiled_flavor = "install_only"
 
 [tasks.npm-commitizen]
 description = "Install commitizen and cz-git globally"
