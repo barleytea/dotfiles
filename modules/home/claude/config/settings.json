@@ -96,7 +96,8 @@
       "Bash(npx tsc:*)",
       "Bash(npx tsx:*)",
       "Bash(npx vitest:*)",
-      "Bash(npx cdk synth:*)"
+      "Bash(npx cdk synth:*)",
+      "mcp__pencil"
     ],
     "deny": [
       "Bash(git commit:*)",
