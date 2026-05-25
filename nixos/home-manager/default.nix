@@ -11,7 +11,7 @@
     prefix=${config.home.homeDirectory}/.npm-global
     min-release-age=7
   '';
-  shared = inputs.dotfiles-shared;
+  shared = "${inputs.dotfiles-shared}/modules";
 in {
 
   # nixpkgs config is supplied by the caller (NixOS flake sets allowUnfree)
@@ -40,6 +40,7 @@ in {
     "${shared}/home/mise"
     ./shell
     "${shared}/home/zellij"
+    ./agent-sin
   ];
 
   home = {
