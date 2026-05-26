@@ -11,7 +11,7 @@
     prefix=${config.home.homeDirectory}/.npm-global
     min-release-age=7
   '';
-  shared = "${inputs.dotfiles-shared}/modules";
+  shared = "${inputs.dotfiles-shared}";
 in {
 
   # nixpkgs config is supplied by the caller (darwin flake sets allowUnfree)
