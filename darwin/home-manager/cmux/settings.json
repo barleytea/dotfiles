@@ -1,0 +1,56 @@
+{
+  "$schema": "https://raw.githubusercontent.com/manaflow-ai/cmux/main/web/data/cmux-settings.schema.json",
+  "schemaVersion": 1,
+
+  "app": {
+    "appearance": "dark",
+    "newWorkspacePlacement": "afterCurrent",
+    "reorderOnNotification": false,
+    "warnBeforeQuit": false
+  },
+
+  "sidebar": {
+    "branchLayout": "vertical",
+    "showBranchDirectory": true,
+    "showCustomMetadata": true,
+    "showLog": true,
+    "showNotificationMessage": true,
+    "showPorts": true,
+    "showProgress": true,
+    "showPullRequests": true,
+    "showSSH": true,
+    "openPortLinksInCmuxBrowser": true,
+    "openPullRequestLinksInCmuxBrowser": true
+  },
+
+  "workspaceColors": {
+    "colors": {
+      "DraculaGreen":   "#50FA7B",
+      "DraculaCyan":    "#8BE9FD",
+      "DraculaPink":    "#FF79C6",
+      "DraculaPurple":  "#BD93F9",
+      "DraculaYellow":  "#F1FA8C",
+      "DraculaOrange":  "#FFB86C",
+      "DraculaComment": "#6272A4",
+      "DraculaRed":     "#FF5555"
+    },
+    "indicatorStyle": "leftRail"
+  },
+
+  "sidebarAppearance": {
+    "matchTerminalBackground": true
+  },
+
+  "browser": {
+    "defaultSearchEngine": "google",
+    "interceptTerminalOpenCommandInCmuxBrowser": true,
+    "openTerminalLinksInCmuxBrowser": true
+  },
+
+  "notifications": {
+    "dockBadge": true,
+    "paneFlash": true,
+    "showInMenuBar": true,
+    "unreadPaneRing": true
+  }
+}

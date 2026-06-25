@@ -39,6 +39,16 @@ set -euo pipefail
 CMUX="/Applications/cmux.app/Contents/Resources/bin/cmux"
 DIFIT_PORT="${DIFIT_PORT:-4966}"
 
+# ── Dracula color palette ─────────────────────────────────────────
+RESET='\033[0m'
+BOLD='\033[1m'
+FG_GREEN='\033[38;2;80;250;123m'    # #50FA7B
+FG_CYAN='\033[38;2;139;233;253m'    # #8BE9FD
+FG_PURPLE='\033[38;2;189;147;249m'  # #BD93F9
+FG_YELLOW='\033[38;2;241;250;140m'  # #F1FA8C
+FG_ORANGE='\033[38;2;255;184;108m'  # #FFB86C
+FG_COMMENT='\033[38;2;98;114;164m'  # #6272A4
+
 extract_json_value() {
     local json="$1"
     local key="$2"
@@ -86,9 +96,9 @@ do
 done
 
 if [[ -z "$targetDir" ]]; then
-    echo "Error: Could not detect a git repository from cmux sidebar-state or \$PWD" >&2
+    printf "${FG_ORANGE}${BOLD}✗ Error:${RESET} Could not detect a git repository from cmux sidebar-state or \$PWD\n" >&2
     if [[ -n "$sidebarStateText" ]]; then
-        echo "cmux sidebar-state:" >&2
+        printf "${FG_COMMENT}cmux sidebar-state:${RESET}\n" >&2
         echo "$sidebarStateText" >&2
     fi
     "$CMUX" notify --title "Difit" --body "No git repository detected from cmux pane"
@@ -100,7 +110,7 @@ cd "$targetDir"
 # Provide immediate feedback so the user knows the script is running
 "$CMUX" notify --title "Difit" --body "Loading diff: $targetDir"
 
-echo "🔍 Detecting git state..."
+printf "${FG_CYAN}${BOLD}🔍 Detecting git state...${RESET}\n"
 
 currentBranch=$(git rev-parse --abbrev-ref HEAD)
 
@@ -126,7 +136,7 @@ trap kill_difit EXIT INT TERM
 
 difitArgs=(--mode unified --no-open --clean --include-untracked --port "$DIFIT_PORT")
 
-echo "🚀 Starting difit server..."
+printf "${FG_GREEN}${BOLD}🚀 Starting difit server...${RESET}\n"
 
 if [[ -z "$defaultBranch" ]] || [[ "$currentBranch" == "${defaultBranch#origin/}" ]]; then
     # On the default branch or no remote — diff working directory against HEAD
@@ -137,7 +147,7 @@ else
         # Fallback if merge-base cannot be determined
         difit working "${difitArgs[@]}" &
     else
-        echo "🔀 Branch: $currentBranch (base: ${defaultBranch#origin/})"
+        printf "${FG_PURPLE}🔀 Branch:${RESET} ${FG_GREEN}${currentBranch}${RESET} ${FG_COMMENT}(base: ${FG_YELLOW}${defaultBranch#origin/}${RESET}${FG_COMMENT})${RESET}\n"
         difit . "$mergeBase" "${difitArgs[@]}" &
     fi
 fi
@@ -149,7 +159,7 @@ until curl -s "http://localhost:${DIFIT_PORT}/" > /dev/null 2>&1; do
     sleep 0.5
     _difit_waited=$(( _difit_waited + 1 ))
     if (( _difit_waited >= _difit_wait_timeout * 2 )); then
-        echo "Error: difit server did not start within ${_difit_wait_timeout}s" >&2
+        printf "${FG_ORANGE}${BOLD}✗ Error:${RESET} difit server did not start within ${_difit_wait_timeout}s\n" >&2
         exit 1
     fi
 done
@@ -158,7 +168,7 @@ done
 browserSurface=$("$CMUX" --json browser open-split "http://localhost:${DIFIT_PORT}/" | jq -r '.surface_ref // empty')
 
 if [[ -z "$browserSurface" ]]; then
-    echo "Warning: Could not get browser surface ID, difit server running in background" >&2
+    printf "${FG_YELLOW}${BOLD}⚠  Warning:${RESET} Could not get browser surface ID, difit server running in background\n" >&2
     wait
     exit 0
 fi
@@ -170,7 +180,7 @@ while "$CMUX" surface-health 2>&1 | grep -q "$browserSurface"; do
     sleep 1
     _browser_watched=$(( _browser_watched + 1 ))
     if (( _browser_watched >= _browser_watch_timeout )); then
-        echo "Warning: browser watch timed out after 8h, shutting down difit" >&2
+        printf "${FG_YELLOW}${BOLD}⚠  Warning:${RESET} browser watch timed out after 8h, shutting down difit\n" >&2
         break
     fi
 done

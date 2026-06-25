@@ -2,7 +2,13 @@
   "permissions": {
     "allow": [
       "WebFetch(domain:zenn.dev)",
-      "Skill(generate-commit-msg)"
+      "Skill(generate-commit-msg)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:draculatheme.com)",
+      "WebSearch",
+      "WebFetch(domain:cmux.app)",
+      "WebFetch(domain:cmux.com)",
+      "WebFetch(domain:manaflow-ai-cmux.mintlify.app)"
     ],
     "deny": []
   },

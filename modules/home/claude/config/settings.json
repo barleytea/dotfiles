@@ -3,62 +3,6 @@
     "EDITOR": "nvim",
     "GH_CONFIG_DIR": "~/.config/github-cli"
   },
-  "sandbox": {
-    "enabled": true,
-    "enableWeakerNetworkIsolation": true,
-    "autoAllowBashIfSandboxed": true,
-    "excludedCommands": [
-      "docker",
-      "gh",
-      "security"
-    ],
-    "allowUnsandboxedCommands": false,
-    "filesystem": {
-      "read": {
-        "denyOnly": [
-          "/var/run/docker.sock",
-          ".env*",
-          "*.env",
-          "*credential*",
-          "*.pem",
-          "*.key",
-          "*.secret"
-        ],
-        "allowLocalBinding": true
-      },
-      "write": {
-        "allowOnly": [
-          ".",
-          "/tmp/claude",
-          "/private/tmp/claude",
-          "/dev/stdout",
-          "/dev/stderr",
-          "/dev/null"
-        ],
-        "denyWithinAllow": [
-          ".claude/settings.json",
-          ".claude/settings.local.json"
-        ]
-      }
-    },
-    "network": {
-      "allowedDomains": [
-        "github.com",
-        "api.github.com",
-        "raw.githubusercontent.com",
-        "objects.githubusercontent.com",
-        "cache.nixos.org",
-        "nixos.org",
-        "search.nixos.org",
-        "registry.npmjs.org",
-        "nodejs.org",
-        "*.googleapis.com",
-        "*.pkg.dev",
-        "*.amazonaws.com",
-        "*.aws.amazon.com"
-      ]
-    }
-  },
   "permissions": {
     "allow": [
       "Bash(git log:*)",
@@ -104,16 +48,7 @@
       "Bash(git push:*)"
     ]
   },
-  "model": "opusplan",
-  "permissionMode": "plan",
-  "statusLine": {
-    "type": "command",
-    "command": "~/.claude/statusline.sh",
-    "padding": 1
-  },
-  "enabledPlugins": {},
-  "language": "Japanese",
-  "effortLevel": "medium",
+  "model": "opus",
   "hooks": {
     "PreToolUse": [
       {
@@ -137,5 +72,43 @@
         ]
       }
     ]
-  }
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/statusline.sh",
+    "padding": 1
+  },
+  "enabledPlugins": {},
+  "language": "Japanese",
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": true,
+    "allowUnsandboxedCommands": false,
+    "network": {
+      "allowedDomains": [
+        "github.com",
+        "api.github.com",
+        "raw.githubusercontent.com",
+        "objects.githubusercontent.com",
+        "cache.nixos.org",
+        "nixos.org",
+        "search.nixos.org",
+        "registry.npmjs.org",
+        "nodejs.org",
+        "*.googleapis.com",
+        "*.pkg.dev",
+        "*.amazonaws.com",
+        "*.aws.amazon.com"
+      ]
+    },
+    "filesystem": {},
+    "enableWeakerNetworkIsolation": true,
+    "excludedCommands": [
+      "docker",
+      "gh",
+      "security"
+    ]
+  },
+  "effortLevel": "xhigh",
+  "permissionMode": "plan"
 }
