@@ -126,7 +126,7 @@ CI は `windows-host.yml` が `bash -n` で構文チェック + ダミー bootst
 
 | ワークフロー | トリガ | 内容 |
 |-------------|--------|------|
-| `.github/workflows/darwin.yml` | `darwin/`, `nixvim/`, `Makefile`, `vscode/`, `scripts/` | HM apply, mise install, nix-darwin build, nixvim build, `make nix-check-all-ci`, vscode apply/save |
+| `.github/workflows/darwin.yml` | `darwin/`, `nixvim/`, `Makefile`, `vscode/`, `scripts/` | HM activation package build, nix-darwin build, nixvim build |
 | `.github/workflows/nixos.yml` | `nixos/`, `nixvim/` | NixOS toplevel build, nixvim build（GC 挟む） |
 | `.github/workflows/windows-host.yml` | `windows-ctf/` | bash 構文チェック + setup スクリプトのドライラン |
 

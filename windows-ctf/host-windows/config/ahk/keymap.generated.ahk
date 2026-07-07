@@ -137,4 +137,3 @@ ValidateCapsCtrlState() {
 !s::RunWait 'komorebic resize-axis vertical increase', , 'Hide'
 
 ; Win->Ctrl remap disabled in this profile.
-

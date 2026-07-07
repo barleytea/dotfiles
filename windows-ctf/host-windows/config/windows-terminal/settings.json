@@ -1,10 +1,10 @@
 {
     "$help": "https://aka.ms/terminal-documentation",
     "$schema": "https://aka.ms/terminal-profiles-schema",
-    "actions": 
+    "actions":
     [
         {
-            "command": 
+            "command":
             {
                 "action": "splitPane",
                 "split": "right"
@@ -13,7 +13,7 @@
             "keys": "ctrl+d"
         },
         {
-            "command": 
+            "command":
             {
                 "action": "splitPane",
                 "split": "down"
@@ -29,24 +29,24 @@
     ],
     "copyOnSelect": true,
     "defaultProfile": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
-    "newTabMenu": 
+    "newTabMenu":
     [
         {
             "type": "remainingProfiles"
         }
     ],
-    "profiles": 
+    "profiles":
     {
-        "defaults": 
+        "defaults":
         {
             "bellStyle": "none",
-            "font": 
+            "font":
             {
                 "face": "Hack Nerd Font",
                 "size": 10
             }
         },
-        "list": 
+        "list":
         [
             {
                 "guid": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",

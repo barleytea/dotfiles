@@ -206,5 +206,6 @@
   "claudeCode.selectedModel": "sonnet",
   "claudeCode.preferredLocation": "panel",
   "chat.viewSessions.orientation": "stacked",
-  "workbench.browser.enableChatTools": true
+  "workbench.browser.enableChatTools": true,
+  "window.autoDetectColorScheme": false
 }

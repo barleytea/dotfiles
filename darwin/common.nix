@@ -1,13 +1,7 @@
 # nix-darwin 共通設定
 { ... }: {
-  nix = {
-    optimise.automatic = true;
-    settings = {
-      experimental-features = "nix-command flakes";
-      max-jobs = 8;
-      trusted-users = [ "root" "miyoshi_s" ];
-    };
-  };
+  # Determinate Nix を使用しているため nix-darwin の Nix 管理を無効化
+  nix.enable = false;
 
   # nix-darwinの新しいバージョン(unstable)で必須項目（homebrew、system.defaults等に必要）
   # ローカル環境、CI環境のどちらでも動作するように環境変数から取得

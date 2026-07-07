@@ -48,7 +48,6 @@
       "Bash(git push:*)"
     ]
   },
-  "model": "sonnet",
   "hooks": {
     "PreToolUse": [
       {

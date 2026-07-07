@@ -62,9 +62,10 @@ use-xdg-base-directories = true
 
 1. restart nix-daemon
 
+Determinate Systems の Nix は modern launchd で管理されるため、`kickstart` を使う（`unload`/`load` は非対応）。
+
 ```sh
-sudo launchctl unload /Library/LaunchDaemons/org.nixos.nix-daemon.plist
-sudo launchctl load /Library/LaunchDaemons/org.nixos.nix-daemon.plist
+sudo launchctl kickstart -k system/systems.determinate.nix-daemon
 ```
 
 ## 5. Update nix channel

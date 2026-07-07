@@ -17,7 +17,7 @@
 | `make nix-darwin-check` | ビルドチェックのみ | ❌ |
 | `make nix-update-all` | チャンネル更新 + HM apply + nix-darwin apply | ✅ |
 | `make nix-check-all` | チャンネル更新 + HM apply + nix-darwin check（ローカル CI 相当） | ✅ |
-| `make nix-check-all-ci` | チャンネル更新 + HM switch + nix-darwin check（CI 用、lock 更新なし） | ❌ |
+| `make nix-check-all-ci` | チャンネル更新 + HM switch + nix-darwin check（旧 CI 互換、lock 更新なし） | ❌ |
 
 > ⚠️ `home-manager-apply` は内部で `flake-update-darwin` を呼ぶ副作用がある（lock を必ず更新する）。lock を変えたくないときは `make home-manager-switch` を使うこと。
 
@@ -104,9 +104,11 @@ NixOS 側には `home-manager-apply` 相当のターゲットは無い（HM は 
 
 | シナリオ | ローカル | CI |
 |----------|----------|----|
-| macOS PR 検証 | `make nix-check-all` | `make nix-check-all-ci`（lock 更新を伴わない） |
+| macOS PR 検証 | `make nix-check-all` | HM activation package / nix-darwin / nixvim の `nix build` を個別に直接実行 |
 | NixOS PR 検証 | `make nixos-build` | `nix build path:.#nixosConfigurations.desktop.config.system.build.toplevel ...` を直接実行 |
 | nixvim PR 検証 | `nix build ./nixvim` | `nix build .#packages.<system>.default --no-write-lock-file` |
+
+GitHub Actions の darwin CI は長時間化を避けるため、`make nix-check-all-ci` は使わず、実適用や `mise install` を伴わないビルド確認に絞る。
 
 ## 12. 検証のおすすめフロー
 

@@ -36,4 +36,3 @@ in {
     MISE_CACHE_DIR = "${config.xdg.cacheHome}/mise";
   };
 }
-
