@@ -40,7 +40,7 @@ jobs:
           configure-global-nixconf: "true"
           add-channel: "false"
 
-      - name: Build home-manager activation package
+      - name: Build CI home-manager activation package
         timeout-minutes: 45
         shell: zsh {0}
         env:
@@ -51,7 +51,7 @@ jobs:
           export USER=runner
           source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
           cd darwin
-          nix build path:.#homeConfigurations.home.activationPackage --impure --no-write-lock-file --override-input nixvim-config "$NIXVIM_CONFIG_INPUT" --override-input dotfiles-shared "$DOTFILES_SHARED_INPUT"
+          nix build path:.#homeConfigurations.ci.activationPackage --impure --no-write-lock-file --override-input nixvim-config "$NIXVIM_CONFIG_INPUT" --override-input dotfiles-shared "$DOTFILES_SHARED_INPUT"
 
       - name: Check nix-darwin configuration
         timeout-minutes: 60

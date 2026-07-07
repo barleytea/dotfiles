@@ -104,11 +104,11 @@ NixOS 側には `home-manager-apply` 相当のターゲットは無い（HM は 
 
 | シナリオ | ローカル | CI |
 |----------|----------|----|
-| macOS PR 検証 | `make nix-check-all` | HM activation package / nix-darwin / nixvim の `nix build` を個別に直接実行 |
+| macOS PR 検証 | `make nix-check-all` | HM CI activation package / nix-darwin / nixvim の `nix build` を個別に直接実行 |
 | NixOS PR 検証 | `make nixos-build` | `nix build path:.#nixosConfigurations.desktop.config.system.build.toplevel ...` を直接実行 |
 | nixvim PR 検証 | `nix build ./nixvim` | `nix build .#packages.<system>.default --no-write-lock-file` |
 
-GitHub Actions の darwin CI は長時間化を避けるため、`make nix-check-all-ci` は使わず、実適用や `mise install` を伴わないビルド確認に絞る。
+GitHub Actions の darwin CI は長時間化を避けるため、`make nix-check-all-ci` は使わず、実適用や `mise install` を伴わないビルド確認に絞る。HM は `homeConfigurations.ci` を使い、GUI アプリなどの大型 `home.packages` をビルド対象から外す。
 
 ## 12. 検証のおすすめフロー
 

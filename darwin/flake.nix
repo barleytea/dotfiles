@@ -76,15 +76,24 @@
       inherit system;
       modules = modules;
     };
+
+    mkHomeConfig = modules: home-manager.lib.homeManagerConfiguration {
+      pkgs = nixpkgsWithOverlays;
+      extraSpecialArgs = { inherit inputs; };
+      modules = modules;
+    };
   in {
     homeConfigurations = {
-      home = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgsWithOverlays;
-        extraSpecialArgs = { inherit inputs; };
-        modules = [
-          ./home-manager/default.nix
-        ];
-      };
+      home = mkHomeConfig [
+        ./home-manager/default.nix
+      ];
+      ci = mkHomeConfig [
+        ./home-manager/default.nix
+        # CIでは設定評価を優先し、GUIアプリ等の大型パッケージはビルド対象から外す
+        ({lib, ...}: {
+          home.packages = lib.mkForce [];
+        })
+      ];
     };
 
     darwinConfigurations = {
