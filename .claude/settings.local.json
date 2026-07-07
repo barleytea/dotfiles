@@ -8,7 +8,9 @@
       "WebSearch",
       "WebFetch(domain:cmux.app)",
       "WebFetch(domain:cmux.com)",
-      "WebFetch(domain:manaflow-ai-cmux.mintlify.app)"
+      "WebFetch(domain:manaflow-ai-cmux.mintlify.app)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:herdr.dev)"
     ],
     "deny": []
   },

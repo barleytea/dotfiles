@@ -42,3 +42,7 @@ run = ["curl -fsSL https://github.com/AikidoSec/safe-chain/releases/latest/downl
 [tasks.safe-chain-setup]
 description = "Set up aikido safe-chain (CA cert + npm proxy)"
 run = ["safe-chain setup"]
+
+[tasks.herdr-install]
+description = "Install herdr agent multiplexer via official install script"
+run = ["curl -fsSL https://herdr.dev/install.sh | sh"]

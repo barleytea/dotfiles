@@ -35,7 +35,7 @@
           args = [
             "-l"
             "-c"
-            "${pkgs.zellij}/bin/zellij attach --create main"
+            "$HOME/.local/bin/herdr || exec zsh"
           ];
         };
       };

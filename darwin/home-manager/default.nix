@@ -34,6 +34,7 @@ in {
     ./aerospace
     ./cmux
     ./borders
+    ./herdr
     "${shared}/home/claude"
     "${shared}/home/gemini"
     "${shared}/home/git"
