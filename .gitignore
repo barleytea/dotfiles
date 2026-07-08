@@ -29,6 +29,9 @@ secret
 
 .cache/
 
+# Claude Code サンドボックスが作業ディレクトリ追加時に生成する内部スタブ
+nixos/.claude/
+
 # Docker
 docker/*/workspace/
 !docker/*/workspace/.gitkeep
