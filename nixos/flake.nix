@@ -21,6 +21,12 @@
       url = "github:modem-dev/hunk";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    agent-dangomushi = {
+      # dotfiles と同一マシン上にクローン済みのローカルリポジトリを直接参照する
+      # （GitHub 上で private/未push でも動く）
+      url = "git+file:///home/miyoshi_s/git_repos/github.com/barleytea/agent-dangomushi";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -30,6 +36,7 @@
     nixvim-config,
     dotfiles-shared,
     hunk,
+    agent-dangomushi,
   } @ inputs: let
     system = "x86_64-linux";
 

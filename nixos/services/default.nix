@@ -1,5 +1,5 @@
 # Services configuration
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   imports = [
@@ -7,6 +7,7 @@
     ./gitserver
     ./ollama
     ./tailscale
+    inputs.agent-dangomushi.nixosModules.default
   ];
 
   # System services
@@ -28,6 +29,12 @@
 
     # Firmware updates
     fwupd.enable = true;
+
+    # だんごむし Discord bot
+    agent-dangomushi = {
+      enable = true;
+      environmentFile = "/var/lib/agent-dangomushi/env";
+    };
   };
 
   # Enable Bluetooth

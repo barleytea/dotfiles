@@ -1,5 +1,26 @@
 {
   "nodes": {
+    "agent-dangomushi": {
+      "inputs": {
+        "flake-utils": "flake-utils",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1783496023,
+        "narHash": "sha256-fz9CGXYbyV3kPaNEy75k5deESTpGOlqf24QVvU3F1bg=",
+        "ref": "refs/heads/main",
+        "rev": "b72e0f94e8c39485ec4e81e9e985881c55911abf",
+        "revCount": 2,
+        "type": "git",
+        "url": "file:///home/miyoshi_s/git_repos/github.com/barleytea/agent-dangomushi"
+      },
+      "original": {
+        "type": "git",
+        "url": "file:///home/miyoshi_s/git_repos/github.com/barleytea/agent-dangomushi"
+      }
+    },
     "bun2nix": {
       "inputs": {
         "flake-parts": "flake-parts",
@@ -8,7 +29,7 @@
           "hunk",
           "nixpkgs"
         ],
-        "systems": "systems",
+        "systems": "systems_2",
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
@@ -79,6 +100,24 @@
       "original": {
         "owner": "hercules-ci",
         "repo": "flake-parts",
+        "type": "github"
+      }
+    },
+    "flake-utils": {
+      "inputs": {
+        "systems": "systems"
+      },
+      "locked": {
+        "lastModified": 1731533236,
+        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
         "type": "github"
       }
     },
@@ -192,7 +231,7 @@
           "nixvim-config",
           "nixpkgs"
         ],
-        "systems": "systems_2"
+        "systems": "systems_3"
       },
       "locked": {
         "lastModified": 1770630823,
@@ -231,6 +270,7 @@
     },
     "root": {
       "inputs": {
+        "agent-dangomushi": "agent-dangomushi",
         "dotfiles-shared": "dotfiles-shared",
         "home-manager": "home-manager",
         "hunk": "hunk",
@@ -254,6 +294,21 @@
       }
     },
     "systems_2": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
+    "systems_3": {
       "locked": {
         "lastModified": 1681028828,
         "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
