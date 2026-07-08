@@ -8,11 +8,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1783496023,
-        "narHash": "sha256-fz9CGXYbyV3kPaNEy75k5deESTpGOlqf24QVvU3F1bg=",
+        "lastModified": 1783500421,
+        "narHash": "sha256-GJzjV/IW6dE7XZkuPy4CA8S7PZn2+Vnj7+awyFCJuLc=",
         "ref": "refs/heads/main",
-        "rev": "b72e0f94e8c39485ec4e81e9e985881c55911abf",
-        "revCount": 2,
+        "rev": "7990bfedf2032d02f34206dcbf7c5a84255c379a",
+        "revCount": 3,
         "type": "git",
         "url": "file:///home/miyoshi_s/git_repos/github.com/barleytea/agent-dangomushi"
       },
@@ -50,11 +50,11 @@
       "flake": false,
       "locked": {
         "dir": "modules",
-        "lastModified": 1783496758,
-        "narHash": "sha256-aWvhboCxia9NQeOdh6TzyNfqmVjOs8I01jeWzyId3gE=",
+        "lastModified": 1783497159,
+        "narHash": "sha256-PBTCqnY7lk3zHgktFvPMhGveZv/hPH62PH0Iz+gtJIc=",
         "ref": "refs/heads/main",
-        "rev": "fd7236ab18b007b68d0a24056d8349fca153fc47",
-        "revCount": 541,
+        "rev": "8b40f4b1384a9af32293e7538ad6b96a385633a0",
+        "revCount": 543,
         "type": "git",
         "url": "file:.."
       },
@@ -255,11 +255,11 @@
       },
       "locked": {
         "dir": "nixvim",
-        "lastModified": 1783496758,
-        "narHash": "sha256-aWvhboCxia9NQeOdh6TzyNfqmVjOs8I01jeWzyId3gE=",
+        "lastModified": 1783497159,
+        "narHash": "sha256-PBTCqnY7lk3zHgktFvPMhGveZv/hPH62PH0Iz+gtJIc=",
         "ref": "refs/heads/main",
-        "rev": "fd7236ab18b007b68d0a24056d8349fca153fc47",
-        "revCount": 541,
+        "rev": "8b40f4b1384a9af32293e7538ad6b96a385633a0",
+        "revCount": 543,
         "type": "git",
         "url": "file:.."
       },
