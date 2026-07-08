@@ -17,6 +17,10 @@
       url = "git+file:..?dir=modules";
       flake = false;
     };
+    hunk = {
+      url = "github:modem-dev/hunk";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -25,6 +29,7 @@
     home-manager,
     nixvim-config,
     dotfiles-shared,
+    hunk,
   } @ inputs: let
     system = "x86_64-linux";
 

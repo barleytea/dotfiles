@@ -21,6 +21,10 @@
       url = "git+file:..?dir=modules";
       flake = false;
     };
+    hunk = {
+      url = "github:modem-dev/hunk";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -30,6 +34,7 @@
     nix-darwin,
     nixvim-config,
     dotfiles-shared,
+    hunk,
   } @ inputs: let
     darwinSystems = [
       "aarch64-darwin"

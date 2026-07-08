@@ -18,6 +18,7 @@ in {
 
   imports = [
     inputs.nixvim-config.homeManagerModules.default
+    inputs.hunk.homeManagerModules.default
     # 共通 HM モジュール（modules/home/ から）
     "${shared}/home/alacritty"
     "${shared}/home/atuin"
@@ -81,6 +82,17 @@ in {
       executable = true;
     };
 
+  };
+
+  programs.hunk = {
+    enable = true;
+    enableGitIntegration = true;
+    settings = {
+      theme = "auto";
+      mode = "auto";
+      vcs = "git";
+      line_numbers = true;
+    };
   };
 
   # .npmrc を実ファイルとして配置し、safe-chain や npm が追記できるようにする

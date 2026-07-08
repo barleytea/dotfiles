@@ -31,11 +31,11 @@ nix-channel-update: ## Nixチャンネルを最新に更新します
 ## ---- Flake Lock 操作 (細粒度アップデート) ---- ##
 flake-update-darwin: ## darwin/flake.lock の全入力を更新します
 	$(NIX_SOURCE_CMD) \
-	cd darwin && nix flake update
+	cd darwin && nix flake update --allow-dirty-locks
 
 flake-update-nixos: ## nixos/flake.lock の全入力を更新します
 	$(NIX_SOURCE_CMD) \
-	cd nixos && nix flake update
+	cd nixos && nix flake update --allow-dirty-locks
 
 flake-update-nixvim: ## nixvim/flake.lock の全入力を更新します
 	$(NIX_SOURCE_CMD) \
@@ -46,11 +46,11 @@ flake-update-all: flake-update-darwin flake-update-nixos flake-update-nixvim ## 
 ## ---- Home Manager Operations (macOS) ---- ##
 home-manager-switch: ## Home Manager設定を適用 (flake.lock を更新しない)
 	$(NIX_SOURCE_CMD) \
-	cd darwin && nix build path:.#homeConfigurations.home.activationPackage --impure --no-write-lock-file --override-input nixvim-config "$(NIXVIM_CONFIG_INPUT)" --override-input dotfiles-shared "$(DOTFILES_SHARED_INPUT)" && ./result/activate
+	cd darwin && nix build path:.#homeConfigurations.home.activationPackage --impure --no-write-lock-file --allow-dirty-locks --override-input nixvim-config "$(NIXVIM_CONFIG_INPUT)" --override-input dotfiles-shared "$(DOTFILES_SHARED_INPUT)" && ./result/activate
 
 home-manager-build: ## Home Manager設定をビルドのみ (適用しない)
 	$(NIX_SOURCE_CMD) \
-	cd darwin && nix build path:.#homeConfigurations.home.activationPackage --impure --no-write-lock-file --override-input nixvim-config "$(NIXVIM_CONFIG_INPUT)" --override-input dotfiles-shared "$(DOTFILES_SHARED_INPUT)"
+	cd darwin && nix build path:.#homeConfigurations.home.activationPackage --impure --no-write-lock-file --allow-dirty-locks --override-input nixvim-config "$(NIXVIM_CONFIG_INPUT)" --override-input dotfiles-shared "$(DOTFILES_SHARED_INPUT)"
 
 home-manager-apply: flake-update-darwin home-manager-switch ## Home Manager設定を適用 (まずflakeを全更新)
 
@@ -61,19 +61,19 @@ nix-uninstall: ## Nixを完全にアンインストールします
 ## ---- nix-darwin Operations (macOS) ---- ##
 nix-darwin-apply: ## nix-darwinの全設定を適用します（システム全体の設定）
 	$(NIX_SOURCE_CMD) \
-	cd darwin && sudo nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake path:.#all --impure --no-write-lock-file --override-input nixvim-config "$(NIXVIM_CONFIG_INPUT)" --override-input dotfiles-shared "$(DOTFILES_SHARED_INPUT)"
+	cd darwin && sudo nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake path:.#all --impure --no-write-lock-file --allow-dirty-locks --override-input nixvim-config "$(NIXVIM_CONFIG_INPUT)" --override-input dotfiles-shared "$(DOTFILES_SHARED_INPUT)"
 
 nix-darwin-homebrew-apply: ## nix-darwinのHomebrew設定のみを適用します
 	$(NIX_SOURCE_CMD) \
-	cd darwin && sudo nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake path:.#homebrew --impure --no-write-lock-file --override-input nixvim-config "$(NIXVIM_CONFIG_INPUT)" --override-input dotfiles-shared "$(DOTFILES_SHARED_INPUT)"
+	cd darwin && sudo nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake path:.#homebrew --impure --no-write-lock-file --allow-dirty-locks --override-input nixvim-config "$(NIXVIM_CONFIG_INPUT)" --override-input dotfiles-shared "$(DOTFILES_SHARED_INPUT)"
 
 nix-darwin-system-apply: ## nix-darwinのシステム設定のみを適用します（Finder、Dock等の設定）
 	$(NIX_SOURCE_CMD) \
-	cd darwin && sudo nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake path:.#system --impure --no-write-lock-file --override-input nixvim-config "$(NIXVIM_CONFIG_INPUT)" --override-input dotfiles-shared "$(DOTFILES_SHARED_INPUT)"
+	cd darwin && sudo nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake path:.#system --impure --no-write-lock-file --allow-dirty-locks --override-input nixvim-config "$(NIXVIM_CONFIG_INPUT)" --override-input dotfiles-shared "$(DOTFILES_SHARED_INPUT)"
 
 nix-darwin-check: ## nix-darwinの設定をビルドのみ行います（実際の適用はしません）
 	$(NIX_SOURCE_CMD) \
-	cd darwin && nix --extra-experimental-features "nix-command flakes" build path:.#darwinConfigurations.all.system --impure --no-write-lock-file --override-input nixvim-config "$(NIXVIM_CONFIG_INPUT)" --override-input dotfiles-shared "$(DOTFILES_SHARED_INPUT)"
+	cd darwin && nix --extra-experimental-features "nix-command flakes" build path:.#darwinConfigurations.all.system --impure --no-write-lock-file --allow-dirty-locks --override-input nixvim-config "$(NIXVIM_CONFIG_INPUT)" --override-input dotfiles-shared "$(DOTFILES_SHARED_INPUT)"
 
 ## ---- NixOS Operations ---- ##
 nixos-switch: ## NixOSシステム設定を適用します
