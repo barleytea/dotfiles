@@ -50,10 +50,11 @@
       "flake": false,
       "locked": {
         "dir": "modules",
-        "dirtyRev": "5191c45070ae70f6b4a9284816938db801ed330a-dirty",
-        "dirtyShortRev": "5191c45-dirty",
-        "lastModified": 1783391871,
-        "narHash": "sha256-fHRSxuJ4y/P1nGh/LXjRTnuWtl7dStnogV7uZjfYu9c=",
+        "lastModified": 1783496758,
+        "narHash": "sha256-aWvhboCxia9NQeOdh6TzyNfqmVjOs8I01jeWzyId3gE=",
+        "ref": "refs/heads/main",
+        "rev": "fd7236ab18b007b68d0a24056d8349fca153fc47",
+        "revCount": 541,
         "type": "git",
         "url": "file:.."
       },
@@ -128,11 +129,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1771188132,
-        "narHash": "sha256-qLXxN/tPrZtnekaLBQuVtxQfvqqs5cT5WbyH4zZaTGI=",
+        "lastModified": 1783479733,
+        "narHash": "sha256-d/JatqgG+Pmo+IuCTZfnrEAPWU3fdha48GQeXuFO+bE=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "ae8003d8b61d0d373e7ca3da1a48f9c870d15df9",
+        "rev": "cee3f0e7fec85d80c149c7afc29926747f7bd3c2",
         "type": "github"
       },
       "original": {
@@ -179,11 +180,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1771008912,
-        "narHash": "sha256-gf2AmWVTs8lEq7z/3ZAsgnZDhWIckkb+ZnAo5RzSxJg=",
+        "lastModified": 1783224372,
+        "narHash": "sha256-8i/87eeoqiGE4yOTjwSA3Eh/ziJRQEmd/unYU+K27sk=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "a82ccc39b39b621151d6732718e3e250109076fa",
+        "rev": "d407951447dcd00442e97087bf374aad70c04cea",
         "type": "github"
       },
       "original": {
@@ -254,11 +255,11 @@
       },
       "locked": {
         "dir": "nixvim",
-        "lastModified": 1771248787,
-        "narHash": "sha256-2mGDa6uCTtqP4CgrjLQomp+KHCTp2d4UPsWVYfhVLQ8=",
+        "lastModified": 1783496758,
+        "narHash": "sha256-aWvhboCxia9NQeOdh6TzyNfqmVjOs8I01jeWzyId3gE=",
         "ref": "refs/heads/main",
-        "rev": "de9530e441aed8f510e2e33edabd80cae0f52e00",
-        "revCount": 450,
+        "rev": "fd7236ab18b007b68d0a24056d8349fca153fc47",
+        "revCount": 541,
         "type": "git",
         "url": "file:.."
       },
