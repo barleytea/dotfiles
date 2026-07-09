@@ -70,6 +70,30 @@
     docker.enable = true;
   };
 
+  # サーバー用途: サスペンド・ハイバネートを完全に無効化
+  # systemd の sleep 系ターゲットを無効化することで、
+  # logind/GNOME/Hyprland等どこから systemctl suspend 等が呼ばれても実行されない
+  systemd.targets = {
+    sleep.enable = false;
+    suspend.enable = false;
+    hibernate.enable = false;
+    hybrid-sleep.enable = false;
+  };
+
+  services.logind.settings.Login = {
+    HandleLidSwitch = "ignore";
+    HandleLidSwitchExternalPower = "ignore";
+    HandleLidSwitchDocked = "ignore";
+    HandleSuspendKey = "ignore";
+    HandleHibernateKey = "ignore";
+    IdleAction = "ignore";
+  };
+
+  # GDMログイン画面のアイドル時自動サスペンドを無効化
+  # NVIDIAプロプライエタリドライバーはこの自動サスペンドからの復帰に失敗し、
+  # atomic modeset エラーで画面が真っ黒に固まったまま戻らなくなる不具合があるため
+  services.displayManager.gdm.autoSuspend = false;
+
   # Allow running pre-built binaries from generic Linux distributions (e.g. Claude CLI)
   programs.nix-ld = {
     enable = true;

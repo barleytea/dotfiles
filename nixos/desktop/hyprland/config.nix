@@ -92,7 +92,6 @@
 
     # Layout configuration
     dwindle {
-        pseudotile = yes
         preserve_split = yes
         smart_split = true
         smart_resizing = true
@@ -122,7 +121,7 @@
     bind = $mainMod SHIFT, V, togglefloating,
     bind = ALT, Space, exec, wofi --show drun
     bind = $mainMod SHIFT, P, pseudo,
-    bind = $mainMod, J, togglesplit,
+    bind = $mainMod, J, layoutmsg, togglesplit
 
     # Move focus with mainMod + arrow keys
     bind = $mainMod, left, movefocus, l
@@ -193,10 +192,10 @@
     bind = $mainMod SHIFT, L, exec, hyprlock
 
     # Window rules
-    windowrulev2 = float, class:^(pavucontrol)$
-    windowrulev2 = float, class:^(blueman-manager)$
-    windowrulev2 = float, class:^(nm-connection-editor)$
-    windowrulev2 = float, class:^(firefox)$, title:^(Picture-in-Picture)$
-    windowrulev2 = size 800 600, class:^(thunar)$
+    windowrule = float on, match:class ^(pavucontrol)$
+    windowrule = float on, match:class ^(blueman-manager)$
+    windowrule = float on, match:class ^(nm-connection-editor)$
+    windowrule = float on, match:class ^(firefox)$, match:title ^(Picture-in-Picture)$
+    windowrule = size 800 600, match:class ^(thunar)$
   '';
 }
