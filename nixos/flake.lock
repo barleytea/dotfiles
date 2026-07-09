@@ -8,11 +8,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1783500421,
-        "narHash": "sha256-GJzjV/IW6dE7XZkuPy4CA8S7PZn2+Vnj7+awyFCJuLc=",
+        "lastModified": 1783560135,
+        "narHash": "sha256-1aBmc4NDwvCFHp3csi9zlc512azo7ibX23Jd5gV7BeI=",
         "ref": "refs/heads/main",
-        "rev": "7990bfedf2032d02f34206dcbf7c5a84255c379a",
-        "revCount": 3,
+        "rev": "113f547d03d90293ee70c89b84bfae700cb9f4d4",
+        "revCount": 4,
         "type": "git",
         "url": "file:///home/miyoshi_s/git_repos/github.com/barleytea/agent-dangomushi"
       },
