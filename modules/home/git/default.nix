@@ -126,7 +126,7 @@ gitConfig = ''
   gshow = !f(){ git show $(git glfzf); }; f
 
   [pager]
-    diff = delta
+    diff = hunk pager --pager
     log = delta
     reflog = delta
     show = delta

@@ -10,7 +10,13 @@
       "WebFetch(domain:cmux.com)",
       "WebFetch(domain:manaflow-ai-cmux.mintlify.app)",
       "WebFetch(domain:raw.githubusercontent.com)",
-      "WebFetch(domain:herdr.dev)"
+      "WebFetch(domain:herdr.dev)",
+      "WebFetch(domain:gist.github.com)",
+      "WebFetch(domain:gist.githubusercontent.com)",
+      "Bash(python3 -c ' *)",
+      "Bash(curl -s \"https://api.github.com/users/k16shikano/gists?per_page=100\")",
+      "Bash(curl -s \"https://api.github.com/gists/67625f2a7d96e3bbdfae8d571a936063\")",
+      "Bash(python3 *)"
     ],
     "deny": []
   },

@@ -126,6 +126,9 @@ mise-install-npm-commitizen: ## miseで管理しているnpmパッケージ（co
 mise-run-safe-chain-setup: ## aikido safe-chain のセットアップ（CA証明書 + npmプロキシ）
 	mise run safe-chain-setup
 
+mise-install-npm-pxpipe: ## miseで管理しているnpmパッケージ（pxpipe-proxy）をグローバルにインストールします
+	mise run npm-pxpipe
+
 mise-update-npm-tools: ## npm CLI の pin を min age を満たす最新安定版へ更新します
 	bash scripts/update-mise-npm-tools.sh --min-age-days $(MISE_NPM_MIN_AGE_DAYS)
 

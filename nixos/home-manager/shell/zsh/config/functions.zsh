@@ -63,6 +63,18 @@ function claude_add_dir_search() {
 
 zle -N claude_add_dir_search
 
+# Launch Claude Code through pxpipe-proxy (opt-in token-saving image compression, see /pxpipe-guide)
+function claude-px() {
+  local pxpipe_port=47821
+  if ! curl -s -o /dev/null "http://127.0.0.1:${pxpipe_port}/"; then
+    echo "[claude-px] starting pxpipe-proxy on :${pxpipe_port}"
+    pxpipe-proxy &>/dev/null &
+    disown
+    sleep 1
+  fi
+  ANTHROPIC_BASE_URL="http://127.0.0.1:${pxpipe_port}" claude "$@"
+}
+
 # AWS SSO
 alias awsp=set_aws_profile
 function set_aws_profile() {

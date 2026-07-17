@@ -21,7 +21,7 @@ trusted_config_paths = ["~"]
 
 [tasks.npm-commitizen]
 description = "Install commitizen and cz-git globally"
-run = ["aikido-npm install -g commitizen cz-git"]
+run = ["npm install -g commitizen cz-git"]
 
 [tasks.copilot-install]
 description = "Install GitHub Copilot CLI via official install script"
@@ -46,3 +46,7 @@ run = ["safe-chain setup"]
 [tasks.herdr-install]
 description = "Install herdr agent multiplexer via official install script"
 run = ["curl -fsSL https://herdr.dev/install.sh | sh"]
+
+[tasks.npm-pxpipe]
+description = "Install pxpipe-proxy globally"
+run = ["npm install -g pxpipe-proxy"]
