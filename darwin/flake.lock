@@ -29,10 +29,10 @@
       "flake": false,
       "locked": {
         "dir": "modules",
-        "dirtyRev": "5191c45070ae70f6b4a9284816938db801ed330a-dirty",
-        "dirtyShortRev": "5191c45-dirty",
-        "lastModified": 1783391871,
-        "narHash": "sha256-XppRFWSf8brPbDdK/yj4pEbCELXBKbByL2Ol4+KCdAw=",
+        "dirtyRev": "2aa9b45d68e243dccff34b2fd2b676ec9156f026-dirty",
+        "dirtyShortRev": "2aa9b45-dirty",
+        "lastModified": 1783559740,
+        "narHash": "sha256-rOq+iUVKgu2NlLeJ6vg18OehewCNzbK8LO6MxCHtxOo=",
         "type": "git",
         "url": "file:.."
       },
@@ -89,11 +89,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1783479733,
-        "narHash": "sha256-d/JatqgG+Pmo+IuCTZfnrEAPWU3fdha48GQeXuFO+bE=",
+        "lastModified": 1783963347,
+        "narHash": "sha256-r376E2XpakiXwModDHIxlvB6qLq4iFVEq730vxOO4JY=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "cee3f0e7fec85d80c149c7afc29926747f7bd3c2",
+        "rev": "a45a7c451455a51ae740ec3bce4024b312809c29",
         "type": "github"
       },
       "original": {
@@ -110,11 +110,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1783426737,
-        "narHash": "sha256-yQFZXU2rFrwR+OJMktg9Zvrn3jnfVcQAuT8fWVNsnCs=",
+        "lastModified": 1783931038,
+        "narHash": "sha256-gKf9U1sjnmR2Ok7lGAO5qqYsJ7ZWcP41jGqhcMzFQLk=",
         "owner": "modem-dev",
         "repo": "hunk",
-        "rev": "059dd13c8bd27fe503ef59652077edf0041034c8",
+        "rev": "4fdf4bc1e26f6fdceeced81bf7bae8f9bcb8588a",
         "type": "github"
       },
       "original": {
@@ -169,8 +169,8 @@
       },
       "original": {
         "owner": "nixos",
-        "ref": "nixos-unstable",
         "repo": "nixpkgs",
+        "rev": "d407951447dcd00442e97087bf374aad70c04cea",
         "type": "github"
       }
     },
@@ -235,10 +235,10 @@
       },
       "locked": {
         "dir": "nixvim",
-        "dirtyRev": "5191c45070ae70f6b4a9284816938db801ed330a-dirty",
-        "dirtyShortRev": "5191c45-dirty",
-        "lastModified": 1783391871,
-        "narHash": "sha256-XppRFWSf8brPbDdK/yj4pEbCELXBKbByL2Ol4+KCdAw=",
+        "dirtyRev": "2aa9b45d68e243dccff34b2fd2b676ec9156f026-dirty",
+        "dirtyShortRev": "2aa9b45-dirty",
+        "lastModified": 1783559740,
+        "narHash": "sha256-rOq+iUVKgu2NlLeJ6vg18OehewCNzbK8LO6MxCHtxOo=",
         "type": "git",
         "url": "file:.."
       },

@@ -44,10 +44,10 @@
       "mcp__pencil"
     ],
     "deny": [
-      "Bash(git commit:*)",
       "Bash(git push:*)"
     ]
   },
+  "model": "haiku",
   "hooks": {
     "PreToolUse": [
       {

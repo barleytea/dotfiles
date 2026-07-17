@@ -172,7 +172,9 @@
     "docker inspect": true,
     ".Size}}'": true,
     "npm install": true,
-    "uniq": true
+    "uniq": true,
+    "gofmt": true,
+    "npm test": true
   },
   "chat.agent.enabled": true,
   "chat.agent.maxRequests": 200,
@@ -207,5 +209,8 @@
   "claudeCode.preferredLocation": "panel",
   "chat.viewSessions.orientation": "stacked",
   "workbench.browser.enableChatTools": true,
-  "window.autoDetectColorScheme": false
+  "window.autoDetectColorScheme": false,
+  "github.copilot.chat.codesearch.enabled": true,
+  "github.copilot.chat.claudeAgent.useSdkExtension": true,
+  "github.copilot.chat.anthropic.tools.websearch.enabled": true
 }

@@ -2,7 +2,7 @@
   description = "Flake for Darwin (macOS)";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/d407951447dcd00442e97087bf374aad70c04cea";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -38,7 +38,6 @@
   } @ inputs: let
     darwinSystems = [
       "aarch64-darwin"
-      "x86_64-darwin"
     ];
     hostSystem =
       if builtins ? currentSystem
