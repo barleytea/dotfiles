@@ -17,7 +17,8 @@
 
 ### `modules/home/` に集約済みの共通モジュール
 - `alacritty/`, `atuin/`, `cz-git/`, `editorconfig/`, `helix/`, `lazygit/`, `sheldon/`, `starship/`, `tmux/`, `yazi/`, `zed/`
-- `claude/`, `gemini/`, `git/`, `mise/`, `zellij/`
+- `claude/`, `codex/`, `gemini/`, `git/`, `mise/`, `zellij/`
+  - `codex/` は既存の `~/.codex/config.toml` を保持しつつ、Auto-review 設定を適用
   - うち `mise/config.toml` と `zellij/config.kdl` は `pkgs.stdenv.isDarwin` で差分を Nix 側から差し替え
 
 ### Darwin 専用 HM モジュール（`darwin/home-manager/`）

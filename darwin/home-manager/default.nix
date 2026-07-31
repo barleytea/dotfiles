@@ -37,6 +37,7 @@ in {
     ./borders
     ./herdr
     "${shared}/home/claude"
+    "${shared}/home/codex"
     "${shared}/home/gemini"
     "${shared}/home/git"
     ./ghostty

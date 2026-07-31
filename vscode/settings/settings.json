@@ -207,10 +207,10 @@
   "cursor.composer.usageSummaryDisplay": "always",
   "claudeCode.selectedModel": "sonnet",
   "claudeCode.preferredLocation": "panel",
-  "chat.viewSessions.orientation": "stacked",
   "workbench.browser.enableChatTools": true,
   "window.autoDetectColorScheme": false,
   "github.copilot.chat.codesearch.enabled": true,
   "github.copilot.chat.claudeAgent.useSdkExtension": true,
-  "github.copilot.chat.anthropic.tools.websearch.enabled": true
+  "github.copilot.chat.anthropic.tools.websearch.enabled": true,
+  "chat.viewSessions.orientation": "stacked"
 }

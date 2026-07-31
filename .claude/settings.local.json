@@ -16,7 +16,8 @@
       "Bash(python3 -c ' *)",
       "Bash(curl -s \"https://api.github.com/users/k16shikano/gists?per_page=100\")",
       "Bash(curl -s \"https://api.github.com/gists/67625f2a7d96e3bbdfae8d571a936063\")",
-      "Bash(python3 *)"
+      "Bash(python3 *)",
+      "Bash(atuin history *)"
     ],
     "deny": []
   },

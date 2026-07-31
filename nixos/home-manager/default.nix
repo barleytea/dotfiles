@@ -33,6 +33,7 @@ in {
     "${shared}/home/zed"
     # OS 固有・差分ありモジュール
     "${shared}/home/claude"
+    "${shared}/home/codex"
     ./fcitx5
     "${shared}/home/gemini"
     "${shared}/home/git"

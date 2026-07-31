@@ -61,15 +61,15 @@ nix-uninstall: ## Nixを完全にアンインストールします
 ## ---- nix-darwin Operations (macOS) ---- ##
 nix-darwin-apply: ## nix-darwinの全設定を適用します（システム全体の設定）
 	$(NIX_SOURCE_CMD) \
-	cd darwin && sudo nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake path:.#all --impure --no-write-lock-file --allow-dirty-locks --override-input nixvim-config "$(NIXVIM_CONFIG_INPUT)" --override-input dotfiles-shared "$(DOTFILES_SHARED_INPUT)"
+	cd darwin && sudo -H nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake path:.#all --impure --no-write-lock-file --override-input nixvim-config "$(NIXVIM_CONFIG_INPUT)" --override-input dotfiles-shared "$(DOTFILES_SHARED_INPUT)"
 
 nix-darwin-homebrew-apply: ## nix-darwinのHomebrew設定のみを適用します
 	$(NIX_SOURCE_CMD) \
-	cd darwin && sudo nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake path:.#homebrew --impure --no-write-lock-file --allow-dirty-locks --override-input nixvim-config "$(NIXVIM_CONFIG_INPUT)" --override-input dotfiles-shared "$(DOTFILES_SHARED_INPUT)"
+	cd darwin && sudo -H nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake path:.#homebrew --impure --no-write-lock-file --override-input nixvim-config "$(NIXVIM_CONFIG_INPUT)" --override-input dotfiles-shared "$(DOTFILES_SHARED_INPUT)"
 
 nix-darwin-system-apply: ## nix-darwinのシステム設定のみを適用します（Finder、Dock等の設定）
 	$(NIX_SOURCE_CMD) \
-	cd darwin && sudo nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake path:.#system --impure --no-write-lock-file --allow-dirty-locks --override-input nixvim-config "$(NIXVIM_CONFIG_INPUT)" --override-input dotfiles-shared "$(DOTFILES_SHARED_INPUT)"
+	cd darwin && sudo -H nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake path:.#system --impure --no-write-lock-file --override-input nixvim-config "$(NIXVIM_CONFIG_INPUT)" --override-input dotfiles-shared "$(DOTFILES_SHARED_INPUT)"
 
 nix-darwin-check: ## nix-darwinの設定をビルドのみ行います（実際の適用はしません）
 	$(NIX_SOURCE_CMD) \

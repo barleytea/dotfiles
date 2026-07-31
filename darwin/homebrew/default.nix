@@ -17,14 +17,12 @@
     };
     taps = [
       "sanemat/font"
-      "aquaproj/aqua"
       "daipeihust/tap"
       "FelixKratz/formulae"
       "harelba/q"
       "nikitabobko/tap"
     ];
     brews = [
-      "aqua"
       "daipeihust/tap/im-select"
       "FelixKratz/formulae/borders"
       "mas"
@@ -54,6 +52,7 @@
       "notion"
       "plain-clip"
       "raycast"
+      "tableplus"
       "the-unarchiver"
       "zed"
       "xquartz"
