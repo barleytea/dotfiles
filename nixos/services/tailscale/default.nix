@@ -43,20 +43,15 @@
       # tailscaledが起動するまで待機
       sleep 2
 
-      # 既に認証済みかチェック
+      # 初回起動時（未認証）は手動認証が必要
       status="$(${tailscale}/bin/tailscale status -json | ${jq}/bin/jq -r .BackendState)"
-      if [ "$status" = "Running" ]; then
-        echo "Tailscale is already running"
-        exit 0
-      fi
-
-      # 初回起動時は手動認証が必要
       if [ "$status" = "NeedsLogin" ]; then
         echo "Tailscale needs authentication. Please run: sudo tailscale up --accept-routes --advertise-exit-node --ssh"
         exit 0
       fi
 
-      # 認証済みの場合は自動接続（SSH有効化でホストキー公開）
+      # 認証済みの場合は毎回up（べき等）。--sshフラグがまだ未適用のケースでも
+      # ここで確実に反映され、SSHホストキーがコントロールプレーンに公開される
       ${tailscale}/bin/tailscale up --accept-routes --advertise-exit-node --ssh
     '';
   };
