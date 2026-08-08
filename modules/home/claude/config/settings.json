@@ -47,7 +47,7 @@
       "Bash(git push:*)"
     ]
   },
-  "model": "sonnet",
+  "model": "claude-fable-5[1m]",
   "hooks": {
     "PreToolUse": [
       {
@@ -89,7 +89,9 @@
     "command": "~/.claude/statusline.sh",
     "padding": 1
   },
-  "enabledPlugins": {},
+  "enabledPlugins": {
+    "gopls-lsp@claude-plugins-official": true
+  },
   "language": "Japanese",
   "sandbox": {
     "enabled": true,
