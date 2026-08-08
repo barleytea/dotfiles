@@ -32,6 +32,9 @@ secret
 # Claude Code サンドボックスが作業ディレクトリ追加時に生成する内部スタブ
 nixos/.claude/
 
+# Claude Code のローカル権限設定（個人環境依存のためバージョン管理対象外）
+/.claude/settings.local.json
+
 # Docker
 docker/*/workspace/
 !docker/*/workspace/.gitkeep
