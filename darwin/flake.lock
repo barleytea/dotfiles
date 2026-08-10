@@ -32,10 +32,10 @@
       "flake": false,
       "locked": {
         "dir": "modules",
-        "dirtyRev": "ee73287eefa3ebc2cee038f4f6bb7cd1ebfb2589-dirty",
-        "dirtyShortRev": "ee73287-dirty",
-        "lastModified": 1785475250,
-        "narHash": "sha256-mn/NiOqFaEpM30Qgt+cPtpWnTj/WYiu0wVZPa4lJST4=",
+        "dirtyRev": "d5ad5adc128404d7ac77e2a17d0093551d559b98-dirty",
+        "dirtyShortRev": "d5ad5ad-dirty",
+        "lastModified": 1786189951,
+        "narHash": "sha256-4GoS33ZWbw/MB1XtEjemBnuLXkYpFlQteLhlty1tF94=",
         "type": "git",
         "url": "file:.."
       },
@@ -92,11 +92,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1785531816,
-        "narHash": "sha256-vkMnV0JIyw+g/NmcfoajlGaAO+9a0ezia+FZohQJrik=",
+        "lastModified": 1786286733,
+        "narHash": "sha256-7dN93WKkEERgutPtTjK7SY3ZarO2LAU33A1+vKu+7cc=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "bf9ce9fec78f95f374e8dd3b503863a3ec128ebe",
+        "rev": "367f7ef80856d18438953d54dda235d42a46ba31",
         "type": "github"
       },
       "original": {
@@ -114,11 +114,11 @@
         "systems": "systems"
       },
       "locked": {
-        "lastModified": 1785683713,
-        "narHash": "sha256-kdOnyXLtBMmQSnNUUYRKW9pKe2VWHyL/DA69Adk/jeE=",
+        "lastModified": 1786284343,
+        "narHash": "sha256-ARDLfq8CQAyg78yn685NLMi/1+4MgI+qJjorf05i6e4=",
         "owner": "modem-dev",
         "repo": "hunk",
-        "rev": "c9ac1203f87323bc2225972ee9e1584f88adcaea",
+        "rev": "ca731ac8a0eb4c385e965b2b6655dd8b86574bbe",
         "type": "github"
       },
       "original": {
@@ -239,10 +239,10 @@
       },
       "locked": {
         "dir": "nixvim",
-        "dirtyRev": "ee73287eefa3ebc2cee038f4f6bb7cd1ebfb2589-dirty",
-        "dirtyShortRev": "ee73287-dirty",
-        "lastModified": 1785475250,
-        "narHash": "sha256-mn/NiOqFaEpM30Qgt+cPtpWnTj/WYiu0wVZPa4lJST4=",
+        "dirtyRev": "d5ad5adc128404d7ac77e2a17d0093551d559b98-dirty",
+        "dirtyShortRev": "d5ad5ad-dirty",
+        "lastModified": 1786189951,
+        "narHash": "sha256-4GoS33ZWbw/MB1XtEjemBnuLXkYpFlQteLhlty1tF94=",
         "type": "git",
         "url": "file:.."
       },

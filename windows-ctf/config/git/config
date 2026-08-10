@@ -1,6 +1,6 @@
 [core]
 	excludesFile = ~/.config/git/ignore
-	editor = vim
+	editor = nvim
 	longpaths = true
 
 [user]

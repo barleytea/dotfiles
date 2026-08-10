@@ -30,9 +30,9 @@ fi
 export NIX_CONF_DIR=$XDG_CONFIG_HOME
 
 # git
-export GIT_EDITOR=vim
-export VISUAL=vim
-export EDITOR=vim
+export GIT_EDITOR=nvim
+export VISUAL=nvim
+export EDITOR=nvim
 
 # asdf
 export ASDF_DATA_DIR="$XDG_DATA_HOME"/asdf

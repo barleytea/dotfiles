@@ -82,3 +82,16 @@ Claude Code はシェルの環境変数を継承するため、
 `GH_TOKEN` が設定されたシェルから起動すれば `gh` コマンドが正常に動作する。
 トークンは dotfiles（Nix 管理ファイル）には書かず、macOS Keychain で管理する。
 <!-- gh-auth-section:end -->
+
+### nix / nixos-rebuild / darwin-rebuild / home-manager のサンドボックス回避
+
+サンドボックスは nix daemon の Unix socket（`/nix/var/nix/daemon-socket/socket`）への
+接続をブロックするため、`nix build` 等が
+`cannot connect to socket ... Operation not permitted` で失敗する。
+
+`sandbox.excludedCommands` に `nix`, `nixos-rebuild`, `darwin-rebuild`, `home-manager` を追加し、
+これらのコマンドはネットワーク・ファイルシステム制限を含むサンドボックスを完全にバイパスして実行される。
+
+- `nix build` / `nix flake check` / `nixos-rebuild build` は `permissions.allow` によりプロンプトなしで実行可能
+- `nix-darwin-apply` / `nixos-switch` / `home-manager switch` など実システムに影響する適用系コマンドは、
+  引き続き実行前にプロンプトで確認する

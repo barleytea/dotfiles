@@ -26,9 +26,9 @@ export HISTFILE="${XDG_STATE_HOME}/bash/bash_history"
 export LESSHISTFILE="${XDG_STATE_HOME}/less/history"
 
 # git
-export GIT_EDITOR=vim
-export VISUAL=vim
-export EDITOR=vim
+export GIT_EDITOR=nvim
+export VISUAL=nvim
+export EDITOR=nvim
 
 # Go
 export GOPATH="${XDG_DATA_HOME}/go"

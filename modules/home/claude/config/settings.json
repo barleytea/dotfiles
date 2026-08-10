@@ -24,8 +24,7 @@
       "Bash(mv:*)",
       "Bash(awk:*)",
       "Bash(make:*)",
-      "Bash(go test:*)",
-      "Bash(go build:*)",
+      "Bash(go *)",
       "Bash(nix build:*)",
       "Bash(nix flake check:*)",
       "Bash(nixos-rebuild build:*)",
@@ -98,6 +97,7 @@
     "autoAllowBashIfSandboxed": true,
     "allowUnsandboxedCommands": false,
     "network": {
+      "allowLocalBinding": true,
       "allowedDomains": [
         "github.com",
         "api.github.com",
@@ -111,7 +111,12 @@
         "*.googleapis.com",
         "*.pkg.dev",
         "*.amazonaws.com",
-        "*.aws.amazon.com"
+        "*.aws.amazon.com",
+        "proxy.golang.org",
+        "sum.golang.org",
+        "localhost",
+        "127.0.0.1",
+        "::1"
       ]
     },
     "filesystem": {},
@@ -119,7 +124,11 @@
     "excludedCommands": [
       "docker",
       "gh",
-      "security"
+      "security",
+      "nix",
+      "nixos-rebuild",
+      "darwin-rebuild",
+      "home-manager"
     ]
   },
   "effortLevel": "medium",
