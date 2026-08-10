@@ -32,10 +32,10 @@
       "flake": false,
       "locked": {
         "dir": "modules",
-        "dirtyRev": "d5ad5adc128404d7ac77e2a17d0093551d559b98-dirty",
-        "dirtyShortRev": "d5ad5ad-dirty",
-        "lastModified": 1786189951,
-        "narHash": "sha256-4GoS33ZWbw/MB1XtEjemBnuLXkYpFlQteLhlty1tF94=",
+        "dirtyRev": "2874685d3289cef7d3b6f4b7b3d3b8c31d98aa23-dirty",
+        "dirtyShortRev": "2874685-dirty",
+        "lastModified": 1786320960,
+        "narHash": "sha256-gTy0KGgFmP2O+7Q2A5XRKKNmqaHEZl58+W7uXg3Xgf0=",
         "type": "git",
         "url": "file:.."
       },
@@ -239,10 +239,10 @@
       },
       "locked": {
         "dir": "nixvim",
-        "dirtyRev": "d5ad5adc128404d7ac77e2a17d0093551d559b98-dirty",
-        "dirtyShortRev": "d5ad5ad-dirty",
-        "lastModified": 1786189951,
-        "narHash": "sha256-4GoS33ZWbw/MB1XtEjemBnuLXkYpFlQteLhlty1tF94=",
+        "dirtyRev": "2874685d3289cef7d3b6f4b7b3d3b8c31d98aa23-dirty",
+        "dirtyShortRev": "2874685-dirty",
+        "lastModified": 1786320960,
+        "narHash": "sha256-gTy0KGgFmP2O+7Q2A5XRKKNmqaHEZl58+W7uXg3Xgf0=",
         "type": "git",
         "url": "file:.."
       },
