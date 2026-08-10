@@ -8,6 +8,7 @@ on:
       - 'nixvim/**'
       - '.github/workflows/nixos.yml'
       - '.github/actions/setup-nix/**'
+      - '.github/ci-stubs/**'
   pull_request:
     branches: [main]
     paths:
@@ -16,6 +17,7 @@ on:
       - 'nixvim/**'
       - '.github/workflows/nixos.yml'
       - '.github/actions/setup-nix/**'
+      - '.github/ci-stubs/**'
 
 jobs:
   build:
@@ -49,10 +51,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NIXVIM_CONFIG_INPUT: path:${{ github.workspace }}/nixvim
           DOTFILES_SHARED_INPUT: path:${{ github.workspace }}/modules
+          # agent-dangomushi は private リポジトリをローカルパスで参照する input のため、
+          # CI では実体を持たないスタブに差し替えて eval のみ通す
+          AGENT_DANGOMUSHI_INPUT: path:${{ github.workspace }}/.github/ci-stubs/agent-dangomushi
         run: |
           export NIX_CONFIG="access-tokens = github.com=$GITHUB_TOKEN"
           cd nixos
-          nix build path:.#nixosConfigurations.desktop.config.system.build.toplevel --dry-run --impure --no-write-lock-file --override-input nixvim-config "$NIXVIM_CONFIG_INPUT" --override-input dotfiles-shared "$DOTFILES_SHARED_INPUT"
+          nix build path:.#nixosConfigurations.desktop.config.system.build.toplevel --dry-run --impure --no-write-lock-file --override-input nixvim-config "$NIXVIM_CONFIG_INPUT" --override-input dotfiles-shared "$DOTFILES_SHARED_INPUT" --override-input agent-dangomushi "$AGENT_DANGOMUSHI_INPUT"
 
       - name: Check nixvim configuration
         env:
