@@ -18,8 +18,5 @@ export PATH="$HOME/.local/share/go/bin:$PATH"
 # local
 export PATH="$HOME/.local/bin:$PATH"
 
-# asdf
-export PATH="$HOME/.asdf/bin:$PATH"
-
 # npm global
 export PATH="$HOME/.npm-global/bin:$PATH"

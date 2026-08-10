@@ -11,6 +11,7 @@ description: Hyprland window manager shortcuts including window navigation, work
 |------|------|
 | `Super + Return` | ターミナル（Alacritty）を開く |
 | `Super + Shift + Q` | アクティブウィンドウを閉じる |
+| `Super + Shift + K` | ウィンドウを強制終了（クリックしたウィンドウを `hyprctl kill`。`killactive` が効かないフリーズしたアプリ向け） |
 | `Super + Shift + M` | Hyprlandを終了（ログアウト） |
 | `Super + Shift + E` | ファイルマネージャー（Thunar）を開く |
 | `Super + Shift + L` | スクリーンロック |
@@ -91,11 +92,43 @@ description: Hyprland window manager shortcuts including window navigation, work
 
 ## 自動起動アプリケーション
 
+**systemd user unit 経由**（`graphical-session.target` 配下）:
+
 - Waybar（ステータスバー）
-- Dunst（通知デーモン）
 - Hyprpaper（壁紙）
+- eww（生活情報ダッシュボード。壁紙レイヤー常駐・操作不可。詳細は `/dashboard-guide`）
+
+**`exec-once` 経由**:
+
+- Dunst（通知デーモン）
 - Fcitx5（日本語入力）
 - Gammastep（ブルーライトフィルター）
+- cliphist（クリップボード履歴の監視）
+
+### graphical-session.target の起動について
+
+**Hyprland は `graphical-session.target` を自動では起動しない。**
+`nixos/desktop/hyprland/config.nix` の先頭で
+
+```
+exec-once = systemctl --user import-environment WAYLAND_DISPLAY HYPRLAND_INSTANCE_SIGNATURE XDG_CURRENT_DESKTOP && systemctl --user start hyprland-session.target
+exec-shutdown = systemctl --user stop graphical-session.target
+```
+
+を実行し、`hyprland-session.target`（`nixos/home-manager/hyprland/default.nix` で定義、
+`BindsTo=graphical-session.target`）経由で引き上げている。
+
+この 2 行が無いと `WantedBy = graphical-session.target` のユーザーユニットは
+**エラーも出さずに一度も起動しない**（`journalctl --user-unit=<name>` が `No entries` になる）。
+新しく常駐プロセスを足すときは、`exec-once` に直接書くのではなく
+`graphical-session.target` 配下のユニットにするのが本来の形。
+
+確認:
+
+```bash
+systemctl --user status graphical-session.target
+systemctl --user list-dependencies graphical-session.target
+```
 
 ## ターミナルコマンド
 
@@ -118,9 +151,11 @@ description: Hyprland window manager shortcuts including window navigation, work
 - ウィンドウ装飾: `nixos/desktop/hyprland/config.nix` の `decoration`・`general` ブロックで丸み・ブラー・ボーダー色を制御。
 - 壁紙: `nixos/desktop/hyprland/wallpaper.nix` がグラデーション壁紙を自動生成します。別画像に差し替える場合は `preload`/`wallpaper` 行を書き換え。
 - ランチャー: `nixos/desktop/hyprland/wofi.nix` でサイズやフォント、ハイライト色を変更可能。
+- 背景ダッシュボード: `nixos/home-manager/dashboard/` の `eww.scss` で配色、`eww.yuck` でレイアウトを変更。`nixos/desktop/hyprland/config.nix` の `# Layer rules` 節に `namespace ^(eww-dashboard)$` 向けの `blur` / `ignore_alpha` / `no_anim` を置いている。
 
 ## リロードのショートカット
 
 - Waybar を再起動: `systemctl --user restart waybar`
+- ダッシュボードを再起動: `systemctl --user restart eww`
 - Hyprland 設定反映: `hyprctl reload`
 - Wofi テーマ確認: `wofi --show drun` を都度実行してプレビュー

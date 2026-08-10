@@ -200,6 +200,7 @@ make paths
 **NixOS:**
 - **nixos/flake.nix**: NixOS用flakeのメインエントリポイント、inputs/outputsの定義
 - **nixos/home-manager/default.nix**: NixOS用Home Manager設定のエントリポイント
+- **nixos/home-manager/dashboard/**: eww 背景ダッシュボード（天気・時刻・システム状態・生活情報）。`systemd.user.timers` で 10 分ごとにデータ取得し、layer-shell の BOTTOM レイヤーに常駐表示する。詳細は `/dashboard-guide`
 - **nixos/configuration.nix**: NixOSシステム設定のエントリポイント
 
 **Neovim (nixvim):**
@@ -359,6 +360,7 @@ AI エージェント向けの行動原則は **AGENTS.md** を唯一の真の�
 
 **サービス・デーモン:**
 - `/services-guide` - AeroSpace, JankyBorders, AltTab (macOS)
+- `/dashboard-guide` - eww 生活情報ダッシュボード (NixOS/Hyprland)
 - `/fileserver-guide` - NixOS file server (Tailscale)
 - `/gitserver-guide` - Git SSH server (NixOS)
 - `/tailscale-acl` - Tailscale ACL

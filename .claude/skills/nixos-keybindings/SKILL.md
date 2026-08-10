@@ -13,6 +13,8 @@ macOS 風に `Super`（⌘）キーを扱うための仕組みと、関連モジ
 - `services.keyd` を有効化し、左右の `Super` キーを専用レイヤーにして `Super+…` 操作を `Ctrl+…` に送出しています。
 - ワークスペース切替（`Super+1-0` や `Super+Shift+1-0`）、ウィンドウ操作（`⌘+Shift+V` → `Alt+Shift+V` でクリップボード履歴、`Super+Shift+E/M/Q/L`、`Alt+Space`、`Super+Return` など）は同レイヤーで `Super` にフォワードしているため、Hyprland で従来どおり機能します。
 - これにより `Command+C / V / X / Z / A / S / F / P / N / T / W / Q / L / O`、`Command+Shift+Z`、`Command+,`、`Command+Tab / Command+Shift+Tab` がそのまま Linux アプリでも動作します。
+- **keyd には「レイヤー内のキー名に `S-` を前置する」構文は存在しない。** `[supercmd]` セクション内に `"S-k" = "M-S-k";` のように書いても keyd は静かに無視し、無印字版（`k = "M-k"`）にフォールバックする。実際に `Super+Shift+K` を押しても `Shift` が欠落した `Super+K` が、`Super+Shift+Q` は `Ctrl+Shift+Q` が送出されるというバグを埋め込んでいた（`sudo keyd monitor` で確認できる）。
+  Shift 付きの組み合わせは **複合レイヤー（composite layer）** `[<layer>+shift]` を使って定義する（keyd(1) の "Composite Layers" 節）。`Super+Shift+…` を新しく Hyprland に割り当てるときは `common.nix` の `settings."supercmd+shift"` に `<key> = "M-S-<key>";`（キー名から `S-` は外す）を追加する。既存の `v` / `z` / `p` / `q` / `l` / `k` / `e` / `m` / `1`-`0` を参照
 - テキスト編集で macOS 風にするため、`control` レイヤーで `Ctrl+A / Ctrl+E` を `Home / End`、`Ctrl+Shift+A / Ctrl+Shift+E` を `Shift+Home / Shift+End` に置き換えます。
 
 ## デスクトップ別の注意点

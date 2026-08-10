@@ -50,11 +50,10 @@
       "flake": false,
       "locked": {
         "dir": "modules",
-        "lastModified": 1783497159,
-        "narHash": "sha256-PBTCqnY7lk3zHgktFvPMhGveZv/hPH62PH0Iz+gtJIc=",
-        "ref": "refs/heads/main",
-        "rev": "8b40f4b1384a9af32293e7538ad6b96a385633a0",
-        "revCount": 543,
+        "dirtyRev": "ee73287eefa3ebc2cee038f4f6bb7cd1ebfb2589-dirty",
+        "dirtyShortRev": "ee73287-dirty",
+        "lastModified": 1785475250,
+        "narHash": "sha256-b4M50ehZcalUkaJ7YfVd/Cu57euTbVKAQhGlh61kIkw=",
         "type": "git",
         "url": "file:.."
       },

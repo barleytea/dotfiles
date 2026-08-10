@@ -34,10 +34,12 @@ in {
     # OS 固有・差分ありモジュール
     "${shared}/home/claude"
     "${shared}/home/codex"
+    ./dashboard
     ./fcitx5
     "${shared}/home/gemini"
     "${shared}/home/git"
     ./ghostty
+    ./herdr
     ./hyprland
     "${shared}/home/mise"
     ./shell

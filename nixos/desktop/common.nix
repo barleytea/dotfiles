@@ -39,36 +39,35 @@
       settings.control = {
         a = "home";
         e = "end";
-        "S-a" = "S-home";
-        "S-e" = "S-end";
+      };
+      # keyd に「レイヤー + Shift」を単一のキー名（"S-a" 等）で表現する構文は無い。
+      # Shift 付きの組み合わせは必ず複合レイヤー（layer1+layer2）で定義する。
+      # 誤って main レイヤー内に "S-x" と書いても静かに無視され、無印字版にフォールバックする
+      # （例: Super+Shift+K が Shift 抜きの Super+K として送出される）ため注意
+      settings."control+shift" = {
+        a = "S-home";
+        e = "S-end";
       };
       settings.supercmd = {
         c = "C-c";
         v = "C-v";
         x = "C-x";
         z = "C-z";
-        "S-z" = "C-S-z";
         a = "C-a";
         s = "C-s";
         f = "C-f";
         p = "C-p";
-        "S-p" = "M-S-p";
         n = "C-n";
         t = "C-t";
         w = "C-w";
         q = "C-q";
-        "S-q" = "M-S-q";
-        "S-l" = "M-S-l";
         h = "M-h";
         j = "M-j";
         k = "M-k";
         l = "M-l";
-        "S-e" = "M-S-e";
-        "S-m" = "M-S-m";
         o = "C-o";
         comma = "C-comma";
         tab = "A-tab";
-        "S-tab" = "A-S-tab";
         space = "M-space";
         enter = "M-enter";
         left = "M-left";
@@ -76,28 +75,36 @@
         up = "M-up";
         down = "M-down";
         "1" = "M-1";
-        "S-1" = "M-S-1";
         "2" = "M-2";
-        "S-2" = "M-S-2";
         "3" = "M-3";
-        "S-3" = "M-S-3";
         "4" = "M-4";
-        "S-4" = "M-S-4";
         "5" = "M-5";
-        "S-5" = "M-S-5";
         "6" = "M-6";
-        "S-6" = "M-S-6";
         "7" = "M-7";
-        "S-7" = "M-S-7";
         "8" = "M-8";
-        "S-8" = "M-S-8";
         "9" = "M-9";
-        "S-9" = "M-S-9";
         "0" = "M-0";
-        "S-0" = "M-S-0";
       };
       settings."supercmd+shift" = {
         v = "A-S-v";
+        z = "C-S-z";
+        p = "M-S-p";
+        q = "M-S-q";
+        l = "M-S-l";
+        k = "M-S-k";
+        e = "M-S-e";
+        m = "M-S-m";
+        tab = "A-S-tab";
+        "1" = "M-S-1";
+        "2" = "M-S-2";
+        "3" = "M-S-3";
+        "4" = "M-S-4";
+        "5" = "M-S-5";
+        "6" = "M-S-6";
+        "7" = "M-S-7";
+        "8" = "M-S-8";
+        "9" = "M-S-9";
+        "0" = "M-S-0";
       };
     };
   };

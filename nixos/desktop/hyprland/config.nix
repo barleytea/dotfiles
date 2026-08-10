@@ -8,8 +8,16 @@
     monitor=,preferred,auto,auto
 
     # Startup applications
-    exec-once = waybar
-    exec-once = hyprpaper
+    # Hyprland は graphical-session.target を自動では起動しない。セッション環境を
+    # systemd の user manager に渡したうえで hyprland-session.target を起動することで、
+    # BindsTo 経由で graphical-session.target が立ち上がり配下のユニットが起動する。
+    # これが無いと WantedBy=graphical-session.target のユニット
+    # （waybar / hyprpaper / eww）は一度も起動されない。
+    # waybar と hyprpaper はこの target 配下で起動するため exec-once には書かない
+    exec-once = systemctl --user import-environment WAYLAND_DISPLAY HYPRLAND_INSTANCE_SIGNATURE XDG_CURRENT_DESKTOP && systemctl --user start hyprland-session.target
+    # ログアウト時に停止しておかないと、次のログインで target が active のままになり
+    # 新しい WAYLAND_DISPLAY で起動し直されない
+    exec-shutdown = systemctl --user stop graphical-session.target
     exec-once = dunst
     exec-once = fcitx5
     exec-once = gammastep -l 35.6762:139.6503 -t 6500:3500
@@ -115,6 +123,8 @@
   bind = $mainMod, Return, exec, alacritty
   bind = $mainMod SHIFT, Q, killactive,
   bind = ALT SHIFT, Q, killactive,
+  # フリーズして killactive が効かないアプリ向け。クリックしたウィンドウを強制終了する
+  bind = $mainMod SHIFT, K, exec, hyprctl kill
   bind = $mainMod SHIFT, M, exit,
   bind = $mainMod SHIFT, E, exec, thunar
     bind = ALT SHIFT, V, exec, cliphist-menu
@@ -190,6 +200,13 @@
 
     # Lock screen
     bind = $mainMod SHIFT, L, exec, hyprlock
+
+    # Layer rules
+    # 背景ダッシュボード (eww)。BOTTOM レイヤーなので壁紙より上・ウィンドウより下に出る。
+    # 透明部分まで blur が乗らないよう ignore_alpha を併記する
+    layerrule = blur on, match:namespace ^(eww-dashboard)$
+    layerrule = ignore_alpha 0.2, match:namespace ^(eww-dashboard)$
+    layerrule = no_anim on, match:namespace ^(eww-dashboard)$
 
     # Window rules
     windowrule = float on, match:class ^(pavucontrol)$

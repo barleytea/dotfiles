@@ -1,0 +1,210 @@
+// 生活情報ダッシュボードのスタイル
+//
+// 既存の Waybar グラステーマ (nixos/desktop/hyprland/waybar.nix) と配色を揃える。
+// GTK 独自拡張の @define-color は SCSS コンパイラを通らないため変数で持つ。
+// フォントは fonts.packages に実在するファミリだけを指定する
+// （Waybar CSS が要求している JetBrainsMono Nerd Font と Inter は未インストール）。
+
+$base: rgba(16, 18, 28, 0.68);
+$surface: rgba(26, 28, 40, 0.78);
+$surface-alt: rgba(38, 40, 56, 0.82);
+$hairline: rgba(255, 255, 255, 0.08);
+$text: #e7e9ff;
+$muted: rgba(231, 233, 255, 0.56);
+$accent: #89dceb;
+$accent-alt: #f5c2e7;
+$warn: #f9e2af;
+$danger: #f38ba8;
+
+* {
+    // Nerd Font を先に置き、日本語は fontconfig のフォールバックに任せる
+    font-family: "Hack Nerd Font", "Noto Sans CJK JP", sans-serif;
+    font-size: 13px;
+    color: $text;
+}
+
+// layer-shell の surface 自体は透過させ、角丸を壁紙に対して効かせる。
+// eww は window 名を GtkWindow と root widget の両方に CSS クラスとして付けるため、
+// .dashboard には見た目を持たせず .dashboard-body 側に寄せている
+window.dashboard {
+    background-color: transparent;
+}
+
+.dashboard-body {
+    background: linear-gradient(135deg, rgba(24, 26, 38, 0.82), $base);
+    border: 1px solid $hairline;
+    border-radius: 22px;
+    padding: 20px 22px;
+}
+
+// ------------------------------------------------------------------ カード共通
+
+.card {
+    background: $surface;
+    border: 1px solid $hairline;
+    border-radius: 18px;
+    padding: 14px 16px;
+}
+
+.card-title {
+    color: $accent;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.row {
+    min-height: 20px;
+}
+
+.row-key {
+    color: $muted;
+}
+
+.row-value {
+    font-weight: 600;
+}
+
+// ------------------------------------------------------------ 時刻・カレンダー
+
+.clock-time {
+    font-size: 52px;
+    font-weight: 700;
+}
+
+.clock-date {
+    font-size: 15px;
+    color: $muted;
+    margin-bottom: 4px;
+}
+
+.holiday {
+    color: $muted;
+}
+
+.holiday.active {
+    color: $accent-alt;
+    font-weight: 700;
+}
+
+// ----------------------------------------------------------------- 天気・気温
+
+.weather-now {
+    margin-bottom: 4px;
+}
+
+.weather-icon {
+    font-size: 46px;
+    color: $accent;
+}
+
+.weather-temp {
+    font-size: 34px;
+    font-weight: 700;
+}
+
+.weather-unit {
+    font-size: 16px;
+    color: $muted;
+}
+
+.weather-label {
+    color: $muted;
+}
+
+.forecast {
+    margin-top: 8px;
+}
+
+.forecast-day {
+    background: $surface-alt;
+    border-radius: 12px;
+    padding: 6px 2px;
+}
+
+.forecast-dow {
+    font-size: 11px;
+    color: $accent;
+    font-weight: 700;
+}
+
+.forecast-date {
+    font-size: 10px;
+    color: $muted;
+}
+
+.forecast-icon {
+    font-size: 20px;
+    color: $text;
+}
+
+.forecast-temp {
+    font-size: 11px;
+}
+
+.forecast-pop {
+    font-size: 10px;
+    color: $accent;
+}
+
+.alert {
+    background: rgba(137, 220, 235, 0.10);
+    border-radius: 12px;
+    padding: 6px 10px;
+    margin-top: 8px;
+    color: $muted;
+}
+
+.alert.active {
+    background: rgba(243, 139, 168, 0.22);
+    color: $danger;
+    font-weight: 700;
+}
+
+// -------------------------------------------------------------------- 生活情報
+
+.quakes {
+    margin-top: 4px;
+}
+
+.quake {
+    font-size: 12px;
+    color: $warn;
+}
+
+.news {
+    margin-top: 6px;
+}
+
+.news-item {
+    font-size: 12px;
+}
+
+// ------------------------------------------------------------- ショートカット
+
+.kb-row {
+    min-height: 18px;
+}
+
+.kb-key {
+    color: $accent;
+    font-weight: 700;
+    font-size: 12px;
+    min-width: 150px;
+}
+
+.kb-action {
+    color: $muted;
+    font-size: 12px;
+}
+
+// ----------------------------------------------------------------- フッター
+
+.footer {
+    font-size: 11px;
+    color: $muted;
+}
+
+.footer.stale {
+    font-size: 11px;
+    color: $danger;
+}

@@ -17,6 +17,18 @@ lib.mkIf cfgEnabled (
     xdg.configFile."hypr/hyprpaper.conf".text = hyprpaperConfig;
     xdg.configFile."hyprpaper/hyprpaper.conf".text = hyprpaperConfig;
 
+    # Hyprland のセッション target。hyprland.conf の exec-once から起動され、
+    # BindsTo により graphical-session.target を引き上げる。
+    # 配下のユニット（waybar / hyprpaper / eww）はここで初めて起動する
+    systemd.user.targets.hyprland-session = {
+      Unit = {
+        Description = "Hyprland session";
+        BindsTo = [ "graphical-session.target" ];
+        Wants = [ "graphical-session-pre.target" ];
+        After = [ "graphical-session-pre.target" ];
+      };
+    };
+
     systemd.user.services.hyprpaper = {
       Unit = {
         Description = "Hyprpaper wallpaper daemon";

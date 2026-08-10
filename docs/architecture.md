@@ -27,6 +27,7 @@
 - `cmux/` … cmux 連携 + difit-cmux スクリプト
 
 ### NixOS 専用 HM モジュール（`nixos/home-manager/`）
+- `dashboard/` … eww 背景ダッシュボード（天気・時刻・システム状態・生活情報）と定期フェッチの user unit
 - `fcitx5/` … 日本語入力
 - `hyprland/` … Wayland WM
 
@@ -119,7 +120,7 @@ CI は `windows-host.yml` が `bash -n` で構文チェック + ダミー bootst
 - セットアップ系: `installation`, `nix-operations`, `mise-guide`, `languages-setup`, `npm-tools`, `pre-commit-guide`
 - エディタ系: `vscode-setup`, `cursor-setup`, `nixvim-cheatsheet`
 - ターミナル/シェル系: `atuin-guide`, `zoxide-guide`, `zellij-worktree`
-- WM 系: `services-guide`, `hyprland-cheatsheet`, `nixos-keybindings`
+- WM 系: `services-guide`, `hyprland-cheatsheet`, `nixos-keybindings`, `dashboard-guide`
 - サーバ系: `fileserver-guide`, `gitserver-guide`, `tailscale-acl`
 - メタ: `sync-docs`
 

@@ -1,0 +1,78 @@
+
+=== ZDOTDIR ===
+ZDOTDIR=/home/miyoshi_s/.config/zsh
+
+=== zellij.zsh の実体パス（ZDOTDIR配下） ===
+(ZDOTDIR/config/zellij.zsh が見つからない)
+
+=== デプロイ済み zellij.zsh に HERDR_ENV チェックが入っているか ===
+--- /nix/store/ijg9sjgzji3fk14csni9cwc5wxiyljk4-source/home-manager/shell/zsh/config/zellij.zsh ---
+(HERDR_ENV なし)
+--- /nix/store/mlw50bb8ggm9bkah9agc2qc6lxhi8fpp-source/home-manager/shell/zsh/config/zellij.zsh ---
+(HERDR_ENV なし)
+--- /nix/store/z22dj2427kzxmqsv3n0jxvrd1p3snys3-source/nixos/home-manager/shell/zsh/config/zellij.zsh ---
+(HERDR_ENV なし)
+--- /nix/store/z22dj2427kzxmqsv3n0jxvrd1p3snys3-source/darwin/home-manager/shell/zsh/config/zellij.zsh ---
+(HERDR_ENV なし)
+--- /nix/store/z8vph7jbc9d221900axnzqc1zingf0w1-source/home-manager/shell/zsh/config/zellij.zsh ---
+(HERDR_ENV なし)
+--- /nix/store/5n748zs3vr004llq3dyqqm2m2h48ydd7-source/home-manager/shell/zsh/config/zellij.zsh ---
+(HERDR_ENV なし)
+--- /nix/store/4r0ll8x24l3v7q2pdvm4859b5xbg37hg-source/home-manager/shell/zsh/config/zellij.zsh ---
+(HERDR_ENV なし)
+--- /nix/store/5vhnhyw62vhj0jl01ikbh425mqgvcvsr-source/home-manager/shell/zsh/config/zellij.zsh ---
+(HERDR_ENV なし)
+--- /nix/store/h573pxjn8wmz0pmlnvrm2cskci9avban-source/home-manager/shell/zsh/config/zellij.zsh ---
+(HERDR_ENV なし)
+--- /nix/store/kibkq74ngic55mwixrw1b9bad4n9y0d5-source/nixos/home-manager/shell/zsh/config/zellij.zsh ---
+(HERDR_ENV なし)
+--- /nix/store/kibkq74ngic55mwixrw1b9bad4n9y0d5-source/darwin/home-manager/shell/zsh/config/zellij.zsh ---
+(HERDR_ENV なし)
+--- /nix/store/gjm8x9avxgvi6m71zf2x0blyvksq3szd-source/home-manager/shell/zsh/config/zellij.zsh ---
+(HERDR_ENV なし)
+--- /nix/store/fi33vx9wa3614pdmx73c3kwga9dn04da-source/home-manager/shell/zsh/config/zellij.zsh ---
+(HERDR_ENV なし)
+--- /nix/store/3ajz1igrkzff715b8z7bmwf1a3ddaadh-source/home-manager/shell/zsh/config/zellij.zsh ---
+(HERDR_ENV なし)
+--- /nix/store/0wyhb4zmmxpbyqxxw0216b1hkxsq22x9-source/home-manager/shell/zsh/config/zellij.zsh ---
+115:# HERDR_ENV で「herdr の中かどうか」を別途判定する必要がある
+116:if [[ -z "$ZELLIJ" ]] && [[ -z "$HERDR_ENV" ]] && ( [[ "$TERM_PROGRAM" == "alacritty" ]] || [[ -n "$ALACRITTY_SOCKET" ]] ); then
+--- /nix/store/mbvcxc4jai46sdkrbw232p7ly1vfakdr-source/home-manager/shell/zsh/config/zellij.zsh ---
+115:# HERDR_ENV で「herdr の中かどうか」を別途判定する必要がある
+116:if [[ -z "$ZELLIJ" ]] && [[ -z "$HERDR_ENV" ]] && ( [[ "$TERM_PROGRAM" == "alacritty" ]] || [[ -n "$ALACRITTY_SOCKET" ]] ); then
+--- /home/miyoshi_s/git_repos/github.com/barleytea/dotfiles/nixos/home-manager/shell/zsh/config/zellij.zsh ---
+115:# HERDR_ENV で「herdr の中かどうか」を別途判定する必要がある
+116:if [[ -z "$ZELLIJ" ]] && [[ -z "$HERDR_ENV" ]] && ( [[ "$TERM_PROGRAM" == "alacritty" ]] || [[ -n "$ALACRITTY_SOCKET" ]] ); then
+--- /home/miyoshi_s/git_repos/github.com/barleytea/dotfiles/darwin/home-manager/shell/zsh/config/zellij.zsh ---
+115:# HERDR_ENV で「herdr の中かどうか」を別途判定する必要がある
+116:if [[ -z "$ZELLIJ" ]] && [[ -z "$HERDR_ENV" ]] && ( [[ "$TERM_PROGRAM" == "alacritty" ]] || [[ -n "$ALACRITTY_SOCKET" ]] ); then
+
+=== ~/.zshrc のシンボリックリンク先 ===
+/home/miyoshi_s/.zshrc
+
+=== 評価時点の環境変数 ===
+ZELLIJ=[0]
+HERDR_ENV=[1]
+TERM_PROGRAM=[]
+ALACRITTY_SOCKET=[/run/user/1001/Alacritty-wayland-1-1644543.sock]
+HERDR_PANE_ID=[w3:p1]
+
+=== 現在の zellij セッション一覧 ===
+[32;1mfabulous-capsicum[m [Created [35;1m2days 8h 43m 57s[m ago] ([31;1mEXITED[m - attach to resurrect)
+[32;1mjudicious-magpie[m [Created [35;1m2days 6h 50m 44s[m ago] ([31;1mEXITED[m - attach to resurrect)
+[32;1mprofound-jellyfish[m [Created [35;1m1day 2h 5m 26s[m ago] ([31;1mEXITED[m - attach to resurrect)
+[32;1mrusty-triceratops[m [Created [35;1m1day 1h 16m 1s[m ago] (current)
+
+=== プロセスツリー（herdr / zellij / zsh の親子関係を確認） ===
+ 424504  424482  |                       \_ zsh
+ 424507  424504  |                           \_ herdr
+ 537153  537140  |   |   \_ zsh
+ 538870  538858  |   |   \_ zsh
+3802211 3802196  |   |   \_ zsh
+3802849 3802837  |       \_ zsh
+1644571       1  \_ herdr
+1646891 1644571  |   \_ .zellij-wrapped
+1647155       1  \_ zellij
+1647186 1647155  |   \_ zsh
+
+=== done ===

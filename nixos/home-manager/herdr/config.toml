@@ -1,0 +1,39 @@
+[terminal]
+default_shell = "zsh"
+shell_mode = "auto"
+new_cwd = "follow"
+
+[theme]
+name = "dracula"
+auto_switch = false
+
+[ui]
+sidebar_width = 32
+mouse_capture = true
+pane_borders = true
+pane_gaps = true
+confirm_close = true
+
+[ui.toast]
+delivery = "off"
+
+[ui.sound]
+enabled = false
+
+[keys]
+prefix = "ctrl+b"
+
+[session]
+resume_agents_on_restore = true
+
+[advanced]
+scrollback_limit_bytes = 104857600
+
+[update]
+channel = "stable"
+version_check = true
+
+[experimental]
+pane_history = false
+allow_nested = false
+kitty_graphics = false

@@ -1,0 +1,163 @@
+;; =============================================================================
+;; 生活情報ダッシュボード（壁紙レイヤー常駐・操作不可）
+;;
+;; 対話ウィジェット（button / eventbox / :onclick / :tooltip / calendar）は
+;; 一切使わない。背景レイヤーの surface はポインタイベントを受け取ってしまうため、
+;; 「押しても何も起きない」ことをこの規律で担保している。
+;;
+;; 表示文字列の整形はすべて dashboard-live / dashboard-fetch 側で済ませてあり、
+;; ここでは値の差し込みとフォールバックだけを行う。
+;; =============================================================================
+
+;; ---------------------------------------------------------------- データソース
+
+;; dashboard-fetch が 10 分間隔で書き出した JSON。取得に失敗したセクションは
+;; 前回値が残るため、ネットワーク断でも表示が空にならない
+(defpoll dash :interval "60s" :initial "{}" "dashboard-data")
+
+;; ローカル情報（時刻・温度・メモリ・ディスク・稼働時間）。必ず成功する。
+;; :initial に全キーを揃えた JSON を置くことで、起動直後の 1 回目のポーリング前も
+;; 安全にアクセスできる
+(defpoll live :interval "5s"
+              :initial '{"time":"--:--","dateLabel":"取得待ち","now":0,"cpuTemp":"--","memLabel":"--","uptime":"--","disks":[]}'
+              "dashboard-live")
+
+;; GPU 温度は hwmon に出ないため nvidia-smi から取る
+(defpoll gpu :interval "60s" :initial "--" "dashboard-gpu")
+
+;; ------------------------------------------------------------------- 共通部品
+
+(defwidget card [title]
+  (box :class "card" :orientation "v" :space-evenly false :spacing 8
+    (label :class "card-title" :xalign 0 :text title)
+    (children)))
+
+(defwidget row [key value]
+  (box :class "row" :orientation "h" :space-evenly false
+    (label :class "row-key" :xalign 0 :hexpand true :text key)
+    (label :class "row-value" :xalign 1 :text value)))
+
+;; ------------------------------------------------------------- 時刻・カレンダー
+
+(defwidget clock-card []
+  (card :title "時刻"
+    (label :class "clock-time" :xalign 0 :text {live.time})
+    (label :class "clock-date" :xalign 0 :text {live.dateLabel})
+    (label :class {(dash?.holiday?.active ?: false) ? "holiday active" : "holiday"}
+           :xalign 0 :wrap true
+           :text {dash?.holiday?.label ?: "祝日情報 取得待ち"})
+    (row :key "日の出 / 日の入" :value {dash?.weather?.sunLabel ?: "-- / --"})))
+
+;; ------------------------------------------------------------------ 天気・気温
+
+(defwidget weather-card []
+  (card :title {dash?.weather?.place ?: "天気"}
+    (box :class "weather-now" :orientation "h" :space-evenly false :spacing 16
+      (label :class "weather-icon" :text {dash?.weather?.current?.icon ?: ""})
+      (box :orientation "v" :space-evenly false :spacing 2 :hexpand true
+        (box :orientation "h" :space-evenly false :spacing 2 :halign "start"
+          (label :class "weather-temp" :text {dash?.weather?.current?.temp ?: "--"})
+          (label :class "weather-unit" :text "℃"))
+        (label :class "weather-label" :xalign 0
+               :text {dash?.weather?.current?.label ?: "取得待ち"})))
+    (box :orientation "v" :space-evenly false
+      (row :key "体感温度" :value {dash?.weather?.current?.apparent ?: "--"})
+      (row :key "湿度"     :value {dash?.weather?.current?.humidity ?: "--"})
+      (row :key "風"       :value {dash?.weather?.current?.wind ?: "--"})
+      (row :key "降水確率" :value {dash?.weather?.current?.pop ?: "--"}))
+    (box :class "forecast" :orientation "h" :space-evenly true :spacing 4
+      (for day in {dash?.weather?.daily ?: "[]"}
+        (box :class "forecast-day" :orientation "v" :space-evenly false :spacing 1
+          (label :class "forecast-dow"  :text {day.dow})
+          (label :class "forecast-date" :text {day.day})
+          (label :class "forecast-icon" :text {day.icon})
+          (label :class "forecast-temp" :text "${day.max}/${day.min}")
+          (label :class "forecast-pop"  :text "${day.pop}%"))))
+    (box :class {(dash?.warnings?.active ?: false) ? "alert active" : "alert"}
+         :orientation "h" :space-evenly false
+      (label :xalign 0 :wrap true
+             :text {dash?.warnings?.label ?: "警報情報 取得待ち"}))))
+
+;; ---------------------------------------------------------------- システム状態
+
+(defwidget system-card []
+  (card :title "システム"
+    (row :key "CPU 使用率" :value "${round(EWW_CPU.avg, 0)}%")
+    (row :key "CPU 温度"   :value "${live.cpuTemp}℃")
+    (row :key "GPU 温度"   :value "${gpu}℃")
+    (row :key "メモリ"     :value {live.memLabel})
+    ;; for は container の直接の子でなければならないため box で包む
+    ;; （custom widget の (children) 経由で渡すとエラーになる）
+    (box :orientation "v" :space-evenly false
+      (for disk in {live.disks}
+        (row :key "${disk.mount} 空き" :value "${disk.freeLabel}（使用 ${disk.usedPerc}）")))
+    (row :key "稼働時間"   :value {live.uptime})))
+
+;; ------------------------------------------------------------------ 生活情報
+
+(defwidget life-card []
+  (card :title "生活情報"
+    (row :key "USD / JPY" :value {dash?.fx?.label ?: "--"})
+    (box :class "quakes" :orientation "v" :space-evenly false :spacing 2
+      (for quake in {dash?.quake?.items ?: "[]"}
+        (label :class "quake" :xalign 0 :wrap true
+               :text "地震 ${quake.at}  ${quake.place}  ${quake.mag} ${quake.maxi}")))
+    (box :class "news" :orientation "v" :space-evenly false :spacing 3
+      (for article in {dash?.news?.items ?: "[]"}
+        (label :class "news-item" :xalign 0 :wrap true :limit-width 46
+               :text {article.title})))))
+
+;; ------------------------------------------------------------------ ショートカット
+
+;; Hyprland の bind 一覧（nixos/desktop/hyprland/config.nix）のうち、
+;; 使用頻度が高いものだけを抜粋する。静的な内容のため defpoll ではなく直接埋め込む
+(defwidget keybind-row [key action]
+  (box :class "kb-row" :orientation "h" :space-evenly false
+    (label :class "kb-key" :xalign 0 :text key)
+    (label :class "kb-action" :xalign 0 :hexpand true :text action)))
+
+(defwidget keybinds-card []
+  (card :title "ショートカット"
+    (box :orientation "h" :space-evenly true :spacing 24
+      (box :orientation "v" :space-evenly false :spacing 4
+        (keybind-row :key "Super + Return" :action "ターミナル")
+        (keybind-row :key "Alt + Space" :action "ランチャー")
+        (keybind-row :key "Super + Shift + Q" :action "ウィンドウを閉じる")
+        (keybind-row :key "Super + Shift + K" :action "強制終了（クリックで選択）")
+        (keybind-row :key "Super + Shift + E" :action "ファイラー"))
+      (box :orientation "v" :space-evenly false :spacing 4
+        (keybind-row :key "Super + Shift + L" :action "ロック")
+        (keybind-row :key "Super + h j k l" :action "フォーカス移動")
+        (keybind-row :key "Super + 1-0" :action "ワークスペース切替")
+        (keybind-row :key "Super + Shift + V" :action "フローティング切替")
+        (keybind-row :key "Super + ドラッグ" :action "移動 / リサイズ")))))
+
+;; ----------------------------------------------------------------------- 全体
+
+;; eww は window 名（dashboard）を GtkWindow と root widget の両方に CSS クラスとして
+;; 付けるため、見た目を持つクラスは別名にしないと枠とグラデーションが二重になる
+(defwidget dashboard []
+  (box :class "dashboard-body" :orientation "v" :space-evenly false :spacing 16
+    (box :orientation "h" :space-evenly false :spacing 16
+      (box :hexpand true (clock-card))
+      (box :hexpand true (weather-card)))
+    (box :orientation "h" :space-evenly false :spacing 16
+      (box :hexpand true (system-card))
+      (box :hexpand true (life-card)))
+    (keybinds-card)
+    ;; 最終更新から 30 分以上経っていたら色を変えて気付けるようにする
+    (label :class {live.now - (dash?.meta?.fetchedAt ?: 0) > 1800 ? "footer stale" : "footer"}
+           :xalign 1
+           :text {(dash?.meta?.fetchedAt ?: 0) == 0
+                  ? "データ未取得"
+                  : dash.meta.fetchedAtLabel + " 更新"})))
+
+(defwindow dashboard
+  ;; モニタは DP-1 の 1 枚のみ。コネクタ名の一致に依存しないよう索引で指定する
+  :monitor 0
+  :geometry (geometry :width "1000px" :height "10px" :anchor "center")
+  :stacking "bottom"          ; 壁紙より上・ウィンドウより下
+  :exclusive false            ; 作業領域を奪わない
+  :focusable "none"           ; キーボードフォーカスを絶対に取らない
+  :namespace "eww-dashboard"  ; hyprctl layers / layerrule のマッチ対象
+  (dashboard))

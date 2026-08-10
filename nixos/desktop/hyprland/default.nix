@@ -113,6 +113,7 @@ in
 
       # Wayland utilities
       waybar           # Status bar
+      eww              # Desktop background widget (dashboard)
       wofi             # Application launcher
       wlogout          # Logout menu
       wl-clipboard     # Clipboard manager
