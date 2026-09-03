@@ -64,14 +64,16 @@
 
 ### Reviews
 
-明示的にレビューを頼まれたときのみ、該当する review スキル（`~/.claude/skills/review-*`）を使う。
-根拠のある重要な指摘だけを報告し、スタイルの好みは報告しない。
+観点を指定せず「レビューして」と頼まれた場合は、review スキル（`~/.claude/skills/review-*`）を
+すべて実行し、観点ごとにグルーピングした1本の統合レポートとして返す。特定の観点が指定された
+場合は、そのスキルのみを使う。根拠のある重要な指摘だけを報告し、スタイルの好みは報告しない。
 
 - `review-code-quality`
 - `review-testing`
 - `review-security`
 - `review-dependencies`
 - `review-architecture`
+- `review-layering`
 - `review-performance`
 - `review-documentation`
 
