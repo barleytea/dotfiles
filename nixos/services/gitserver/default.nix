@@ -66,9 +66,6 @@ in
       };
     };
 
-    # Open SSH port in firewall
-    networking.firewall.allowedTCPPorts = [ 22 ];
-
     # Install git package system-wide
     environment.systemPackages = with pkgs; [
       git

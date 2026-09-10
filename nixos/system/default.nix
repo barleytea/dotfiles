@@ -50,6 +50,8 @@
     # SSH
     openssh = {
       enable = true;
+      # ポートは下の networking.firewall で tailscale0 のみに開放する
+      openFirewall = false;
       settings = {
         PasswordAuthentication = false;
         KbdInteractiveAuthentication = false;
@@ -93,6 +95,9 @@
   # NVIDIAプロプライエタリドライバーはこの自動サスペンドからの復帰に失敗し、
   # atomic modeset エラーで画面が真っ黒に固まったまま戻らなくなる不具合があるため
   services.displayManager.gdm.autoSuspend = false;
+
+  # SSH は Tailscale 経由のみ許可する（LAN / インターネットには公開しない）
+  networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 22 ];
 
   # Allow running pre-built binaries from generic Linux distributions (e.g. Claude CLI)
   programs.nix-ld = {
