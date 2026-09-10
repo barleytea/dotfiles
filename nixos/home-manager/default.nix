@@ -19,6 +19,7 @@ in {
   imports = [
     inputs.nixvim-config.homeManagerModules.default
     inputs.hunk.homeManagerModules.default
+    inputs.ai-guardrails.homeManagerModules.default
     # 共通 HM モジュール（modules/home/ から）
     "${shared}/home/alacritty"
     "${shared}/home/atuin"
@@ -94,6 +95,12 @@ in {
       vcs = "git";
       line_numbers = true;
     };
+  };
+
+  programs.ai-guardrails = {
+    enable = true;
+    # CLAUDE.md / GEMINI.md は dotfiles 側（modules/home/claude, gemini）で管理する
+    installInstructionFiles = false;
   };
 
   # .npmrc を実ファイルとして配置し、safe-chain や npm が追記できるようにする
