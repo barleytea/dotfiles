@@ -1,23 +1,6 @@
 {
-  "env": {
-    "EDITOR": "nvim"
-  },
-  "permissions": {
-    "allow": [],
-    "deny": [],
-    "defaultMode": "auto"
-  },
   "hooks": {
     "PreToolUse": [
-      {
-        "matcher": "Skill",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/log-skill.sh"
-          }
-        ]
-      },
       {
         "matcher": "*",
         "hooks": [
@@ -154,30 +137,10 @@
       }
     ]
   },
-  "statusLine": {
-    "type": "command",
-    "command": "~/.claude/statusline.sh",
-    "padding": 1
-  },
-  "enabledPlugins": {},
-  "language": "Japanese",
   "sandbox": {
-    "enabled": false,
-    "autoAllowBashIfSandboxed": true,
-    "allowUnsandboxedCommands": false,
-    "network": {
-      "allowedDomains": [
-        "*"
-      ]
-    },
-    "filesystem": {},
     "excludedCommands": [
       "docker",
       "gh"
     ]
-  },
-  "effortLevel": "medium",
-  "tui": "fullscreen",
-  "permissionMode": "auto",
-  "model": "claude-fable-5[1m]"
+  }
 }

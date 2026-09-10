@@ -32,7 +32,7 @@
 - `hyprland/` … Wayland WM
 
 ### OS 差分が大きく OS 固有のまま残しているモジュール
-- `ghostty/` … `config/config` に macOS 専用 3 行 + `pwd.nix` を経由する `mkOutOfStoreSymlink` のパス差
+- `ghostty/` … `config/config` は darwin/nixos で byte-identical。`pwd.nix` を経由する `mkOutOfStoreSymlink` のパスのみ OS 差分
 - `packages/packages.nix` … OS 専用パッケージ（bubblewrap / lmstudio / git-credential-manager 等）
 - `shell/zsh/config/*` … macOS 専用ウィジェット、Linux 専用 asdf 設定、Zellij 起動条件
 - `pwd.nix` … home 配下のパスのみ違う（ghostty が消費）
@@ -58,7 +58,7 @@ flake outputs:
 - `darwinConfigurations.all` … `make nix-darwin-apply` で適用（system + homebrew 一括）
 - `darwinConfigurations.homebrew` / `darwinConfigurations.system` … 部分適用用
 
-`nixvim-config` は input として `git+file:..?dir=nixvim` から取り込む（CI では `--override-input` でローカルパスに差し替え）。
+`nixvim-config` は input として `git+file:..?dir=nixvim` から取り込む（CI では `--override-input` でローカルパスに差し替え）。同様に `ai-guardrails` を `github:barleytea/ai-guardrails` として input に持ち、`programs.ai-guardrails.enable = true` で review-* / external-* スキルを供給する（`darwin/flake.nix` と `nixos/flake.nix` の両方）。
 
 ## 3. NixOS の構成
 
@@ -112,7 +112,7 @@ windows-ctf/
 
 CI は `windows-host.yml` が `bash -n` で構文チェック + ダミー bootstrap を実行する。
 
-## 6. AI スキル
+## 6. AI スキル / Claude Code 設定
 
 `.claude/skills/<skill-name>/SKILL.md` 形式。Claude Code から `/skill-name` で呼び出せるし、人間が直接 markdown として読める。
 
@@ -123,6 +123,20 @@ CI は `windows-host.yml` が `bash -n` で構文チェック + ダミー bootst
 - WM 系: `services-guide`, `hyprland-cheatsheet`, `nixos-keybindings`, `dashboard-guide`
 - サーバ系: `fileserver-guide`, `gitserver-guide`, `tailscale-acl`
 - メタ: `sync-docs`
+
+### Claude Code モジュール（`modules/home/claude/`）
+
+Claude Code の設定は OS 横断で `modules/home/claude/config/` を正典として管理する。
+
+- `config/settings.json` … 全マシン共通のベース設定
+- `config/overlays/windows-ctf.json` … windows-ctf 専用の上書き差分（Orca hooks 等）
+- `config/merge-settings.sh` … ベース + overlay をディープマージして `~/.claude/settings.json` を生成するスクリプト
+- `config/agents/explore.md` … 組み込み Explore エージェントを `model: haiku` に固定
+- `config/AGENTS.md`, `config/hooks/`, `config/skills/`, `config/commands/`, `config/statusline.sh` … それぞれシンボリックリンクとして配布
+
+`~/.claude/settings.json` は Nix 環境では `modules/home/claude/default.nix` の activation が `merge-settings.sh settings.json` を実行して生成し、WSL（windows-ctf）では `windows-ctf/scripts/setup-claude.sh` がベース + `overlays/windows-ctf.json` をマージして生成する。いずれも実ファイルでありシンボリックリンクではない。
+
+`review-*` / `external-*`（`natural-japanese` 等）スキルは手動配置ではなく flake input `ai-guardrails`（`programs.ai-guardrails.enable = true`）が `~/.claude/skills/` に自動インストールする。
 
 ## 7. CI ワークフロー
 

@@ -214,6 +214,34 @@ After `bootstrap-vm`, create snapshots in VMware:
 1. `baseline-clean`
 2. `ctf-ready`
 
+## Claude Code
+
+`windows-ctf/config/claude/` no longer exists. Claude Code settings for WSL Kali
+are generated from the OS-shared canonical source at
+`modules/home/claude/config/`.
+
+```bash
+cd ~/git_repos/github.com/barleytea/dotfiles/windows-ctf
+make setup-claude
+```
+
+`make setup-claude` runs `windows-ctf/scripts/setup-claude.sh`, which:
+
+- Deep-merges `modules/home/claude/config/settings.json` (base, shared with
+  macOS/NixOS) with `modules/home/claude/config/overlays/windows-ctf.json`
+  (Orca hooks, `excludedCommands`) and writes the result to
+  `~/.claude/settings.json` as a real file, not a symlink.
+- Symlinks everything else (`AGENTS.md` -> `~/.claude/CLAUDE.md`, `hooks/`,
+  `skills/`, `commands/`, `agents/`, `statusline.sh`) from
+  `modules/home/claude/config/` into `~/.claude/`.
+- Links `review-*` / `external-*` skills (e.g. `external-natural-japanese`)
+  from a sibling `../ai-guardrails/generated/` checkout when present, mirroring
+  the `ai-guardrails` flake input used on macOS/NixOS. Override the source
+  directory with `AI_GUARDRAILS_DIR` if your ghq layout differs.
+
+Requires `jq` (settings merge) and `bubblewrap` (Claude Code sandbox on
+WSL) - both are pulled in by the Kali manifests.
+
 ## Host Key Policy
 
 - `Caps Lock -> Ctrl`: always enabled.

@@ -54,7 +54,7 @@ install-bash-tools: ## Install Bash tools (Sheldon, ble.sh, Atuin, Starship, etc
 setup-bash: ## Link bash configs (starship/atuin/tmux) and install bash tools
 	bash ./scripts/setup-bash.sh
 
-setup-claude: ## Link Claude Code config (settings, statusline, skills, hooks)
+setup-claude: ## Generate Claude Code settings (base+overlay) and link config
 	bash ./scripts/setup-claude.sh
 
 install-nixvim: ## Install Nix + nixvim (Kali/WSL)
