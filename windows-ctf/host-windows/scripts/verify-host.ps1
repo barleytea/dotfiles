@@ -30,6 +30,7 @@ function Test-RequiredPath {
 }
 
 Test-RequiredCommand winget
+Test-RequiredCommand herdr
 # AutoHotkey may not be in PATH; check well-known install locations as fallback
 if (Get-Command AutoHotkey64.exe -ErrorAction SilentlyContinue) {
   Write-Host '[OK] command: AutoHotkey64.exe'
@@ -46,6 +47,7 @@ Test-RequiredCommand komorebic
 
 Test-RequiredPath $statePath
 Test-RequiredPath $generatedAhkPath
+Test-RequiredPath (Join-Path $env:LOCALAPPDATA 'Programs/Orca/Orca.exe')
 Test-RequiredPath (Join-Path $env:APPDATA 'ghostty/config')
 Test-RequiredPath (Join-Path $env:APPDATA 'FlowLauncher/Settings/Settings.json')
 Test-RequiredPath (Join-Path $env:USERPROFILE '.config/komorebi/komorebi.json')

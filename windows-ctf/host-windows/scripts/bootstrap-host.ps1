@@ -41,6 +41,9 @@ foreach ($entry in $entries) {
   }
 }
 
+Write-Host '==> Installing Herdr'
+& (Join-Path $scriptDir 'install-herdr.ps1') | Out-Host
+
 Write-Host '==> Installing fonts'
 & (Join-Path $scriptDir 'install-fonts.ps1') | Out-Host
 

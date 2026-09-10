@@ -1,17 +1,23 @@
 #!/usr/bin/env bash
 # fzf key bindings and completion
 
-# Load fzf bash integration
-if [[ -f /usr/share/doc/fzf/examples/key-bindings.bash ]]; then
-  source /usr/share/doc/fzf/examples/key-bindings.bash
-elif [[ -f /usr/share/fzf/key-bindings.bash ]]; then
-  source /usr/share/fzf/key-bindings.bash
-fi
+# ble.sh requires its own fzf integration. Fall back to the standard Readline
+# scripts when ble.sh is not available.
+if [[ ${BLE_VERSION-} ]]; then
+  ble-import -d integration/fzf-completion
+  ble-import -d integration/fzf-key-bindings
+else
+  if [[ -f /usr/share/doc/fzf/examples/key-bindings.bash ]]; then
+    source /usr/share/doc/fzf/examples/key-bindings.bash
+  elif [[ -f /usr/share/fzf/key-bindings.bash ]]; then
+    source /usr/share/fzf/key-bindings.bash
+  fi
 
-if [[ -f /usr/share/doc/fzf/examples/completion.bash ]]; then
-  source /usr/share/doc/fzf/examples/completion.bash
-elif [[ -f /usr/share/fzf/completion.bash ]]; then
-  source /usr/share/fzf/completion.bash
+  if [[ -f /usr/share/doc/fzf/examples/completion.bash ]]; then
+    source /usr/share/doc/fzf/examples/completion.bash
+  elif [[ -f /usr/share/fzf/completion.bash ]]; then
+    source /usr/share/fzf/completion.bash
+  fi
 fi
 
 # fzf default options

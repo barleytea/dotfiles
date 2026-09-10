@@ -13,7 +13,11 @@ sudo apt-get dist-upgrade -y
 
 "${SCRIPT_DIR}/install-manifest.sh" all
 
+"${SCRIPT_DIR}/install-gh.sh"
+
 "${SCRIPT_DIR}/install-mise.sh"
+
+"${SCRIPT_DIR}/install-herdr.sh"
 
 "${SCRIPT_DIR}/install-tailscale.sh"
 

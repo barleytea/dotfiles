@@ -12,6 +12,10 @@ This directory provides a dual-layer CTF environment for ThinkPad + Windows and 
 2. WSL2 Kali for fast daily operations
 3. VMware Kali for risky binaries and rollback-based testing
 
+Orca runs natively on Windows for the daily workflow and launches Codex from
+the Kali WSL distro. A standalone AppImage installer is also provided for the
+VMware Kali desktop or WSLg.
+
 ## Prerequisites
 
 Before running scripts, prepare the Windows host:
@@ -59,6 +63,9 @@ windows-ctf/
     ├── setup-host.ps1
     ├── install-manifest.sh
     ├── install-docker.sh
+    ├── install-gh.sh
+    ├── install-herdr.sh
+    ├── install-orca.sh
     ├── bootstrap-wsl-kali.sh
     ├── bootstrap-vm-kali.sh
     ├── sync-dotfiles.sh
@@ -82,7 +89,11 @@ cd path\to\dotfiles\windows-ctf\host-windows\scripts
 .\bootstrap-host.ps1
 ```
 
-This installs host-side UX tools via `winget`, enforces `Caps Lock -> Ctrl`, applies host configs, and verifies status.
+This installs host-side UX tools via `winget`, enforces `Caps Lock -> Ctrl`,
+applies host configs, and verifies status.
+It also installs Orca. See the
+[Windows host guide](host-windows/README.md#orca--wsl-kali) for connecting it
+to Codex inside `kali-linux`.
 
 ### 1) WSL feature setup (Windows, Administrator PowerShell)
 
@@ -113,8 +124,62 @@ newgrp docker
 docker run hello-world
 ```
 
+Install or update GitHub CLI independently with:
+
+```bash
+make install-gh
+gh auth login
+```
+
+This uses GitHub CLI's official apt repository because Kali's configured apt
+snapshot does not provide the `gh` package.
+
+### Herdr on Windows and Kali WSL
+
+The two bootstrap flows install separate Herdr binaries so native Windows
+agents and Kali WSL agents can each use local persistent sessions:
+
+```powershell
+# Windows host
+cd path\to\dotfiles\windows-ctf\host-windows\scripts
+.\install-herdr.ps1
+herdr
+```
+
+```bash
+# Kali WSL
+cd ~/git_repos/github.com/barleytea/dotfiles/windows-ctf
+make install-herdr
+herdr
+```
+
+The Windows installer uses Herdr's stable channel. The Kali installer places
+the executable in `~/.local/bin`, which this repository adds to `PATH`.
+Each installation has its own sessions and configuration; they are not shared
+automatically across the Windows/WSL boundary.
+
 If your WSL distro has systemd enabled, the bootstrap uses `systemctl enable --now docker`.
 Otherwise it falls back to `service docker start`.
+
+### Bash plugins and inline suggestions
+
+The Bash environment uses Sheldon as its plugin manager. Its declarative
+configuration is stored in `config/sheldon/plugins.toml`.
+
+`ble.sh` provides inline command suggestions while typing. Atuin automatically
+registers its history as a suggestion source when `ble.sh` is active. Accept a
+suggestion with the right arrow, `Ctrl+F`, or `End`.
+
+Install or refresh the shell tools and activate the configuration with:
+
+```bash
+cd ~/git_repos/github.com/barleytea/dotfiles/windows-ctf
+make setup-bash
+exec bash
+```
+
+The fzf integration is loaded through the `ble.sh` integration modules to
+avoid replacing its line editor bindings.
 
 ### 3) VMware Kali setup
 
@@ -131,6 +196,18 @@ VMware application setup checklist (Windows side):
 2. Create a Kali VM from ISO/image.
 3. Assign CPU/RAM/Disk (suggested start: 4 vCPU, 8-12GB RAM, 100GB disk).
 4. Install/enable VMware Tools (`open-vm-tools-desktop` in guest).
+
+Install the native Linux Orca app in the guest when you want the full UI there:
+
+```bash
+make install-orca
+orca-ide
+```
+
+The launcher automatically falls back to AppImage extraction mode when FUSE
+is unavailable, including WSL installations without `/dev/fuse`.
+Use `orca-ide`, not `orca ide`; Kali's `orca` apt package is the unrelated
+GNOME screen reader.
 
 After `bootstrap-vm`, create snapshots in VMware:
 
@@ -188,6 +265,7 @@ bash ./scripts/install-manifest.sh all
 - WSL and VMware Kali both boot and can reach network.
 - `make verify-environment` passes in both Linux environments.
 - WSL GUI tools launch via WSLg.
+- Orca launches on Windows and detects the Codex installation in `kali-linux`.
 - VMware snapshots can restore to `ctf-ready` quickly.
 
 ## CI Coverage

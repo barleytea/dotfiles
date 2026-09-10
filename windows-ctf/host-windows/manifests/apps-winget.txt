@@ -9,9 +9,11 @@ voidtools.Everything
 
 # Terminal and shell helpers
 Microsoft.WindowsTerminal
+StablyAI.Orca
 
 # Optional quality-of-life
 # Prefix optional package IDs with "?".
+?Discord.Discord
 ?Ghostty.Ghostty
 ?JanDeDobbeleer.OhMyPosh
 ?Notion.Notion

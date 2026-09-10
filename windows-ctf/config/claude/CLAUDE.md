@@ -32,3 +32,8 @@
 - Use subagents for complex problem verification
 - When you need the user to choose from explicit options, use `AskQuestionTool` instead of presenting plain-text multiple-choice lists.
 - Use plain-text questions only for open-ended input or when `AskQuestionTool` is unavailable.
+
+## Agent Model Strategy
+- **Fable / Opus をメインセッションとして使う場合**: 戦略立案・監査・レビュー・オーケストレーションに専念し、実作業（コード生成・コマンド実行・ファイル編集・情報収集）は Sonnet サブエージェント（`model: claude-sonnet-4-6`）に切り出して実行させる。
+- **例外**: 難易度が特に高いと判断した実作業はメインセッションで直接行ってよい。
+- サブエージェントを起動する際は Agent ツールの `model` パラメータに `"sonnet"` を明示する（省略するとメインセッションのモデルを継承してしまう）。

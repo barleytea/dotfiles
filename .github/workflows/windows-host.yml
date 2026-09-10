@@ -55,6 +55,7 @@ jobs:
             "$HOME/.config/bash/bashrc.sh" \
             "$HOME/.config/starship/starship.toml" \
             "$HOME/.config/atuin/config.toml" \
+            "$HOME/.config/sheldon/plugins.toml" \
             "$HOME/.tmux.conf" \
             "$HOME/.config/git/config" \
             "$HOME/.config/git/ignore" \

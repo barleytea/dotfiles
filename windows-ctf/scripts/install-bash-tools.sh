@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Install bash terminal tools for WSL Kali
-# Installs: starship, atuin, zoxide (via curl installers), eza, bat, ghq
+# Installs: bash-completion, Sheldon, ble.sh, starship, Atuin, zoxide, eza, bat, ghq
 set -euo pipefail
 
 LOCAL_BIN="${HOME}/.local/bin"
@@ -9,15 +9,35 @@ mkdir -p "${LOCAL_BIN}"
 # Ensure ~/.local/bin is in PATH for this session
 export PATH="${LOCAL_BIN}:${PATH}"
 
-echo "==> Installing apt packages: bat, eza"
-sudo apt-get install -y bat eza 2>/dev/null || {
+echo "==> Installing apt packages: bash-completion, bat, eza, xz-utils"
+sudo apt-get install -y bash-completion bat eza xz-utils 2>/dev/null || {
   echo "Note: eza not found in apt, will skip. Install manually if needed."
-  sudo apt-get install -y bat 2>/dev/null || true
+  sudo apt-get install -y bash-completion bat xz-utils 2>/dev/null || true
 }
 # On Debian/Ubuntu, bat may be installed as 'batcat'
 if command -v batcat >/dev/null 2>&1 && ! command -v bat >/dev/null 2>&1; then
   ln -sf "$(command -v batcat)" "${LOCAL_BIN}/bat"
 fi
+
+echo "==> Installing Sheldon"
+SHELDON_TMP_DIR=$(mktemp -d)
+curl --proto '=https' --tlsv1.2 -LsSf \
+  https://rossmacarthur.github.io/install/crate.sh \
+  -o "${SHELDON_TMP_DIR}/install-sheldon.sh"
+bash "${SHELDON_TMP_DIR}/install-sheldon.sh" \
+  --repo rossmacarthur/sheldon \
+  --to "${LOCAL_BIN}"
+rm -rf "${SHELDON_TMP_DIR}"
+
+echo "==> Installing ble.sh"
+BLESH_TMP_DIR=$(mktemp -d)
+curl --proto '=https' --tlsv1.2 -LsSf \
+  https://github.com/akinomyoga/ble.sh/releases/download/nightly/ble-nightly.tar.xz \
+  -o "${BLESH_TMP_DIR}/ble-nightly.tar.xz"
+tar -xJf "${BLESH_TMP_DIR}/ble-nightly.tar.xz" -C "${BLESH_TMP_DIR}"
+bash "${BLESH_TMP_DIR}/ble-nightly/ble.sh" \
+  --install "${HOME}/.local/share"
+rm -rf "${BLESH_TMP_DIR}"
 
 echo "==> Installing starship"
 curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir "${LOCAL_BIN}" --yes
@@ -49,12 +69,17 @@ rm -rf "${TMP_DIR}"
 
 echo ""
 echo "==> Done! Installed tools:"
-for tool in starship atuin zoxide ghq bat eza; do
+for tool in sheldon starship atuin zoxide ghq bat eza; do
   if command -v "${tool}" >/dev/null 2>&1; then
     echo "  [OK] ${tool} $(${tool} --version 2>/dev/null | head -1)"
   else
     echo "  [MISSING] ${tool}"
   fi
 done
+if [[ -r "${HOME}/.local/share/blesh/ble.sh" ]]; then
+  echo "  [OK] ble.sh"
+else
+  echo "  [MISSING] ble.sh"
+fi
 echo ""
 echo "Run 'make setup-bash' to link configs and add .bashrc source snippet."

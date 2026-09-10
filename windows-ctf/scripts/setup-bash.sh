@@ -14,6 +14,9 @@ STARSHIP_CONFIG_DEST="${HOME}/.config/starship/starship.toml"
 ATUIN_CONFIG_SRC="${DOTFILES_DIR}/config/atuin/config.toml"
 ATUIN_CONFIG_DEST="${HOME}/.config/atuin/config.toml"
 
+SHELDON_CONFIG_SRC="${DOTFILES_DIR}/config/sheldon/plugins.toml"
+SHELDON_CONFIG_DEST="${HOME}/.config/sheldon/plugins.toml"
+
 TMUX_CONF_SRC="${DOTFILES_DIR}/config/tmux/tmux.conf"
 TMUX_CONF_DEST="${HOME}/.tmux.conf"
 
@@ -31,7 +34,7 @@ bash "${SCRIPT_DIR}/install-bash-tools.sh"
 
 echo ""
 echo "==> Creating config directories..."
-mkdir -p "${HOME}/.config/bash" "${HOME}/.config/starship" "${HOME}/.config/atuin" "${HOME}/.config/git"
+mkdir -p "${HOME}/.config/bash" "${HOME}/.config/starship" "${HOME}/.config/atuin" "${HOME}/.config/git" "${HOME}/.config/sheldon"
 mkdir -p "${HOME}/.local/state/bash" "${HOME}/.local/state/less"
 
 echo "==> Linking bash config directory..."
@@ -50,6 +53,15 @@ echo "  Linked: ${STARSHIP_CONFIG_DEST}"
 echo "==> Linking atuin config..."
 ln -sf "${ATUIN_CONFIG_SRC}" "${ATUIN_CONFIG_DEST}"
 echo "  Linked: ${ATUIN_CONFIG_DEST}"
+
+echo "==> Linking Sheldon config..."
+ln -sf "${SHELDON_CONFIG_SRC}" "${SHELDON_CONFIG_DEST}"
+echo "  Linked: ${SHELDON_CONFIG_DEST}"
+if command -v sheldon >/dev/null 2>&1; then
+  sheldon lock
+else
+  echo "  Warning: sheldon not found; skipping plugin lock"
+fi
 
 echo "==> Linking tmux config..."
 ln -sf "${TMUX_CONF_SRC}" "${TMUX_CONF_DEST}"

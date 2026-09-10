@@ -1,0 +1,21 @@
+shell = "bash"
+
+[templates]
+blesh = """
+{{ hooks?.pre | nl }}{% for file in files %}source -- "{{ file }}" --attach=none
+{% endfor %}{{ hooks?.post | nl }}"""
+
+[plugins.blesh]
+local = "~/.local/share/blesh"
+use = ["ble.sh"]
+apply = ["blesh"]
+
+[plugins.blesh.hooks]
+pre = 'if [[ $- == *i* ]]; then'
+post = '''
+  if [[ ${BLE_VERSION-} ]]; then
+    bleopt complete_auto_complete=1
+    bleopt complete_auto_delay=100
+  fi
+fi
+'''

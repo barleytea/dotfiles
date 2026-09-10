@@ -30,8 +30,14 @@ install-all: ## Install all manifests (core + category + gui)
 install-mise: ## Install mise, Node.js LTS, and global npm tools (codex etc.)
 	bash ./scripts/install-mise.sh
 
+install-herdr: ## Install/update Herdr in Kali/WSL
+	bash ./scripts/install-herdr.sh
+
 setup-github-ssh: ## Set up SSH key and configure git remote for GitHub
 	bash ./scripts/setup-github-ssh.sh
+
+install-gh: ## Install/update GitHub CLI from the official apt repository
+	bash ./scripts/install-gh.sh
 
 dump-wt-settings: ## Dump current Windows Terminal settings from Windows filesystem to dotfiles
 	bash ./host-windows/scripts/dump-wt-settings.sh
@@ -42,7 +48,7 @@ install-tailscale: ## Install Tailscale (WSL userspace-networking mode)
 install-docker: ## Install Docker Engine and Docker Compose on Kali/WSL
 	bash ./scripts/install-docker.sh
 
-install-bash-tools: ## Install bash terminal tools (starship, atuin, zoxide, eza, bat, ghq)
+install-bash-tools: ## Install Bash tools (Sheldon, ble.sh, Atuin, Starship, etc.)
 	bash ./scripts/install-bash-tools.sh
 
 setup-bash: ## Link bash configs (starship/atuin/tmux) and install bash tools
@@ -53,3 +59,6 @@ setup-claude: ## Link Claude Code config (settings, statusline, skills, hooks)
 
 install-nixvim: ## Install Nix + nixvim (Kali/WSL)
 	bash ./scripts/install-nixvim.sh
+
+install-orca: ## Install/update Orca AppImage (Kali GUI/WSLg)
+	bash ./scripts/install-orca.sh

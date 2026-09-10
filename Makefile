@@ -157,3 +157,9 @@ windows-host-help: ## windowsホストUX設定ガイドを表示します
 
 windows-ctf-dump-wt-settings: ## Windows Terminalの現在の設定をdotfilesにdumpします（WSL2から実行）
 	cd windows-ctf && make dump-wt-settings
+
+windows-ctf-install-orca: ## Kali GUI/WSLgにOrca AppImageをインストールします
+	cd windows-ctf && make install-orca
+
+windows-ctf-install-gh: ## Kali/WSLにGitHub CLIをインストールします
+	cd windows-ctf && make install-gh

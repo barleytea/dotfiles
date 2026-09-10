@@ -9,6 +9,8 @@ sudo apt-get dist-upgrade -y
 
 "${SCRIPT_DIR}/install-manifest.sh" all
 
+"${SCRIPT_DIR}/install-gh.sh"
+
 cat <<'EOM'
 VM bootstrap complete.
 Recommended post-steps:

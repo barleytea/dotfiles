@@ -14,6 +14,7 @@ check_cmd() {
 }
 
 check_cmd git
+check_cmd gh
 check_cmd nmap
 check_cmd sqlmap
 check_cmd gdb
@@ -21,9 +22,18 @@ check_cmd radare2
 check_cmd binwalk
 check_cmd wireshark
 check_cmd python3
+check_cmd herdr
+check_cmd sheldon
 check_cmd zsh
 check_cmd tmux
 check_cmd docker
+
+if [[ -r "${HOME}/.local/share/blesh/ble.sh" ]]; then
+    echo "[OK] ble.sh"
+else
+    echo "[NG] ble.sh (missing)"
+    errors=$((errors + 1))
+fi
 
 if grep -qi "microsoft" /proc/version 2>/dev/null; then
     echo "[INFO] Environment: WSL"
