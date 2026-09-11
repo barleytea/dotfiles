@@ -97,7 +97,10 @@ ValidateCapsCtrlState() {
 #HotIf
 
 ; IME toggle (英かな) - 実 Ctrl+Space (排他: CapsLock 物理押下なし時のみ)
-#HotIf !GetKeyState("CapsLock", "P")
+; WSLg（wslhost.exe がホストする Kali 側 GUI ウィンドウ）がアクティブなときは
+; 素通しする。ここで奪うと fcitx5 の Control+space トリガーに Ctrl+Space が
+; 一切届かず、WSLg 内で日本語入力の切り替えができなくなる。
+#HotIf !GetKeyState("CapsLock", "P") && WinGetProcessName("A") != "wslhost.exe"
 ^Space::{
     global g_capsCtrlDown
     if g_capsCtrlDown {
