@@ -4,11 +4,10 @@
   pkgs,
   ...
 }: let
-  dotfilesPath = "${config.home.homeDirectory}/git_repos/github.com/barleytea/dotfiles";
-  claudeConfigPath = "${dotfilesPath}/modules/home/claude/config";
-
   # AGENTS.md の OS 別レンダリングは Claude / Gemini / Codex / Copilot で共有する。
-  renderedAgents = import "${claudeConfigPath}/render-agents.nix" {inherit pkgs;};
+  # import はビルド評価時にファイルを読むため、実行時のホームディレクトリ文字列
+  # ではなく、このファイル自身からの相対 Nix パスで参照する必要がある。
+  renderedAgents = import ../claude/config/render-agents.nix {inherit pkgs;};
 
   # Claude Code の auto mode + sandbox 方針を Codex CLI の語彙に合わせたもの。
   # - model = "gpt-5.6-terra": メインセッションのデフォルトモデル

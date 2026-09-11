@@ -1,13 +1,11 @@
 {
-  config,
   pkgs,
   ...
 }: let
-  dotfilesPath = "${config.home.homeDirectory}/git_repos/github.com/barleytea/dotfiles";
-  claudeConfigPath = "${dotfilesPath}/modules/home/claude/config";
-
   # AGENTS.md の OS 別レンダリングは Claude / Gemini / Codex / Copilot で共有する。
-  renderedAgents = import "${claudeConfigPath}/render-agents.nix" {inherit pkgs;};
+  # import はビルド評価時にファイルを読むため、実行時のホームディレクトリ文字列
+  # ではなく、このファイル自身からの相対 Nix パスで参照する必要がある。
+  renderedAgents = import ../claude/config/render-agents.nix {inherit pkgs;};
 
   # VS Code の GitHub Copilot（Agent Host / ローカルエージェント）は
   # ~/.copilot/instructions/*.instructions.md をグローバル指示として読む。
