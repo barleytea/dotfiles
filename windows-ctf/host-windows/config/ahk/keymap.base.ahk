@@ -97,10 +97,13 @@ ValidateCapsCtrlState() {
 #HotIf
 
 ; IME toggle (英かな) - 実 Ctrl+Space (排他: CapsLock 物理押下なし時のみ)
-; WSLg（wslhost.exe がホストする Kali 側 GUI ウィンドウ）がアクティブなときは
-; 素通しする。ここで奪うと fcitx5 の Control+space トリガーに Ctrl+Space が
-; 一切届かず、WSLg 内で日本語入力の切り替えができなくなる。
-#HotIf !GetKeyState("CapsLock", "P") && WinGetProcessName("A") != "wslhost.exe"
+; WSLg（Kali 側 GUI ウィンドウ）がアクティブなときは素通しする。ここで奪うと
+; fcitx5 の Control+space トリガーに Ctrl+Space が一切届かず、WSLg 内で
+; 日本語入力の切り替えができなくなる。ホストプロセス名は実機で ToolTip
+; WinGetProcessName("A") により msrdc.exe（WSLg は内部的に RDP で描画する
+; ため）と確認済み。wslhost.exe も一部の WSLg バージョン/構成で使われる
+; ため、両方を対象外にしておく。
+#HotIf !GetKeyState("CapsLock", "P") && !(WinGetProcessName("A") = "wslhost.exe" || WinGetProcessName("A") = "msrdc.exe")
 ^Space::{
     global g_capsCtrlDown
     if g_capsCtrlDown {
