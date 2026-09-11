@@ -17,14 +17,19 @@
       url = "git+file:..?dir=modules";
       flake = false;
     };
+    ai-guardrails = {
+      # レビュースキル等のガードレール（instruction ファイルは dotfiles 側で管理するため無効化）
+      url = "github:barleytea/ai-guardrails";
+    };
     hunk = {
       url = "github:modem-dev/hunk";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     agent-dangomushi = {
-      # dotfiles と同一マシン上にクローン済みのローカルリポジトリを直接参照する
-      # （GitHub 上で private/未push でも動く）
-      url = "git+file:///home/miyoshi_s/git_repos/github.com/barleytea/agent-dangomushi";
+      # dotfiles と同じ ghq ルート配下（`../../agent-dangomushi`）にクローン済みのローカルリポジトリを
+      # 相対パスで参照する（GitHub 上で private/未push でも動く。CI では
+      # `.github/ci-stubs/agent-dangomushi` に override される）
+      url = "git+file:../../agent-dangomushi";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -35,6 +40,7 @@
     home-manager,
     nixvim-config,
     dotfiles-shared,
+    ai-guardrails,
     hunk,
     agent-dangomushi,
   } @ inputs: let

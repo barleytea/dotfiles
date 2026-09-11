@@ -32,6 +32,20 @@
 - 選択肢は相互排他的かつ簡潔に保つ
 - フリーフォーム入力が本質的に必要なケースに限り、プレーンテキストで質問する
 
+### 1.5 モデル戦略とガードレール
+- メインセッションは戦略立案・監査・レビューに専念し、実作業はサブエージェントに切り出す（`env.CLAUDE_CODE_SUBAGENT_MODEL=sonnet` によりデフォルトで Sonnet）
+- 探索系タスク（Explore エージェント）は `modules/home/claude/config/agents/explore.md` で `model: haiku` に固定し、コストを抑える
+- 権限・破壊的操作のガードレール（force-push 禁止、秘密ファイル読み取り禁止、`git push` 等の確認プロンプト）の詳細は `modules/home/claude/config/AGENTS.md` と同ディレクトリの `settings.json` を正典とする
+
+### 1.6 エージェント横断の人格共有
+- `modules/home/claude/config/AGENTS.md`（1.1〜1.5 の内容そのもの）は Claude Code / Gemini CLI / Codex CLI / GitHub Copilot（VS Code）が共通で読む唯一のソース。ツール別の配備先は以下の通り
+  - Claude Code: `~/.claude/CLAUDE.md`
+  - Gemini CLI: `~/.gemini/GEMINI.md`
+  - Codex CLI: `~/.codex/AGENTS.md`
+  - GitHub Copilot（VS Code, Agent Host）: `~/.copilot/instructions/dotfiles-agents.instructions.md`
+- gh 認証手順など OS 依存部分は `modules/home/claude/config/render-agents.nix` が build 時に差し替える（4 ツールとも同じレンダリング結果を参照する）
+- **Cursor は対象外**: ホームディレクトリ直下のグローバル指示ファイルという仕組みが存在しないため自動配備できない。プロジェクトルートの `AGENTS.md`（このファイル自身を含む）は自動で読まれるが、全プロジェクト共通の指示は Cursor Settings → Rules → User Rules に手動で貼る必要がある。詳細は `/cursor-setup` スキルの「Global AI Rules」節を参照
+
 ---
 
 ## 2. リポジトリ構成（ハイレベル）
@@ -127,6 +141,7 @@
 |--------------|------|
 | `docs/architecture.md` | Nix 構成 / モジュール責務 / フロー詳細 |
 | `docs/commands.md` | 全 Make ターゲットと CI 想定の使い分け |
+| `modules/home/claude/config/` | Claude Code の正典設定（settings base / overlays / agents / AGENTS.md） |
 | `README.md` | 利用者向けの Quick Start とツール一覧 |
 | `.claude/skills/*/SKILL.md` | 個別トピック（mise / pre-commit / VSCode / 各種サービス etc.） |
 | `windows-ctf/README.md` | Windows CTF 環境専用ガイド |

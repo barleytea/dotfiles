@@ -81,15 +81,37 @@ jobs:
 
       - name: Verify Claude symlinks
         run: |
+          # skills/generate-commit-msg はディレクトリごと symlink されるため、
+          # 中の SKILL.md 自体は symlink にならない（親ディレクトリが symlink）。
+          # ディレクトリの方を -L で検証する
           for f in \
             "$HOME/.claude/CLAUDE.md" \
-            "$HOME/.claude/settings.json" \
             "$HOME/.claude/statusline.sh" \
             "$HOME/.claude/hooks/log-skill.sh" \
-            "$HOME/.claude/skills/generate-commit-msg/SKILL.md"; do
-            if [ -e "$f" ]; then
-              echo "[OK] $f"
+            "$HOME/.claude/skills/generate-commit-msg" \
+            "$HOME/.claude/agents/explore.md"; do
+            if [ -L "$f" ]; then
+              echo "[OK] symlink: $f"
             else
-              echo "[NG] missing: $f" && exit 1
+              echo "[NG] not a symlink (or missing): $f" && exit 1
             fi
           done
+          if [ -e "$HOME/.claude/skills/generate-commit-msg/SKILL.md" ]; then
+            echo "[OK] reachable: $HOME/.claude/skills/generate-commit-msg/SKILL.md"
+          else
+            echo "[NG] missing: $HOME/.claude/skills/generate-commit-msg/SKILL.md" && exit 1
+          fi
+
+      - name: Verify Claude settings.json is a generated real file
+        run: |
+          f="$HOME/.claude/settings.json"
+          if [ -L "$f" ]; then
+            echo "[NG] $f must not be a symlink" && exit 1
+          fi
+          if [ ! -e "$f" ]; then
+            echo "[NG] missing: $f" && exit 1
+          fi
+          jq empty "$f" && echo "[OK] $f is valid JSON"
+          jq -e '(.hooks.PreToolUse|length) >= 2 and .permissions.defaultMode == "auto" and .env.CLAUDE_CODE_SUBAGENT_MODEL == "sonnet"' "$f" \
+            && echo "[OK] $f overlay fields present" \
+            || { echo "[NG] $f missing expected overlay fields"; exit 1; }

@@ -78,6 +78,16 @@ nix build .#nixosConfigurations.desktop.config.environment.systemPackages -L
 cursor --version
 ```
 
+## Global AI Rules（人格・行動原則）
+
+Claude Code / Gemini / Codex CLI と異なり、**Cursor にはホームディレクトリ配下のグローバル指示ファイルという仕組みが存在しない**（`~/.cursor/AGENTS.md` のようなパスは Cursor が読まない）。`modules/home/claude/config/AGENTS.md` を dotfiles から自動配備する対象に Cursor は含まれていない。理由と回避策は以下の通り。
+
+- **プロジェクト単位**: Cursor はプロジェクトルートの `AGENTS.md`（フロントマターなしのプレーン Markdown）を自動的に読む。このリポジトリのようにルートに `AGENTS.md` があるプロジェクトでは、追加設定なしで人格・行動原則が反映される。`.cursor/rules/*.mdc` も同様にプロジェクト単位（`<repo>/.cursor/rules/`）で、`$HOME/.cursor/rules/` はスコープ外。
+- **グローバル（全プロジェクト共通）**: Cursor 上部メニュー → **Cursor Settings → Rules → User Rules** に手動で貼り付ける以外の方法がない。`modules/home/claude/config/AGENTS.md` の内容をコピーして貼り付ける（自動同期の仕組みはなく、内容を更新したら手動で再度貼り直す必要がある）。
+- **参考**: [Cursor Docs - Rules](https://cursor.com/docs/rules)
+
+なお [ai-guardrails](https://github.com/barleytea/ai-guardrails) が生成する `~/.cursor/rules/ai-guardrails.mdc`（ホームディレクトリ直下への配置）も、上記と同じ理由でおそらく Cursor に読み込まれない。dotfiles では `programs.ai-guardrails.installInstructionFiles = false` により、この生成自体を無効化している。
+
 ## NixOS-Specific Implementation
 
 ### Automatic cursor-agent Patching

@@ -1,6 +1,8 @@
 # Core tools shared between WSL Kali and VMware Kali
 bash-completion
 build-essential
+# Claude Code sandbox 用
+bubblewrap
 ca-certificates
 curl
 direnv

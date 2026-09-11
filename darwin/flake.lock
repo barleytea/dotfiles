@@ -1,5 +1,20 @@
 {
   "nodes": {
+    "ai-guardrails": {
+      "locked": {
+        "lastModified": 1789091361,
+        "narHash": "sha256-3zNK5pf55T34XTEZ5gB5eBuLTwiXVOOmigW8YX/tnhI=",
+        "owner": "barleytea",
+        "repo": "ai-guardrails",
+        "rev": "356d67082849533fd78ec08727c81943793e0bdb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "barleytea",
+        "repo": "ai-guardrails",
+        "type": "github"
+      }
+    },
     "bun2nix": {
       "inputs": {
         "flake-parts": "flake-parts",
@@ -254,6 +269,7 @@
     },
     "root": {
       "inputs": {
+        "ai-guardrails": "ai-guardrails",
         "dotfiles-shared": "dotfiles-shared",
         "home-manager": "home-manager",
         "hunk": "hunk",

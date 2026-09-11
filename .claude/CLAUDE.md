@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Architecture Overview
 
-これはNixとHome Managerを使用したmacOS/NixOS dotfilesリポジトリ、およびシンボリックリンクベースのParrotOS設定を含むリポジトリです：
+これはNixとHome Managerを使用したmacOS/NixOS dotfilesリポジトリ、およびWindows + WSL2向けのNix非依存なCTF環境設定を含むリポジトリです：
 
 **Nix-based Configurations:**
 - **darwin/**: macOS用の独立したflake（nix-darwin + home-manager）
@@ -16,13 +16,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **nixvim/**: Neovim用の独立したflake（スタンドアロン使用可能）
   - `nixvim/flake.nix`: Neovim設定のメインエントリポイント
 
-**Non-Nix Configuration:**
-- **parrotos/**: ParrotOS/Debian用の設定（シンボリックリンク + aptパッケージ管理）
-  - `parrotos/setup.sh`: ワンライナーブートストラップ
-  - `parrotos/install.sh`: メインインストーラー
-  - `parrotos/Makefile`: 独立したタスクランナー
-  - Nix依存なし、aptとGitHub Releasesでツール管理
-
 ### Supported Architectures
 
 | Architecture | Package Manager | Status |
@@ -30,7 +23,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | Apple Silicon (aarch64-darwin) | Nix (unstable) | Full support |
 | Intel Mac (x86_64-darwin) | Nix (unstable) | Full support |
 | NixOS (x86_64-linux) | Nix (unstable) | Full support |
-| ParrotOS / Debian (x86_64, aarch64) | apt + GitHub Releases | Full support |
+| Windows + WSL2 (windows-ctf) | apt + winget + scripts | Full support |
 
 ## Common Commands
 
@@ -119,41 +112,6 @@ make nix-gc
 make nix-uninstall
 ```
 
-### ParrotOS / Debian
-**ワンライナーセットアップ:**
-```bash
-curl -fsSL https://raw.githubusercontent.com/barleytea/dotfiles/main/parrotos/setup.sh | bash
-```
-
-**手動セットアップ（parrotosディレクトリ内で実行）:**
-```bash
-# 完全セットアップ
-make setup
-
-# 個別インストール
-make install-packages  # apt基本パッケージ
-make install-ctf       # CTFツール
-make install-tools     # non-aptツール (mise, starship, sheldon, etc.)
-make install-fonts     # Nerd Fonts
-
-# シンボリックリンク
-make link              # リンク作成
-make unlink            # リンク削除
-make link-dry-run      # dry-run
-
-# 更新
-make update-packages   # aptパッケージ更新
-make update-tools      # non-aptツール更新
-make update-repo       # dotfilesリポジトリ更新
-
-# mise
-make mise-install              # mise管理ツールをインストール
-make mise-run-commitizen       # commitizen/cz-git
-make mise-run-pre-commit       # pre-commitフック
-```
-
-詳細は `parrotos/README.md` または `parrotos/Makefile` を参照。
-
 ### Development Tools (Nix環境)
 ```bash
 # miseでツール管理
@@ -219,38 +177,67 @@ make paths
 4. **Window Management**: AeroSpace + JankyBorders + AltTab
 5. **Development**: pre-commit、gitleaks、commitizen
 
-### AI ツール設定（AGENTS.md）
+### AI ツール設定（modules/home/claude/config/）
 
-AI エージェント向けの行動原則は **AGENTS.md** を唯一の真のソースとして管理。
-`~/.claude/CLAUDE.md` と `~/.gemini/GEMINI.md` は AGENTS.md へのシンボリックリンク。
+Claude Code 設定は OS 横断の正典 `modules/home/claude/config/` を単一ソースとして管理する（darwin/nixos 個別の claude ディレクトリは存在しない）。AI エージェント向けの行動原則は同ディレクトリの **AGENTS.md** が唯一の真のソースで、Claude Code / Gemini CLI / Codex CLI / GitHub Copilot の4ツールがこれを共有する。
 
-**ファイル配置:**
-- **darwin/home-manager/claude/config/**: macOS用AI設定の管理
-  - **AGENTS.md**: 行動原則（Claude・Gemini 共通の単一ソース）
-  - **settings.json**: Claude Code設定（hooks、permissions）
-  - **commands/**: カスタムコマンド定義
-  - **skills/**: カスタムスキル定義
+**エージェント別の配備先:**
+| ツール | 配備先 | 配備方法 |
+|--------|--------|----------|
+| Claude Code | `~/.claude/CLAUDE.md` | `render-agents.nix` でレンダリングし symlink |
+| Gemini CLI | `~/.gemini/GEMINI.md` | 同上 |
+| Codex CLI | `~/.codex/AGENTS.md` | 同上（`modules/home/codex/default.nix`） |
+| GitHub Copilot（VS Code） | `~/.copilot/instructions/dotfiles-agents.instructions.md` | frontmatter を付与した実ファイル（`modules/home/copilot/default.nix`） |
+| Cursor | 自動配備なし | プロジェクトルートの `AGENTS.md` は自動で読まれるが、グローバル指示は Cursor Settings → Rules → User Rules に手動設定が必要（`~/.cursor/` 配下にグローバル指示ファイルの仕組みが存在しないため）。詳細は `/cursor-setup` スキル |
 
-- **nixos/home-manager/claude/config/**: NixOS用AI設定の管理
-  - 構造はmacOSと同じ
+`render-agents.nix`（`modules/home/claude/config/`）が gh 認証手順など OS 依存部分をビルド時に差し替え、4 ツールとも同じレンダリング結果を参照する。
 
-**シンボリックリンク構造:**
-```
-~/.claude/CLAUDE.md  → .../claude/config/AGENTS.md  ← Claude Code が読む
-~/.gemini/GEMINI.md  → .../claude/config/AGENTS.md  ← Gemini CLI が読む
-```
+**ファイル配置（`modules/home/claude/config/`）:**
+| ファイル/ディレクトリ | 役割 |
+|------------------------|------|
+| `settings.json` | 全マシン共通のベース設定（hooks、permissions、model 等。Claude Code 専用） |
+| `overlays/windows-ctf.json` | windows-ctf 専用の上書き差分（Orca 用 hooks、`excludedCommands`） |
+| `merge-settings.sh` | ベースとoverlayをディープマージするスクリプト。`hooks` 配下の配列は連結、それ以外の配列は置換（`excludedCommands` 等は overlay が全体を置き換えるので注意） |
+| `agents/explore.md` | 組み込み Explore エージェントを `model: haiku` で上書き |
+| `render-agents.nix` | AGENTS.md の OS 別レンダリング共通関数（Claude/Gemini/Codex/Copilot が共有） |
+| `AGENTS.md` | 行動原則（4 ツール共通の単一ソース） |
+| `hooks/` | フックスクリプト群 |
+| `skills/` | カスタムスキル定義 |
+| `commands/` | カスタムコマンド定義 |
+| `statusline.sh` | ステータスライン表示スクリプト |
 
-**デプロイメント:**
-- **自動デプロイ**: `make home-manager-apply`（macOS）または`sudo nixos-rebuild switch`（NixOS）で`~/.claude/`にシンボリックリンクを作成
-- **スキル追加手順**:
-  1. OS別のディレクトリに配置（`darwin/home-manager/claude/config/skills/<skill-name>/` または `nixos/home-manager/claude/config/skills/<skill-name>/`）
-  2. `SKILL.md`（必須）とオプションファイルを配置
-  3. 設定を適用すると`~/.claude/skills/<skill-name>/`に自動展開
+**`~/.claude/settings.json` の生成方式（重要: シンボリックリンクではなく実ファイル）:**
+- **Nix環境（darwin/NixOS）**: `modules/home/claude/default.nix` の Home Manager activation が `merge-settings.sh settings.json` を実行し、ベース設定のみから `~/.claude/settings.json` を生成
+- **WSL（windows-ctf）**: `windows-ctf/scripts/setup-claude.sh` がベース設定 + `overlays/windows-ctf.json` をマージして生成
+- それ以外（`CLAUDE.md`、statusline、hooks、skills、commands、agents）はすべて `modules/home/claude/config/` からのシンボリックリンク
+
+**権限モデル / ガードレール:**
+- 全マシン共通で `permissions.defaultMode: auto` + サンドボックス有効（WSL では `bubblewrap` が必要。windows-ctf のマニフェストに追加済み）
+- `permissions.deny` / `autoMode.hard_deny`: force-push や秘密情報ファイル（`~/.npmrc_local`, `~/.zshrc_local`, `~/.ssh`, `~/.aws`, `/etc/nixos/secrets`, `.env` 等）の読み取りをブロック
+- `autoMode.soft_deny`: `git push`, `git reset --hard`, `rm -rf`, `*-rebuild switch`, `home-manager switch`, `gh repo delete`, `npm publish` 等は確認を要求
+- `permissions.ask`: `model: opus` / `model: fable` を指定するサブエージェント起動時に確認を要求
+
+**モデル戦略:**
+- メインセッション: `fable[1m]` / `effortLevel high`（戦略立案・監査・レビュー用）
+- サブエージェント: `env.CLAUDE_CODE_SUBAGENT_MODEL=sonnet` によりデフォルトで Sonnet
+- Explore エージェント: `agents/explore.md` で `model: haiku` に固定
+- `modelSettings` で sonnet/haiku の effort を下げている
+- `env.zsh` から `ANTHROPIC_MODEL=opusplan` の export は削除済み（モデル指定は settings.json が一元管理）
+
+**ai-guardrails（review / natural-japanese スキル）:**
+- flake input `github:barleytea/ai-guardrails` として `darwin/flake.nix` と `nixos/flake.nix` の両方から取り込み
+- 両 HM エントリポイントで `programs.ai-guardrails = { enable = true; installInstructionFiles = false; }` を設定
+- `~/.claude/skills/review-*`（8種）と `~/.claude/skills/external-*`（例: `external-natural-japanese`）を自動インストール
+- 手動コピーしていた `review-*` / `natural-japanese` スキルは `modules/home/claude/config/skills/` から削除済み
+- WSL では `windows-ctf/scripts/setup-claude.sh` が、隣接チェックアウト `../ai-guardrails/generated/`（`AI_GUARDRAILS_DIR` で上書き可）が存在する場合に同じスキル群をリンクする
+
+**スキル追加手順:**
+1. `modules/home/claude/config/skills/<skill-name>/` に配置
+2. `SKILL.md`（必須）とオプションファイルを配置
+3. 設定を適用すると`~/.claude/skills/<skill-name>/`に自動展開
 
 #### Statusline（ステータスバー）機能
-- **スクリプト場所**:
-  - macOS: `darwin/home-manager/claude/config/statusline.sh`
-  - NixOS: `nixos/home-manager/claude/config/statusline.sh`
+- **スクリプト場所**: `modules/home/claude/config/statusline.sh`
 - **表示内容（1行）**:
   - モデル名 │ 📁 ディレクトリ名 🌿 Gitブランチ │ ctx ◔ % │ 5h ◕ % │ 7d ● % │ ⏳ブロック残時間 │ $今月累計/mo
 - **リングメーター仕様（パターン3: Ring Meter）**:
@@ -293,7 +280,7 @@ AI エージェント向けの行動原則は **AGENTS.md** を唯一の真の�
 - 詳細は `/npm-tools` スキルを参照
 
 ### gwq Configuration (git worktree manager)
-- `~/.config/gwq/config.toml` は `darwin/home-manager/git/default.nix` と `nixos/home-manager/git/default.nix` で管理
+- `~/.config/gwq/config.toml` は `modules/home/git/default.nix` で管理
 - basedir を ghq root (`~/git_repos`) と統一することで `ghq list` でworktreeも一括検索できる
 - 命名テンプレート: `{{.Host}}/{{.Owner}}/{{.Repository}}={{.Branch}}`（worktreeのパスに `=` が含まれる）
 - worktreeの実体: `~/git_repos/github.com/owner/repo=branch` に配置

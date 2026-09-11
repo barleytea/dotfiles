@@ -1,9 +1,11 @@
 {
   "env": {
     "EDITOR": "nvim",
-    "GH_CONFIG_DIR": "~/.config/github-cli"
+    "GH_CONFIG_DIR": "~/.config/github-cli",
+    "CLAUDE_CODE_SUBAGENT_MODEL": "sonnet"
   },
   "permissions": {
+    "defaultMode": "auto",
     "allow": [
       "Bash(git log:*)",
       "Bash(git diff:*)",
@@ -42,11 +44,69 @@
       "Bash(npx cdk synth:*)",
       "mcp__pencil"
     ],
+    "ask": [
+      "Agent(model:opus)",
+      "Agent(model:fable)"
+    ],
     "deny": [
-      "Bash(git push:*)"
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Bash(git push --force-with-lease:*)",
+      "Read(~/.npmrc_local)",
+      "Read(~/.zshrc_local)",
+      "Read(~/.ssh/**)",
+      "Read(~/.aws/**)",
+      "Read(/etc/nixos/secrets/**)",
+      "Read(**/.env)",
+      "Read(**/.env.*)"
     ]
   },
-  "model": "claude-fable-5[1m]",
+  "autoMode": {
+    "environment": [
+      "Personal dotfiles repository, public on GitHub (barleytea/dotfiles).",
+      "Repositories live in ghq layout: ~/git_repos/github.com/<owner>/<repo>.",
+      "Hosts are Nix-managed (nix-darwin + home-manager on macOS, NixOS on the Linux desktop) plus one plain WSL2 host used for CTF work.",
+      "No production infrastructure, no customer data, and no cloud accounts with billing exposure are reachable from these machines.",
+      "Git remotes are the user's own GitHub account only.",
+      "Secrets live outside the repository in ~/.npmrc_local, ~/.zshrc_local, /etc/nixos/secrets, ~/.ssh and ~/.aws; they must never be read, printed, or committed."
+    ],
+    "hard_deny": [
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Bash(git push --force-with-lease:*)",
+      "Read(~/.npmrc_local)",
+      "Read(~/.zshrc_local)",
+      "Read(~/.ssh/**)",
+      "Read(~/.aws/**)",
+      "Read(/etc/nixos/secrets/**)",
+      "Read(**/.env)",
+      "Read(**/.env.*)"
+    ],
+    "soft_deny": [
+      "$defaults",
+      "Bash(git push:*)",
+      "Bash(git reset --hard:*)",
+      "Bash(git clean:*)",
+      "Bash(rm -rf:*)",
+      "Bash(nixos-rebuild switch:*)",
+      "Bash(darwin-rebuild switch:*)",
+      "Bash(home-manager switch:*)",
+      "Bash(gh repo delete:*)",
+      "Bash(gh secret set:*)",
+      "Bash(npm publish:*)",
+      "Bash(gh release create:*)"
+    ]
+  },
+  "model": "fable[1m]",
+  "effortLevel": "high",
+  "modelSettings": {
+    "sonnet": {
+      "effortLevel": "medium"
+    },
+    "haiku": {
+      "effortLevel": "low"
+    }
+  },
   "hooks": {
     "PreToolUse": [
       {
@@ -76,7 +136,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash '/Users/miyoshi_s/.claude/hooks/herdr-agent-state.sh' session",
+            "command": "bash -c '[ -f ~/.claude/hooks/herdr-agent-state.sh ] && bash ~/.claude/hooks/herdr-agent-state.sh session || true'",
             "timeout": 10
           }
         ]
@@ -119,7 +179,15 @@
         "::1"
       ]
     },
-    "filesystem": {},
+    "filesystem": {
+      "denyRead": [
+        "~/.npmrc_local",
+        "~/.zshrc_local",
+        "~/.ssh",
+        "~/.aws",
+        "/etc/nixos/secrets"
+      ]
+    },
     "enableWeakerNetworkIsolation": true,
     "excludedCommands": [
       "docker",
@@ -129,8 +197,40 @@
       "nixos-rebuild",
       "darwin-rebuild",
       "home-manager"
-    ]
-  },
-  "effortLevel": "high",
-  "permissionMode": "plan"
+    ],
+    "credentials": {
+      "files": [
+        {
+          "path": "~/.ssh",
+          "mode": "deny"
+        },
+        {
+          "path": "~/.aws",
+          "mode": "deny"
+        },
+        {
+          "path": "~/.npmrc_local",
+          "mode": "deny"
+        },
+        {
+          "path": "~/.zshrc_local",
+          "mode": "deny"
+        }
+      ],
+      "envVars": [
+        {
+          "name": "GH_TOKEN",
+          "mode": "mask"
+        },
+        {
+          "name": "ANTHROPIC_API_KEY",
+          "mode": "mask"
+        },
+        {
+          "name": "NPM_TOKEN",
+          "mode": "mask"
+        }
+      ]
+    }
+  }
 }

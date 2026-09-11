@@ -17,8 +17,10 @@
 
 ### `modules/home/` に集約済みの共通モジュール
 - `alacritty/`, `atuin/`, `cz-git/`, `editorconfig/`, `helix/`, `lazygit/`, `sheldon/`, `starship/`, `tmux/`, `yazi/`, `zed/`
-- `claude/`, `codex/`, `gemini/`, `git/`, `mise/`, `zellij/`
-  - `codex/` は既存の `~/.codex/config.toml` を保持しつつ、Auto-review 設定を適用
+- `claude/`, `codex/`, `copilot/`, `gemini/`, `git/`, `mise/`, `zellij/`
+  - `codex/` は既存の `~/.codex/config.toml` を保持しつつ、`approval_policy`/`sandbox_mode`/`sandbox_workspace_write` を上書き適用し、`~/.codex/AGENTS.md` を配備
+  - `copilot/` は `~/.copilot/instructions/dotfiles-agents.instructions.md` に frontmatter 付きで AGENTS.md を配備
+  - `claude/`, `codex/`, `gemini/`, `copilot/` は `render-agents.nix`（`claude/config/`）で AGENTS.md を共通レンダリングして配布する
   - うち `mise/config.toml` と `zellij/config.kdl` は `pkgs.stdenv.isDarwin` で差分を Nix 側から差し替え
 
 ### Darwin 専用 HM モジュール（`darwin/home-manager/`）
@@ -32,7 +34,7 @@
 - `hyprland/` … Wayland WM
 
 ### OS 差分が大きく OS 固有のまま残しているモジュール
-- `ghostty/` … `config/config` に macOS 専用 3 行 + `pwd.nix` を経由する `mkOutOfStoreSymlink` のパス差
+- `ghostty/` … `config/config` は darwin/nixos で byte-identical。`pwd.nix` を経由する `mkOutOfStoreSymlink` のパスのみ OS 差分
 - `packages/packages.nix` … OS 専用パッケージ（bubblewrap / lmstudio / git-credential-manager 等）
 - `shell/zsh/config/*` … macOS 専用ウィジェット、Linux 専用 asdf 設定、Zellij 起動条件
 - `pwd.nix` … home 配下のパスのみ違う（ghostty が消費）
@@ -58,7 +60,7 @@ flake outputs:
 - `darwinConfigurations.all` … `make nix-darwin-apply` で適用（system + homebrew 一括）
 - `darwinConfigurations.homebrew` / `darwinConfigurations.system` … 部分適用用
 
-`nixvim-config` は input として `git+file:..?dir=nixvim` から取り込む（CI では `--override-input` でローカルパスに差し替え）。
+`nixvim-config` は input として `git+file:..?dir=nixvim` から取り込む（CI では `--override-input` でローカルパスに差し替え）。同様に `ai-guardrails` を `github:barleytea/ai-guardrails` として input に持ち、`programs.ai-guardrails.enable = true` で review-* / external-* スキルを供給する（`darwin/flake.nix` と `nixos/flake.nix` の両方）。
 
 ## 3. NixOS の構成
 
@@ -112,7 +114,7 @@ windows-ctf/
 
 CI は `windows-host.yml` が `bash -n` で構文チェック + ダミー bootstrap を実行する。
 
-## 6. AI スキル
+## 6. AI スキル / エージェント設定
 
 `.claude/skills/<skill-name>/SKILL.md` 形式。Claude Code から `/skill-name` で呼び出せるし、人間が直接 markdown として読める。
 
@@ -123,6 +125,33 @@ CI は `windows-host.yml` が `bash -n` で構文チェック + ダミー bootst
 - WM 系: `services-guide`, `hyprland-cheatsheet`, `nixos-keybindings`, `dashboard-guide`
 - サーバ系: `fileserver-guide`, `gitserver-guide`, `tailscale-acl`
 - メタ: `sync-docs`
+
+### Claude Code モジュール（`modules/home/claude/`）
+
+Claude Code の設定は OS 横断で `modules/home/claude/config/` を正典として管理する。
+
+- `config/settings.json` … 全マシン共通のベース設定
+- `config/overlays/windows-ctf.json` … windows-ctf 専用の上書き差分（Orca hooks 等）
+- `config/merge-settings.sh` … ベース + overlay をディープマージして `~/.claude/settings.json` を生成するスクリプト
+- `config/agents/explore.md` … 組み込み Explore エージェントを `model: haiku` に固定
+- `config/AGENTS.md`, `config/hooks/`, `config/skills/`, `config/commands/`, `config/statusline.sh` … それぞれシンボリックリンクとして配布
+
+`~/.claude/settings.json` は Nix 環境では `modules/home/claude/default.nix` の activation が `merge-settings.sh settings.json` を実行して生成し、WSL（windows-ctf）では `windows-ctf/scripts/setup-claude.sh` がベース + `overlays/windows-ctf.json` をマージして生成する。いずれも実ファイルでありシンボリックリンクではない。
+
+`review-*` / `external-*`（`natural-japanese` 等）スキルは手動配置ではなく flake input `ai-guardrails`（`programs.ai-guardrails.enable = true`）が `~/.claude/skills/` に自動インストールする。
+
+### 他エージェントへの人格共有（Codex / Gemini / Copilot / Cursor）
+
+`config/AGENTS.md` は Claude Code 専用ではなく、`config/render-agents.nix`（gh 認証手順を OS 別にレンダリングする共有関数）経由で以下のツールにも配布される。
+
+| ツール | モジュール | 配備先 |
+|--------|-----------|--------|
+| Gemini CLI | `modules/home/gemini/` | `~/.gemini/GEMINI.md` |
+| Codex CLI | `modules/home/codex/` | `~/.codex/AGENTS.md`（`config.toml` の `approval_policy`/`sandbox_mode`/`sandbox_workspace_write` も同モジュールが管理） |
+| GitHub Copilot（VS Code） | `modules/home/copilot/` | `~/.copilot/instructions/dotfiles-agents.instructions.md`（frontmatter 付き実ファイル） |
+| Cursor | 対象外 | ホームディレクトリ直下にグローバル指示ファイルの仕組みが存在しないため自動配備不可。`/cursor-setup` スキル参照 |
+
+`modules/home/codex/default.nix` の `config.toml` マージは TOML の仕様（`[section]` 以降の key はそのセクションに属する）を踏まえ、root レベルのキーと table を分離して「base scalars → 既存ファイルの root 残り → base tables → 既存ファイルの table 残り」の順で結合する。
 
 ## 7. CI ワークフロー
 

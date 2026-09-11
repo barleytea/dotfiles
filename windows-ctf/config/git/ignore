@@ -15,3 +15,5 @@ copilot-instructions.md
 .ai/
 .kiro/
 .DS_Store
+
+**/.claude/.cc-writes/

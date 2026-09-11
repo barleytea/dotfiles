@@ -128,7 +128,10 @@
     isNormalUser = true;
     description = "miyoshi_s";
     extraGroups = [ "networkmanager" "wheel" "docker" ];
-    hashedPassword = "$6$mkbGmoIi0MUYy8yK$Sb27D2/bwxBHqD6i1uyH2yAmIYFCUIZGkTa9FjWUYuE4tiR3R/RarqSbJCIQl0k4dl5qRgtMXrF5DofFqp1UG1";
+    # パスワードハッシュはリポジトリ外で管理する（public リポジトリのため）
+    # 生成: mkpasswd -m sha-512 | sudo tee /etc/nixos/secrets/miyoshi_s.hashed-password
+    # 権限: sudo chmod 600 /etc/nixos/secrets/miyoshi_s.hashed-password
+    hashedPasswordFile = "/etc/nixos/secrets/miyoshi_s.hashed-password";
     shell = pkgs.zsh;
     packages = with pkgs; [
     #  thunderbird

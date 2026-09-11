@@ -21,6 +21,10 @@
       url = "git+file:..?dir=modules";
       flake = false;
     };
+    ai-guardrails = {
+      # レビュースキル等のガードレール（instruction ファイルは dotfiles 側で管理するため無効化）
+      url = "github:barleytea/ai-guardrails";
+    };
     hunk = {
       url = "github:modem-dev/hunk";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -34,6 +38,7 @@
     nix-darwin,
     nixvim-config,
     dotfiles-shared,
+    ai-guardrails,
     hunk,
   } @ inputs: let
     darwinSystems = [
