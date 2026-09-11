@@ -242,6 +242,26 @@ make setup-claude
 Requires `jq` (settings merge) and `bubblewrap` (Claude Code sandbox on
 WSL) - both are pulled in by the Kali manifests.
 
+## Japanese Input (fcitx5 + Mozc)
+
+WSLg GUI apps (Orca included) need both a CJK font and an input method
+framework - neither ships by default on Kali.
+
+```bash
+make install-all      # pulls fcitx5, fcitx5-mozc, the GTK/Qt frontends,
+                       # and fonts-noto-cjk from manifests/gui.txt
+make setup-fcitx5      # writes ~/.config/fcitx5/{profile,config}
+                       # (mirrors nixos/home-manager/fcitx5, mozc default,
+                       # Ctrl+Space / 半角全角 / left-Shift to toggle)
+make install-orca      # regenerate orca-ide if it's already installed -
+                       # the launcher now exports GTK_IM_MODULE/QT_IM_MODULE/
+                       # XMODIFIERS and starts the fcitx5 daemon automatically
+```
+
+Other GUI tools (burpsuite, ghidra) don't get this automatically - export
+`GTK_IM_MODULE=fcitx QT_IM_MODULE=fcitx XMODIFIERS=@im=fcitx5` and make sure
+`fcitx5 -d` is running before launching them if you need Japanese there too.
+
 ## Host Key Policy
 
 - `Caps Lock -> Ctrl`: always enabled.

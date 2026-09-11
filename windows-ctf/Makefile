@@ -62,3 +62,6 @@ install-nixvim: ## Install Nix + nixvim (Kali/WSL)
 
 install-orca: ## Install/update Orca AppImage (Kali GUI/WSLg)
 	bash ./scripts/install-orca.sh
+
+setup-fcitx5: ## Configure fcitx5 + Mozc Japanese input (Ctrl+Space to toggle)
+	bash ./scripts/setup-fcitx5.sh

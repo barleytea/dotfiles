@@ -20,6 +20,16 @@ install_launcher() {
         printf '%s\n' '#!/usr/bin/env bash' 'set -euo pipefail'
         printf 'readonly appimage_path=%q\n' "${ORCA_APPIMAGE_PATH}"
         printf '%s\n' \
+            '# 日本語入力を有効化する（setup-fcitx5.sh でプロファイル配備済みの前提）。' \
+            'export GTK_IM_MODULE=fcitx' \
+            'export QT_IM_MODULE=fcitx' \
+            'export XMODIFIERS=@im=fcitx5' \
+            'export SDL_IM_MODULE=fcitx' \
+            'if command -v fcitx5 >/dev/null 2>&1 && ! pgrep -x fcitx5 >/dev/null 2>&1; then' \
+            '    fcitx5 -d --replace >/dev/null 2>&1 &' \
+            '    disown' \
+            'fi' \
+            '' \
             'if [[ -e /dev/fuse ]] && {' \
             '    command -v fusermount >/dev/null 2>&1 ||' \
             '        command -v fusermount3 >/dev/null 2>&1' \
