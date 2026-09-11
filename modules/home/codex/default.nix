@@ -11,6 +11,7 @@
   renderedAgents = import "${claudeConfigPath}/render-agents.nix" {inherit pkgs;};
 
   # Claude Code の auto mode + sandbox 方針を Codex CLI の語彙に合わせたもの。
+  # - model = "gpt-5.6-terra": メインセッションのデフォルトモデル
   # - approval_policy = "on-request": モデルが必要と判断したときだけ確認を求める
   #   （Claude Code の auto mode に相当）
   # - sandbox_mode = "workspace-write": 書き込みはワークスペース配下に限定
@@ -19,6 +20,14 @@
   #   ドメイン単位の許可リストを持たないため、Claude Code の allowedDomains
   #   ほど細かくは絞れない。ネットワークが必要な作業（依存関係の取得等）を
   #   妨げないよう on にしている
+  # - agents.default_subagent_model = "gpt-5.6-luna": サブエージェントの既定
+  #   モデル（Claude Code の CLAUDE_CODE_SUBAGENT_MODEL に相当）。個別の
+  #   サブエージェントは ~/.codex/agents/*.toml の model で上書きできる
+  #
+  # モデル名は OpenAI 側のリネームで頻繁に変わる（このマシンの
+  # ~/.codex/config.toml には gpt-5.3-codex → gpt-5.4 → gpt-5.6-terra という
+  # notice.model_migrations の履歴が残っている）。無効化したら
+  # `codex` の TUI でモデル一覧を確認し、この2箇所を更新すること。
   #
   # TOML は `[section]` 以降に現れる key をすべてそのセクションに属するものと
   # 解釈するため、root レベルのキー（scalars）と table（sections）を分けて
@@ -26,6 +35,7 @@
   # ファイルの table 残り」の順で結合する。table を root キーより先に置くと、
   # 後から追記する既存ファイルの root キーが誤って table 配下に取り込まれる。
   codexConfigScalars = pkgs.writeText "codex-config-scalars" ''
+    model = "gpt-5.6-terra"
     approval_policy = "on-request"
     approvals_reviewer = "auto_review"
     sandbox_mode = "workspace-write"
@@ -33,6 +43,9 @@
   codexConfigTables = pkgs.writeText "codex-config-tables" ''
     [sandbox_workspace_write]
     network_access = true
+
+    [agents]
+    default_subagent_model = "gpt-5.6-luna"
   '';
 in {
   home.activation.configureCodex = lib.hm.dag.entryAfter ["writeBoundary"] ''
@@ -46,7 +59,7 @@ in {
       # 管理下のキーを除いたものを追記する
       ${pkgs.gawk}/bin/awk '
         /^\[/ { exit }
-        /^[[:space:]]*(approval_policy|approvals_reviewer|sandbox_mode)[[:space:]]*=/ { next }
+        /^[[:space:]]*(model|approval_policy|approvals_reviewer|sandbox_mode)[[:space:]]*=/ { next }
         { print }
       ' "$codex_config" >> "$tmp_config"
     fi
@@ -58,7 +71,7 @@ in {
         BEGIN { started = 0; skip_section = 0 }
         /^\[/ {
           started = 1
-          skip_section = ($0 ~ /^\[sandbox_workspace_write\]/)
+          skip_section = ($0 ~ /^\[sandbox_workspace_write\]/ || $0 ~ /^\[agents\]/)
         }
         !started { next }
         skip_section { next }
