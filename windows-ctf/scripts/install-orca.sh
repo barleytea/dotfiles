@@ -21,12 +21,19 @@ install_launcher() {
         printf 'readonly appimage_path=%q\n' "${ORCA_APPIMAGE_PATH}"
         printf '%s\n' \
             '# 日本語入力を有効化する（setup-fcitx5.sh でプロファイル配備済みの前提）。' \
-            'export GTK_IM_MODULE=fcitx' \
-            'export QT_IM_MODULE=fcitx' \
+            'export GTK_IM_MODULE=fcitx5' \
+            'export QT_IM_MODULE=fcitx5' \
             'export XMODIFIERS=@im=fcitx5' \
-            'export SDL_IM_MODULE=fcitx' \
+            'export SDL_IM_MODULE=fcitx5' \
             'if command -v fcitx5 >/dev/null 2>&1 && ! pgrep -x fcitx5 >/dev/null 2>&1; then' \
-            '    fcitx5 -d --replace >/dev/null 2>&1 &' \
+            '    # -d（内部デーモン化 / fork）だと WSLg 環境で何かが壊れて' \
+            '    # GTK 側から一切キーイベントを受け取れなくなる。-D（非デーモン化）' \
+            '    # をシェルの & でバックグラウンド化する形でないと機能しない。' \
+            '    # --disable wayland は WSLg の compositor が zwp_input_method_v1 の' \
+            '    # bind を拒否し、それを起点に dbus/xim を含む全アドオンが巻き添えで' \
+            '    # アンロードされる問題の回避策（config ファイルの DisabledAddons= は' \
+            '    # 反映されないため CLI フラグで直接指定する）。' \
+            '    fcitx5 -D --replace --disable wayland >/dev/null 2>&1 &' \
             '    disown' \
             'fi' \
             '' \

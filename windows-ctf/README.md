@@ -259,8 +259,34 @@ make install-orca      # regenerate orca-ide if it's already installed -
 ```
 
 Other GUI tools (burpsuite, ghidra) don't get this automatically - export
-`GTK_IM_MODULE=fcitx QT_IM_MODULE=fcitx XMODIFIERS=@im=fcitx5` and make sure
-`fcitx5 -d` is running before launching them if you need Japanese there too.
+`GTK_IM_MODULE=fcitx5 QT_IM_MODULE=fcitx5 XMODIFIERS=@im=fcitx5` and make sure
+`fcitx5 -D --replace --disable wayland &` (not `-d`, see below) is running
+before launching them if you need Japanese there too.
+
+### Troubleshooting: fcitx5 loads but nothing converts
+
+If `fcitx5-remote` reports state `2` (active), the GTK/Qt module is loaded
+(check `grep fcitx /proc/<pid>/maps` for the target app), env vars are all
+correct, and yet typing produces plain romaji with no preedit/candidate
+window at all - two WSLg-specific issues stack on top of each other:
+
+1. **`fcitx5 -d` (daemon/fork mode) silently breaks key delivery under
+   WSLg.** Use `-D` (non-daemonize) backgrounded with shell `&` instead;
+   `install-orca.sh`'s launcher already does this.
+2. **WSLg's compositor rejects fcitx5's Wayland input-method binding**
+   (`zwp_input_method_v1 ... permission to bind input_method denied`),
+   and fcitx5 treats that as fatal - it unloads *every* addon including
+   `dbus`/`dbusfrontend`/`xim`, not just the Wayland-specific ones. Pass
+   `--disable wayland` on the command line (the `DisabledAddons=wayland`
+   key in `~/.config/fcitx5/config`, written by `setup-fcitx5.sh`, was
+   not observed to take effect - use the CLI flag).
+
+Also worth an AHK-side check if Ctrl+Space does nothing at all inside a
+WSLg window: the host `^Space::` IME-toggle hotkey (see
+`host-windows/config/ahk/keymap.base.ahk`) is scoped to skip WSLg windows
+(hosted by `msrdc.exe`), but if a future WSLg version changes which
+process hosts its windows, that `#HotIf` guard will need updating - verify
+with a `ToolTip WinGetProcessName("A")` probe in the hotkey body.
 
 ## Host Key Policy
 
