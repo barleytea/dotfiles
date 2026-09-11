@@ -4,7 +4,9 @@
 #
 # nixos/home-manager/fcitx5/default.nix と同じプロファイル・トリガーキー設定を
 # 手書きで再現している（Nix 管理外の Kali/WSL 環境のため）。挙動を変える場合は
-# 両方を同期させること。
+# 両方を同期させること。ただし DisabledAddons=wayland は WSLg 固有の回避策
+# なので同期しない（NixOS 側は Hyprland 等の実 Wayland コンポジタを使うため
+# 不要、むしろ無効化すべきではない）。
 set -euo pipefail
 
 FCITX5_CONFIG_DIR="${HOME}/.config/fcitx5"
@@ -104,7 +106,13 @@ CustomXkbOption=
 # Force Enabled Addons
 EnabledAddons=
 # Force Disabled Addons
-DisabledAddons=
+#
+# wayland アドオンを無効化する。WSLg のコンポジタ（Weston ベース）は
+# zwp_input_method_v1 の bind を拒否するため、有効なままだと fcitx5 が
+# Wayland 接続エラーを起点に dbus/dbusfrontend/classicui/xim を含む
+# 全アドオンを巻き添えでアンロードしてしまい、本来 Wayland に依存しない
+# はずの XWayland + D-Bus 経由の GTK/Qt 連携まで巻き込んで壊れる。
+DisabledAddons=wayland
 # Preload input method to be used by default
 PreloadInputMethod=True
 # Allow input method in the password field
