@@ -11,10 +11,10 @@ install_launcher() {
     local launcher_path="${ORCA_BIN_DIR}/orca-ide"
 
     mkdir -p "${ORCA_BIN_DIR}" "${ORCA_DESKTOP_DIR}"
-    if [[ -e "${launcher_path}" && ! -L "${launcher_path}" ]]; then
-        echo "Error: refusing to replace existing file: ${launcher_path}" >&2
-        exit 1
-    fi
+    # このランチャーは常にこの関数自身が生成する通常ファイルなので、
+    # 「symlink でなければ既存ファイルとして保護する」というガードは
+    # 常に自分自身の前回出力を拒否してしまい、--repair-launcher を含む
+    # 再生成が永久に失敗するバグだった。ここは無条件に上書きしてよい。
     rm -f "${launcher_path}"
     {
         printf '%s\n' '#!/usr/bin/env bash' 'set -euo pipefail'
