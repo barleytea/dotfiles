@@ -179,16 +179,28 @@ make paths
 
 ### AI ツール設定（modules/home/claude/config/）
 
-Claude Code 設定は OS 横断の正典 `modules/home/claude/config/` を単一ソースとして管理する（darwin/nixos 個別の claude ディレクトリは存在しない）。AI エージェント向けの行動原則は同ディレクトリの **AGENTS.md** が唯一の真のソースで、`~/.claude/CLAUDE.md` と `~/.gemini/GEMINI.md` はそこへのシンボリックリンク。
+Claude Code 設定は OS 横断の正典 `modules/home/claude/config/` を単一ソースとして管理する（darwin/nixos 個別の claude ディレクトリは存在しない）。AI エージェント向けの行動原則は同ディレクトリの **AGENTS.md** が唯一の真のソースで、Claude Code / Gemini CLI / Codex CLI / GitHub Copilot の4ツールがこれを共有する。
+
+**エージェント別の配備先:**
+| ツール | 配備先 | 配備方法 |
+|--------|--------|----------|
+| Claude Code | `~/.claude/CLAUDE.md` | `render-agents.nix` でレンダリングし symlink |
+| Gemini CLI | `~/.gemini/GEMINI.md` | 同上 |
+| Codex CLI | `~/.codex/AGENTS.md` | 同上（`modules/home/codex/default.nix`） |
+| GitHub Copilot（VS Code） | `~/.copilot/instructions/dotfiles-agents.instructions.md` | frontmatter を付与した実ファイル（`modules/home/copilot/default.nix`） |
+| Cursor | 自動配備なし | プロジェクトルートの `AGENTS.md` は自動で読まれるが、グローバル指示は Cursor Settings → Rules → User Rules に手動設定が必要（`~/.cursor/` 配下にグローバル指示ファイルの仕組みが存在しないため）。詳細は `/cursor-setup` スキル |
+
+`render-agents.nix`（`modules/home/claude/config/`）が gh 認証手順など OS 依存部分をビルド時に差し替え、4 ツールとも同じレンダリング結果を参照する。
 
 **ファイル配置（`modules/home/claude/config/`）:**
 | ファイル/ディレクトリ | 役割 |
 |------------------------|------|
-| `settings.json` | 全マシン共通のベース設定（hooks、permissions、model 等） |
+| `settings.json` | 全マシン共通のベース設定（hooks、permissions、model 等。Claude Code 専用） |
 | `overlays/windows-ctf.json` | windows-ctf 専用の上書き差分（Orca 用 hooks、`excludedCommands`） |
-| `merge-settings.sh` | ベースとoverlayをディープマージするスクリプト。`hooks` 配下の配列は連結、それ以外の配列は置換 |
+| `merge-settings.sh` | ベースとoverlayをディープマージするスクリプト。`hooks` 配下の配列は連結、それ以外の配列は置換（`excludedCommands` 等は overlay が全体を置き換えるので注意） |
 | `agents/explore.md` | 組み込み Explore エージェントを `model: haiku` で上書き |
-| `AGENTS.md` | 行動原則（Claude・Gemini 共通の単一ソース） |
+| `render-agents.nix` | AGENTS.md の OS 別レンダリング共通関数（Claude/Gemini/Codex/Copilot が共有） |
+| `AGENTS.md` | 行動原則（4 ツール共通の単一ソース） |
 | `hooks/` | フックスクリプト群 |
 | `skills/` | カスタムスキル定義 |
 | `commands/` | カスタムコマンド定義 |

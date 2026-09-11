@@ -39,6 +39,7 @@ in {
     ./herdr
     "${shared}/home/claude"
     "${shared}/home/codex"
+    "${shared}/home/copilot"
     "${shared}/home/gemini"
     "${shared}/home/git"
     ./ghostty

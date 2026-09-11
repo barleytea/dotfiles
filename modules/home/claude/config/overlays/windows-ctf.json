@@ -140,7 +140,8 @@
   "sandbox": {
     "excludedCommands": [
       "docker",
-      "gh"
+      "gh",
+      "nix"
     ]
   }
 }

@@ -35,6 +35,7 @@ in {
     # OS 固有・差分ありモジュール
     "${shared}/home/claude"
     "${shared}/home/codex"
+    "${shared}/home/copilot"
     ./dashboard
     ./fcitx5
     "${shared}/home/gemini"
