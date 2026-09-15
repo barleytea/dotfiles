@@ -5,13 +5,18 @@
   imports = [
     ./fileserver
     ./gitserver
+    ./k3s
     ./ollama
     ./tailscale
+    ./writing
     inputs.agent-dangomushi.nixosModules.default
   ];
 
   # System services
   services = {
+    # NixOS 上で完結する AI 小説執筆環境
+    writing.enable = true;
+
     # Automatic updates
     system76-scheduler.enable = true;
 

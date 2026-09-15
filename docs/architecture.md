@@ -71,7 +71,7 @@ nixos/
 ├── hardware-configuration.nix
 ├── system/                共通システム設定
 ├── desktop/               GNOME / Hyprland / Wofi / Waybar / Dunst
-├── services/              fileserver(Samba/NFS) / gitserver / tailscale / ollama
+├── services/              fileserver(Samba/NFS) / gitserver / k3s / ollama / tailscale / writing
 ├── storage/               filesystem mounts / directories
 ├── packages/              cursor AppImage 抽出パッケージ等
 └── home-manager/          ユーザ環境（NixOS module 経由で統合）
@@ -82,7 +82,28 @@ flake outputs:
 
 Home Manager は NixOS の `users.miyoshi_s` に `useGlobalPkgs = true` で統合される。`make home-manager-apply` のような独立適用は darwin 側のみの体系。
 
-## 4. Nixvim
+## 4. Home Kubernetes と執筆環境
+
+NixOS ホストが単一ノードの k3s server/worker を実行する。NixOS は k3s 本体、ホスト側の永続ディレクトリ、ファイアウォールを管理し、Kubernetes リソースは [`kubernetes/`](../kubernetes/) 以下を Flux で同期する。
+
+```text
+nixos/services/k3s/       k3s、local-path の保存先、Jellyfin hostPath の準備
+kubernetes/
+├── clusters/home/         Flux の同期起点
+├── infrastructure/        Tailscale Operator の HelmRepository / HelmRelease
+└── apps/jellyfin/         Jellyfin Deployment、Service、private Ingress
+```
+
+Jellyfin は `/mnt/sda1/shares/media` を読み取り専用で参照する。設定とキャッシュは `/mnt/sda1/k3s/jellyfin/` に置く。Tailscale Operator が `ingressClassName: tailscale` の Ingress を処理するため、Service は `ClusterIP` のまま外部公開しない。OAuth Secret は chart の既定名 `operator-oauth` と `client_id` / `client_secret` キーを使い、SOPS で暗号化して同じ namespace に投入する。詳細は [`kubernetes/README.md`](../kubernetes/README.md) を参照。
+
+執筆データは Kubernetes から完全に分離する。`services.writing` は `/mnt/sda1/private/writing/novel` を `miyoshi_s` 専用の `0700` で準備し、日次の世代バックアップを `/mnt/sdb1/backup/private/writing` に保存する。原稿を SMB/NFS/PVC に公開しないため、Mac は Tailscale 経由の SSH terminal のみを使い、AI CLI・Git・Zellij は NixOS 上で実行する。
+
+`tailscale0` は trusted interface であるため、tailnet 内の利用者・端末を分離する正本は
+Tailscale ACL / grants である。ホスト root 権限を持つ人から原稿を暗号学的に隠す構成
+ではない。運用上の境界、初回適用、Secrets、復旧試験は
+[Home Kubernetes とプライベート執筆環境の運用](home-kubernetes.md) を参照する。
+
+## 5. Nixvim
 
 ```
 nixvim/
@@ -99,7 +120,7 @@ outputs:
 
 `darwin/flake.nix` と `nixos/flake.nix` の `nixvim-config` input が指す先がこれ。
 
-## 5. Windows CTF
+## 6. Windows CTF
 
 完全独立スコープ。Nix を使わず apt + bash + manifest 駆動。
 
@@ -114,7 +135,7 @@ windows-ctf/
 
 CI は `windows-host.yml` が `bash -n` で構文チェック + ダミー bootstrap を実行する。
 
-## 6. AI スキル / エージェント設定
+## 7. AI スキル / エージェント設定
 
 `.claude/skills/<skill-name>/SKILL.md` 形式。Claude Code から `/skill-name` で呼び出せるし、人間が直接 markdown として読める。
 
@@ -153,7 +174,7 @@ Claude Code の設定は OS 横断で `modules/home/claude/config/` を正典と
 
 `modules/home/codex/default.nix` の `config.toml` マージは TOML の仕様（`[section]` 以降の key はそのセクションに属する）を踏まえ、root レベルのキーと table を分離して「base scalars → 既存ファイルの root 残り → base tables → 既存ファイルの table 残り」の順で結合する。
 
-## 7. CI ワークフロー
+## 8. CI ワークフロー
 
 | ワークフロー | トリガ | 内容 |
 |-------------|--------|------|
@@ -163,7 +184,10 @@ Claude Code の設定は OS 横断で `modules/home/claude/config/` を正典と
 
 Renovate と Dependabot がそれぞれ動いて mise / GitHub Actions を更新する。
 
-## 8. データの流れ（macOS の例）
+`kubernetes/**` 単独の変更を検証する workflow はまだない。manifest の変更では
+`kubectl kustomize kubernetes/clusters/home` と pre-commit をローカルで実行する。
+
+## 9. データの流れ（macOS の例）
 
 1. ユーザが `make home-manager-apply` を実行
 2. Make が `flake-update-darwin` で `darwin/flake.lock` を更新

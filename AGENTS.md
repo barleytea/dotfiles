@@ -141,6 +141,7 @@
 |--------------|------|
 | `docs/architecture.md` | Nix 構成 / モジュール責務 / フロー詳細 |
 | `docs/commands.md` | 全 Make ターゲットと CI 想定の使い分け |
+| `docs/home-kubernetes.md` | k3s / Flux / Jellyfin / プライベート執筆の導入・運用・復旧 |
 | `modules/home/claude/config/` | Claude Code の正典設定（settings base / overlays / agents / AGENTS.md） |
 | `README.md` | 利用者向けの Quick Start とツール一覧 |
 | `.claude/skills/*/SKILL.md` | 個別トピック（mise / pre-commit / VSCode / 各種サービス etc.） |
