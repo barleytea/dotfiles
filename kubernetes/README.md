@@ -1,9 +1,9 @@
 # Home Kubernetes GitOps
 
-`clusters/home` は単一ノード k3s 用の Flux 同期起点。NixOS が k3s とホスト側ディレクトリを管理し、このディレクトリはクラスタ内リソースだけを管理する。Flux bootstrap の生成物と秘密情報は、この初期コミットには含めない。
+`clusters/home` は単一ノード k3s 用の Flux 同期起点。NixOS が k3s とホスト側ディレクトリを管理し、このディレクトリはクラスタ内リソースだけを管理する。
 
 ```text
-clusters/home             Flux の同期起点
+clusters/home/flux-system Flux bootstrap の生成物と子 Kustomization
 infrastructure/           Tailscale Operator
 apps/jellyfin/            Jellyfin と private Ingress
 ```
@@ -12,6 +12,7 @@ apps/jellyfin/            Jellyfin と private Ingress
 
 - NixOS: k3s、`/mnt/sda1/k3s`、`/mnt/sda1/shares/media`、ホストのファイアウォール
 - Flux: namespace、HelmRepository、HelmRelease、Jellyfin の Deployment/Service/Ingress
+- Git 管理: SOPS 暗号化済みの Tailscale OAuth Secret
 - 手動かつ Git 外: Flux bootstrap、SOPS/age 復号鍵、Tailscale OAuth client secret
 
 Jellyfin の `/media` は `/mnt/sda1/shares/media` を read-only の `hostPath` として参照する。`/config` と `/cache` は `/mnt/sda1/k3s/jellyfin/` を使う。`/config` はバックアップ対象、`/cache` は再生成可能なため初期バックアップ対象外。
@@ -28,19 +29,27 @@ commit する外部変更である。対象 owner、repository、branch、path �
 `kubernetes/clusters/home` を同期起点として bootstrap する。手順と確認コマンドは
 [運用ガイド](../docs/home-kubernetes.md#2-flux-bootstrap-と秘密情報) を参照。
 
-### SOPS 導入前の制限
+### SOPS/age と OAuth Secret
 
-現在の初期ツリーには、Flux bootstrap 生成物、`.sops.yaml`、暗号化 Secret、Flux
-Kustomization の `spec.decryption` が含まれない。そのため SOPS/age を使うための
-review 済み変更なしにこのツリーを同期しても、`operator-oauth` は作成されない。
-平文 OAuth secret を Git へ置く、または暫定的に手動 apply する運用は行わない。
+`.sops.yaml` と `flux-system` namespace の infrastructure Kustomization の
+`spec.decryption` はこのツリーに含まれる。`secretRef.name: sops-age` は同じ
+`flux-system` namespace を参照するため、別の namespace 指定は不要である。
 
-SOPS を導入する変更では、age 公開鍵を用意し、`flux-system` namespace の `sops-age`
-Secret と decryption 設定を追加する。`tailscale` namespace の
-`operator-oauth.sops.yaml` は暗号化済みで管理する。具体的な順序と鍵の保管方法は
+`sops-age` と age 秘密鍵は Git 外である。age 公開鍵を `.sops.yaml` の置換値へ設定し、
+`secrets/operator-oauth.sops.yaml.example` を暗号化済みの
+`secrets/operator-oauth.sops.yaml` として作成してから、同ディレクトリの
+`kustomization.yaml` に resource として追加する。実ファイルが存在しない初期状態では
+secret 用 Kustomization は空であり、`sops-age` がない限り infrastructure 全体の同期は
+失敗する。この fail-closed 動作により、OAuth Secret を手動の平文 apply で補わない。
+
+`clusters/home/flux-system/gotk-components.yaml` と `gotk-sync.yaml` は bootstrap 前は
+空の予約ファイルであり、`flux bootstrap` が実マニフェストへ置換する。root の
+Kustomization は `flux-system` を参照し、生成された `gotk-sync` は root を同期する。
+子の infrastructure Kustomization だけが SOPS 復号を行うため、bootstrap 自身には
+SOPS 復号鍵を埋め込まない。具体的な順序と鍵の保管方法は
 [運用ガイド](../docs/home-kubernetes.md#23-sopsage-と-tailscale-oauth) を参照。
 
-手順 4 の Secret は公式チャートの既定契約を使う。名前は `operator-oauth`、キーは `client_id` と `client_secret`。チャートに OAuth 値を `valuesFrom` で渡さず、既定の Secret volume を使うため、値を HelmRelease に埋め込まない。OAuth client は operator/proxy 用タグを作成できるように、Tailscale の Devices、Auth Keys、Services の必要な read/write scope とタグ所有権を設定する。
+Secret は公式チャートの既定契約を使う。名前は `operator-oauth`、キーは `client_id` と `client_secret`。chart `1.102.3` は OAuth 値が未設定のとき、この Secret を `/oauth` volume として参照する。`HelmRelease` に OAuth 値を `valuesFrom` で渡さず、値を Git の Helm values に埋め込まない。OAuth client は operator/proxy 用タグを作成できるように、Tailscale の Devices、Auth Keys、Services の必要な read/write scope とタグ所有権を設定する。
 
 `helmrelease.yaml` は Tailscale Operator chart `1.102.3` を固定し、`installCRDs: true` を明示して Operator の CRD を chart に管理させる。このツリーが作るのは標準 Kubernetes の `Ingress` だけなので、Ingress は Operator と IngressClass が Ready になるまで待機してから処理される。Tailscale の専用 CR を追加する場合は、Operator HelmRelease を先に Ready にする Flux の依存関係を追加する。
 

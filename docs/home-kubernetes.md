@@ -162,28 +162,15 @@ git diff --check
 
 ### 2.1 現在のツリーで自動化されている範囲
 
-現時点の `kubernetes/` は、Flux が同期した後に Tailscale Operator と Jellyfin を
-展開するリソースを持つ。一方で次は意図的に Git に含めていない。
+`kubernetes/clusters/home/flux-system/` は Flux bootstrap の標準配置である。
+bootstrap 前の `gotk-components.yaml` と `gotk-sync.yaml` は空の予約ファイルであり、
+bootstrap が controller/CRD と GitRepository/同期用 Kustomization の実マニフェストへ
+置換する。root の `clusters/home/kustomization.yaml` は `flux-system` を参照するため、
+生成後の `gotk-sync` が Flux 自身と二つの子 Kustomization をともに同期する。
 
-- `flux-system` の bootstrap 生成物
-- `operator-oauth` の実値
-- age 秘密鍵と Flux controller が参照する Secret
-- `.sops.yaml`、暗号化 Secret、Flux Kustomization の `spec.decryption`
-
-したがって、**このリポジトリをそのまま同期しても SOPS 復号は有効にならず、
-Tailscale Operator は OAuth Secret がないため Ready にならない**。初回 bootstrap は
-まず `flux-system` の生成物を作るために実行し、その直後に以下の Secret 管理用の小さな
-変更をレビューして commit する。変更を取り込むまで Operator が Ready でないのは想定
-内であり、平文 Secret で一時的に復旧させない。
-
-1. age 公開鍵だけを使う `.sops.yaml` を追加する。
-2. `operator-oauth.sops.yaml` を `tailscale` namespace の resource に加える。
-3. bootstrap が生成する `flux-system` の Kustomization に SOPS decryption と
-   `sops-age` Secret 参照を加える。
-
-3 の Kustomization には少なくとも次の decryption 設定が必要である。これは
-`flux-system` に作成される bootstrap manifest への変更なので、bootstrap 後に
-対象ファイルを確認してから追加する。
+infrastructure Kustomization は `flux-system` namespace にあり、次の設定で同じ
+namespace の `sops-age` Secret を復号鍵として参照する。`secretRef` に namespace は
+指定できないため、Secret を `tailscale` namespace に作ることは誤りである。
 
 ```yaml
 spec:
@@ -193,8 +180,14 @@ spec:
       name: sops-age
 ```
 
-この三点を完了するまで、平文 Secret を `kubectl apply` して「後で GitOps 化する」
-運用にはしない。Secret の契約は
+Git に置くのは `.sops.yaml` の age 公開鍵と、暗号化済みの
+`operator-oauth.sops.yaml` だけである。age 秘密鍵、`sops-age`、Tailscale OAuth client
+secret、GitHub token は Git に置かない。Secret を追加するまで
+`tailscale-operator/secrets/kustomization.yaml` は空である。さらに `sops-age` がない
+間は infrastructure Kustomization が失敗し、namespace、HelmRelease、Jellyfin を
+部分的に適用しない。この fail-closed 動作を平文 Secret の手動 apply で迂回しない。
+
+Secret の実ファイルを作る手順と chart の契約は
 [`secret-contract.md`](../kubernetes/infrastructure/tailscale-operator/secret-contract.md)
 を正本とする。
 
@@ -203,6 +196,12 @@ spec:
 bootstrap は GitHub token を利用し、GitHub リポジトリへ `flux-system` の生成物を
 commit する外部変更である。対象 owner、repository、branch、path を画面上で確認し、
 意図しないリポジトリでないことを確認してから実行する。
+
+先に [2.3](#23-sopsage-と-tailscale-oauth) の「暗号化 Secret を Git に追加する」までを
+完了し、その commit が対象 branch にあることを確認する。`sops-age` Secret の作成だけは
+`flux-system` namespace が必要なので、bootstrap 後に行う。この順序では、bootstrap の
+直後に infrastructure Kustomization が `sops-age` 不在で NotReady になるが、Secret を
+作成するまで何も部分適用しないため正常な fail-closed 状態である。
 
 ```sh
 flux check --pre
@@ -232,8 +231,10 @@ flux get sources git -A
 flux get kustomizations -A
 ```
 
-失敗時に `kubectl get secret -o yaml` や `kubectl describe secret` を実行して秘密を
-画面・ログに出さない。
+この時点では infrastructure が `sops-age` 不在で NotReady でもよい。次節の
+cluster 内 Secret を作成後に Ready へ変わることを確認する。失敗時に
+`kubectl get secret -o yaml` や `kubectl describe secret` を実行して秘密を画面・ログに
+出さない。
 
 ### 2.3 SOPS/age と Tailscale OAuth
 
@@ -241,42 +242,63 @@ age 秘密鍵は NixOS 上だけに作り、権限 `0600` の個人用パスワ�
 オフライン媒体に復旧手順とともに保管する。age の公開鍵は Git に置いてよいが、
 秘密鍵、Tailscale OAuth client secret、GitHub token は置かない。
 
-SOPS の導入では Flux 公式の [SOPS guide](https://fluxcd.io/flux/guides/mozilla-sops/)
-に従い、次の性質を満たすレビュー可能な変更を作る。
-
-- `sops-age` は `flux-system` namespace にだけ手動作成し、controller が復号に使う。
-- Git に置く `operator-oauth.sops.yaml` は暗号化済みで、名前は `operator-oauth`、
-  namespace は `tailscale`、キーは `client_id` と `client_secret` である。
-- `HelmRelease` に OAuth 値を `values` や `valuesFrom` として埋め込まない。現行
-  chart は上記 Secret 名・キーを既定契約として参照する。
-- OAuth client の scope と tag ownership は、使用する Tailscale Operator chart
-  バージョンの [公式設定手順](https://tailscale.com/docs/kubernetes-operator) に照らして
-  最小限にする。operator/proxy 用タグを作成できる権限も必要になる。
-
-鍵の作成と cluster への bootstrap Secret 登録は、上記の Git 側変更をレビューしてから
-NixOS 上で一度だけ行う。秘密鍵のファイル名・保存先は個人の復旧手順に記録するが、
-このリポジトリや dotfiles 管理下に置かない。
+SOPS の導入は二段階に分ける。まず実際の age 公開鍵と暗号化 OAuth Secret を Git に
+追加する。次に bootstrap 後の cluster へ、その秘密鍵だけを `sops-age` として登録する。
+`.sops.yaml` の `age1REPLACE_WITH_YOUR_AGE_PUBLIC_KEY` は安全な既定値ではなく、SOPS が
+暗号化を拒否する意図的な placeholder である。実鍵に置換しないまま適用しない。
 
 ```sh
 umask 077
 install -d -m 0700 "$HOME/.config/sops/age"
 age-keygen -o "$HOME/.config/sops/age/keys.txt"
 age-keygen -y "$HOME/.config/sops/age/keys.txt"
+```
 
-# 出力された公開鍵だけを .sops.yaml の recipient に使う。
-# Flux bootstrap が完了し、decryption 設定を commit した後だけ実行する。
+`age-keygen -y` の出力は公開鍵なので `.sops.yaml` の `age` 値へ設定できる。`keys.txt`
+はこのリポジトリや dotfiles 管理下に置かない。OAuth client を Tailscale 管理画面で
+作成する際は、Operator/proxy 用タグを作成できる最小権限の Devices、Auth Keys、Services
+scope と tag ownership を設定する。使用する chart バージョンの
+[公式設定手順](https://tailscale.com/docs/kubernetes-operator) と照合する。
+
+公開鍵を設定した後、テンプレートをコピーして `sops` の編集画面で OAuth 値を置換して
+保存する。target file は editor を保存するまで平文なので、保存前に `git add` せず、
+画面共有・録画も止める。
+
+```sh
+cp kubernetes/infrastructure/tailscale-operator/secrets/operator-oauth.sops.yaml.example \
+  kubernetes/infrastructure/tailscale-operator/secrets/operator-oauth.sops.yaml
+sops kubernetes/infrastructure/tailscale-operator/secrets/operator-oauth.sops.yaml
+```
+
+保存後、`kubernetes/infrastructure/tailscale-operator/secrets/kustomization.yaml` を次の
+内容に変更する。`.example` は resource に含めない。
+
+```yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - operator-oauth.sops.yaml
+```
+
+暗号化済みファイル、`.sops.yaml`、Kustomization の変更を review して commit/push する。
+レビューでは `metadata.name`、`metadata.namespace`、`sops:` metadata と暗号文だけを
+確認し、`sops --decrypt`、`kubectl get secret -o yaml`、terminal への値の貼り付けで
+内容を表示しない。`make pre-commit-run` で gitleaks を通す。
+
+その commit を含んだ branch に対して [2.2](#22-github-を使う-bootstrap) の bootstrap を
+行った後、NixOS 上で一度だけ復号鍵を登録する。
+
+```sh
 kubectl -n flux-system create secret generic sops-age \
   --from-file=age.agekey="$HOME/.config/sops/age/keys.txt" \
   --dry-run=client -o yaml | kubectl apply -f -
 ```
 
-`age-keygen -y` の出力は公開鍵なので Git に置ける。`keys.txt` と上の `kubectl` が
-作る bootstrap Secret は秘密である。`kubectl get secret -o yaml`、`sops --decrypt`、
-terminal への値の貼り付けで内容を確認しない。暗号化 Secret は `sops` の編集画面で
-直接作成・更新し、保存されたファイルが暗号化されていることと `metadata.name` /
-`metadata.namespace` だけをレビューする。
+この Secret は infrastructure Kustomization と同じ `flux-system` namespace に存在する
+必要がある。`tailscale` namespace に作ると Flux が復号できない。`keys.txt` と上の
+cluster 内 Secret は秘密である。
 
-暗号化 Secret と decryption 設定を commit した後、同期を要求して結果だけを確認する。
+登録後、同期を要求して結果だけを確認する。
 
 ```sh
 flux reconcile kustomization flux-system --with-source
@@ -284,8 +306,8 @@ flux get kustomizations -A
 flux get helmreleases -A
 ```
 
-Tailscale OAuth client の値を生成・表示する場面は、画面録画・共有・shell history
-を停止してから行う。値を紛失すると Operator を再認証する必要があり、age 秘密鍵を
+Tailscale OAuth client の値を生成・表示する場面は、画面録画・共有・shell historyを
+停止してから行う。値を紛失すると Operator を再認証する必要があり、age 秘密鍵を
 紛失すると暗号化 Secret を復号できない。
 
 ## 3. Jellyfin の初期利用

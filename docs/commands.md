@@ -151,8 +151,10 @@ git diff --check
 ```
 
 Flux bootstrap、SOPS/age、Tailscale OAuth secret は外部状態と秘密情報を扱う。実行前に
-[Home Kubernetes とプライベート執筆環境の運用](home-kubernetes.md) の手順と現在の
-未実装範囲を確認する。secret の内容を表示する `kubectl` コマンドは使わない。
+[Home Kubernetes とプライベート執筆環境の運用](home-kubernetes.md) の順序を確認する。
+実際の age 公開鍵と暗号化 OAuth Secret を Git に追加してから bootstrap し、age 秘密鍵
+を含む `sops-age` は bootstrap 後に `flux-system` namespace へ一度だけ作成する。secret
+の内容を表示する `kubectl` コマンドは使わない。
 
 ## 14. Jellyfin と Flux の状態確認
 

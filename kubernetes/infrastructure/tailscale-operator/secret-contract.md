@@ -13,6 +13,11 @@ stringData:
   client_secret: "<Tailscale OAuth client secret>"
 ```
 
-このファイルは契約の説明だけを行い、Secret の雛形や実値を Kubernetes の resources に含めない。実際に GitOps で管理する場合は、Flux の Kustomization に `spec.decryption` を設定し、`operator-oauth.sops.yaml` を age 公開鍵で暗号化して追加する。OAuth client には Operator 用タグ `tag:k8s-operator` を作成できる権限を付与する。
+実ファイルは `secrets/operator-oauth.sops.yaml` に置く。雛形
+`secrets/operator-oauth.sops.yaml.example` をコピーし、SOPS で暗号化してから
+`secrets/kustomization.yaml` の resource に追加する。雛形と plaintext の OAuth 値を
+Git に追加しない。Flux の infrastructure Kustomization は `spec.decryption` で
+`flux-system` namespace の `sops-age` Secret を参照する。OAuth client には Operator
+用タグ `tag:k8s-operator` を作成できる権限を付与する。
 
 Tailscale 公式の Helm chart は、`oauth.clientId` と `oauth.clientSecret` を指定した場合に Secret を生成し、未指定の場合は `operator-oauth` の `client_id` / `client_secret` を参照する。この構成は後者を使うため、`HelmRelease.spec.valuesFrom` で OAuth 値を渡さない。OAuth client と tailnet policy には、Operator/proxy用タグを作成できる Devices、Auth Keys、Services の必要な read/write scope とタグ所有権を設定する。チャートを更新する際は、使用バージョンの公式 `values.yaml` と [Kubernetes Operator の公式手順](https://tailscale.com/docs/kubernetes-operator) を再確認する。
