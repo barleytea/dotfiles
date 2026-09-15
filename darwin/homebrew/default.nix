@@ -21,6 +21,7 @@
       "FelixKratz/formulae"
       "harelba/q"
       "nikitabobko/tap"
+      "stablyai/orca"
     ];
     brews = [
       "daipeihust/tap/im-select"
@@ -50,6 +51,7 @@
       "miro"
       "nosql-workbench"
       "notion"
+      "stablyai/orca/orca"
       "plain-clip"
       "raycast"
       "tableplus"
