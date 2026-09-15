@@ -1,0 +1,5 @@
+# 実際の age 公開鍵を設定するまで、SOPS による暗号化は意図的に失敗する。
+creation_rules:
+  - path_regex: ^kubernetes/infrastructure/tailscale-operator/secrets/operator-oauth\.sops\.yaml$
+    encrypted_regex: ^(data|stringData)$
+    age: age1REPLACE_WITH_YOUR_AGE_PUBLIC_KEY

@@ -82,8 +82,9 @@ AI を使う小説執筆の正本は `/mnt/sda1/private/writing/novel`。SMB、N
 導入、秘密情報、Jellyfin の初期設定、原稿移行、バックアップと復元試験は
 [Home Kubernetes とプライベート執筆環境の運用](docs/home-kubernetes.md) を正本とする。
 最初の適用は x86_64 NixOS 実機で `make nixos-build` を通してから行う。現行の
-`kubernetes/` には Flux bootstrap 生成物と SOPS 復号設定が含まれないため、平文の
-OAuth secret をコミット・適用しないこと。
+`kubernetes/` には SOPS 復号設定と OAuth Secret の雛形を含む。実際の age 公開鍵と
+暗号化済み OAuth Secret は利用者が作成して Git 管理し、age 秘密鍵と cluster 内の
+`sops-age` Secret は Git 外に保つ。平文 OAuth secret をコミット・適用しないこと。
 
 ## Documentation
 
