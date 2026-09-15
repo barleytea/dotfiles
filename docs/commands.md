@@ -118,3 +118,77 @@ GitHub Actions の darwin CI は長時間化を避けるため、`make nix-check
 2. `make pre-commit-run` で lint と gitleaks
 3. 問題なければ apply
 4. 挙動が変わったら `AGENTS.md` / `docs/architecture.md` / `docs/commands.md` を同期更新
+
+## 13. Home Kubernetes の導入・確認
+
+以下は x86_64 NixOS 実機で実行する。`make nixos-switch` はシステム設定を変更するため、
+先に `make nixos-build` を成功させ、`/mnt/sda1` と `/mnt/sdb1` がマウントされていることを
+確認する。
+
+```sh
+findmnt /mnt/sda1 /mnt/sdb1
+make nixos-build
+make nixos-switch
+systemctl status k3s k3s-storage-setup --no-pager
+```
+
+NixOS ホストだけで Kubernetes を管理するため、k3s の kubeconfig を Mac へコピーしない。
+
+```sh
+install -d -m 0700 "$HOME/.kube"
+sudo install -m 0600 /etc/rancher/k3s/k3s.yaml "$HOME/.kube/config"
+sudo chown "$USER":"$(id -gn)" "$HOME/.kube/config"
+export KUBECONFIG="$HOME/.kube/config"
+kubectl get nodes -o wide
+kubectl get storageclass
+```
+
+manifest の静的検証はクラスタを変更しない。
+
+```sh
+kubectl kustomize kubernetes/clusters/home >/dev/null
+git diff --check
+```
+
+Flux bootstrap、SOPS/age、Tailscale OAuth secret は外部状態と秘密情報を扱う。実行前に
+[Home Kubernetes とプライベート執筆環境の運用](home-kubernetes.md) の手順と現在の
+未実装範囲を確認する。secret の内容を表示する `kubectl` コマンドは使わない。
+
+## 14. Jellyfin と Flux の状態確認
+
+```sh
+flux check
+flux get kustomizations -A
+flux get helmreleases -A
+kubectl get pods -A
+kubectl get ingress -n jellyfin
+kubectl get ingress jellyfin -n jellyfin \
+  -o jsonpath='{.status.loadBalancer.ingress[0].hostname}{"\n"}'
+```
+
+最後に表示される MagicDNS FQDN を Tailscale 接続済み・ACL 許可済みの端末から HTTPS で
+開く。`8096` を直接公開しない。詳細は [`kubernetes/README.md`](../kubernetes/README.md)
+を参照。
+
+## 15. プライベート執筆環境の運用
+
+原稿の正本は `/mnt/sda1/private/writing/novel` で、SMB/NFS/Kubernetes に公開しない。
+Mac は原稿を clone せず、Tailscale 経由の SSH terminal として使う。
+
+```sh
+ssh -t miyoshi_s@<NixOS の Tailscale 名> \
+  'zellij attach --create writing'
+```
+
+日次バックアップの状態確認と手動実行は次の通り。書込み中の原稿と競合しない時刻を
+選ぶ。
+
+```sh
+systemctl list-timers writing-backup.timer --all
+sudo systemctl start writing-backup.service
+sudo systemctl status writing-backup.service --no-pager
+```
+
+原稿移行、復元試験、Jellyfin `/config`、k3s etcd snapshot の手順にはデータを上書きする
+場面がある。対象を確認し本人が承認してから実行する。詳細は
+[Home Kubernetes とプライベート執筆環境の運用](home-kubernetes.md) を参照。

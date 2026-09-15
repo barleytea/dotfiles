@@ -12,6 +12,7 @@ This repository is organized into OS-specific directories:
 - **`nixos/`** - NixOS configuration (system + home-manager). OS 固有モジュールのみ
 - **`modules/home/`** - 両 OS 共通の home-manager モジュール（alacritty / atuin / claude / gemini / git / mise / zellij など）。両 flake から `inputs.dotfiles-shared` 経由で参照
 - **`nixvim/`** - Standalone Neovim configuration (can be used independently)
+- **`kubernetes/`** - NixOS 上の単一ノード k3s 向け Flux GitOps 構成（Jellyfin と Tailscale Operator）
 
 darwin / nixos は独立した flake のまま、共通 HM モジュールだけ `modules/` に集約する構成。詳細は [docs/architecture.md](docs/architecture.md) を参照。
 
@@ -71,6 +72,18 @@ nix run ./nixvim
 # Update nixvim flake
 make flake-update-nixvim
 ```
+
+## Home Kubernetes and Writing
+
+NixOS は単一ノード k3s を実行し、`kubernetes/` 以下を Flux で同期する。初期ワークロードは Jellyfin で、メディア原本は `/mnt/sda1/shares/media` を読み取り専用でマウントする。アクセスは Tailscale Operator の private Ingress に限定し、Funnel は使わない。詳細と bootstrap 前提条件は [kubernetes/README.md](kubernetes/README.md) を参照。
+
+AI を使う小説執筆の正本は `/mnt/sda1/private/writing/novel`。SMB、NFS、Kubernetes には公開せず、Mac から Tailscale 経由の SSH と Zellij で NixOS 上の AI CLI を使う。NixOS は日次バックアップを `/mnt/sdb1/backup/private/writing` に保持する。実データの移行・削除は自動化しないため、設定適用後に内容を確認してから手動で行う。
+
+導入、秘密情報、Jellyfin の初期設定、原稿移行、バックアップと復元試験は
+[Home Kubernetes とプライベート執筆環境の運用](docs/home-kubernetes.md) を正本とする。
+最初の適用は x86_64 NixOS 実機で `make nixos-build` を通してから行う。現行の
+`kubernetes/` には Flux bootstrap 生成物と SOPS 復号設定が含まれないため、平文の
+OAuth secret をコミット・適用しないこと。
 
 ## Documentation
 
@@ -156,7 +169,7 @@ Documentation is available as Claude Code skills in `.claude/skills/`. These ski
 
 - [alacritty](https://github.com/alacritty/alacritty) - terminal
 - [wezterm](https://github.com/wez/wezterm) - alternative terminal
-- [ghostty](https://github.com/ghostty/ghostty) - terminal
+- [ghostty](https://github.com/ghostty-org/ghostty) - terminal
 
 ### Terminal Multiplexers
 
