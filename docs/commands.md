@@ -97,7 +97,8 @@ NixOS 側には `home-manager-apply` 相当のターゲットは無い（HM は 
 | 変数 | 既定値 | 用途 |
 |------|--------|------|
 | `NIX_PROFILE` | 自動検出 | Nix 環境変数 source 元の `profile.d` スクリプト |
-| `NIXVIM_CONFIG_INPUT` | `path:../nixvim` | flake input `nixvim-config` の override 先（CI で `${{ github.workspace }}/nixvim` を渡す） |
+| `NIXVIM_CONFIG_INPUT` | `path:../nixvim` | flake input `nixvim-config` の override 先 |
+| `DOTFILES_SHARED_INPUT` | `path:../modules` | flake input `dotfiles-shared` の override 先 |
 | `MISE_NPM_MIN_AGE_DAYS` | `7` | `mise-update-npm-tools` の min-age 日数 |
 
 ## 11. CI 想定の使い分け

@@ -16,6 +16,8 @@
       "Bash(git stash:*)",
       "Bash(git checkout -b:*)",
       "Bash(git pull:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
       "Bash(find:*)",
       "Bash(fd:*)",
       "Bash(rg:*)",
@@ -117,6 +119,16 @@
             "command": "~/.claude/hooks/log-skill.sh"
           }
         ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/git-push-guard.sh",
+            "if": "Bash(git push:*)"
+          }
+        ]
       }
     ],
     "Stop": [
@@ -157,7 +169,6 @@
     "autoAllowBashIfSandboxed": true,
     "allowUnsandboxedCommands": false,
     "network": {
-      "allowLocalBinding": true,
       "allowedDomains": [
         "github.com",
         "api.github.com",
@@ -177,7 +188,8 @@
         "localhost",
         "127.0.0.1",
         "::1"
-      ]
+      ],
+      "allowLocalBinding": true
     },
     "filesystem": {
       "denyRead": [

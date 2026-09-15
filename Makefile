@@ -78,11 +78,17 @@ nix-darwin-check: ## nix-darwinの設定をビルドのみ行います（実際�
 ## ---- NixOS Operations ---- ##
 nixos-switch: ## NixOSシステム設定を適用します
 	$(NIX_SOURCE_CMD) \
-	cd nixos && sudo nixos-rebuild switch --flake path:.#desktop --no-write-lock-file
+	cd nixos && sudo nixos-rebuild switch --flake path:.#desktop \
+		--impure --no-write-lock-file \
+		--override-input nixvim-config "$(NIXVIM_CONFIG_INPUT)" \
+		--override-input dotfiles-shared "$(DOTFILES_SHARED_INPUT)"
 
 nixos-build: ## NixOSシステム設定をビルドのみ行います（適用しない）
 	$(NIX_SOURCE_CMD) \
-	cd nixos && sudo nixos-rebuild build --flake path:.#desktop --no-write-lock-file
+	cd nixos && sudo nixos-rebuild build --flake path:.#desktop \
+		--impure --no-write-lock-file \
+		--override-input nixvim-config "$(NIXVIM_CONFIG_INPUT)" \
+		--override-input dotfiles-shared "$(DOTFILES_SHARED_INPUT)"
 
 ## ---- All Operations ---- ##
 nix-update-all: nix-channel-update home-manager-apply nix-darwin-apply ## Nix関連の全設定を一括で更新・適用します (macOS)
