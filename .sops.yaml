@@ -2,4 +2,4 @@
 creation_rules:
   - path_regex: ^kubernetes/infrastructure/tailscale-operator/secrets/operator-oauth\.sops\.yaml$
     encrypted_regex: ^(data|stringData)$
-    age: age1REPLACE_WITH_YOUR_AGE_PUBLIC_KEY
+    age: age1cnhna00dmmq9fpeg4swj2ckk4dujggcgn7pxk4lps68heefc2ffsf7qhat
