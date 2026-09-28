@@ -118,6 +118,13 @@ if [ ! -d "${AI_GUARDRAILS_DIR}" ]; then
     echo "  Note: ai-guardrails is not checked out at ${AI_GUARDRAILS_DIR}; review/external skills were skipped."
 fi
 
+# 外部 marketplace のプラグインを導入する
+echo "==> Installing Claude Code plugins..."
+bash "${CLAUDE_CONFIG_SRC}/install-plugins.sh"
+
+echo "==> Installing Agent Skills for other agents..."
+bash "${CLAUDE_CONFIG_SRC}/install-agent-skills.sh"
+
 echo ""
 echo "==> Claude Code setup complete!"
 echo "    Config deployed to: ${CLAUDE_HOME}/"

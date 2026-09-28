@@ -31,6 +31,7 @@
       "n"
       "uv"
       "harelba/q/q"
+      "jira-cli"
     ];
     casks = [
       "alt-tab"

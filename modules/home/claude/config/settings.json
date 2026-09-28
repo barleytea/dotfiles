@@ -161,7 +161,8 @@
     "padding": 1
   },
   "enabledPlugins": {
-    "gopls-lsp@claude-plugins-official": true
+    "gopls-lsp@claude-plugins-official": true,
+    "typesafe@typesafe-ai": true
   },
   "language": "Japanese",
   "sandbox": {

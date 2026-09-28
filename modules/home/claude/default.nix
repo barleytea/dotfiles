@@ -38,6 +38,12 @@ in
         && ${pkgs.coreutils}/bin/mv "${config.home.homeDirectory}/.claude/settings.json.tmp" "${config.home.homeDirectory}/.claude/settings.json"
     '
 
+    $DRY_RUN_CMD ${pkgs.bash}/bin/bash -c '
+      PATH="${pkgs.jq}/bin:$PATH" ${pkgs.bash}/bin/bash "${claudeConfigPath}/install-plugins.sh"
+    '
+
+    $DRY_RUN_CMD ${pkgs.bash}/bin/bash "${claudeConfigPath}/install-agent-skills.sh"
+
     # Link individual files from commands directory
     if [ -d "${claudeConfigPath}/commands" ]; then
       for file in "${claudeConfigPath}/commands"/*; do

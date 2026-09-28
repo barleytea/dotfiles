@@ -238,6 +238,10 @@ make setup-claude
   from a sibling `../ai-guardrails/generated/` checkout when present, mirroring
   the `ai-guardrails` flake input used on macOS/NixOS. Override the source
   directory with `AI_GUARDRAILS_DIR` if your ghq layout differs.
+- Adds the `typesafe-ai/skills` marketplace and installs the
+  `typesafe@typesafe-ai` plugin when the `claude` command is available.
+- Installs the `typesafe-ai` Agent Skill for Codex, Gemini CLI, and GitHub
+  Copilot when `npx` is available.
 
 Requires `jq` (settings merge) and `bubblewrap` (Claude Code sandbox on
 WSL) - both are pulled in by the Kali manifests.
