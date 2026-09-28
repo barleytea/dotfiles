@@ -38,6 +38,7 @@ in {
     ./cmux
     ./borders
     ./herdr
+    ./homebrew
     "${shared}/home/claude"
     "${shared}/home/codex"
     "${shared}/home/copilot"
