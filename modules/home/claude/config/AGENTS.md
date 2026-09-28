@@ -56,7 +56,7 @@
 ベースラインの運用規則と `review-*` スキル（code-quality / testing / security / dependencies /
 architecture / layering / performance / documentation）、および `external-*` スキルは
 [ai-guardrails](https://github.com/barleytea/ai-guardrails) が flake input として
-`~/.claude/skills/` に配備する。レビュー依頼を受けたら該当する `review-*` スキルを使い、
+`~/.claude/skills/` と Agent Skills 標準の `~/.agents/skills/` に配備する。レビュー依頼を受けたら該当する `review-*` スキルを使い、
 範囲指定がなければ全レビューを実行して 1 つのレポートに統合する。
 
 ## Important Notes

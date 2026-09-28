@@ -212,5 +212,6 @@
   "github.copilot.chat.codesearch.enabled": true,
   "github.copilot.chat.claudeAgent.useSdkExtension": true,
   "github.copilot.chat.anthropic.tools.websearch.enabled": true,
-  "chat.viewSessions.orientation": "stacked"
+  "chat.viewSessions.orientation": "stacked",
+  "window.confirmSaveUntitledWorkspace": false
 }

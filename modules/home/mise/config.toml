@@ -1,18 +1,18 @@
 [tools]
 node = "lts"
-go = "1.24.5"
+go = "1.26.2"
 python = "system"
 # renovate: datasource=github-releases depName=aws/aws-cli
-awscli = "2.22.28"
+awscli = "2.36.48"
 # Pin npm CLIs so CI remains reproducible and npm min-release-age stays effective.
-"npm:aws-cdk" = "2.1034.0"
+"npm:aws-cdk" = "2.1142.0"
 "npm:@redocly/cli" = "2.24.1"
-"npm:corepack" = "0.33.0"
-"npm:@google/gemini-cli" = "0.1.7"
-"npm:@openai/codex" = "0.147.0"
-"npm:ccusage" = "18.0.10"
+"npm:corepack" = "0.36.0"
+"npm:@google/gemini-cli" = "0.60.0"
+"npm:@openai/codex" = "0.154.0"
+"npm:ccusage" = "20.0.22"
 "npm:difit" = "3.1.15"
-"pipx:pre-commit" = "latest"
+"pipx:pre-commit" = "4.6.2"
 
 [settings]
 experimental = true

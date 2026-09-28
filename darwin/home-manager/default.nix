@@ -21,6 +21,7 @@ in {
     inputs.hunk.homeManagerModules.default
     inputs.ai-guardrails.homeManagerModules.default
     # 共通 HM モジュール（modules/home/ から）
+    "${shared}/home/ai-guardrails"
     "${shared}/home/alacritty"
     "${shared}/home/atuin"
     "${shared}/home/cz-git"

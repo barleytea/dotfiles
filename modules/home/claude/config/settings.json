@@ -99,14 +99,13 @@
       "Bash(gh release create:*)"
     ]
   },
-  "model": "fable[1m]",
-  "effortLevel": "high",
+  "model": "sonnet",
   "modelSettings": {
     "sonnet": {
       "effortLevel": "medium"
     },
     "haiku": {
-      "effortLevel": "low"
+      "effortLevel": "high"
     }
   },
   "hooks": {
@@ -188,7 +187,7 @@
         "sum.golang.org",
         "localhost",
         "127.0.0.1",
-        "::1"
+        "[::1]"
       ],
       "allowLocalBinding": true
     },
@@ -199,6 +198,11 @@
         "~/.ssh",
         "~/.aws",
         "/etc/nixos/secrets"
+      ],
+      "allowWrite": [
+        "~/git_repos/github.com/tokyucorp/hachi_cms",
+        "~/git_repos/github.com/tokyucorp/hachi_cms_deployments",
+        "~/git_repos/github.com/tokyucorp/tokyuplus-web-development"
       ]
     },
     "enableWeakerNetworkIsolation": true,
@@ -233,15 +237,15 @@
       "envVars": [
         {
           "name": "GH_TOKEN",
-          "mode": "mask"
+          "mode": "deny"
         },
         {
           "name": "ANTHROPIC_API_KEY",
-          "mode": "mask"
+          "mode": "deny"
         },
         {
           "name": "NPM_TOKEN",
-          "mode": "mask"
+          "mode": "deny"
         }
       ]
     }
