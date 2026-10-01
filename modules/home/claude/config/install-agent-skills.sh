@@ -27,16 +27,20 @@ install_skill() {
         if [ ! -f "${skillPath}" ]; then
             echo "==> Installing Agent Skill: ${skillName}"
             if [ -n "${skillSelector}" ]; then
-                npx --yes skills add "${skillSource}" \
+                if ! npx --yes skills add "${skillSource}" \
                     --skill "${skillSelector}" \
                     --global \
                     --agent codex gemini-cli github-copilot \
-                    --yes
+                    --yes; then
+                    echo "  Warning: failed to install Agent Skill: ${skillName}; continuing." >&2
+                fi
             else
-                npx --yes skills add "${skillSource}" \
+                if ! npx --yes skills add "${skillSource}" \
                     --global \
                     --agent codex gemini-cli github-copilot \
-                    --yes
+                    --yes; then
+                    echo "  Warning: failed to install Agent Skill: ${skillName}; continuing." >&2
+                fi
             fi
             return 0
         fi
