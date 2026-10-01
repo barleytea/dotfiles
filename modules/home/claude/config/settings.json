@@ -161,7 +161,8 @@
   },
   "enabledPlugins": {
     "gopls-lsp@claude-plugins-official": true,
-    "typesafe@typesafe-ai": true
+    "typesafe@typesafe-ai": true,
+    "yomiyasu@yomiyasu": true
   },
   "language": "Japanese",
   "sandbox": {

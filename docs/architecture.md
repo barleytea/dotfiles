@@ -154,14 +154,14 @@ Claude Code の設定は OS 横断で `modules/home/claude/config/` を正典と
 - `config/settings.json` … 全マシン共通のベース設定
 - `config/overlays/windows-ctf.json` … windows-ctf 専用の上書き差分（Orca hooks 等）
 - `config/merge-settings.sh` … ベース + overlay をディープマージして `~/.claude/settings.json` を生成するスクリプト
-- `config/install-plugins.sh` … `typesafe-ai/skills` marketplace と `typesafe@typesafe-ai` を冪等に導入するスクリプト
-- `config/install-agent-skills.sh` … `typesafe-ai` を共通の `~/.agents/skills/` 経由で Codex / Gemini CLI / GitHub Copilot のユーザースコープへ冪等に導入するスクリプト
+- `config/install-plugins.sh` … `typesafe-ai/skills` と `nanaism/yomiyasu` の marketplace、各 Claude Code プラグインを冪等に導入するスクリプト
+- `config/install-agent-skills.sh` … `typesafe-ai` と `yomiyasu` を共通の `~/.agents/skills/` 経由で Codex / Gemini CLI / GitHub Copilot のユーザースコープへ冪等に導入するスクリプト
 - `config/agents/explore.md` … 組み込み Explore エージェントを `model: haiku` に固定
 - `config/AGENTS.md`, `config/hooks/`, `config/skills/`, `config/commands/`, `config/statusline.sh` … それぞれシンボリックリンクとして配布
 
 `~/.claude/settings.json` は Nix 環境では `modules/home/claude/default.nix` の activation が `merge-settings.sh settings.json` を実行して生成し、WSL（windows-ctf）では `windows-ctf/scripts/setup-claude.sh` がベース + `overlays/windows-ctf.json` をマージして生成する。いずれも実ファイルでありシンボリックリンクではない。
 
-Nix の activation と `windows-ctf/scripts/setup-claude.sh` は `install-plugins.sh` と `install-agent-skills.sh` を実行する。Claude Code または `npx` が未導入の環境ではそれぞれスキップする。`typesafe@typesafe-ai` は `settings.json` の `enabledPlugins` でも有効化を宣言し、`typesafe-ai` は共通の `~/.agents/skills/` に配備して Codex / Gemini CLI / GitHub Copilot から利用できるようにする。第三者 marketplace や Agent Skill はユーザー権限で実行されるため、導入元を確認したうえで使用する。
+Nix の activation と `windows-ctf/scripts/setup-claude.sh` は `install-plugins.sh` と `install-agent-skills.sh` を実行する。Claude Code または `npx` が未導入の環境ではそれぞれスキップする。`typesafe@typesafe-ai` と `yomiyasu@yomiyasu` は `settings.json` の `enabledPlugins` でも有効化を宣言し、`typesafe-ai` と `yomiyasu` は共通の `~/.agents/skills/` に配備して Codex / Gemini CLI / GitHub Copilot から利用できるようにする。第三者 marketplace や Agent Skill はユーザー権限で実行されるため、導入元を確認したうえで使用する。
 
 `review-*` / `external-*`（`natural-japanese` 等）スキルは手動配置ではなく flake input `ai-guardrails`（`programs.ai-guardrails.enable = true`）が `~/.claude/skills/` に自動インストールする。`review-*` は共通モジュールが Agent Skills 必須メタデータを補完して `~/.agents/skills/` と Codex 旧互換の `~/.codex/skills/` にも公開するため、Codex と Gemini のスキル一覧にも表示される。Codex はスキル一覧をセッション開始時に読み込むため、Home Manager 適用後は既存の Codex セッションを終了して再起動する。
 

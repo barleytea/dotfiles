@@ -2,35 +2,48 @@
 # Claude Code 以外の agent に共有する Agent Skill を冪等に導入する。
 set -euo pipefail
 
-SKILL_NAME="typesafe-ai"
-SKILL_SOURCE="typesafe-ai/skills"
-SHARED_SKILL_PATH="${HOME}/.agents/skills/${SKILL_NAME}/SKILL.md"
-SKILL_PATHS=(
-    "${HOME}/.codex/skills/${SKILL_NAME}/SKILL.md"
-    "${HOME}/.gemini/skills/${SKILL_NAME}/SKILL.md"
-    "${HOME}/.copilot/skills/${SKILL_NAME}/SKILL.md"
-)
-
 if ! command -v npx >/dev/null 2>&1; then
-    echo "  Note: npx not found; skipping ${SKILL_NAME} for other agents." >&2
+    echo "  Note: npx not found; skipping external Agent Skills." >&2
     exit 0
 fi
 
-if [ -f "${SHARED_SKILL_PATH}" ]; then
-    echo "  Agent Skill already installed: ${SKILL_NAME}"
-    exit 0
-fi
+install_skill() {
+    local skillName="$1"
+    local skillSource="$2"
+    local skillSelector="${3:-}"
+    local sharedSkillPath="${HOME}/.agents/skills/${skillName}/SKILL.md"
+    local skillPaths=(
+        "${HOME}/.codex/skills/${skillName}/SKILL.md"
+        "${HOME}/.gemini/skills/${skillName}/SKILL.md"
+        "${HOME}/.copilot/skills/${skillName}/SKILL.md"
+    )
 
-for skillPath in "${SKILL_PATHS[@]}"; do
-    if [ ! -f "${skillPath}" ]; then
-        echo "==> Installing Agent Skill: ${SKILL_NAME}"
-        npx --yes skills add "${SKILL_SOURCE}" \
-            --skill "${SKILL_NAME}" \
-            --global \
-            --agent codex gemini-cli github-copilot \
-            --yes
-        exit 0
+    if [ -f "${sharedSkillPath}" ]; then
+        echo "  Agent Skill already installed: ${skillName}"
+        return 0
     fi
-done
 
-echo "  Agent Skill already installed: ${SKILL_NAME}"
+    for skillPath in "${skillPaths[@]}"; do
+        if [ ! -f "${skillPath}" ]; then
+            echo "==> Installing Agent Skill: ${skillName}"
+            if [ -n "${skillSelector}" ]; then
+                npx --yes skills add "${skillSource}" \
+                    --skill "${skillSelector}" \
+                    --global \
+                    --agent codex gemini-cli github-copilot \
+                    --yes
+            else
+                npx --yes skills add "${skillSource}" \
+                    --global \
+                    --agent codex gemini-cli github-copilot \
+                    --yes
+            fi
+            return 0
+        fi
+    done
+
+    echo "  Agent Skill already installed: ${skillName}"
+}
+
+install_skill "typesafe-ai" "typesafe-ai/skills" "typesafe-ai"
+install_skill "yomiyasu" "nanaism/yomiyasu"
