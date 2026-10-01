@@ -3,6 +3,12 @@
 let
   dotfilesPath = "${config.home.homeDirectory}/git_repos/github.com/barleytea/dotfiles";
   claudeConfigPath = "${dotfilesPath}/modules/home/claude/config";
+  activationPath = builtins.concatStringsSep ":" [
+    "${config.home.homeDirectory}/.local/bin"
+    "${config.home.homeDirectory}/.npm-global/bin"
+    "${config.xdg.dataHome}/mise/shims"
+    "${config.xdg.dataHome}/mise/installs/node/lts/bin"
+  ];
   ghConfigBase = pkgs.writeText "gh-config" ''
     version: 1
     git_protocol: https
@@ -22,6 +28,9 @@ in
   '';
 
   home.activation.createClaudeSymlinks = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    # activation は対話シェルではないため、Claude と mise 管理の npx を明示的に PATH へ追加する。
+    export PATH="${activationPath}:$PATH"
+
     $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir -p "${config.home.homeDirectory}/.config/claude"
     $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir -p "${config.home.homeDirectory}/.claude/commands"
     $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir -p "${config.home.homeDirectory}/.claude/skills"
