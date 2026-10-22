@@ -33,7 +33,7 @@ Edit `nixos/packages/cursor/extracted.nix`:
 ```nix
 let
   pname = "cursor";
-  version = "1.6.45";  # Update this version number
+  version = "3.26.16";  # Update this version number
 
   src = fetchurl {
     url = "https://downloads.cursor.com/production/COMMIT_HASH/linux/x64/Cursor-${version}-x86_64.AppImage";
@@ -54,10 +54,10 @@ Use `nix-prefetch-url` to download and calculate the hash:
 
 ```bash
 # Download and get SHA256 hash
-nix-prefetch-url https://downloads.cursor.com/production/COMMIT_HASH/linux/x64/Cursor-1.6.45-x86_64.AppImage
+nix-prefetch-url https://downloads.cursor.com/production/COMMIT_HASH/linux/x64/Cursor-3.26.16-x86_64.AppImage
 
 # Convert to SRI format (sha256-...)
-nix --extra-experimental-features 'nix-command' hash convert --hash-algo sha256 --to sri HASH_FROM_ABOVE
+nix --extra-experimental-features 'nix-command' hash convert --hash-algo sha256 --from nix32 --to sri HASH_FROM_ABOVE
 ```
 
 Update the `hash` field in `extracted.nix` with the SRI format hash (e.g., `sha256-ABC123...=`).

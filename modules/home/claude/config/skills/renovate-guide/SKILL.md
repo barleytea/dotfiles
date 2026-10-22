@@ -46,9 +46,9 @@ Renovate の `mise` manager は `config.toml` の `[tools]` セクションを�
 
 ```toml
 [tools]
-"npm:aws-cdk" = "2.1034.0"   # → npm registry でバージョンチェック
-"npm:@redocly/cli" = "1.34.4"
-go = "1.24.5"                  # → Go リリースでバージョンチェック
+"npm:aws-cdk" = "3.0.0"   # → npm registry でバージョンチェック
+"npm:@redocly/cli" = "2.63.0"
+go = "1.27.3"                  # → Go リリースでバージョンチェック
 ```
 
 ---

@@ -22,7 +22,7 @@ mise is configured and managed through home-manager.
 ### Programming Languages
 
 - **Node.js**: `lts`
-- **Go**: `1.24.5`
+- **Go**: `1.27.3`
 - **Jujutsu**: `latest`
 
 ### NPM Packages
@@ -67,11 +67,11 @@ make mise-install-all
 
 ```sh
 # Install specific tools
-mise install go@1.23.4
+mise install go@1.27.3
 mise install node@lts
 
 # Use specific tools
-mise use go@1.23.4
+mise use go@1.27.3
 mise use node@lts
 ```
 
@@ -113,7 +113,7 @@ programs.mise = {
   globalConfig = {
     tools = {
       node = "lts";
-      go = "1.24.5";
+      go = "1.27.3";
       jujutsu = "latest";
       "npm:@redocly/cli" = "latest";
       # ... other tools
