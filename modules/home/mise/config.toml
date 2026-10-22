@@ -1,5 +1,5 @@
 [tools]
-node = "lts"
+node = "24"
 go = "1.27.3"
 python = "system"
 # renovate: datasource=github-releases depName=aws/aws-cli

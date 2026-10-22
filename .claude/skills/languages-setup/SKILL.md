@@ -17,7 +17,7 @@ This project uses mise for language version management and task execution.
 The following tools are configured in `modules/home/mise/config.toml`:
 
 - **Go**: `1.27.3`
-- **Node.js**: `lts`
+- **Node.js**: `24` (latest 24.x)
 
 ## Available Tasks
 
