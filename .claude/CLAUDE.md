@@ -236,6 +236,16 @@ Claude Code 設定は OS 横断の正典 `modules/home/claude/config/` を単一
 2. `SKILL.md`（必須）とオプションファイルを配置
 3. 設定を適用すると`~/.claude/skills/<skill-name>/`に自動展開
 
+**第三者 Agent Skill（imozuru）:**
+- `modules/home/imozuru/` が `MaryCache/imozuru` を commit 固定で取得し、`hardening.patch`（URL のスキーム・内部アドレスの拒否、保存名の制限、yt-dlp の option injection 対策、report.py の参照先制限、フィードの DOCTYPE 検査の強化、取得物をデータとして扱う注意書き）を当てて配る
+- ビルド時に上流のテストとパッチで足したテストを実行する（パッチが上流とずれたら build が失敗する）
+- 配備先: `~/.agents/skills`（Codex / Gemini CLI / GitHub Copilot）、`~/.claude/skills`、`~/.codex/skills`、`~/.cursor/skills`（いずれも `home.file` の symlink）
+- 更新手順: `rev` と `hash` を上げる → 上流の差分をレビュー → パッチを作り直す → `make home-manager-build`
+- windows-ctf（WSL）は Nix を使わないため対象外
+
+**開発スタック系のカスタムスキル:**
+- `cf-hono-react-stack`: Cloudflare Workers + Hono + React（Vite SPA）+ D1（Drizzle）+ Durable Objects の統合ガイド。`SKILL.md` を入口に `references/`（setup / API / client / D1 / DO / testing / security / deploy）を必要な分だけ読む構成。製品ごとの詳細は Cloudflare 公式系スキル（`cloudflare`, `durable-objects`, `workers-best-practices`, `wrangler`）に任せる。`scenarios.md` は `skill-eval` 用
+
 #### Statusline（ステータスバー）機能
 - **スクリプト場所**: `modules/home/claude/config/statusline.sh`
 - **表示内容（1行）**:

@@ -163,6 +163,8 @@ Claude Code の設定は OS 横断で `modules/home/claude/config/` を正典と
 
 Nix の activation と `windows-ctf/scripts/setup-claude.sh` は `install-plugins.sh` と `install-agent-skills.sh` を実行する。Nix の activation は非対話シェルでも Claude・mise 管理の Node.js・git（marketplace の clone 用）を検出できるよう PATH を補完する。外部 marketplace / Agent Skill のネットワーク導入に失敗した場合は警告を出して Home Manager の activation を継続する。`typesafe@typesafe-ai` と `yomiyasu@yomiyasu` は `settings.json` の `enabledPlugins` でも有効化を宣言し、`typesafe-ai` と `yomiyasu` は共通の `~/.agents/skills/` に配備して Codex / Gemini CLI / GitHub Copilot から利用できるようにする。第三者 marketplace や Agent Skill はユーザー権限で実行されるため、導入元を確認したうえで使用する。
 
+第三者 Agent Skill の `imozuru`（芋づる式の調べもの）は `modules/home/imozuru/` が `fetchFromGitHub` で commit を固定し、セキュリティレビューで見つけた穴を塞ぐ `hardening.patch` を当ててから配る。ビルド時に上流のテストとパッチで足したテストを実行する。配備先は `~/.agents/skills`（Codex / Gemini CLI / GitHub Copilot）、`~/.claude/skills`、`~/.codex/skills`（Codex 旧互換）、`~/.cursor/skills`。上流を更新するときは `rev` と `hash` を上げ、差分をレビューしてからパッチを作り直す。`.patch` は空のコンテキスト行に末尾空白を含むため、pre-commit の `trailing-whitespace` から除外している。
+
 `review-*` / `external-*`（`natural-japanese` 等）スキルは手動配置ではなく flake input `ai-guardrails`（`programs.ai-guardrails.enable = true`）が `~/.claude/skills/` に自動インストールする。`review-*` は共通モジュールが Agent Skills 必須メタデータを補完して `~/.agents/skills/` と Codex 旧互換の `~/.codex/skills/` にも公開するため、Codex と Gemini のスキル一覧にも表示される。Codex はスキル一覧をセッション開始時に読み込むため、Home Manager 適用後は既存の Codex セッションを終了して再起動する。
 
 ### 他エージェントへの人格共有（Codex / Gemini / Copilot / Cursor）

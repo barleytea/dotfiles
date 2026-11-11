@@ -3,6 +3,8 @@ repos:
     rev: v5.0.0
     hooks:
       - id: trailing-whitespace
+        # パッチの空のコンテキスト行は「 」1文字で、削ると当たらなくなる
+        exclude: \.patch$
       - id: end-of-file-fixer
       - id: check-yaml
       - id: check-added-large-files
