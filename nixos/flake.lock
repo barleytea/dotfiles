@@ -147,10 +147,7 @@
           "hermes-writing",
           "home-manager"
         ],
-        "nixpkgs": [
-          "hermes-writing",
-          "nixpkgs"
-        ],
+        "nixpkgs": "nixpkgs",
         "pyproject-build-systems": "pyproject-build-systems",
         "pyproject-nix": "pyproject-nix",
         "uv2nix": "uv2nix"
@@ -181,11 +178,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1794817402,
-        "narHash": "sha256-sW8wt+tdHPaA14Psmmj3twVZ6d0C6jQBMpjvE/PCs0A=",
+        "lastModified": 1794820464,
+        "narHash": "sha256-qVk0gdMYhtwkEqL7lMCU+eBBX3YvdF5lqbGA7+c+r4w=",
         "owner": "gyokuroo",
         "repo": "hermes-writing-nix",
-        "rev": "60cfc765c146a4cfc59b4cb89486e6a58099773b",
+        "rev": "166923f0604359b40ee7bf7bb172e18fd2604094",
         "type": "github"
       },
       "original": {
@@ -252,15 +249,15 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1783224372,
-        "narHash": "sha256-8i/87eeoqiGE4yOTjwSA3Eh/ziJRQEmd/unYU+K27sk=",
-        "owner": "nixos",
+        "lastModified": 1792502884,
+        "narHash": "sha256-IoNisKcGbUjdd45qCqywGMCYmZ5EnkxezvLII0FWwNA=",
+        "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "d407951447dcd00442e97087bf374aad70c04cea",
+        "rev": "02c087f3fe673c9e317f206a627cb6b910336dbe",
         "type": "github"
       },
       "original": {
-        "owner": "nixos",
+        "owner": "NixOS",
         "ref": "nixos-unstable",
         "repo": "nixpkgs",
         "type": "github"
@@ -282,6 +279,22 @@
       }
     },
     "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1783224372,
+        "narHash": "sha256-8i/87eeoqiGE4yOTjwSA3Eh/ziJRQEmd/unYU+K27sk=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "d407951447dcd00442e97087bf374aad70c04cea",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_3": {
       "locked": {
         "lastModified": 1770562336,
         "narHash": "sha256-ub1gpAONMFsT/GU2hV6ZWJjur8rJ6kKxdm9IlCT0j84=",
@@ -403,7 +416,7 @@
         "hermes-writing": "hermes-writing",
         "home-manager": "home-manager",
         "hunk": "hunk",
-        "nixpkgs": "nixpkgs",
+        "nixpkgs": "nixpkgs_2",
         "nixvim-config": "nixvim-config"
       }
     },
