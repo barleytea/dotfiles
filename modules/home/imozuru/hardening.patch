@@ -300,6 +300,12 @@ diff --git a/tests/test_fetch.py b/tests/test_fetch.py
 index 8530099..9cdd69a 100644
 --- a/tests/test_fetch.py
 +++ b/tests/test_fetch.py
+@@ -28,3 +28,5 @@ class FetchPreservationTests(unittest.TestCase):
+         self.stack.enter_context(contextlib.redirect_stdout(self.stdout))
+         self.stack.enter_context(patch.object(fetch, "HAS_AX", False))
++        # 保存処理のテストを実 DNS の結果に依存させない
++        self.stack.enter_context(patch.object(fetch, "check_url"))
+         # 外部コマンドの有無で結果が変わらないように、既定では全部あることにする
 @@ -188,5 +188,66 @@ class FetchPreservationTests(unittest.TestCase):
          self.assertEqual(list(self.sources.iterdir()), [])
  
