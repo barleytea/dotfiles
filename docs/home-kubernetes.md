@@ -399,6 +399,44 @@ Git は小さな scene または章単位で commit し、AI の草稿・レビ�
 本文を混ぜない。同じファイルを複数の AI セッションで同時に編集させない。AI が
 外部クラウドを利用する場合は、送信してよい本文だけを明示する。
 
+### 4.3 Hermes の継続執筆
+
+小説用 Hermes は公式 v0.23.1 の Home Manager user service として `miyoshi_s` に導入し、
+user linger と一つの gateway を使う。状態と cron 定義は次に固定する。
+
+Hermesのmodule、upstream pin、writer helper、GitHub隔離、prompt、テストは公開外部flake
+`gyokuroo/hermes-writing-nix`が所有する。dotfilesはその
+`homeManagerModules.default`を明示的に読み込み、host固有のパスとアカウントを渡す。
+外部repoは実行コードとテストを公開するための場所であり、原稿、OAuth、Discord bot env、
+GitHubの認証状態、Hermesのruntime stateを保存しない。
+
+```text
+HERMES_HOME:  /mnt/sda1/private/writing/hermes
+worktree:     /mnt/sda1/private/writing/worktrees/hermes
+branch:       agent/hermes-writing
+provider:     openai-codex (ChatGPT subscription)
+model:        gpt-6-sol (公式 catalog の tag)
+```
+
+writer cron は5分間隔の1 jobだけにし、`cron.allow_agent_scheduling = true`、
+`cron.max_parallel_jobs = 1`、retry、catch-up を有効にする。各 run は checkpoint/progress
+を読み、scene 単位で変更して branch へ commit する。完了時は checkpoint、commit、自己の
+job remove、Discord 最終通知の順に行い、正本への merge・push は人間の確認後に行う。
+goal の active 状態や `max_turns` 到達後の pause だけでは、gateway 再起動後の自動継続に
+ならない。cron が checkpoint から次の scene を再開することを正本の継続条件にする。
+
+SSH と Discord の Hermes 操作は目標指定、指示、状態確認、pause/resume に限定する。本文を
+CLI や Discord から直接編集しない。Hermes に全 run を覆う OS-level lock hook はないため、
+`max_parallel_jobs = 1` と「手編集は pause 後、running worker の終了確認後」という運用で
+single writer にする。checkpoint と commit の短い処理だけ lock で保護する。これは運用上の
+排他であり、root や別プロセスによる書込みを強制的に遮断する sandbox ではない。
+
+Codex quota 中は Hermes の quota hold/pause を利用し、別 provider へ fallback しない。途中
+の quota/429 が全て自動保留される保証はないため、checkpoint は各 scene の境界で更新する。
+原稿を Codex に送る範囲はユーザーが指定した scene・指示に限り、送信先 provider の保存や
+利用規約から原稿を秘匿する構成ではない。Discord bot の環境ファイルはリポジトリ外に
+`0600` で置き、許可する user/channel を制限する。
+
 ## 5. バックアップと復元試験
 
 バックアップが存在することと復元可能であることは別である。初回構築後、以後は
@@ -410,12 +448,30 @@ Git は小さな scene または章単位で commit し、AI の草稿・レビ�
 |---|---|---|
 | 原稿の正本 | 日次 03:15、ランダム最大 15 分遅延、14 世代 | `systemctl list-timers writing-backup.timer --all` |
 | 原稿の backup | `/mnt/sdb1/backup/private/writing/<timestamp>/novel` | `sudo systemctl status writing-backup --no-pager` |
+| Hermes state | cron/checkpoint/ledger と非秘密 state を同じ世代へ追加 | `HERMES_HOME` の秘密除外を確認 |
+| Hermes worktree | worktree と branch/common Git の復元情報を追加 | worktree の `.git` 参照先を確認 |
 | 既存 bare Git | 存在する場合だけ原稿 backup 世代へ複製 | 対象 backup 世代の `novel.git` の有無を確認 |
 | Jellyfin `/config` | **未自動化** | 手動バックアップが必要 |
 | k3s embedded etcd | **未自動化** | snapshot と server token を別途保全する |
 
-原稿バックアップを今すぐ一回実行するには次を使う。作業中の書き込みと競合しない
-タイミングを選ぶ。
+原稿バックアップは writer と競合しないよう、次の停止順序を backup service が行った
+場合だけ実行する。既存の root timer は維持し、新しい暗号化基盤は追加しない。
+
+1. writer cron を pause する。
+2. execution ledger と restart-safe external worker の終了を待つ。
+3. gateway を正常停止し、state DB/WAL が閉じたことを確認する。
+4. worktree、common Git、非秘密 Hermes state を rsync する。
+5. 元々 gateway が稼働中だった場合だけ再起動し、writer が有効だった場合だけ resume する。
+
+待機には30分の上限を設ける。上限を超えた場合は rsync を開始せず、停止したサービスを
+元の状態へ戻して backup failure とする。`cron status` だけでは実行完了を判定できない。
+`cron runs`、user systemd、worker の状態を合わせて確認する。`cron cancel` は副作用を
+rollback しないため、タイムアウト時の通常処理には使わない。
+
+`auth.json`、`.env`、OAuth/token/credential ファイルは backup から除外し、復元時は OAuth
+device flow で再認証する。live な SQLite/WAL をコピーしない。
+
+手動で backup service の状態を見るには次を使う。
 
 ```sh
 sudo systemctl start writing-backup.service
@@ -443,6 +499,25 @@ dry-run の出力と destination が正しいことを確認してから `-n` �
 正本への本番復元では、まず新しい backup 世代を取り、SSH/Zellij/AI の書込みを止める。
 次に別パスへ復元して内容を検証し、正本を置換する必要性・対象・ロールバック方法を
 本人が承認してから行う。既存正本に対する `rsync --delete` は承認なしに実行しない。
+
+Hermes worktree の `.git` は common Git directory への絶対パスを含むファイルなので、
+復元先が変わるとそのままでは使えない。common Git（正本側の Git directory または bare
+Git）を先に復元し、worktree をコピーした後、元の worktree 登録を確認してから次で接続を
+修復する。
+
+```sh
+git -C /mnt/sda1/private/writing/novel worktree repair \
+  /mnt/sda1/private/writing/worktrees/hermes
+git -C /mnt/sda1/private/writing/worktrees/hermes rev-parse --git-common-dir
+git -C /mnt/sda1/private/writing/worktrees/hermes branch --show-current
+```
+
+`worktree repair` 後も common Git の実体や branch が一致しない場合は、復元先を削除・
+再初期化せず、正本/common Git と worktree manifest を確認してから人間が再登録する。
+
+このbackupのpause/drainとHermes stateのallowlist処理は外部flakeのbackup packageを使う。
+03:15のtimer、14世代保持、マウント確認、原稿正本の場所はNixOS host側の
+`services.writing`が管理する。外部repoの更新だけでhostの保存先やtimer時刻は変わらない。
 
 ### 5.3 Jellyfin のバックアップと復元
 

@@ -15,7 +15,14 @@
   # System services
   services = {
     # NixOS 上で完結する AI 小説執筆環境
-    writing.enable = true;
+    writing = {
+      enable = true;
+      sourceDir = config.home-manager.users.miyoshi_s.services.hermes-writing.repository;
+      worktreeDir = config.home-manager.users.miyoshi_s.services.hermes-writing.workingDirectory;
+      hermesHomeDir = config.home-manager.users.miyoshi_s.services.hermes-writing.hermesHome;
+      hermesBackupPackage = inputs.hermes-writing.packages.${pkgs.system}.hermes-writing-backup;
+      hermesPackage = config.home-manager.users.miyoshi_s.services.hermes-agent.package;
+    };
 
     # Automatic updates
     system76-scheduler.enable = true;

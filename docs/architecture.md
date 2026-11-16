@@ -103,6 +103,43 @@ Tailscale ACL / grants である。ホスト root 権限を持つ人から原稿
 ではない。運用上の境界、初回適用、Secrets、復旧試験は
 [Home Kubernetes とプライベート執筆環境の運用](home-kubernetes.md) を参照する。
 
+### 4.1 Hermes 執筆エージェント
+
+小説用 [Nous Hermes Agent](https://hermes-agent.nousresearch.com/docs/getting-started/nix-setup) は
+NixOS の `miyoshi_s` に公式 Home Manager user service として導入し、
+gateway を一つだけ起動する。`miyoshi_s` の linger を有効にして SSH logout とホスト再起動
+後も user service を復帰させる。Hermes の状態は原稿 worktree の外に置く。
+
+Hermes固有のHome Manager module、upstream Hermesのversion pin、writer helper、GitHub
+アカウント分離、prompt、テストは外部flake
+[`gyokuroo/hermes-writing-nix`](https://github.com/gyokuroo/hermes-writing-nix)から
+`inputs.hermes-writing.homeManagerModules.default`として明示的に読み込む。NixOS側には
+`services.hermes-writing`のhost固有値だけを置く。公開repoには原稿、OAuth、Discord環境変数、
+GitHub認証状態を入れない。
+
+`services.writing`はdotfiles側で管理し、マウント、原稿正本、03:15のbackup timer、14世代保持、
+ユーザーとlingerを所有する。Hermesのpause/drainと非秘密stateのbackup処理は外部flakeの
+packageを使う。これにより外部moduleの更新とNixOS hostのディスク構成を別々にレビューできる。
+
+| 項目 | 正本 |
+|---|---|
+| Hermes | v0.23.1、provider `openai-codex`、初期 model tag `gpt-6-sol` |
+| `HERMES_HOME` | `/mnt/sda1/private/writing/hermes` |
+| writer worktree | `/mnt/sda1/private/writing/worktrees/hermes` |
+| writer branch | `agent/hermes-writing` |
+| writer | built-in cron 1個、5分間隔、scene単位、checkpoint 継続 |
+
+cron は `allow_agent_scheduling = true`、`max_parallel_jobs = 1`、retry、catch-up を使う。
+目標完了時は checkpoint 更新、commit、自己の job remove、Discord 最終通知の順で終える。
+CLI/Discord は目標指定、指示、状態確認、pause/resume だけを行い、本文の直接編集や正本への
+自動 merge・push は行わない。全 run を覆う Hermes 公式の OS-level lock hook はないため、
+writer を一つに限定し、手編集は pause と実行中 worker の終了確認後だけ許可する。checkpoint
+と commit の短い操作だけ lock で保護する。
+
+Codex の quota hold 中は cron の再実行を待つ。別 provider への fallback、独自 watchdog、
+新しい Discord bot、外部 API/runtime は追加しない。原稿を Codex へ送る範囲はユーザーが
+指定した作業単位だけで、原稿の秘密性は root 権限や provider から暗号学的に保護されない。
+
 ## 5. Nixvim
 
 ```
