@@ -20,6 +20,7 @@ in {
     inputs.nixvim-config.homeManagerModules.default
     inputs.hunk.homeManagerModules.default
     inputs.ai-guardrails.homeManagerModules.default
+    inputs.hermes-writing.homeManagerModules.default
     # 共通 HM モジュール（modules/home/ から）
     "${shared}/home/ai-guardrails"
     "${shared}/home/imozuru"
@@ -44,6 +45,7 @@ in {
     "${shared}/home/git"
     ./ghostty
     ./herdr
+    ./hermes-host.nix
     ./hyprland
     "${shared}/home/mise"
     ./shell

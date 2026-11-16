@@ -133,6 +133,7 @@
     # 権限: sudo chmod 600 /etc/nixos/secrets/miyoshi_s.hashed-password
     hashedPasswordFile = "/etc/nixos/secrets/miyoshi_s.hashed-password";
     shell = pkgs.zsh;
+    linger = true;
     packages = with pkgs; [
     #  thunderbird
     ];

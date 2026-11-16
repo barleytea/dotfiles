@@ -83,6 +83,34 @@
 
 全 Make ターゲットと使い分け、CI 想定の流れは **`docs/commands.md`** を参照。
 
+### NixOS の Hermes 執筆エージェント
+
+NixOS 側の小説執筆エージェントは、外部flake
+`gyokuroo/hermes-writing-nix`が提供する公式 Nous Hermes Agent v0.23.1 の Home
+Manager user serviceを `miyoshi_s` に統合する。dotfilesのNixOS flakeでは
+`inputs.hermes-writing.homeManagerModules.default`を明示的にimportし、host固有の
+パスとアカウントだけを設定する。gateway は一つだけ起動し、
+`users.users.miyoshi_s.linger = true` で SSH logout や再起動後も user service を
+維持する。設定の正本と運用上の制約は [`docs/home-kubernetes.md`](docs/home-kubernetes.md)、
+サービス固有のパスと初期化手順は [`nixos/services/writing/README.md`](nixos/services/writing/README.md)
+に記載する。
+
+Hermesのmodule、helper、prompt、GitHub隔離、upstreamのpinは外部repoが所有する。
+原稿正本、マウント、ユーザー、03:15のbackup timer、14世代保持はこのdotfilesが所有する。
+外部repoへ原稿、OAuth、Discord環境変数、GitHub認証状態を持ち込まない。
+
+- `HERMES_HOME`: `/mnt/sda1/private/writing/hermes`
+- writer worktree: `/mnt/sda1/private/writing/worktrees/hermes`
+- writer branch: `agent/hermes-writing`
+- provider: ChatGPT subscription の `openai-codex`（初期モデルは公式 catalog の `gpt-6-sol` tag）
+- writer cron: scene 単位、checkpoint 継続、`max_parallel_jobs = 1`、完了時に commit → self-remove → Discord 通知
+
+SSH/Discord の Hermes 操作は目標、指示、状態確認、pause/resume に限定する。正本への
+自動 merge・push は行わず、原稿の送信範囲はユーザーが指定した本文だけにする。Hermes
+cron に全 run を覆う OS-level lock はないため、単一 writer と手編集停止確認を運用上の
+排他とし、checkpoint/commit の短い操作だけ lock で保護する。実装変更後は NixOS build
+と review-* を別工程で行う。
+
 ---
 
 ## 4. コーディングスタイル

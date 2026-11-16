@@ -195,3 +195,65 @@ sudo systemctl status writing-backup.service --no-pager
 原稿移行、復元試験、Jellyfin `/config`、k3s etcd snapshot の手順にはデータを上書きする
 場面がある。対象を確認し本人が承認してから実行する。詳細は
 [Home Kubernetes とプライベート執筆環境の運用](home-kubernetes.md) を参照。
+
+## 16. Hermes 執筆エージェント
+
+Hermes は外部flake `gyokuroo/hermes-writing-nix`のHome Manager moduleを通じて、NixOSの
+`miyoshi_s` user serviceとして一つの gatewayを起動する。Macは
+Tailscale SSH、Discord は gateway 経由で接続し、どちらも目標・指示・状態確認・停止再開
+の操作に限る。原稿 writer は built-in cron の1 jobだけで、`/mnt/sda1/private/writing/worktrees/hermes`
+の `agent/hermes-writing` branch に scene 単位で変更を commit する。正本への merge・push は
+人間が確認してから行う。
+
+主な読み取り確認は次の通り。`cron status` は scheduler の状態であり、実行中 writer の
+完了を単独では保証しない。必要に応じて `cron runs` と user systemd の状態も確認する。
+
+```sh
+hermes cron list
+hermes cron status
+hermes cron runs <writer-job-id> --limit 20
+systemctl --user status hermes-agent --no-pager
+```
+
+writer を止めるときは新規 fire を止めてから、実行中の run と restart-safe external worker
+の終了を確認する。通常の停止は次のコマンドを使う。実行中 run の中断が必要な場合だけ、
+副作用が rollback されないことを確認して `cron cancel` を SSH から実行する。
+
+```sh
+hermes cron pause <writer-job-id>
+hermes cron resume <writer-job-id>
+hermes cron cancel <writer-job-id>
+```
+
+初回の writer 準備は NixOS 上の SSH shell から次の順で行う。Nix activation は storage
+guard が通るまで state を作らない。
+
+```sh
+# activation 前に作成する。既に activation 済みなら作成後に NixOS/HM をもう一度適用する。
+# /mnt/sda1/private/writing/hermes.env を 0600 で作成し、Discord の runtime env を手動投入
+hermes-writing-init
+hermes auth add openai-codex --type oauth
+hermes-writing-ready
+hermes gateway start
+# /mnt/sda1/private/writing/worktrees/hermes/progress/goal.md に目標・完了条件を記入
+hermes-writing-start
+```
+
+`hermes-writing-ready` は storage、branch、source/common Git の接続を確認する。
+`hermes-writing-start` は `progress/goal.md` の完了条件を確認し、5分間隔・専用 worktree・
+Discord delivery の writer job を重複なく登録する。進捗の確認には `hermes-writing-status`、
+短い checkpoint/commit には `hermes-writing-checkpoint` と `hermes-writing-commit` を使う。
+完了時の job remove と最終通知は writer 自身が行う。
+
+GitHub の認証と commit author は Hermes 専用の `gyokuroo` に分離する。初回だけ SSH shell
+から `hermes-gh auth login --hostname github.com` を実行し、その後
+`hermes-gh-user` が `gyokuroo` を表示することを確認する。親の個人アカウントを switch/logout
+しない。repo 移管・新規 repo 作成・自動 push は行わない。
+
+初回 OAuth、Discord bot env、GitHub login は手動入力とし、秘密値をリポジトリ・Git・backup
+へ保存しない。復元時は OAuth/GitHub を再認証する。
+
+外部moduleを更新するときは、まず外部repoのlockとテストを確認し、その後このrepoのNixOS
+flakeを`--no-write-lock-file`で評価する。外部repoの公開範囲に原稿、認証情報、runtime stateが
+含まれていないことも確認する。NixOS実機でのapplyは、外部flakeのrevisionとhost側の生成unitを
+確認してから行う。
