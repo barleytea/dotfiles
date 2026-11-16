@@ -110,7 +110,8 @@ NixOS 側には `home-manager-apply` 相当のターゲットは無い（HM は 
 | nixvim PR 検証 | `nix build ./nixvim` | `nix build .#packages.<system>.default --no-write-lock-file` |
 
 NixOS CI の toplevel と nixvim の確認は、依存関係と設定の評価を目的に `--dry-run` で行う。
-Hermes本体のLinux実ビルドとCLI version smoke testは、外部の
+imozuru の skill source は同じ NixOS input で `nix build --no-link` を実行し、checkPhase を含む
+Linux 実ビルドを確認する。Hermes本体のLinux実ビルドとCLI version smoke testは、外部の
 [`gyokuroo/hermes-writing-nix`](https://github.com/gyokuroo/hermes-writing-nix) 側CIで実行する。
 したがって、dotfiles CIの成功だけではHermesの実ビルド成功までは保証しない。
 

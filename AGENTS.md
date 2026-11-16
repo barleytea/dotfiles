@@ -127,6 +127,7 @@ cron に全 run を覆う OS-level lock はないため、単一 writer と手�
 - ローカルでは `make nix-darwin-check`（macOS）または `make nixos-build`（NixOS）で apply 前のビルドチェックを必ず行う
 - Push 前に `make pre-commit-run` を実行
 - CI（GitHub Actions）は `darwin.yml` / `nixos.yml` / `windows-host.yml` の 3 ワークフローが該当ディレクトリの変更で起動する。マージ前に必ず通す
+- NixOS CI は toplevel の dry-run に加え、imozuru skill source の Linux 実ビルドで checkPhase も確認する
 - 詳細な検証手順は `docs/commands.md` の Testing セクションを参照
 
 ---
