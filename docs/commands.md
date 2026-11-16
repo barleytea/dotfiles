@@ -109,6 +109,11 @@ NixOS 側には `home-manager-apply` 相当のターゲットは無い（HM は 
 | NixOS PR 検証 | `make nixos-build` | `nix build path:.#nixosConfigurations.desktop.config.system.build.toplevel ...` を直接実行 |
 | nixvim PR 検証 | `nix build ./nixvim` | `nix build .#packages.<system>.default --no-write-lock-file` |
 
+NixOS CI の toplevel と nixvim の確認は、依存関係と設定の評価を目的に `--dry-run` で行う。
+Hermes本体のLinux実ビルドとCLI version smoke testは、外部の
+[`gyokuroo/hermes-writing-nix`](https://github.com/gyokuroo/hermes-writing-nix) 側CIで実行する。
+したがって、dotfiles CIの成功だけではHermesの実ビルド成功までは保証しない。
+
 GitHub Actions の darwin CI は長時間化を避けるため、`make nix-check-all-ci` は使わず、実適用や `mise install` を伴わないビルド確認に絞る。HM は `homeConfigurations.ci` を使い、GUI アプリなどの大型 `home.packages` をビルド対象から外す。
 
 ## 12. 検証のおすすめフロー

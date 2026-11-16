@@ -117,9 +117,14 @@ Hermes固有のHome Manager module、upstream Hermesのversion pin、writer help
 `services.hermes-writing`のhost固有値だけを置く。公開repoには原稿、OAuth、Discord環境変数、
 GitHub認証状態を入れない。
 
+NixOSの`hermes-writing` input自体はhostのnixpkgsをfollowする。一方、外部flakeが内包する
+公式Hermes packageは、公式v0.23.1のupstream lockにあるnixpkgsとビルド依存関係を使う。
+hostのnixpkgs更新でHermesのビルドツール世代を暗黙に差し替えないための分離である。
+
 `services.writing`はdotfiles側で管理し、マウント、原稿正本、03:15のbackup timer、14世代保持、
 ユーザーとlingerを所有する。Hermesのpause/drainと非秘密stateのbackup処理は外部flakeの
-packageを使う。これにより外部moduleの更新とNixOS hostのディスク構成を別々にレビューできる。
+packageを使い、backup package自体はhost nixpkgsで評価する。これにより外部moduleの更新と
+NixOS hostのディスク構成を別々にレビューできる。
 
 | 項目 | 正本 |
 |---|---|
