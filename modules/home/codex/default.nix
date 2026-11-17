@@ -8,6 +8,13 @@
   # import はビルド評価時にファイルを読むため、実行時のホームディレクトリ文字列
   # ではなく、このファイル自身からの相対 Nix パスで参照する必要がある。
   renderedAgents = import ../claude/config/render-agents.nix {inherit pkgs;};
+  codexActivationPath = builtins.concatStringsSep ":" [
+    "${pkgs.git}/bin"
+    "${pkgs.jq}/bin"
+    "${config.home.homeDirectory}/.npm-global/bin"
+    "${config.xdg.dataHome}/mise/shims"
+    "${config.xdg.dataHome}/mise/installs/node/lts/bin"
+  ];
 
   # Claude Code の auto mode + sandbox 方針を Codex CLI の語彙に合わせたもの。
   # - model = "gpt-5.6-terra": メインセッションのデフォルトモデル
@@ -85,5 +92,10 @@ in {
     # AGENTS.md は Claude / Gemini と同じ内容（人格・行動原則）を共有する。
     # Codex はこのファイルをグローバル指示として ~/.codex/AGENTS.md から読む。
     $DRY_RUN_CMD ${pkgs.coreutils}/bin/ln -sf "${renderedAgents}" "${config.home.homeDirectory}/.codex/AGENTS.md"
+
+    # activation は非対話シェルのため、Codex CLI と marketplace 用 git / jq を PATH に補う。
+    $DRY_RUN_CMD ${pkgs.bash}/bin/bash -c '
+      PATH="${codexActivationPath}:$PATH" ${pkgs.bash}/bin/bash "${./install-plugins.sh}"
+    '
   '';
 }

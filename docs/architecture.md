@@ -18,7 +18,7 @@
 ### `modules/home/` に集約済みの共通モジュール
 - `alacritty/`, `atuin/`, `cz-git/`, `editorconfig/`, `helix/`, `lazygit/`, `sheldon/`, `starship/`, `tmux/`, `yazi/`, `zed/`
 - `claude/`, `codex/`, `copilot/`, `gemini/`, `git/`, `mise/`, `zellij/`
-  - `codex/` は既存の `~/.codex/config.toml` を保持しつつ、`approval_policy`/`sandbox_mode`/`sandbox_workspace_write` を上書き適用し、`~/.codex/AGENTS.md` を配備
+  - `codex/` は既存の `~/.codex/config.toml` を保持しつつ、`approval_policy`/`sandbox_mode`/`sandbox_workspace_write` を上書き適用し、`~/.codex/AGENTS.md` を配備する。`install-plugins.sh` は `michael-denyer/pstack-claude` marketplace と Codex 用 pstack plugin を冪等に導入する
   - `copilot/` は `~/.copilot/instructions/dotfiles-agents.instructions.md` に frontmatter 付きで AGENTS.md を配備
   - `claude/`, `codex/`, `gemini/`, `copilot/` は `render-agents.nix`（`claude/config/`）で AGENTS.md を共通レンダリングして配布する
   - うち `mise/config.toml` と `zellij/config.kdl` は `pkgs.stdenv.isDarwin` で差分を Nix 側から差し替え
@@ -208,6 +208,8 @@ Nix の activation と `windows-ctf/scripts/setup-claude.sh` は `install-plugin
 第三者 Agent Skill の `imozuru`（芋づる式の調べもの）は `modules/home/imozuru/` が `fetchFromGitHub` で commit を固定し、セキュリティレビューで見つけた穴を塞ぐ `hardening.patch` を当ててから配る。ビルド時に上流のテストとパッチで足したテストを実行する。配備先は `~/.agents/skills`（Codex / Gemini CLI / GitHub Copilot）、`~/.claude/skills`、`~/.codex/skills`（Codex 旧互換）、`~/.cursor/skills`。上流を更新するときは `rev` と `hash` を上げ、差分をレビューしてからパッチを作り直す。`.patch` は空のコンテキスト行に末尾空白を含むため、pre-commit の `trailing-whitespace` から除外している。
 
 `review-*` / `external-*`（`natural-japanese` 等）スキルは手動配置ではなく flake input `ai-guardrails`（`programs.ai-guardrails.enable = true`）が `~/.claude/skills/` に自動インストールする。`review-*` は共通モジュールが Agent Skills 必須メタデータを補完して `~/.agents/skills/` と Codex 旧互換の `~/.codex/skills/` にも公開するため、Codex と Gemini のスキル一覧にも表示される。Codex はスキル一覧をセッション開始時に読み込むため、Home Manager 適用後は既存の Codex セッションを終了して再起動する。
+
+Codex 向け pstack は Cursor 公式版ではなく、Cursor 版のワークフローを Codex 向けに移植した外部 plugin を使う。`install-plugins.sh` で marketplace source の commit を固定し、sparse checkout で `.agents/plugins/` と `plugins/pstack/` のみ取得する。導入後のモデル設定は Codex 内で `$setup-pstack` を実行して `~/.codex/pstack-models.md` に保存する。SessionStart hook は Codex の `/hooks` で内容を確認して trust するまで実行されない。
 
 ### 他エージェントへの人格共有（Codex / Gemini / Copilot / Cursor）
 
