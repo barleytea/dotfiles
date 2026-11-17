@@ -34,7 +34,7 @@
 - Use plain-text questions only for open-ended input or when `AskQuestionTool` is unavailable.
 
 ## Agent Model Strategy
-- メインセッション（Fable / Opus）は戦略立案・監査・レビュー・オーケストレーションに専念し、実作業（コード生成・コマンド実行・ファイル編集・情報収集）はサブエージェントに切り出す
+- メインセッションの既定モデルは Haiku。複雑な戦略立案・監査・レビュー・オーケストレーションでは Fable / Opus に切り替え、実作業（コード生成・コマンド実行・ファイル編集・情報収集）はサブエージェントに切り出す
 - サブエージェントの既定モデルは `CLAUDE_CODE_SUBAGENT_MODEL=sonnet`（settings.json の `env`）で Sonnet に固定されている。Agent ツールの `model` は既定から変えたいときだけ指定する
 - コードベースの探索・検索は組み込みの `Explore` エージェント（`~/.claude/agents/explore.md` で haiku に固定）を使う
 - `model: opus` / `model: fable` のサブエージェントは `permissions.ask` により確認が入る。難易度が特に高い実作業はメインセッションで直接行ってよい

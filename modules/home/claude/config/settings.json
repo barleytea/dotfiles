@@ -99,7 +99,7 @@
       "Bash(gh release create:*)"
     ]
   },
-  "model": "sonnet",
+  "model": "haiku",
   "modelSettings": {
     "sonnet": {
       "effortLevel": "medium"
