@@ -14,10 +14,10 @@ This project uses mise for language version management and task execution.
 
 ## Tool Versions
 
-The following tools are configured in `.mise.toml`:
+The following tools are configured in `modules/home/mise/config.toml`:
 
-- **Go**: `1.23.4` (migrated from asdf)
-- **Node.js**: `lts` (migrated from n)
+- **Go**: `1.27.3`
+- **Node.js**: `24` (latest 24.x)
 
 ## Available Tasks
 

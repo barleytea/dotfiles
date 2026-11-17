@@ -93,7 +93,7 @@ make mise-config
 ### 管理対象ツール
 
 - **Node.js**: `lts`
-- **Go**: `1.23.4`
+- **Go**: `1.27.3`
 - **NPMパッケージ（mise管理）**:
   - `@redocly/cli`
   - `corepack`

@@ -2,7 +2,7 @@
   description = "Flake for Darwin (macOS)";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/d407951447dcd00442e97087bf374aad70c04cea";
+    nixpkgs.url = "github:nixos/nixpkgs/3ec636362e1816bc2f0888fa0fa2c69f1bc9e504";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -60,9 +60,6 @@
       inherit system;
       config = {
         allowUnfree = true;
-        permittedInsecurePackages = [
-          "google-chrome-144.0.7559.97"
-        ];
       };
       overlays = [
         (final: prev: {
