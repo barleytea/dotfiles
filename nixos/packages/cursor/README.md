@@ -22,14 +22,14 @@
 nix-prefetch-url https://downloads.cursor.com/production/RELEASE_ID/linux/x64/Cursor-VERSION-x86_64.AppImage
 ```
 
-### 2. default.nixを更新
+### 2. extracted.nixを更新
 
-`default.nix`の以下の部分を更新：
+`nixos/configuration.nix` が読み込む `extracted.nix` の以下の部分を更新：
 
 ```nix
 let
   pname = "cursor";
-  version = "0.50.5";  # 最新バージョンに変更
+  version = "3.26.16";  # 最新バージョンに変更
 
   src = pkgs.fetchurl {
     url = "https://downloads.cursor.com/production/RELEASE_ID/linux/x64/Cursor-VERSION-x86_64.AppImage";  # 最新URLに変更

@@ -51,11 +51,11 @@
 
 let
   pname = "cursor";
-  version = "2.0.34";
+  version = "3.26.16";
 
   src = fetchurl {
-    url = "https://downloads.cursor.com/production/45fd70f3fe72037444ba35c9e51ce86a1977ac11/linux/x64/Cursor-${version}-x86_64.AppImage";
-    hash = "sha256-x51N2BttMkfKwH4/Uxn/ZNFVPZbaNdsZm8BFFIMmxBM=";
+    url = "https://downloads.cursor.com/production/8fcb8ace5c73fa31f2e2707fd6783160e4ed3e49/linux/x64/Cursor-${version}-x86_64.AppImage";
+    hash = "sha256-2eaL9MIFGeNL8ZTwQ+SAVzDFv9eIImuiMMF/QFCGxAE=";
   };
 
   appimageContents = appimageTools.extract {

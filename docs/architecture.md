@@ -43,7 +43,7 @@
 
 ```
 darwin/
-├── flake.nix              entrypoint（aarch64-darwin / x86_64-darwin 自動検出）
+├── flake.nix              entrypoint（aarch64-darwin / Apple Silicon）
 ├── default.nix            "all" 設定: common + homebrew + system
 ├── common.nix             nix 設定、primaryUser、homebrew.user 等
 ├── homebrew/              brew tap / brews / casks / mas
@@ -193,7 +193,7 @@ CI は `windows-host.yml` が `bash -n` で構文チェック + ダミー bootst
 
 Claude Code の設定は OS 横断で `modules/home/claude/config/` を正典として管理する。
 
-- `config/settings.json` … 全マシン共通のベース設定
+- `config/settings.json` … 全マシン共通のベース設定（既定モデルは `haiku`）
 - `config/overlays/windows-ctf.json` … windows-ctf 専用の上書き差分（Orca hooks 等）
 - `config/merge-settings.sh` … ベース + overlay をディープマージして `~/.claude/settings.json` を生成するスクリプト
 - `config/install-plugins.sh` … `typesafe-ai/skills` と `nanaism/yomiyasu` の marketplace、各 Claude Code プラグインを冪等に導入するスクリプト

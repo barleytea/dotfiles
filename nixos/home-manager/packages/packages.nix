@@ -41,7 +41,7 @@
   ripgrep
   rustup
   sheldon
-  slack
+  (import ./slack.nix { inherit pkgs; })
   socat
   tmux
   tree

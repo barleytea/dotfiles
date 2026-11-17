@@ -15,7 +15,7 @@
     nixvim,
     ...
   }: let
-    systems = ["aarch64-darwin" "x86_64-darwin" "x86_64-linux" "aarch64-linux"];
+    systems = ["aarch64-darwin" "x86_64-linux" "aarch64-linux"];
     forAllSystems = nixpkgs.lib.genAttrs systems;
   in {
     # (1) standalone パッケージ: nix run / nix build で利用可能
