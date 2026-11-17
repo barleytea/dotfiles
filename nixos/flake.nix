@@ -28,7 +28,11 @@
     };
     hunk = {
       url = "github:modem-dev/hunk";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs = {
+        # Nixpkgs 26.11 で廃止された Intel Mac を bun2nix の対象から除外する
+        bun2nix.inputs.systems.url = "github:nix-systems/default/future-26.11";
+        nixpkgs.follows = "nixpkgs";
+      };
     };
     agent-dangomushi = {
       # dotfiles と同じ ghq ルート配下（`../../agent-dangomushi`）にクローン済みのローカルリポジトリを

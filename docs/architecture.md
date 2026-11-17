@@ -43,7 +43,7 @@
 
 ```
 darwin/
-├── flake.nix              entrypoint（aarch64-darwin / x86_64-darwin 自動検出）
+├── flake.nix              entrypoint（aarch64-darwin / Apple Silicon）
 ├── default.nix            "all" 設定: common + homebrew + system
 ├── common.nix             nix 設定、primaryUser、homebrew.user 等
 ├── homebrew/              brew tap / brews / casks / mas

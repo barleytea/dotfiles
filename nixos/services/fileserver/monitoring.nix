@@ -3,15 +3,13 @@
 
 {
   # システム監視とログ設定
-  services.journald = {
-    extraConfig = ''
-      # ログファイルサイズ制限
-      SystemMaxUse=500M
-      SystemMaxFileSize=50M
+  services.journald.settings.Journal = {
+    # ログ保持期間
+    MaxRetentionSec = "1month";
 
-      # ログ保持期間
-      MaxRetentionSec=1month
-    '';
+    # ログファイルサイズ制限
+    SystemMaxFileSize = "50M";
+    SystemMaxUse = "500M";
   };
 
   # ディスク使用量監視スクリプト
