@@ -92,7 +92,20 @@ NixOS 側には `home-manager-apply` 相当のターゲットは無い（HM は 
 | `make windows-host-help` | Windows ホスト UX ガイドの場所表示 |
 | `make windows-ctf-dump-wt-settings` | Windows Terminal 設定を dotfiles に dump |
 
-## 10. 環境変数
+## 10. Codex pstack plugin
+
+`make home-manager-switch` の Home Manager activation が commit 固定の `michael-denyer/pstack-claude` marketplace と `pstack` plugin を冪等に導入する。初回導入後は Codex を再起動し、`/hooks` で SessionStart hook を確認して trust してから、`$setup-pstack` でモデルを選ぶ。自動ルーティングを止める場合は `~/.codex/pstack-models.md` に `session hook: off` を記述する。pstack は第三者による Codex 向け移植版。
+
+手動導入・更新は以下のコマンドで行う。
+
+```bash
+codex plugin marketplace add michael-denyer/pstack-claude --ref a12b04786023e762f12f5de7bb5fafb8c23f8c36 --sparse .agents/plugins --sparse plugins/pstack
+codex plugin add pstack@pstack-claude
+```
+
+更新時は `modules/home/codex/install-plugins.sh` の commit を更新し、既存の plugin と marketplace を削除してから `make home-manager-switch` を実行する。plugin の hook 定義が変わった場合、Codex は改めて trust を求める。
+
+## 11. 環境変数
 
 | 変数 | 既定値 | 用途 |
 |------|--------|------|
@@ -101,7 +114,7 @@ NixOS 側には `home-manager-apply` 相当のターゲットは無い（HM は 
 | `DOTFILES_SHARED_INPUT` | `path:../modules` | flake input `dotfiles-shared` の override 先 |
 | `MISE_NPM_MIN_AGE_DAYS` | `7` | `mise-update-npm-tools` の min-age 日数 |
 
-## 11. CI 想定の使い分け
+## 12. CI 想定の使い分け
 
 | シナリオ | ローカル | CI |
 |----------|----------|----|
@@ -117,7 +130,7 @@ Linux 実ビルドを確認する。Hermes本体のLinux実ビルドとCLI versi
 
 GitHub Actions の darwin CI は長時間化を避けるため、`make nix-check-all-ci` は使わず、実適用や `mise install` を伴わないビルド確認に絞る。HM は `homeConfigurations.ci` を使い、GUI アプリなどの大型 `home.packages` をビルド対象から外す。
 
-## 12. 検証のおすすめフロー
+## 13. 検証のおすすめフロー
 
 変更を加えたら最低でも以下を実行する:
 

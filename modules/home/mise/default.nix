@@ -27,7 +27,7 @@ in {
       if pkgs.stdenv.isDarwin then darwinConfig else builtins.readFile ./config.toml;
 
     # zsh 初期化スクリプト（activate + safe-chain）
-    "zsh/config/tools/203-mise.zsh".source = ./mise.zsh;
+    "zsh/config/tools/202-mise.zsh".source = ./mise.zsh;
   };
 
   home.sessionVariables = {
