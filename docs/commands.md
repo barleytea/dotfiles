@@ -194,7 +194,8 @@ kubectl get ingress jellyfin -n jellyfin \
 
 ## 15. プライベート執筆環境の運用
 
-原稿の正本は `/mnt/sda1/private/writing/novel` で、SMB/NFS/Kubernetes に公開しない。
+執筆データ領域は `/mnt/sda1/private/writing/novel`、Hermes のGit正本は
+`/mnt/sda1/private/writing/novel/product`。SMB/NFS/Kubernetes に公開しない。
 Mac は原稿を clone せず、Tailscale 経由の SSH terminal として使う。
 
 ```sh
@@ -219,8 +220,7 @@ sudo systemctl status writing-backup.service --no-pager
 
 Hermes は外部flake `gyokuroo/hermes-writing-nix`のHome Manager moduleを通じて、NixOSの
 `miyoshi_s` user serviceとして一つの gatewayを起動する。Macは
-Tailscale SSH、Discord は gateway 経由で接続し、どちらも目標・指示・状態確認・停止再開
-の操作に限る。原稿 writer は built-in cron の1 jobだけで、`/mnt/sda1/private/writing/worktrees/hermes`
+Tailscale SSH で接続する。Discord gateway は無効にしている。原稿 writer は built-in cron の1 jobだけで、`/mnt/sda1/private/writing/worktrees/hermes`
 の `agent/hermes-writing` branch に scene 単位で変更を commit する。正本への merge・push は
 人間が確認してから行う。
 
@@ -248,28 +248,46 @@ hermes cron cancel <writer-job-id>
 guard が通るまで state を作らない。
 
 ```sh
-# activation 前に作成する。既に activation 済みなら作成後に NixOS/HM をもう一度適用する。
-# /mnt/sda1/private/writing/hermes.env を 0600 で作成し、Discord の runtime env を手動投入
 hermes-writing-init
 hermes auth add openai-codex --type oauth
 hermes-writing-ready
-hermes gateway start
+systemctl --user status hermes-agent --no-pager
 # /mnt/sda1/private/writing/worktrees/hermes/progress/goal.md に目標・完了条件を記入
 hermes-writing-start
 ```
 
 `hermes-writing-ready` は storage、branch、source/common Git の接続を確認する。
 `hermes-writing-start` は `progress/goal.md` の完了条件を確認し、5分間隔・専用 worktree・
-Discord delivery の writer job を重複なく登録する。進捗の確認には `hermes-writing-status`、
+writer job を重複なく登録する。進捗の確認には `hermes-writing-status`、
 短い checkpoint/commit には `hermes-writing-checkpoint` と `hermes-writing-commit` を使う。
-完了時の job remove と最終通知は writer 自身が行う。
+完了時の job remove は writer 自身が行う。
+gateway は Home Manager 管理の `hermes-agent` user service として起動する。停止中なら
+`systemctl --user start hermes-agent` を使い、`hermes gateway install` は実行しない。
+このhostではDiscord gatewayとcredentialsを無効にしている。writer cronの実行結果と失敗通知は
+`local` に保存し、外部メッセージサービスへ送信しない。進捗は
+`hermes cron runs <writer-job-id> --limit 20` とGit履歴で確認する。
 
 GitHub の認証と commit author は Hermes 専用の `gyokuroo` に分離する。初回だけ SSH shell
 から `hermes-gh auth login --hostname github.com` を実行し、その後
 `hermes-gh-user` が `gyokuroo` を表示することを確認する。親の個人アカウントを switch/logout
 しない。repo 移管・新規 repo 作成・自動 push は行わない。
 
-初回 OAuth、Discord bot env、GitHub login は手動入力とし、秘密値をリポジトリ・Git・backup
+Home Manager の Git 設定は通常 `barleytea` を使い、`/mnt/sda1/private/writing/` 配下と
+`~/git_repos/github.com/gyokuroo/` 配下では `gyokuroo` のcommit authorとGitHub usernameに切り替える。
+GitHub HTTPS credentialはremote URL単位で分ける。初回pushでは対象アカウントのcredentialを登録する。
+`git config --show-origin user.name` と `git config --show-origin user.email` で作者を確認できる。
+GitHub usernameはremote URLを指定して確認する。
+
+```sh
+git config --show-origin --get-urlmatch credential.username \
+  https://github.com/gyokuroo/hermes-writing-nix.git
+```
+
+SSH shellではGCMをGPG/`pass`ストアとGitHub device認証で動かす。初回だけ既存のGPG鍵で
+`pass init <GPG fingerprint>`を実行し、credentialを暗号化して保存する。GPG鍵がない場合は、
+鍵を作る前に保存場所とバックアップ方針を決める。
+
+初回 OAuth と GitHub login は手動入力とし、秘密値をリポジトリ・Git・backup
 へ保存しない。復元時は OAuth/GitHub を再認証する。
 
 外部moduleを更新するときは、まず外部repoのlockとテストを確認し、その後このrepoのNixOS

@@ -96,7 +96,7 @@ kubernetes/
 
 Jellyfin は `/mnt/sda1/shares/media` を読み取り専用で参照する。設定とキャッシュは `/mnt/sda1/k3s/jellyfin/` に置く。Tailscale Operator が `ingressClassName: tailscale` の Ingress を処理するため、Service は `ClusterIP` のまま外部公開しない。OAuth Secret は chart の既定名 `operator-oauth` と `client_id` / `client_secret` キーを使い、SOPS で暗号化して同じ namespace に投入する。詳細は [`kubernetes/README.md`](../kubernetes/README.md) を参照。
 
-執筆データは Kubernetes から完全に分離する。`services.writing` は `/mnt/sda1/private/writing/novel` を `miyoshi_s` 専用の `0700` で準備し、日次の世代バックアップを `/mnt/sdb1/backup/private/writing` に保存する。原稿を SMB/NFS/PVC に公開しないため、Mac は Tailscale 経由の SSH terminal のみを使い、AI CLI・Git・Zellij は NixOS 上で実行する。
+執筆データは Kubernetes から完全に分離する。`services.writing` は `/mnt/sda1/private/writing/novel` を `miyoshi_s` 専用の `0700` で準備し、領域全体の日次世代バックアップを `/mnt/sdb1/backup/private/writing` に保存する。Hermes のGit正本は `/mnt/sda1/private/writing/novel/product`。原稿を SMB/NFS/PVC に公開しないため、Mac は Tailscale 経由の SSH terminal のみを使い、AI CLI・Git・Zellij は NixOS 上で実行する。
 
 `tailscale0` は trusted interface であるため、tailnet 内の利用者・端末を分離する正本は
 Tailscale ACL / grants である。ホスト root 権限を持つ人から原稿を暗号学的に隠す構成
@@ -135,8 +135,9 @@ NixOS hostのディスク構成を別々にレビューできる。
 | writer | built-in cron 1個、5分間隔、scene単位、checkpoint 継続 |
 
 cron は `allow_agent_scheduling = true`、`max_parallel_jobs = 1`、retry、catch-up を使う。
-目標完了時は checkpoint 更新、commit、自己の job remove、Discord 最終通知の順で終える。
-CLI/Discord は目標指定、指示、状態確認、pause/resume だけを行い、本文の直接編集や正本への
+目標完了時は checkpoint 更新、commit、自己の job remove の順で終える。Discord gateway は
+無効で、cron delivery は結果未配信として記録される。CLI は目標指定、指示、状態確認、pause/resume
+だけを行い、本文の直接編集や正本への
 自動 merge・push は行わない。全 run を覆う Hermes 公式の OS-level lock hook はないため、
 writer を一つに限定し、手編集は pause と実行中 worker の終了確認後だけ許可する。checkpoint
 と commit の短い操作だけ lock で保護する。

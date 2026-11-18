@@ -12,6 +12,16 @@ gitConfig = ''
     name = barleytea
     email = barleytea362@gmail.com
 
+  [credential "https://github.com"]
+    username = barleytea
+    useHttpPath = true
+
+  [includeIf "gitdir:/mnt/sda1/private/writing/**"]
+    path = ~/.config/git/gyokuroo.inc
+
+  [includeIf "gitdir:~/git_repos/github.com/gyokuroo/**"]
+    path = ~/.config/git/gyokuroo.inc
+
   [init]
     defaultBranch = main
 
@@ -160,6 +170,14 @@ gitIgnore = ''
 
 in {
   home.file.".config/git/config".text = gitConfig;
+  home.file.".config/git/gyokuroo.inc".text = ''
+    [user]
+      name = gyokuroo
+      email = 357243118+gyokuroo@users.noreply.github.com
+
+    [credential "https://github.com"]
+      username = gyokuroo
+  '';
   home.file.".config/git/ignore".text = gitIgnore;
   home.file.".config/gwq/config.toml" = {
     force = true;
