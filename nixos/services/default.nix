@@ -17,7 +17,8 @@
     # NixOS 上で完結する AI 小説執筆環境
     writing = {
       enable = true;
-      sourceDir = config.home-manager.users.miyoshi_s.services.hermes-writing.repository;
+      # Hermes の個別リポジトリではなく、執筆データ全体をバックアップする。
+      sourceDir = "/mnt/sda1/private/writing/novel";
       worktreeDir = config.home-manager.users.miyoshi_s.services.hermes-writing.workingDirectory;
       hermesHomeDir = config.home-manager.users.miyoshi_s.services.hermes-writing.hermesHome;
       hermesBackupPackage = inputs.hermes-writing.packages.${pkgs.system}.hermes-writing-backup;

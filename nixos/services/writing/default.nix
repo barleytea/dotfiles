@@ -56,7 +56,7 @@ in
     sourceDir = mkOption {
       type = types.str;
       default = "/mnt/sda1/private/writing/novel";
-      description = "小説本文の正本。SMB/NFS/Kubernetesへ公開しない";
+      description = "小説データ全体の保存元。SMB/NFS/Kubernetesへ公開しない";
     };
 
     worktreeDir = mkOption {

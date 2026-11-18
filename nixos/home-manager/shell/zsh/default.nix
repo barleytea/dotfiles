@@ -15,6 +15,7 @@ in {
       "zsh/config/000-env.zsh".source = ./config/env.zsh;
       "zsh/config/001-path.zsh".source = ./config/path.zsh;
       "zsh/config/002-options.zsh".source = ./config/options.zsh;
+      "zsh/config/003-gpg-ssh.zsh".source = ./config/gpg-ssh.zsh;
 
       # 2. Function settings
       "zsh/config/100-completion.zsh".source = ./config/completion.zsh;

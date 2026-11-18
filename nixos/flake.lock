@@ -8,17 +8,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1783560135,
-        "narHash": "sha256-1aBmc4NDwvCFHp3csi9zlc512azo7ibX23Jd5gV7BeI=",
-        "ref": "refs/heads/main",
-        "rev": "113f547d03d90293ee70c89b84bfae700cb9f4d4",
-        "revCount": 4,
+        "lastModified": 1789021688,
+        "narHash": "sha256-tQGUKjBSBP2hks0LxwcyQ3WhdZeAD2ZFegpp5aG4lic=",
+        "ref": "refs/heads/docs/codex-auth-same-host",
+        "rev": "702c652829f5d5597749c21a076327f322df5dab",
+        "revCount": 5,
         "type": "git",
-        "url": "file:///home/miyoshi_s/git_repos/github.com/barleytea/agent-dangomushi"
+        "url": "file:../../agent-dangomushi"
       },
       "original": {
         "type": "git",
-        "url": "file:///home/miyoshi_s/git_repos/github.com/barleytea/agent-dangomushi"
+        "url": "file:../../agent-dangomushi"
       }
     },
     "ai-guardrails": {
@@ -178,11 +178,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1794820464,
-        "narHash": "sha256-qVk0gdMYhtwkEqL7lMCU+eBBX3YvdF5lqbGA7+c+r4w=",
+        "lastModified": 1794895060,
+        "narHash": "sha256-A7g1V/ga9QfgshYmfsqeBOLO3eou1O+ig0RMRfWyTCo=",
         "owner": "gyokuroo",
         "repo": "hermes-writing-nix",
-        "rev": "166923f0604359b40ee7bf7bb172e18fd2604094",
+        "rev": "12ecfeb3931797489395b1c2b70ca308b3d2a895",
         "type": "github"
       },
       "original": {
@@ -505,11 +505,11 @@
         "systems": "systems"
       },
       "locked": {
-        "lastModified": 1731533236,
-        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
+        "lastModified": 1794427683,
+        "narHash": "sha256-o7ey9gEilsxaifqJWnBDlYSKbNWYQYtKwDyXeZU2kaU=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
+        "rev": "cd489559845d81f673a12885576016c65cbe9363",
         "type": "github"
       },
       "original": {

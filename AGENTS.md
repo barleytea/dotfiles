@@ -95,17 +95,23 @@ Manager user serviceを `miyoshi_s` に統合する。dotfilesのNixOS flakeで�
 サービス固有のパスと初期化手順は [`nixos/services/writing/README.md`](nixos/services/writing/README.md)
 に記載する。
 
-Hermesのmodule、helper、prompt、GitHub隔離、upstreamのpinは外部repoが所有する。
+Hermesのmodule、helper、共通prompt、GitHub隔離、upstreamのpinは外部repoが所有する。
 原稿正本、マウント、ユーザー、03:15のbackup timer、14世代保持はこのdotfilesが所有する。
 外部repoへ原稿、OAuth、Discord環境変数、GitHub認証状態を持ち込まない。
 
+- private writing root / backup source: `/mnt/sda1/private/writing/novel`
+- Hermes source repository: `/mnt/sda1/private/writing/novel/product`
 - `HERMES_HOME`: `/mnt/sda1/private/writing/hermes`
 - writer worktree: `/mnt/sda1/private/writing/worktrees/hermes`
 - writer branch: `agent/hermes-writing`
+- Hermes専用の執筆スキルと参照資料: `$HERMES_HOME/skills/writing/`
+  （dotfilesや共有スキルを直接編集せず、writing backup に含める）
 - provider: ChatGPT subscription の `openai-codex`（初期モデルは公式 catalog の `gpt-6-sol` tag）
-- writer cron: scene 単位、checkpoint 継続、`max_parallel_jobs = 1`、完了時に commit → self-remove → Discord 通知
+- writer cron: scene 単位、checkpoint 継続、`max_parallel_jobs = 1`、完了時に commit → self-remove
+- Git の commit author は執筆領域と `~/git_repos/github.com/gyokuroo/hermes-writing-nix/` で `gyokuroo` にし、GitHub 認証は `hermes-gh` に分離する
+- Discord gateway は無効。完了通知は送らず、writer cron の状態はNixOS上のHermes CLIで確認する
 
-SSH/Discord の Hermes 操作は目標、指示、状態確認、pause/resume に限定する。正本への
+SSH/CLI の Hermes 操作は目標、指示、状態確認、pause/resume に限定する。正本への
 自動 merge・push は行わず、原稿の送信範囲はユーザーが指定した本文だけにする。Hermes
 cron に全 run を覆う OS-level lock はないため、単一 writer と手編集停止確認を運用上の
 排他とし、checkpoint/commit の短い操作だけ lock で保護する。実装変更後は NixOS build

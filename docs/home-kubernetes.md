@@ -30,6 +30,7 @@ tailnet の視聴端末 ── HTTPS ───────────> Jellyfin
 
 Mac terminal ── Tailscale + SSH ───────> NixOS + Zellij + AI CLI
                                            └── /mnt/sda1/private/writing/novel
+                                               └── product (Hermes Git repository)
 ```
 
 ## 責務とデータ境界
@@ -48,7 +49,8 @@ Mac terminal ── Tailscale + SSH ───────> NixOS + Zellij + AI C
 | `/mnt/sda1/k3s/storage` | local-path PVC の保存先 | 単一ノード専用。別ノードへ移動できない |
 | `/mnt/sda1/k3s/jellyfin/config` | Jellyfin の設定・DB | バックアップ必須 |
 | `/mnt/sda1/k3s/jellyfin/cache` | サムネイル等のキャッシュ | 再生成可能。初期バックアップ対象外 |
-| `/mnt/sda1/private/writing/novel` | 原稿と Git 履歴の正本 | `miyoshi_s` 専用、SMB/NFS/Kubernetes 非公開 |
+| `/mnt/sda1/private/writing/novel` | 執筆データ全体とバックアップの保存元 | `miyoshi_s` 専用、SMB/NFS/Kubernetes 非公開 |
+| `/mnt/sda1/private/writing/novel/product` | Hermes が使うGit正本 | `miyoshi_s` 専用、worktree は別ディレクトリ |
 | `/mnt/sdb1/backup/private/writing` | 原稿の 14 世代日次バックアップ | 同一ホスト内。災害対策ではない |
 
 `/mnt/sda1` と `/mnt/sdb1` は同一マシン内である。二台のディスクに分かれていても
@@ -345,24 +347,26 @@ Ingress status を接続先の正本とする。HTTP の `:8096` を直接 LAN �
 確認する。
 
 ```sh
-namei -l /mnt/sda1/private/writing/novel
+namei -l /mnt/sda1/private/writing/novel/product
 systemctl status writing-directory-setup --no-pager
 ```
 
 コピー対象のファイル名・容量・バックアップの有無を人間が確認してから、`rsync` の
-source と destination を一行ずつ見直す。最初は `--dry-run` を付けて差分だけを確認
-し、既存原稿を上書きしない空の destination にだけ実コピーする。
+source と destination を一行ずつ見直す。`product` は既存のGitリポジトリなので、
+リポジトリルートへ丸ごとコピーしない。最初は `--dry-run` を付けて差分だけを確認し、
+配置先として選んだ空のサブディレクトリにだけ実コピーする。
 
 ```sh
-# <source-directory> は原稿だけを含む既存ディレクトリへ置換する。
+# <source-directory> は原稿だけを含む既存ディレクトリ、
+# <empty-destination> は product 内の空の配置先へ置換する。
 rsync -aHn --human-readable --itemize-changes \
   '<source-directory>/' \
-  /mnt/sda1/private/writing/novel/
+  '<empty-destination>/'
 
 # dry-run の対象と件数を承認した後だけ -n を外す。
 rsync -aH --human-readable --itemize-changes \
   '<source-directory>/' \
-  /mnt/sda1/private/writing/novel/
+  '<empty-destination>/'
 ```
 
 コピー完了後、通常の執筆アプリで開く・保存する、`git status` を確認する、日次
@@ -385,7 +389,7 @@ ssh -t miyoshi_s@<NixOS の Tailscale 名> \
 接続後に作業ディレクトリへ移動して、NixOS に導入済みの AI CLI を起動する。
 
 ```sh
-cd /mnt/sda1/private/writing/novel
+cd /mnt/sda1/private/writing/novel/product
 git status
 ```
 
@@ -407,7 +411,7 @@ user linger と一つの gateway を使う。状態と cron 定義は次に固�
 Hermesのmodule、upstream pin、writer helper、GitHub隔離、prompt、テストは公開外部flake
 `gyokuroo/hermes-writing-nix`が所有する。dotfilesはその
 `homeManagerModules.default`を明示的に読み込み、host固有のパスとアカウントを渡す。
-外部repoは実行コードとテストを公開するための場所であり、原稿、OAuth、Discord bot env、
+外部repoは実行コードとテストを公開するための場所であり、原稿、OAuth、Discord credentials、
 GitHubの認証状態、Hermesのruntime stateを保存しない。
 
 ```text
@@ -421,12 +425,12 @@ model:        gpt-6-sol (公式 catalog の tag)
 writer cron は5分間隔の1 jobだけにし、`cron.allow_agent_scheduling = true`、
 `cron.max_parallel_jobs = 1`、retry、catch-up を有効にする。各 run は checkpoint/progress
 を読み、scene 単位で変更して branch へ commit する。完了時は checkpoint、commit、自己の
-job remove、Discord 最終通知の順に行い、正本への merge・push は人間の確認後に行う。
+job remove の順に行い、正本への merge・push は人間の確認後に行う。
 goal の active 状態や `max_turns` 到達後の pause だけでは、gateway 再起動後の自動継続に
 ならない。cron が checkpoint から次の scene を再開することを正本の継続条件にする。
 
-SSH と Discord の Hermes 操作は目標指定、指示、状態確認、pause/resume に限定する。本文を
-CLI や Discord から直接編集しない。Hermes に全 run を覆う OS-level lock hook はないため、
+SSH 経由のHermes操作は目標指定、指示、状態確認、pause/resume に限定する。Discord gatewayは
+無効にしている。Hermes に全 run を覆う OS-level lock hook はないため、
 `max_parallel_jobs = 1` と「手編集は pause 後、running worker の終了確認後」という運用で
 single writer にする。checkpoint と commit の短い処理だけ lock で保護する。これは運用上の
 排他であり、root や別プロセスによる書込みを強制的に遮断する sandbox ではない。
@@ -434,8 +438,7 @@ single writer にする。checkpoint と commit の短い処理だけ lock で�
 Codex quota 中は Hermes の quota hold/pause を利用し、別 provider へ fallback しない。途中
 の quota/429 が全て自動保留される保証はないため、checkpoint は各 scene の境界で更新する。
 原稿を Codex に送る範囲はユーザーが指定した scene・指示に限り、送信先 provider の保存や
-利用規約から原稿を秘匿する構成ではない。Discord bot の環境ファイルはリポジトリ外に
-`0600` で置き、許可する user/channel を制限する。
+利用規約から原稿を秘匿する構成ではない。Discord credentials は設定しない。
 
 ## 5. バックアップと復元試験
 
@@ -506,7 +509,7 @@ Git）を先に復元し、worktree をコピーした後、元の worktree 登�
 修復する。
 
 ```sh
-git -C /mnt/sda1/private/writing/novel worktree repair \
+git -C /mnt/sda1/private/writing/novel/product worktree repair \
   /mnt/sda1/private/writing/worktrees/hermes
 git -C /mnt/sda1/private/writing/worktrees/hermes rev-parse --git-common-dir
 git -C /mnt/sda1/private/writing/worktrees/hermes branch --show-current

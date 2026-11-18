@@ -31,6 +31,7 @@
   nerd-fonts.hack
   obsidian
   pipx
+  pass
   pnpm
   postgresql
   postman
