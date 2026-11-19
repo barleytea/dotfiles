@@ -284,7 +284,8 @@ guard が通るまで state を作らない。
 
 ```sh
 hermes-writing-init
-hermes auth add openai-codex --type oauth
+claude auth login
+claude auth status
 hermes-writing-ready
 systemctl --user status hermes-agent --no-pager
 # /mnt/sda1/private/writing/worktrees/hermes/progress/goal.md に目標・完了条件を記入

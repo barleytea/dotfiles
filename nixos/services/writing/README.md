@@ -19,9 +19,12 @@ Hermes固有のHome Manager moduleとhelperは、外部flake
 ## Hermes 執筆エージェント
 
 外部moduleは `miyoshi_s` の Home Manager user service として一つの gateway を起動する。
-公式 v0.23.1 を使い、ChatGPT subscription の `openai-codex` provider と公式 catalog の
-`gpt-6-sol` tag を既定にする。`users.users.miyoshi_s.linger = true` により、SSH logout
-後も user service を継続する。
+公式 v0.23.1 を使い、Claude Code CLI を使う Hermes 公式
+実験的 provider [`claude-subscription-directsdk-experimental` v0.3.3](https://github.com/NousResearch/hermes-official-plugins/tree/main/claude-subscription-directsdk)
+と `sonnet` model を既定にする。plugin と Claude Code CLI は Nix で固定・配置し、Claude Code
+の認証は Hermes 実行ユーザーの `claude auth login` で行う。このproviderはClaude subscription
+の Agent SDK 利用枠を消費する。`users.users.miyoshi_s.linger = true` により、SSH logout 後も
+user service を継続する。
 
 ```text
 HERMES_HOME: /mnt/sda1/private/writing/hermes
@@ -63,7 +66,8 @@ running worker の終了確認後だけ行う。checkpoint と commit の短い�
 
 ```sh
 hermes-writing-init
-hermes auth add openai-codex --type oauth
+claude auth login
+claude auth status
 hermes-writing-ready
 systemctl --user status hermes-agent --no-pager
 # /mnt/sda1/private/writing/worktrees/hermes/progress/goal.md に目標・完了条件を記入
