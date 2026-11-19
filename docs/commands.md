@@ -23,21 +23,22 @@
 
 ### GitHub HTTPS 認証
 
-macOS では、Home Manager が `https://github.com/tokyucorp/` 配下のリポジトリに
-GitHub CLI の認証ヘルパーを設定する。作業ツリーで別アカウントのGit設定が有効な場合と、
-その他のHTTPS接続には `osxkeychain` を使う。
+macOS では、Home Manager が `https://github.com/` への Git 接続に GitHub CLI の
+認証ヘルパーを設定する。別アカウントの Git 設定を読み込む作業ツリーと、
+ほかの HTTPS ホストへの接続には `osxkeychain` を使う。
 
 変更は `make home-manager-switch` で反映する。Home Manager が読み取り専用の
 `~/.config/git/config` を生成するため、`gh auth setup-git` は不要。
 普段 Git を使うシェルで `gh auth status` を実行し、認証状態を確認する。
-`REPOSITORY` をアクセス権のあるリポジトリ名に置き換え、リポジトリ外から適用済みの
-全体設定で接続できることを確認する。トークンは dotfiles に記録しない。
+`OWNER` と `REPOSITORY` を通常の設定を使う GitHub の非公開リポジトリに置き換える。
+別アカウント用の作業ツリー外から、適用済みの全体設定で接続できることを確認する。
+トークンは dotfiles に記録しない。
 
 ```sh
 (
 	cd /tmp || exit
 	GIT_CONFIG_NOSYSTEM=1 GIT_CONFIG_GLOBAL="$HOME/.config/git/config" \
-		GIT_TERMINAL_PROMPT=0 git ls-remote --exit-code https://github.com/tokyucorp/REPOSITORY.git HEAD
+		GIT_TERMINAL_PROMPT=0 git ls-remote --exit-code https://github.com/OWNER/REPOSITORY.git HEAD
 )
 ```
 

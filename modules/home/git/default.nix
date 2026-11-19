@@ -37,7 +37,7 @@ gitConfig = ''
     [credential]
       helper = osxkeychain
 
-    [credential "https://github.com/tokyucorp"]
+    [credential "https://github.com"]
       helper =
       helper = !${pkgs.gh}/bin/gh auth git-credential
   '' else ""}
@@ -183,7 +183,7 @@ in {
       username = gyokuroo
 
     ${if pkgs.stdenv.isDarwin then ''
-      [credential "https://github.com/tokyucorp"]
+      [credential "https://github.com"]
         helper =
         helper = osxkeychain
     '' else ""}
