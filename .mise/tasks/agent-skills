@@ -1,0 +1,163 @@
+#!/usr/bin/env bash
+#MISE description="Refresh dotfiles-managed Agent Skills"
+set -euo pipefail
+
+mode="${1:-sync}"
+skills_root="${HOME}/.agents/skills"
+state_dir="${XDG_STATE_HOME:-${HOME}/.local/state}/dotfiles"
+manifest="${state_dir}/agent-skills.manifest"
+skill_specs=(
+    "typesafe-ai|typesafe-ai/skills|typesafe-ai"
+    "yomiyasu|nanaism/yomiyasu|yomiyasu"
+    "nihongo|AnIT012/nihongo|nihongo"
+)
+skill_names=()
+for skill_spec in "${skill_specs[@]}"; do
+    IFS='|' read -r skill_name _ _ <<<"${skill_spec}"
+    skill_names+=("${skill_name}")
+done
+
+selected_specs=()
+should_prune=true
+case "${mode}" in
+    sync|--ensure)
+        selected_specs=("${skill_specs[@]}")
+        ;;
+    --only)
+        requested_skill="${2:-}"
+        if [[ -z "${requested_skill}" || $# -ne 2 ]]; then
+            echo "Usage: mise run agent-skills --only <skill-name>" >&2
+            exit 2
+        fi
+        for skill_spec in "${skill_specs[@]}"; do
+            IFS='|' read -r skill_name _ _ <<<"${skill_spec}"
+            if [[ "${skill_name}" == "${requested_skill}" ]]; then
+                selected_specs+=("${skill_spec}")
+            fi
+        done
+        if [[ ${#selected_specs[@]} -eq 0 ]]; then
+            echo "Error: ${requested_skill} is not declared in this task." >&2
+            exit 2
+        fi
+        should_prune=false
+        ;;
+    *)
+        echo "Usage: mise run agent-skills [--only <skill-name>|--ensure]" >&2
+        exit 2
+        ;;
+esac
+
+if ! gh skill --help >/dev/null 2>&1; then
+    echo "Error: GitHub CLI gh skill is unavailable. Update gh before syncing Agent Skills." >&2
+    exit 1
+fi
+
+if [[ "${mode}" == "--ensure" ]]; then
+    needs_install=false
+    for skill_name in "${skill_names[@]}"; do
+        if [[ ! -f "${skills_root}/${skill_name}/SKILL.md" ]]; then
+            needs_install=true
+            break
+        fi
+    done
+    if [[ "${needs_install}" == false ]]; then
+        echo "Agent Skills already installed. Run 'mise run agent-skills' to refresh them."
+        exit 0
+    fi
+fi
+
+if [[ -L "${skills_root}" ]]; then
+    echo "Error: ${skills_root} must be a directory so staging and replacement stay on one filesystem." >&2
+    exit 1
+fi
+
+mkdir -p "${skills_root}" "${state_dir}"
+staging="$(mktemp -d "${HOME}/.agents/skills.staging.XXXXXX")"
+manifest_tmp=""
+cleanup() {
+    rm -rf -- "${staging}"
+    if [[ -n "${manifest_tmp}" ]]; then
+        rm -f -- "${manifest_tmp}"
+    fi
+}
+trap cleanup EXIT
+
+selected_names=()
+for skill_spec in "${selected_specs[@]}"; do
+    IFS='|' read -r skill_name skill_source skill_selector <<<"${skill_spec}"
+    selected_names+=("${skill_name}")
+    gh skill install "${skill_source}" "${skill_selector}" \
+        --dir "${staging}" --force
+done
+
+for skill_name in "${selected_names[@]}"; do
+    if [[ ! -f "${staging}/${skill_name}/SKILL.md" ]]; then
+        echo "Error: gh skill did not install ${skill_name}." >&2
+        exit 1
+    fi
+done
+
+if [[ "${should_prune}" == true && -f "${manifest}" ]]; then
+    while IFS= read -r previous_skill; do
+        [[ "${previous_skill}" =~ ^[a-zA-Z0-9][a-zA-Z0-9._-]*$ ]] || continue
+
+        is_current=false
+        for skill_name in "${skill_names[@]}"; do
+            if [[ "${previous_skill}" == "${skill_name}" ]]; then
+                is_current=true
+                break
+            fi
+        done
+
+        previous_path="${skills_root}/${previous_skill}"
+        if [[ "${is_current}" == false && ! -L "${previous_path}" ]]; then
+            rm -rf -- "${previous_path}"
+        fi
+    done <"${manifest}"
+fi
+
+for skill_name in "${selected_names[@]}"; do
+    target="${skills_root}/${skill_name}"
+    backup="${staging}/.previous-${skill_name}"
+    if [[ -e "${target}" || -L "${target}" ]]; then
+        mv -- "${target}" "${backup}"
+    fi
+    if ! mv -- "${staging}/${skill_name}" "${target}"; then
+        if [[ -e "${backup}" || -L "${backup}" ]]; then
+            mv -- "${backup}" "${target}"
+        fi
+        echo "Error: could not replace Agent Skill ${skill_name}." >&2
+        exit 1
+    fi
+done
+
+manifest_names=()
+append_unique() {
+    local candidate="$1"
+    local existing
+    for existing in "${manifest_names[@]}"; do
+        if [[ "${existing}" == "${candidate}" ]]; then
+            return 0
+        fi
+    done
+    manifest_names+=("${candidate}")
+}
+
+if [[ "${should_prune}" == true ]]; then
+    manifest_names=("${skill_names[@]}")
+else
+    manifest_names=("${selected_names[@]}")
+    if [[ -f "${manifest}" ]]; then
+        while IFS= read -r previous_skill; do
+            if [[ "${previous_skill}" =~ ^[a-zA-Z0-9][a-zA-Z0-9._-]*$ ]]; then
+                append_unique "${previous_skill}"
+            fi
+        done <"${manifest}"
+    fi
+fi
+
+manifest_tmp="$(mktemp "${state_dir}/agent-skills.XXXXXX")"
+printf '%s\n' "${manifest_names[@]}" >"${manifest_tmp}"
+mv -- "${manifest_tmp}" "${manifest}"
+manifest_tmp=""
+echo "Agent Skills refreshed in ${skills_root}."

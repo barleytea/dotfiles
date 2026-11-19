@@ -198,17 +198,19 @@ Claude Code の設定は OS 横断で `modules/home/claude/config/` を正典と
 - `config/overlays/windows-ctf.json` … windows-ctf 専用の上書き差分（Orca hooks 等）
 - `config/merge-settings.sh` … ベース + overlay をディープマージして `~/.claude/settings.json` を生成するスクリプト
 - `config/install-plugins.sh` … `typesafe-ai/skills` と `nanaism/yomiyasu` の marketplace、各 Claude Code プラグインを冪等に導入するスクリプト
-- `config/install-agent-skills.sh` … `typesafe-ai` と `yomiyasu` を共通の `~/.agents/skills/` 経由で Codex / Gemini CLI / GitHub Copilot のユーザースコープへ冪等に導入するスクリプト
+- `config/install-agent-skills.sh` … `typesafe-ai`、`yomiyasu`、`nihongo` を共通の `~/.agents/skills/` 経由で Codex / Gemini CLI / GitHub Copilot のユーザースコープへ冪等に導入するスクリプト
 - `config/agents/explore.md` … 組み込み Explore エージェントを `model: haiku` に固定
 - `config/AGENTS.md`, `config/hooks/`, `config/skills/`, `config/commands/`, `config/statusline.sh` … それぞれシンボリックリンクとして配布
 
 `~/.claude/settings.json` は Nix 環境では `modules/home/claude/default.nix` の activation が `merge-settings.sh settings.json` を実行して生成し、WSL（windows-ctf）では `windows-ctf/scripts/setup-claude.sh` がベース + `overlays/windows-ctf.json` をマージして生成する。いずれも実ファイルでありシンボリックリンクではない。
 
-Nix の activation と `windows-ctf/scripts/setup-claude.sh` は `install-plugins.sh` と `install-agent-skills.sh` を実行する。Nix の activation は非対話シェルでも Claude・mise 管理の Node.js・git（marketplace の clone 用）を検出できるよう PATH を補完する。外部 marketplace / Agent Skill のネットワーク導入に失敗した場合は警告を出して Home Manager の activation を継続する。`typesafe@typesafe-ai` と `yomiyasu@yomiyasu` は `settings.json` の `enabledPlugins` でも有効化を宣言し、`typesafe-ai` と `yomiyasu` は共通の `~/.agents/skills/` に配備して Codex / Gemini CLI / GitHub Copilot から利用できるようにする。第三者 marketplace や Agent Skill はユーザー権限で実行されるため、導入元を確認したうえで使用する。
+Nix の activation と `windows-ctf/scripts/setup-claude.sh` は `install-plugins.sh` と `install-agent-skills.sh` を実行する。Nix の activation は非対話シェルでも Claude・GitHub CLI・git（marketplace の clone 用）を検出できるよう PATH を補完する。外部 marketplace / Agent Skill のネットワーク導入に失敗した場合は警告を出して Home Manager の activation を継続する。`typesafe@typesafe-ai` と `yomiyasu@yomiyasu` は `settings.json` の `enabledPlugins` でも有効化を宣言し、`typesafe-ai`、`yomiyasu`、`nihongo` は共通の `~/.agents/skills/` に配備して Codex / Gemini CLI / GitHub Copilot から利用できるようにする。第三者 marketplace や Agent Skill はユーザー権限で実行されるため、導入元を確認したうえで使用する。
 
 第三者 Agent Skill の `imozuru`（芋づる式の調べもの）は `modules/home/imozuru/` が `fetchFromGitHub` で commit を固定し、セキュリティレビューで見つけた穴を塞ぐ `hardening.patch` を当ててから配る。ビルド時に上流のテストとパッチで足したテストを実行する。配備先は `~/.agents/skills`（Codex / Gemini CLI / GitHub Copilot）、`~/.claude/skills`、`~/.codex/skills`（Codex 旧互換）、`~/.cursor/skills`。上流を更新するときは `rev` と `hash` を上げ、差分をレビューしてからパッチを作り直す。`.patch` は空のコンテキスト行に末尾空白を含むため、pre-commit の `trailing-whitespace` から除外している。
 
 `review-*` / `external-*`（`natural-japanese` 等）スキルは手動配置ではなく flake input `ai-guardrails`（`programs.ai-guardrails.enable = true`）が `~/.claude/skills/` に自動インストールする。`review-*` は共通モジュールが Agent Skills 必須メタデータを補完して `~/.agents/skills/` と Codex 旧互換の `~/.codex/skills/` にも公開するため、Codex と Gemini のスキル一覧にも表示される。Codex はスキル一覧をセッション開始時に読み込むため、Home Manager 適用後は既存の Codex セッションを終了して再起動する。
+
+`.mise/tasks/agent-skills` は `typesafe-ai`、`yomiyasu`、`nihongo` を空の staging directory に `gh skill install` し、導入が成功してから対象 skill だけを `~/.agents/skills/` で置き換える。`--only <skill-name>` を指定すると単一 skill を更新し、他の管理対象を維持する。Nix が同じ場所へ配る `review-*` と `imozuru` の symlink には触れない。前回同期した skill 名は `XDG_STATE_HOME` 配下の manifest で管理し、宣言を外した skill も全件同期時に片付ける。Nix / Windows CTF の自動セットアップは同じタスクを `--ensure` で呼び、必要な skill がすでにあればネットワーク更新を行わない。通常の更新はリポジトリルートから `mise run agent-skills` を実行する。`gh` 自体は Nix または Windows CTF の apt が管理する。
 
 Codex 向け pstack は Cursor 公式版ではなく、Cursor 版のワークフローを Codex 向けに移植した外部 plugin を使う。`install-plugins.sh` で marketplace source の commit を固定し、sparse checkout で `.agents/plugins/` と `plugins/pstack/` のみ取得する。導入後のモデル設定は Codex 内で `$setup-pstack` を実行して `~/.codex/pstack-models.md` に保存する。SessionStart hook は Codex の `/hooks` で内容を確認して trust するまで実行されない。
 

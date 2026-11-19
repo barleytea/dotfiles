@@ -1,53 +1,15 @@
 #!/usr/bin/env bash
-# Claude Code 以外の agent に共有する Agent Skill を冪等に導入する。
+# 初回セットアップ時だけ、mise タスクで共有 Agent Skills を導入する。
 set -euo pipefail
 
-if ! command -v npx >/dev/null 2>&1; then
-    echo "  Note: npx not found; skipping external Agent Skills." >&2
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+repo_root="$(cd "${script_dir}/../../../.." && pwd)"
+
+if ! command -v gh >/dev/null 2>&1; then
+    echo "  Note: gh not found; skipping external Agent Skills." >&2
     exit 0
 fi
 
-install_skill() {
-    local skillName="$1"
-    local skillSource="$2"
-    local skillSelector="${3:-}"
-    local sharedSkillPath="${HOME}/.agents/skills/${skillName}/SKILL.md"
-    local skillPaths=(
-        "${HOME}/.codex/skills/${skillName}/SKILL.md"
-        "${HOME}/.gemini/skills/${skillName}/SKILL.md"
-        "${HOME}/.copilot/skills/${skillName}/SKILL.md"
-    )
-
-    if [ -f "${sharedSkillPath}" ]; then
-        echo "  Agent Skill already installed: ${skillName}"
-        return 0
-    fi
-
-    for skillPath in "${skillPaths[@]}"; do
-        if [ ! -f "${skillPath}" ]; then
-            echo "==> Installing Agent Skill: ${skillName}"
-            if [ -n "${skillSelector}" ]; then
-                if ! npx --yes skills add "${skillSource}" \
-                    --skill "${skillSelector}" \
-                    --global \
-                    --agent codex gemini-cli github-copilot \
-                    --yes; then
-                    echo "  Warning: failed to install Agent Skill: ${skillName}; continuing." >&2
-                fi
-            else
-                if ! npx --yes skills add "${skillSource}" \
-                    --global \
-                    --agent codex gemini-cli github-copilot \
-                    --yes; then
-                    echo "  Warning: failed to install Agent Skill: ${skillName}; continuing." >&2
-                fi
-            fi
-            return 0
-        fi
-    done
-
-    echo "  Agent Skill already installed: ${skillName}"
-}
-
-install_skill "typesafe-ai" "typesafe-ai/skills" "typesafe-ai"
-install_skill "yomiyasu" "nanaism/yomiyasu"
+if ! bash "${repo_root}/.mise/tasks/agent-skills" --ensure; then
+    echo "  Warning: failed to install external Agent Skills; continuing." >&2
+fi
