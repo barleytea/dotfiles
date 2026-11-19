@@ -418,8 +418,8 @@ GitHubの認証状態、Hermesのruntime stateを保存しない。
 HERMES_HOME:  /mnt/sda1/private/writing/hermes
 worktree:     /mnt/sda1/private/writing/worktrees/hermes
 branch:       agent/hermes-writing
-provider:     openai-codex (ChatGPT subscription)
-model:        gpt-6-sol (公式 catalog の tag)
+provider:     claude-subscription-directsdk-experimental (Claude Code subscription)
+model:        sonnet
 ```
 
 writer cron は5分間隔の1 jobだけにし、`cron.allow_agent_scheduling = true`、
@@ -435,10 +435,12 @@ SSH 経由のHermes操作は目標指定、指示、状態確認、pause/resume 
 single writer にする。checkpoint と commit の短い処理だけ lock で保護する。これは運用上の
 排他であり、root や別プロセスによる書込みを強制的に遮断する sandbox ではない。
 
-Codex quota 中は Hermes の quota hold/pause を利用し、別 provider へ fallback しない。途中
-の quota/429 が全て自動保留される保証はないため、checkpoint は各 scene の境界で更新する。
-原稿を Codex に送る範囲はユーザーが指定した scene・指示に限り、送信先 provider の保存や
-利用規約から原稿を秘匿する構成ではない。Discord credentials は設定しない。
+Claude Code subscription の Agent SDK 利用枠に達した場合は cron を pause し、枠の回復後に
+resume する。provider は実験的な Hermes 公式 plugin で、別 provider への fallback は設定しない。
+途中の quota/429 が全て自動保留される保証はないため、
+checkpoint は各 scene の境界で更新する。原稿を Claude Code に送る範囲はユーザーが指定した
+scene・指示に限り、送信先 provider の保存や利用規約から原稿を秘匿する構成ではない。
+Discord credentials は設定しない。
 
 ## 5. バックアップと復元試験
 

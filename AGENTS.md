@@ -108,7 +108,7 @@ Hermesのmodule、helper、共通prompt、GitHub隔離、upstreamのpinは外部
 - writer branch: `agent/hermes-writing`
 - Hermes専用の執筆スキルと参照資料: `$HERMES_HOME/skills/writing/`
   （dotfilesや共有スキルを直接編集せず、writing backup に含める）
-- provider: ChatGPT subscription の `openai-codex`（初期モデルは公式 catalog の `gpt-6-sol` tag）
+- provider: Claude Code CLI を使う Hermes 公式 `claude-subscription-directsdk-experimental` plugin v0.3.3（初期 model は `sonnet`）
 - writer cron: scene 単位、checkpoint 継続、`max_parallel_jobs = 1`、完了時に commit → self-remove
 - Git の commit author は執筆領域と `~/git_repos/github.com/<執筆用アカウント>/` で執筆用アカウントにし、GitHub 認証は `hermes-gh` に分離する
 - Discord gateway は無効。完了通知は送らず、writer cron の状態はNixOS上のHermes CLIで確認する

@@ -128,7 +128,7 @@ NixOS hostのディスク構成を別々にレビューできる。
 
 | 項目 | 正本 |
 |---|---|
-| Hermes | v0.23.1、provider `openai-codex`、初期 model tag `gpt-6-sol` |
+| Hermes | v0.23.1、provider `claude-subscription-directsdk-experimental`、初期 model `sonnet` |
 | `HERMES_HOME` | `/mnt/sda1/private/writing/hermes` |
 | writer worktree | `/mnt/sda1/private/writing/worktrees/hermes` |
 | writer branch | `agent/hermes-writing` |
@@ -142,9 +142,10 @@ cron は `allow_agent_scheduling = true`、`max_parallel_jobs = 1`、retry、cat
 writer を一つに限定し、手編集は pause と実行中 worker の終了確認後だけ許可する。checkpoint
 と commit の短い操作だけ lock で保護する。
 
-Codex の quota hold 中は cron の再実行を待つ。別 provider への fallback、独自 watchdog、
-新しい Discord bot、外部 API/runtime は追加しない。原稿を Codex へ送る範囲はユーザーが
-指定した作業単位だけで、原稿の秘密性は root 権限や provider から暗号学的に保護されない。
+Claude Code subscription の Agent SDK 利用枠に達した場合は cron を pause し、枠の回復後に
+resume する。provider は実験的な Hermes 公式 plugin で、別 provider への fallback は設定しない。
+原稿を Claude Code へ送る範囲はユーザーが指定した作業単位だけで、原稿の秘密性は root 権限や
+provider から暗号学的に保護されない。
 
 ## 5. Nixvim
 

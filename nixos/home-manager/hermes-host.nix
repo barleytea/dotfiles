@@ -1,6 +1,28 @@
-{ ... }:
+{ pkgs, ... }:
+
+let
+  claudeSubscriptionProviderSrc = pkgs.fetchFromGitHub {
+    owner = "NousResearch";
+    repo = "hermes-official-plugins";
+    rev = "20048e6e2c1c48d6023e73ae6951595f58352b20";
+    hash = "sha256-YZUMf3zMrKed8VKXpWk4F9+mXBFX4QWQiR69E49+TAA=";
+  };
+  claudeSubscriptionProvider = pkgs.runCommand "hermes-claude-subscription-directsdk" {} ''
+    mkdir -p "$out"
+    cp -r ${claudeSubscriptionProviderSrc}/claude-subscription-directsdk/. "$out/"
+  '';
+in
 
 {
+  services.hermes-agent = {
+    extraPackages = [ pkgs.claude-code ];
+    extraPlugins = [ claudeSubscriptionProvider ];
+    settings = {
+      fallback_model = [];
+      fallback_providers = [];
+    };
+  };
+
   services.hermes-writing = {
     enable = true;
     hermesHome = "/mnt/sda1/private/writing/hermes";
@@ -15,7 +37,7 @@
       authorEmail = "357243118+gyokuroo@users.noreply.github.com";
     };
 
-    provider = "openai-codex";
-    model = "gpt-6-sol";
+    provider = "claude-subscription-directsdk-experimental";
+    model = "sonnet";
   };
 }
