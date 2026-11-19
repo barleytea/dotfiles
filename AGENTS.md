@@ -60,6 +60,7 @@
 ├── vscode/           VSCode 設定・拡張機能の sync スクリプト
 ├── scripts/          Makefile から呼ぶヘルパ群
 ├── .claude/skills/   AI スキル群（人間も markdown として読める）
+├── .mise/tasks/     mise から実行するリポジトリ固有タスク
 ├── docs/             詳細ドキュメント（このファイルから参照）
 └── AGENTS.md         ★このファイル
 ```
@@ -80,6 +81,7 @@
 | NixOS ビルドチェック | `make nixos-build` |
 | flake lock 更新 | `make flake-update-all` |
 | pre-commit 実行 | `make pre-commit-run` |
+| Agent Skills 同期 | リポジトリルートで `mise run agent-skills` |
 
 全 Make ターゲットと使い分け、CI 想定の流れは **`docs/commands.md`** を参照。
 

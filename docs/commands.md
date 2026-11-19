@@ -103,6 +103,20 @@ NixOS 側には `home-manager-apply` 相当のターゲットは無い（HM は 
 | `make mise-list` | ツール一覧 |
 | `make mise-config` | mise の設定表示 |
 
+外部 Agent Skills は mise タスクで同期する。空の staging に導入してから、GitHub 管理対象の skill だけを `~/.agents/skills` 内で置き換える。Nix が管理する `review-*` と `imozuru` は維持され、全件同期では GitHub 上で削除された管理対象 skill や skill 内の古いファイルも片付く。
+
+```sh
+# dotfiles のリポジトリルートから実行
+mise run agent-skills
+# 指定したスキルだけを更新し、他の管理対象を触らない
+mise run agent-skills --only nihongo
+
+# skill を探す
+gh skill search cloudflare
+```
+
+同期対象は `.mise/tasks/agent-skills` に宣言する。通常の同期対象は `typesafe-ai`、`yomiyasu`、`nihongo`。`--only` は指定した skill だけを更新し、他の管理対象を削除しない。`gh` は Darwin / NixOS では Nix、Windows CTF の WSL では apt で導入する。`gh skill` は GitHub CLI の preview 機能。以前 `npx skills` などで入れたスキルは自動では移行されないため、同期タスクを実行すると宣言済みのスキルが導入される。
+
 ## 9. その他ユーティリティ
 
 | ターゲット | 説明 |
