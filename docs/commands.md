@@ -21,6 +21,26 @@
 
 > ⚠️ `home-manager-apply` は内部で `flake-update-darwin` を呼ぶ副作用がある（lock を必ず更新する）。lock を変えたくないときは `make home-manager-switch` を使うこと。
 
+### GitHub HTTPS 認証
+
+macOS では、Home Manager が `https://github.com/tokyucorp/` 配下のリポジトリに
+GitHub CLI の認証ヘルパーを設定する。作業ツリーで別アカウントのGit設定が有効な場合と、
+その他のHTTPS接続には `osxkeychain` を使う。
+
+変更は `make home-manager-switch` で反映する。Home Manager が読み取り専用の
+`~/.config/git/config` を生成するため、`gh auth setup-git` は不要。
+普段 Git を使うシェルで `gh auth status` を実行し、認証状態を確認する。
+`REPOSITORY` をアクセス権のあるリポジトリ名に置き換え、リポジトリ外から適用済みの
+全体設定で接続できることを確認する。トークンは dotfiles に記録しない。
+
+```sh
+(
+	cd /tmp || exit
+	GIT_CONFIG_NOSYSTEM=1 GIT_CONFIG_GLOBAL="$HOME/.config/git/config" \
+		GIT_TERMINAL_PROMPT=0 git ls-remote --exit-code https://github.com/tokyucorp/REPOSITORY.git HEAD
+)
+```
+
 ## 2. Nix（NixOS）
 
 | ターゲット | 説明 |
@@ -125,7 +145,7 @@ codex plugin add pstack@pstack-claude
 NixOS CI の toplevel と nixvim の確認は、依存関係と設定の評価を目的に `--dry-run` で行う。
 imozuru の skill source は同じ NixOS input で `nix build --no-link` を実行し、checkPhase を含む
 Linux 実ビルドを確認する。Hermes本体のLinux実ビルドとCLI version smoke testは、外部の
-[`gyokuroo/hermes-writing-nix`](https://github.com/gyokuroo/hermes-writing-nix) 側CIで実行する。
+`hermes-writing-nix` 側CIで実行する。
 したがって、dotfiles CIの成功だけではHermesの実ビルド成功までは保証しない。
 
 GitHub Actions の darwin CI は長時間化を避けるため、`make nix-check-all-ci` は使わず、実適用や `mise install` を伴わないビルド確認に絞る。HM は `homeConfigurations.ci` を使い、GUI アプリなどの大型 `home.packages` をビルド対象から外す。
@@ -218,7 +238,7 @@ sudo systemctl status writing-backup.service --no-pager
 
 ## 16. Hermes 執筆エージェント
 
-Hermes は外部flake `gyokuroo/hermes-writing-nix`のHome Manager moduleを通じて、NixOSの
+Hermes は外部flake `hermes-writing-nix`のHome Manager moduleを通じて、NixOSの
 `miyoshi_s` user serviceとして一つの gatewayを起動する。Macは
 Tailscale SSH で接続する。Discord gateway は無効にしている。原稿 writer は built-in cron の1 jobだけで、`/mnt/sda1/private/writing/worktrees/hermes`
 の `agent/hermes-writing` branch に scene 単位で変更を commit する。正本への merge・push は
@@ -267,20 +287,20 @@ gateway は Home Manager 管理の `hermes-agent` user service として起動�
 `local` に保存し、外部メッセージサービスへ送信しない。進捗は
 `hermes cron runs <writer-job-id> --limit 20` とGit履歴で確認する。
 
-GitHub の認証と commit author は Hermes 専用の `gyokuroo` に分離する。初回だけ SSH shell
+GitHub の認証と commit author は Hermes 専用の執筆用アカウントに分離する。初回だけ SSH shell
 から `hermes-gh auth login --hostname github.com` を実行し、その後
-`hermes-gh-user` が `gyokuroo` を表示することを確認する。親の個人アカウントを switch/logout
+`hermes-gh-user` が執筆用アカウントを表示することを確認する。親の個人アカウントを switch/logout
 しない。repo 移管・新規 repo 作成・自動 push は行わない。
 
 Home Manager の Git 設定は通常 `barleytea` を使い、`/mnt/sda1/private/writing/` 配下と
-`~/git_repos/github.com/gyokuroo/` 配下では `gyokuroo` のcommit authorとGitHub usernameに切り替える。
+`~/git_repos/github.com/<執筆用アカウント>/` 配下では執筆用アカウントのcommit authorとGitHub usernameに切り替える。
 GitHub HTTPS credentialはremote URL単位で分ける。初回pushでは対象アカウントのcredentialを登録する。
 `git config --show-origin user.name` と `git config --show-origin user.email` で作者を確認できる。
 GitHub usernameはremote URLを指定して確認する。
 
 ```sh
 git config --show-origin --get-urlmatch credential.username \
-  https://github.com/gyokuroo/hermes-writing-nix.git
+  'https://github.com/<執筆用アカウント>/hermes-writing-nix.git'
 ```
 
 SSH shellではGCMをGPG/`pass`ストアとGitHub device認証で動かす。初回だけ既存のGPG鍵で

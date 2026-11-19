@@ -409,7 +409,7 @@ Git は小さな scene または章単位で commit し、AI の草稿・レビ�
 user linger と一つの gateway を使う。状態と cron 定義は次に固定する。
 
 Hermesのmodule、upstream pin、writer helper、GitHub隔離、prompt、テストは公開外部flake
-`gyokuroo/hermes-writing-nix`が所有する。dotfilesはその
+`hermes-writing-nix`が所有する。dotfilesはその
 `homeManagerModules.default`を明示的に読み込み、host固有のパスとアカウントを渡す。
 外部repoは実行コードとテストを公開するための場所であり、原稿、OAuth、Discord credentials、
 GitHubの認証状態、Hermesのruntime stateを保存しない。

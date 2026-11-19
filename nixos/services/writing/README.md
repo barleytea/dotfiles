@@ -8,7 +8,7 @@
 あり、NixOS の root 権限を持つ人から暗号学的に隠すものではない。
 
 Hermes固有のHome Manager moduleとhelperは、外部flake
-[`gyokuroo/hermes-writing-nix`](https://github.com/gyokuroo/hermes-writing-nix)から
+`hermes-writing-nix`から
 読み込む。ここではhost固有の`services.hermes-writing`値と、原稿正本・マウント・日次backup
 の運用だけを管理する。外部repoに原稿、OAuth、Discord環境変数、GitHub認証状態を保存しない。
 
@@ -80,14 +80,14 @@ gateway は Home Manager 管理の `hermes-agent` user service として起動�
 `local` に保存し、外部メッセージサービスへ送信しない。進捗は
 `hermes cron runs <writer-job-id> --limit 20` とGit履歴で確認する。
 
-GitHub の認証と commit author は執筆用の `gyokuroo` に分離する。初回だけ
-`hermes-gh auth login --hostname github.com` を実行し、`hermes-gh-user` が `gyokuroo` を
+GitHub の認証と commit author は執筆用アカウントに分離する。初回だけ
+`hermes-gh auth login --hostname github.com` を実行し、`hermes-gh-user` が執筆用アカウントを
 表示することを確認する。親の個人 account を switch/logout せず、repo 移管・新規 repo 作成・
 自動 push は行わない。OAuth、GitHub login は手動入力とし、秘密値は Git と
 backup に含めず、復元時に再認証する。
 
 通常のGitでは `barleytea` を使い、`/mnt/sda1/private/writing/` と
-`~/git_repos/github.com/gyokuroo/` 配下では `gyokuroo` に切り替える。HTTPS credentialはremote URL単位で
+`~/git_repos/github.com/<執筆用アカウント>/` 配下では執筆用アカウントに切り替える。HTTPS credentialはremote URL単位で
 分けるため、初回push時には対象アカウントのcredentialを登録する。
 
 ## Mac からの接続

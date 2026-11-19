@@ -112,7 +112,7 @@ gateway を一つだけ起動する。`miyoshi_s` の linger を有効にして 
 
 Hermes固有のHome Manager module、upstream Hermesのversion pin、writer helper、GitHub
 アカウント分離、prompt、テストは外部flake
-[`gyokuroo/hermes-writing-nix`](https://github.com/gyokuroo/hermes-writing-nix)から
+`hermes-writing-nix`から
 `inputs.hermes-writing.homeManagerModules.default`として明示的に読み込む。NixOS側には
 `services.hermes-writing`のhost固有値だけを置く。公開repoには原稿、OAuth、Discord環境変数、
 GitHub認証状態を入れない。

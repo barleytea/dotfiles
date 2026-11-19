@@ -86,7 +86,7 @@
 ### NixOS の Hermes 執筆エージェント
 
 NixOS 側の小説執筆エージェントは、外部flake
-`gyokuroo/hermes-writing-nix`が提供する公式 Nous Hermes Agent v0.23.1 の Home
+`hermes-writing-nix`が提供する公式 Nous Hermes Agent v0.23.1 の Home
 Manager user serviceを `miyoshi_s` に統合する。dotfilesのNixOS flakeでは
 `inputs.hermes-writing.homeManagerModules.default`を明示的にimportし、host固有の
 パスとアカウントだけを設定する。gateway は一つだけ起動し、
@@ -108,7 +108,7 @@ Hermesのmodule、helper、共通prompt、GitHub隔離、upstreamのpinは外部
   （dotfilesや共有スキルを直接編集せず、writing backup に含める）
 - provider: ChatGPT subscription の `openai-codex`（初期モデルは公式 catalog の `gpt-6-sol` tag）
 - writer cron: scene 単位、checkpoint 継続、`max_parallel_jobs = 1`、完了時に commit → self-remove
-- Git の commit author は執筆領域と `~/git_repos/github.com/gyokuroo/hermes-writing-nix/` で `gyokuroo` にし、GitHub 認証は `hermes-gh` に分離する
+- Git の commit author は執筆領域と `~/git_repos/github.com/<執筆用アカウント>/` で執筆用アカウントにし、GitHub 認証は `hermes-gh` に分離する
 - Discord gateway は無効。完了通知は送らず、writer cron の状態はNixOS上のHermes CLIで確認する
 
 SSH/CLI の Hermes 操作は目標、指示、状態確認、pause/resume に限定する。正本への

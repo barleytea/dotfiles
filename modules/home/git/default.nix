@@ -16,12 +16,6 @@ gitConfig = ''
     username = barleytea
     useHttpPath = true
 
-  [includeIf "gitdir:/mnt/sda1/private/writing/**"]
-    path = ~/.config/git/gyokuroo.inc
-
-  [includeIf "gitdir:~/git_repos/github.com/gyokuroo/**"]
-    path = ~/.config/git/gyokuroo.inc
-
   [init]
     defaultBranch = main
 
@@ -42,7 +36,17 @@ gitConfig = ''
   '' else if pkgs.stdenv.isDarwin then ''
     [credential]
       helper = osxkeychain
+
+    [credential "https://github.com/tokyucorp"]
+      helper =
+      helper = !${pkgs.gh}/bin/gh auth git-credential
   '' else ""}
+
+  [includeIf "gitdir:/mnt/sda1/private/writing/**"]
+    path = ~/.config/git/gyokuroo.inc
+
+  [includeIf "gitdir:~/git_repos/github.com/gyokuroo/**"]
+    path = ~/.config/git/gyokuroo.inc
 
   [alias]
 # ---- 基本操作 ----
@@ -177,6 +181,12 @@ in {
 
     [credential "https://github.com"]
       username = gyokuroo
+
+    ${if pkgs.stdenv.isDarwin then ''
+      [credential "https://github.com/tokyucorp"]
+        helper =
+        helper = osxkeychain
+    '' else ""}
   '';
   home.file.".config/git/ignore".text = gitIgnore;
   home.file.".config/gwq/config.toml" = {

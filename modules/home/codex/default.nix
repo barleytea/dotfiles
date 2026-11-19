@@ -41,7 +41,7 @@
   # ファイルの table 残り」の順で結合する。table を root キーより先に置くと、
   # 後から追記する既存ファイルの root キーが誤って table 配下に取り込まれる。
   codexConfigScalars = pkgs.writeText "codex-config-scalars" ''
-    model = "gpt-5.6-terra"
+    model = "gpt-6-luna"
     approval_policy = "on-request"
     approvals_reviewer = "auto_review"
     sandbox_mode = "workspace-write"
@@ -51,7 +51,7 @@
     network_access = true
 
     [agents]
-    default_subagent_model = "gpt-5.6-luna"
+    default_subagent_model = "gpt-6-luna"
   '';
 in {
   home.activation.configureCodex = lib.hm.dag.entryAfter ["writeBoundary"] ''
