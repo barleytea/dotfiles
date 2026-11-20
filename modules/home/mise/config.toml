@@ -1,7 +1,7 @@
 [tools]
 node = "24"
 go = "1.27.3"
-python = "system"
+uv = "0.13.9"
 # renovate: datasource=github-releases depName=aws/aws-cli
 awscli = "2.38.3"
 "aqua:atuinsh/atuin" = "18.24.8"

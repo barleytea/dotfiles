@@ -160,14 +160,7 @@ in
     ];
 
   # XDG portal configuration for Hyprland
-  xdg.portal = {
-    enable = true;
-    wlr.enable = true;
-    extraPortals = with pkgs; [
-      xdg-desktop-portal-hyprland
-      xdg-desktop-portal-gtk
-    ];
-  };
+  xdg.portal.wlr.enable = true;
 
   # Security and session management
   security = {

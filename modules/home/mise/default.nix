@@ -5,11 +5,11 @@
 }: let
   # python は OS により分岐:
   #   - Darwin: nixpkgs の python が無い/不安定なため mise で 3.15.1 を install_only で導入
-  #   - Linux : system python を利用（nixpkgs 経由）
+  #   - Linux : NixOS の system python を利用し、mise には登録しない
   darwinConfig =
     (builtins.replaceStrings
-      ["python = \"system\""]
-      ["python = \"3.15.1\""]
+      ["[tools]\n"]
+      ["[tools]\npython = \"3.15.1\"\n"]
       (builtins.readFile ./config.toml))
     + ''
 
