@@ -6,6 +6,7 @@ let
   activationPath = builtins.concatStringsSep ":" [
     "${pkgs.git}/bin"
     "${pkgs.gh}/bin"
+    "${pkgs.jq}/bin"
     "${config.home.homeDirectory}/.local/bin"
     "${config.home.homeDirectory}/.npm-global/bin"
     "${config.xdg.dataHome}/mise/shims"

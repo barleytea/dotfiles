@@ -34,19 +34,29 @@ branch:      agent/hermes-writing
 
 ### Hermes専用の執筆スキル
 
-執筆スキルは `$HERMES_HOME/skills/writing/` にHermes用コピーを置く。Codex/Claude側の元ファイルや
-dotfilesは変更しない。原稿と同じprivate領域に保存し、writing backup は `$HERMES_HOME/skills` を
-バックアップする。
+執筆スキルは `$HERMES_HOME/skills/writing/` にHermes用コピーを置く。原稿と同じprivate領域に保存し、
+writing backup は `$HERMES_HOME/skills` をバックアップする。
 
 現在のスキルは `novel-writing`、`erotic-novel-writer`、`slow-heart-ntr`、
 `start-writing`、`scene-enhancer`、`consistency-checker`、
-`cognitive-rhythm-writing`、`japanese-tech-writing`。参照資料も各スキルの配下に含める。
+`cognitive-rhythm-writing`、`japanese-tech-writing`、`external-natural-japanese`、
+`yomiyasu`、`imozuru`、`nihongo`（2.3.1）。参照資料や必要なスクリプトも各スキルの配下に含める。
 `start-writing` はHermesのwriter worktreeを使い、旧共有先
 `/mnt/sda1/shares/public/novelist` や `CLAUDE.md` の複製を行わない。
 
+`yomiyasu` と `nihongo` は [共有Agent Skillレジストリ](../../../modules/home/agent-skills/registry.json) で `hermes: true` とし、NixOSのHome Manager activationが `~/.agents/skills/` からHermes用領域へコピーする。`typesafe-ai` は `hermes: false` のためHermesには入れない。ほかのGitHub由来スキルを追加するときも、執筆への適性に応じてこの値を選ぶ。
+`external-natural-japanese` と `imozuru` はNixOSのユーザー用スキルからHermes用領域へコピーする。
+`nihongo` の正本は共有 Home Manager 設定の [`modules/home/claude/config/skills/nihongo/`](../../../modules/home/claude/config/skills/nihongo/) に置く。
+共有モジュールがmacOSとNixOSのClaudeへリンクし、`mise run agent-skills` が両OSの `~/.agents/skills/` へコピーする。
+NixOSではHermes用Home Manager activationが `/mnt/sda1` のmountとHermes homeのdeviceを確認してからprivate領域へ同期する。
+ソースは [AnIT012/nihongo](https://github.com/AnIT012/nihongo) の2.3.1、commit `c6566777c54751ed6c9bc1666190ed5f2f3a9276`。
+同期は `nihongo` ディレクトリ内だけを対象にし、dotfilesにないファイルを削除して正本と一致させる。
+`nihongo/ALWAYS.md` はスキルと一緒に置くが、Hermes全体の常時指示には追加しない。
+`yomiyasu` と `nihongo` は文章推敲の方針が重なるため、使うスキルを明示すると安定する。
+
 スキル一覧は次のコマンドで確認できる。追加後の会話では `/novel-writing`、
 `/start-writing` のようにスキル名を指定できる。元スキルを更新してもHermes用コピーには
-自動反映されないため、移植先を個別に更新する。
+自動反映されないため、移植先を個別に更新する。`nihongo` はdotfilesの正本を更新し、共通 Home Manager と Agent Skills の同期、NixOSのHermes activationで各配置先へ同期する。
 
 ```sh
 HERMES_HOME=/mnt/sda1/private/writing/hermes hermes skills list --source local

@@ -3,19 +3,69 @@
 set -euo pipefail
 
 mode="${1:-sync}"
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+repo_root="$(cd "${script_dir}/../.." && pwd)"
 skills_root="${HOME}/.agents/skills"
 state_dir="${XDG_STATE_HOME:-${HOME}/.local/state}/dotfiles"
 manifest="${state_dir}/agent-skills.manifest"
-skill_specs=(
-    "typesafe-ai|typesafe-ai/skills|typesafe-ai"
-    "yomiyasu|nanaism/yomiyasu|yomiyasu"
-    "nihongo|AnIT012/nihongo|nihongo"
+link_manifest="${state_dir}/agent-skills.links.manifest"
+registry="${repo_root}/modules/home/agent-skills/registry.json"
+if ! command -v jq >/dev/null 2>&1; then
+    echo "Error: jq is required to read ${registry}." >&2
+    exit 1
+fi
+skill_specs_raw="$(jq -er '.skills[] | [.type, .name, (.repository // .path // ""), (.selector // ""), (.hermes | tostring)] | join("|")' "${registry}")"
+skill_specs=()
+while IFS= read -r skill_spec; do
+    [[ -z "${skill_spec}" ]] && continue
+    IFS='|' read -r skill_type skill_name skill_source skill_selector skill_hermes <<<"${skill_spec}"
+    if [[ ! "${skill_name}" =~ ^[a-zA-Z0-9][a-zA-Z0-9._-]*$ ]]; then
+        echo "Error: invalid Agent Skill name in ${registry}: ${skill_name}." >&2
+        exit 1
+    fi
+    if [[ "${skill_type}" != "remote" && "${skill_type}" != "local" ]]; then
+        echo "Error: unsupported Agent Skill type in ${registry}: ${skill_type}." >&2
+        exit 1
+    fi
+    if [[ "${skill_hermes}" != "true" && "${skill_hermes}" != "false" ]]; then
+        echo "Error: set hermes to true or false for ${skill_name} in ${registry}." >&2
+        exit 1
+    fi
+    if [[ "${skill_type}" == "local" ]]; then
+        skill_source="${repo_root}/modules/home/${skill_source}"
+    fi
+    skill_specs+=("${skill_type}|${skill_name}|${skill_source}|${skill_selector}|${skill_hermes}")
+done <<<"${skill_specs_raw}"
+native_skill_roots=(
+    "${HOME}/.claude/skills"
+    "${HOME}/.codex/skills"
+    "${HOME}/.cursor/skills"
 )
 skill_names=()
 for skill_spec in "${skill_specs[@]}"; do
-    IFS='|' read -r skill_name _ _ <<<"${skill_spec}"
+    IFS='|' read -r _ skill_name _ _ _ <<<"${skill_spec}"
     skill_names+=("${skill_name}")
 done
+
+is_managed_skill() {
+    local requested_name="$1"
+    local managed_name
+    [[ -f "${manifest}" ]] || return 1
+    while IFS= read -r managed_name; do
+        [[ "${managed_name}" == "${requested_name}" ]] && return 0
+    done <"${manifest}"
+    return 1
+}
+
+is_managed_link() {
+    local requested_link="$1"
+    local managed_link
+    [[ -f "${link_manifest}" ]] || return 1
+    while IFS= read -r managed_link; do
+        [[ "${managed_link}" == "${requested_link}" ]] && return 0
+    done <"${link_manifest}"
+    return 1
+}
 
 selected_specs=()
 should_prune=true
@@ -30,7 +80,7 @@ case "${mode}" in
             exit 2
         fi
         for skill_spec in "${skill_specs[@]}"; do
-            IFS='|' read -r skill_name _ _ <<<"${skill_spec}"
+            IFS='|' read -r _ skill_name _ _ _ <<<"${skill_spec}"
             if [[ "${skill_name}" == "${requested_skill}" ]]; then
                 selected_specs+=("${skill_spec}")
             fi
@@ -47,24 +97,85 @@ case "${mode}" in
         ;;
 esac
 
-if ! gh skill --help >/dev/null 2>&1; then
+needs_gh=false
+for skill_spec in "${selected_specs[@]}"; do
+    IFS='|' read -r skill_type _ _ _ <<<"${skill_spec}"
+    if [[ "${skill_type}" == "remote" ]]; then
+        needs_gh=true
+        break
+    fi
+done
+
+if [[ "${needs_gh}" == true ]] && ! gh skill --help >/dev/null 2>&1; then
     echo "Error: GitHub CLI gh skill is unavailable. Update gh before syncing Agent Skills." >&2
     exit 1
 fi
 
+for root in "${native_skill_roots[@]}"; do
+    if [[ -L "${root}" ]]; then
+        echo "Error: refusing to write through a symlinked Agent Skill root ${root}." >&2
+        exit 1
+    fi
+done
+for skill_spec in "${selected_specs[@]}"; do
+    IFS='|' read -r skill_type skill_name _ _ _ <<<"${skill_spec}"
+    for root in "${native_skill_roots[@]}"; do
+        if [[ "${skill_type}" == "local" && "${root}" == "${HOME}/.claude/skills" ]]; then
+            continue
+        fi
+        link="${root}/${skill_name}"
+        if [[ -e "${link}" && ! -L "${link}" ]]; then
+            echo "Error: refusing to replace unmanaged skill path ${link}." >&2
+            exit 1
+        fi
+        target="${skills_root}/${skill_name}"
+        if [[ -L "${link}" ]] \
+            && [[ "$(readlink "${link}")" != "${target}" ]] \
+            && ! is_managed_link "${link}"; then
+            echo "Error: refusing to replace unmanaged skill symlink ${link}." >&2
+            exit 1
+        fi
+    done
+done
+
 if [[ "${mode}" == "--ensure" ]]; then
     needs_install=false
-    for skill_name in "${skill_names[@]}"; do
-        if [[ ! -f "${skills_root}/${skill_name}/SKILL.md" ]]; then
+    for skill_spec in "${selected_specs[@]}"; do
+        IFS='|' read -r skill_type skill_name skill_source _ _ <<<"${skill_spec}"
+        target="${skills_root}/${skill_name}"
+        if [[ ! -f "${target}/SKILL.md" ]]; then
             needs_install=true
             break
         fi
+        if [[ "${skill_type}" == "local" ]] && ! diff -qr "${skill_source}" "${target}" >/dev/null; then
+            needs_install=true
+            break
+        fi
+        for root in "${native_skill_roots[@]}"; do
+            if [[ "${skill_type}" == "local" && "${root}" == "${HOME}/.claude/skills" ]]; then
+                continue
+            fi
+            link="${root}/${skill_name}"
+            if [[ ! -L "${link}" ]] || [[ "$(readlink "${link}")" != "${target}" ]]; then
+                needs_install=true
+                break 2
+            fi
+        done
     done
     if [[ "${needs_install}" == false ]]; then
         echo "Agent Skills already installed. Run 'mise run agent-skills' to refresh them."
         exit 0
     fi
 fi
+
+for skill_spec in "${selected_specs[@]}"; do
+    IFS='|' read -r _ skill_name _ _ _ <<<"${skill_spec}"
+    target="${skills_root}/${skill_name}"
+    if [[ ( -e "${target}" || -L "${target}" ) ]] && ! is_managed_skill "${skill_name}"; then
+        echo "Error: refusing to replace unmanaged Agent Skill ${target}." >&2
+        exit 1
+    fi
+done
 
 if [[ -L "${skills_root}" ]]; then
     echo "Error: ${skills_root} must be a directory so staging and replacement stay on one filesystem." >&2
@@ -74,25 +185,37 @@ fi
 mkdir -p "${skills_root}" "${state_dir}"
 staging="$(mktemp -d "${HOME}/.agents/skills.staging.XXXXXX")"
 manifest_tmp=""
+link_manifest_tmp=""
 cleanup() {
     rm -rf -- "${staging}"
     if [[ -n "${manifest_tmp}" ]]; then
         rm -f -- "${manifest_tmp}"
+    fi
+    if [[ -n "${link_manifest_tmp}" ]]; then
+        rm -f -- "${link_manifest_tmp}"
     fi
 }
 trap cleanup EXIT
 
 selected_names=()
 for skill_spec in "${selected_specs[@]}"; do
-    IFS='|' read -r skill_name skill_source skill_selector <<<"${skill_spec}"
+    IFS='|' read -r skill_type skill_name skill_source skill_selector _ <<<"${skill_spec}"
     selected_names+=("${skill_name}")
-    gh skill install "${skill_source}" "${skill_selector}" \
-        --dir "${staging}" --force
+    if [[ "${skill_type}" == "remote" ]]; then
+        gh skill install "${skill_source}" "${skill_selector}" \
+            --dir "${staging}" --force
+    else
+        if [[ ! -f "${skill_source}/SKILL.md" ]]; then
+            echo "Error: local Agent Skill ${skill_name} is missing SKILL.md." >&2
+            exit 1
+        fi
+        cp -R "${skill_source}" "${staging}/${skill_name}"
+    fi
 done
 
 for skill_name in "${selected_names[@]}"; do
     if [[ ! -f "${staging}/${skill_name}/SKILL.md" ]]; then
-        echo "Error: gh skill did not install ${skill_name}." >&2
+        echo "Error: Agent Skill ${skill_name} was not staged correctly." >&2
         exit 1
     fi
 done
@@ -110,6 +233,14 @@ if [[ "${should_prune}" == true && -f "${manifest}" ]]; then
         done
 
         previous_path="${skills_root}/${previous_skill}"
+        for root in "${native_skill_roots[@]}"; do
+            link="${root}/${previous_skill}"
+            if [[ -L "${link}" ]] \
+                && [[ "$(readlink "${link}")" == "${previous_path}" ]] \
+                && is_managed_link "${link}"; then
+                rm -- "${link}"
+            fi
+        done
         if [[ "${is_current}" == false && ! -L "${previous_path}" ]]; then
             rm -rf -- "${previous_path}"
         fi
@@ -130,6 +261,50 @@ for skill_name in "${selected_names[@]}"; do
         exit 1
     fi
 done
+
+for skill_spec in "${selected_specs[@]}"; do
+    IFS='|' read -r skill_type skill_name _ _ _ <<<"${skill_spec}"
+    target="${skills_root}/${skill_name}"
+    for root in "${native_skill_roots[@]}"; do
+        if [[ "${skill_type}" == "local" && "${root}" == "${HOME}/.claude/skills" ]]; then
+            continue
+        fi
+        link="${root}/${skill_name}"
+        mkdir -p "${root}"
+        ln -sfn "${target}" "${link}"
+    done
+done
+
+link_manifest_names=()
+append_unique_link() {
+    local candidate="$1"
+    local existing
+    for existing in "${link_manifest_names[@]}"; do
+        if [[ "${existing}" == "${candidate}" ]]; then
+            return 0
+        fi
+    done
+    link_manifest_names+=("${candidate}")
+}
+
+if [[ "${should_prune}" == false && -f "${link_manifest}" ]]; then
+    while IFS= read -r managed_link; do
+        [[ -n "${managed_link}" ]] && append_unique_link "${managed_link}"
+    done <"${link_manifest}"
+fi
+for skill_spec in "${selected_specs[@]}"; do
+    IFS='|' read -r skill_type skill_name _ _ _ <<<"${skill_spec}"
+    for root in "${native_skill_roots[@]}"; do
+        if [[ "${skill_type}" == "local" && "${root}" == "${HOME}/.claude/skills" ]]; then
+            continue
+        fi
+        append_unique_link "${root}/${skill_name}"
+    done
+done
+link_manifest_tmp="$(mktemp "${state_dir}/agent-skills-links.XXXXXX")"
+printf '%s\n' "${link_manifest_names[@]}" >"${link_manifest_tmp}"
+mv -- "${link_manifest_tmp}" "${link_manifest}"
+link_manifest_tmp=""
 
 manifest_names=()
 append_unique() {

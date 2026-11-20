@@ -103,7 +103,7 @@ NixOS 側には `home-manager-apply` 相当のターゲットは無い（HM は 
 | `make mise-list` | ツール一覧 |
 | `make mise-config` | mise の設定表示 |
 
-外部 Agent Skills は mise タスクで同期する。空の staging に導入してから、GitHub 管理対象の skill だけを `~/.agents/skills` 内で置き換える。Nix が管理する `review-*` と `imozuru` は維持され、全件同期では GitHub 上で削除された管理対象 skill や skill 内の古いファイルも片付く。
+Agent Skills は `modules/home/agent-skills/registry.json` のレジストリに従って mise タスクで同期する。外部 skill は空の staging に導入し、dotfiles管理のスキルは同じ staging にローカルコピーしてから、対象 skill だけを `~/.agents/skills` 内で置き換える。Claude、Codex旧形式、Cursor向けリンクも同期する。Nix が管理する `review-*` と `imozuru` は維持され、全件同期では管理対象 skill や skill 内の古いファイルも片付く。
 
 ```sh
 # dotfiles のリポジトリルートから実行
@@ -115,7 +115,7 @@ mise run agent-skills --only nihongo
 gh skill search cloudflare
 ```
 
-同期対象は `.mise/tasks/agent-skills` に宣言する。通常の同期対象は `typesafe-ai`、`yomiyasu`、`nihongo`。`--only` は指定した skill だけを更新し、他の管理対象を削除しない。`gh` は Darwin / NixOS では Nix、Windows CTF の WSL では apt で導入する。`gh skill` は GitHub CLI の preview 機能。以前 `npx skills` などで入れたスキルは自動では移行されないため、同期タスクを実行すると宣言済みのスキルが導入される。
+同期対象は `modules/home/agent-skills/registry.json` に宣言する。新しいスキルでは `hermes` を `true` / `false` で選び、執筆向けと判断したスキルだけNixOSのHermes private領域にも同期する。`nihongo` の正本は `modules/home/claude/config/skills/nihongo/` にあり、Claude向けにはHome Managerがリンクし、`~/.agents/skills/` へはこのタスクがコピーする。`--only` は指定した skill だけを更新し、他の管理対象を削除しない。`gh` は外部skill用に必要で、Darwin / NixOS では Nix、Windows CTF の WSL では apt で導入する。`gh skill` は GitHub CLI の preview 機能。以前 `npx skills` などで入れたスキルは自動では移行されないため、同期タスクを実行すると宣言済みのスキルが導入される。
 
 ## 9. その他ユーティリティ
 
