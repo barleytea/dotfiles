@@ -133,7 +133,6 @@
     # 権限: sudo chmod 600 /etc/nixos/secrets/miyoshi_s.hashed-password
     hashedPasswordFile = "/etc/nixos/secrets/miyoshi_s.hashed-password";
     shell = pkgs.zsh;
-    linger = true;
     packages = with pkgs; [
     #  thunderbird
     ];
@@ -182,15 +181,4 @@
     git.enable = true;
   };
 
-  # Git SSH Server
-  services.gitserver = {
-    enable = true;
-    authorizedKeys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICL34VaEgzwLhtlFTGBarQkJILQAatNVXFDt3zc92O8x miyoshi_s@nixos"
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID5GTcPRV7SIMocsu6EsrpUVjgDkOmWA0hJq3xQpSWXy barleytea362@gmail.com"
-    ];
-    repositories = [
-      "novel.git"
-    ];
-  };
 }

@@ -73,14 +73,12 @@ nix run ./nixvim
 make flake-update-nixvim
 ```
 
-## Home Kubernetes and Writing
+## Home Kubernetes
 
 NixOS は単一ノード k3s を実行し、`kubernetes/` 以下を Flux で同期する。初期ワークロードは Jellyfin で、メディア原本は `/mnt/sda1/shares/media` を読み取り専用でマウントする。アクセスは Tailscale Operator の private Ingress に限定し、Funnel は使わない。詳細と bootstrap 前提条件は [kubernetes/README.md](kubernetes/README.md) を参照。
 
-AI を使う小説データの保存領域は `/mnt/sda1/private/writing/novel`、Hermes のGit正本はその中の `product/`。SMB、NFS、Kubernetes には公開せず、Mac から Tailscale 経由の SSH と Zellij で NixOS 上の AI CLI を使う。NixOS は執筆データ領域を日次バックアップで `/mnt/sdb1/backup/private/writing` に保持する。実データの移行・削除は自動化しないため、設定適用後に内容を確認してから手動で行う。
-
-導入、秘密情報、Jellyfin の初期設定、原稿移行、バックアップと復元試験は
-[Home Kubernetes とプライベート執筆環境の運用](docs/home-kubernetes.md) を正本とする。
+導入、秘密情報、Jellyfin の初期設定、バックアップと復元試験は
+[Home Kubernetes の運用](docs/home-kubernetes.md) を正本とする。
 最初の適用は x86_64 NixOS 実機で `make nixos-build` を通してから行う。現行の
 `kubernetes/` には SOPS 復号設定と OAuth Secret の雛形を含む。実際の age 公開鍵と
 暗号化済み OAuth Secret は利用者が作成して Git 管理し、age 秘密鍵と cluster 内の

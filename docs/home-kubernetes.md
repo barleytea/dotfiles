@@ -1,12 +1,10 @@
-# Home Kubernetes とプライベート執筆環境の運用
+# Home Kubernetes 運用
 
 この文書は、単一ノードの NixOS に k3s、Flux、Tailscale Kubernetes
-Operator、Jellyfin を導入し、同じホストで AI 支援の小説執筆を行うための
-運用手順である。設定の正本は NixOS 側が [`nixos/`](../nixos/)、Kubernetes
-側が [`kubernetes/`](../kubernetes/) である。
+Operator、Jellyfin を導入・運用する手順をまとめる。設定の正本は NixOS 側が
+[`nixos/`](../nixos/)、Kubernetes 側が [`kubernetes/`](../kubernetes/) である。
 
-実データを移動・削除する手順には明示的な確認点を設けている。原稿、OAuth
-client secret、age 秘密鍵、GitHub token をリポジトリ・シェル履歴・画面共有
+OAuth client secret、age 秘密鍵、GitHub token をリポジトリ・シェル履歴・画面共有
 へ残さないこと。
 
 ## 目的と採用理由
@@ -20,17 +18,11 @@ client secret、age 秘密鍵、GitHub token をリポジトリ・シェル履�
 - Tailscale Ingress は Jellyfin を tailnet 内だけに公開する。Funnel は使わない。
 - Jellyfin はメディアを閲覧・視聴するためのアプリであり、ファイルを置く入口
   は既存の SMB/NFS のままにする。
-- 執筆データは代替不能なユーザーデータなので Kubernetes から切り離す。Mac は
-  SSH 端末に徹し、AI CLI、Git、Zellij、原稿の正本は NixOS 上だけに置く。
 
 ```text
 メディアを追加する端末 ── SMB/NFS ──> /mnt/sda1/shares/media
                                            │ read-only hostPath
 tailnet の視聴端末 ── HTTPS ───────────> Jellyfin Pod
-
-Mac terminal ── Tailscale + SSH ───────> NixOS + Zellij + AI CLI
-                                           └── /mnt/sda1/private/writing/novel
-                                               └── product (Hermes Git repository)
 ```
 
 ## 責務とデータ境界
@@ -40,7 +32,6 @@ Mac terminal ── Tailscale + SSH ───────> NixOS + Zellij + AI C
 | NixOS | k3s、マウント、ホスト側ディレクトリ、SSH、Tailscale | Kubernetes の Deployment / Ingress |
 | Flux | namespace、Tailscale Operator、Jellyfin | k3s 本体、ホスト上のファイル権限 |
 | Jellyfin | `/media` の索引・視聴、`/config` の設定 | メディア原本の書換え |
-| writing service | 原稿ディレクトリと世代バックアップ | SMB/NFS/PVC への公開 |
 | 手動・Git 外 | 初回 Flux bootstrap、age 秘密鍵、Tailscale OAuth secret | 平文秘密情報のコミット |
 
 | パス | 用途 | 取扱い |
@@ -49,31 +40,20 @@ Mac terminal ── Tailscale + SSH ───────> NixOS + Zellij + AI C
 | `/mnt/sda1/k3s/storage` | local-path PVC の保存先 | 単一ノード専用。別ノードへ移動できない |
 | `/mnt/sda1/k3s/jellyfin/config` | Jellyfin の設定・DB | バックアップ必須 |
 | `/mnt/sda1/k3s/jellyfin/cache` | サムネイル等のキャッシュ | 再生成可能。初期バックアップ対象外 |
-| `/mnt/sda1/private/writing/novel` | 執筆データ全体とバックアップの保存元 | `miyoshi_s` 専用、SMB/NFS/Kubernetes 非公開 |
-| `/mnt/sda1/private/writing/novel/product` | Hermes が使うGit正本 | `miyoshi_s` 専用、worktree は別ディレクトリ |
-| `/mnt/sdb1/backup/private/writing` | 原稿の 14 世代日次バックアップ | 同一ホスト内。災害対策ではない |
 
 `/mnt/sda1` と `/mnt/sdb1` は同一マシン内である。二台のディスクに分かれていても
-盗難、火災、電源事故、ホスト故障を防げない。原稿を守るには、復元試験を済ませた
-後に暗号化済みのオフサイトバックアップを別途追加する。
+盗難、火災、電源事故、ホスト故障を防げない。重要なデータを守るには、復元試験を
+済ませた暗号化済みのオフサイトバックアップを別途用意する。
 
 ## セキュリティ境界
 
-この構成の「private」は、原稿を一般的な共有一覧・Kubernetes・Mac のローカル
-ファイルシステムから切り離す意味であり、ホストの root 権限を持つ人から隠す
-暗号化ではない。
+Tailscale を使ったアクセス制御と Jellyfin の読み取り専用メディア設定を組み合わせる。
 
-- 原稿ディレクトリは `0700` で作成され、SMB と NFS の export 対象外である。
 - `tailscale0` は NixOS の trusted interface である。そのためホスト側 firewall
   だけで tailnet の利用者を細かく分離してはいない。SSH と Jellyfin を利用できる
   人・タグは **Tailscale の ACL / grants で制限する**。
 - Jellyfin の Service は `ClusterIP`、Ingress は `tailscale` class である。LAN の
   ポート `8096` や Tailscale Funnel を設定しない。
-- Mac に原稿ファイルや Git clone は作らない。ただし SSH の接続記録、terminal の
-  scrollback・ウィンドウ復元、クリップボード、画面キャプチャは残り得る。本文を
-  コピーしない、terminal の復元を無効化するなどは Mac 側で別途行う。
-- クラウド AI に渡した本文は AI 提供者へ送信される。外部送信を避ける箇所は、NixOS
-  上のローカルモデルだけを使う。
 
 ## 0. 導入前の確認
 
@@ -88,16 +68,15 @@ git status --short
 kubectl kustomize kubernetes/clusters/home >/dev/null
 ```
 
-`findmnt` が二つのマウントを示さない場合はそこで停止する。k3s と writing service
-は未マウントの `/mnt/sda1` / `/mnt/sdb1` にデータを作らないよう確認しているが、
-ストレージ障害をアプリの設定変更で解決しない。
+`findmnt` が二つのマウントを示さない場合はそこで停止する。k3s とファイルサーバーは
+ストレージのマウントを前提とする。ストレージ障害をアプリの設定変更で解決しない。
 
 次も確認する。
 
 - NixOS ホストが Tailscale へログイン済みである。
 - tailnet の MagicDNS を有効にし、SSH と Jellyfin の利用端末・ユーザーを ACL
   で許可する計画がある。
-- `shares/media` はメディア専用であり、原稿を置かない。
+- `shares/media` はメディア専用である。
 - k3s は単一 server/worker である。二台構成の etcd HA には移行しない。HA が必要に
   なった時点で、三台以上の server とストレージを設計し直す。
 
@@ -111,17 +90,15 @@ kubectl kustomize kubernetes/clusters/home >/dev/null
 ```sh
 cd /path/to/dotfiles
 make nixos-build
-git diff -- nixos/services/k3s nixos/services/writing nixos/services/default.nix
+git diff -- nixos/services/k3s nixos/services/default.nix
 make nixos-switch
 ```
 
-適用後はサービスとマウントを確認する。以下は状態を読むだけで、原稿の内容は
-表示しない。
+適用後はサービスとマウントの状態を確認する。
 
 ```sh
 systemctl status k3s --no-pager
-systemctl status k3s-storage-setup writing-directory-setup --no-pager
-systemctl list-timers writing-backup.timer --all
+systemctl status k3s-storage-setup --no-pager
 findmnt /mnt/sda1 /mnt/sdb1
 sudo journalctl -u k3s -b --no-pager -n 100
 ```
@@ -338,193 +315,19 @@ Ingress status を接続先の正本とする。HTTP の `:8096` を直接 LAN �
 求める段階で、NixOS 側の NVIDIA runtime と Kubernetes device plugin を別変更として
 設計・検証する。
 
-## 4. 原稿の非破壊移行と日常執筆
-
-### 4.1 移行前の確認
-
-既存の原稿は `/mnt/sda1/shares/public` と既存バックアップに平文で残っている可能性が
-ある。今回の移行は、それらを自動削除しない。まず新しい正本が作成されたことだけを
-確認する。
-
-```sh
-namei -l /mnt/sda1/private/writing/novel/product
-systemctl status writing-directory-setup --no-pager
-```
-
-コピー対象のファイル名・容量・バックアップの有無を人間が確認してから、`rsync` の
-source と destination を一行ずつ見直す。`product` は既存のGitリポジトリなので、
-リポジトリルートへ丸ごとコピーしない。最初は `--dry-run` を付けて差分だけを確認し、
-配置先として選んだ空のサブディレクトリにだけ実コピーする。
-
-```sh
-# <source-directory> は原稿だけを含む既存ディレクトリ、
-# <empty-destination> は product 内の空の配置先へ置換する。
-rsync -aHn --human-readable --itemize-changes \
-  '<source-directory>/' \
-  '<empty-destination>/'
-
-# dry-run の対象と件数を承認した後だけ -n を外す。
-rsync -aH --human-readable --itemize-changes \
-  '<source-directory>/' \
-  '<empty-destination>/'
-```
-
-コピー完了後、通常の執筆アプリで開く・保存する、`git status` を確認する、日次
-バックアップを一度成功させる、という順で検証する。旧原稿の削除・移動はこの検証と
-復元試験が終わった後でも急がない。削除対象を列挙して本人が承認するまでは行わない。
-
-`/var/lib/git/novel.git` が存在する場合、writing service は日次バックアップへ別に
-複製するが、作業ツリーを自動で clone、push、再初期化しない。リモートとして使うか、
-新しい正本内の `.git` だけを使うかは、既存履歴を確認してから人間が決める。
-
-### 4.2 Mac を SSH terminal として使う
-
-Mac には clone や SMB マウントを作らず、Tailscale 越しに NixOS へ SSH 接続する。
-
-```sh
-ssh -t miyoshi_s@<NixOS の Tailscale 名> \
-  'zellij attach --create writing'
-```
-
-接続後に作業ディレクトリへ移動して、NixOS に導入済みの AI CLI を起動する。
-
-```sh
-cd /mnt/sda1/private/writing/novel/product
-git status
-```
-
-AI の作業規約は原稿リポジトリの `AGENTS.md` に置く。配備用の
-[`template/AGENTS.md`](../nixos/services/writing/template/AGENTS.md) は、AI が
-本文を勝手に確定・削除・全文置換・履歴改変しないこと、変更前に範囲と差分を示す
-ことを定める雛形である。雛形は自動コピーされないので、内容を確認してから正本へ
-手動で追加する。
-
-Git は小さな scene または章単位で commit し、AI の草稿・レビュー・人間が採用した
-本文を混ぜない。同じファイルを複数の AI セッションで同時に編集させない。AI が
-外部クラウドを利用する場合は、送信してよい本文だけを明示する。
-
-### 4.3 Hermes の継続執筆
-
-小説用 Hermes は公式 v0.23.1 の Home Manager user service として `miyoshi_s` に導入し、
-user linger と一つの gateway を使う。状態と cron 定義は次に固定する。
-
-Hermesのmodule、upstream pin、writer helper、GitHub隔離、prompt、テストは公開外部flake
-`hermes-writing-nix`が所有する。dotfilesはその
-`homeManagerModules.default`を明示的に読み込み、host固有のパスとアカウントを渡す。
-外部repoは実行コードとテストを公開するための場所であり、原稿、OAuth、Discord credentials、
-GitHubの認証状態、Hermesのruntime stateを保存しない。
-
-```text
-HERMES_HOME:  /mnt/sda1/private/writing/hermes
-worktree:     /mnt/sda1/private/writing/worktrees/hermes
-branch:       agent/hermes-writing
-provider:     claude-subscription-directsdk-experimental (Claude Code subscription)
-model:        sonnet
-```
-
-writer cron は5分間隔の1 jobだけにし、`cron.allow_agent_scheduling = true`、
-`cron.max_parallel_jobs = 1`、retry、catch-up を有効にする。各 run は checkpoint/progress
-を読み、scene 単位で変更して branch へ commit する。完了時は checkpoint、commit、自己の
-job remove の順に行い、正本への merge・push は人間の確認後に行う。
-goal の active 状態や `max_turns` 到達後の pause だけでは、gateway 再起動後の自動継続に
-ならない。cron が checkpoint から次の scene を再開することを正本の継続条件にする。
-
-SSH 経由のHermes操作は目標指定、指示、状態確認、pause/resume に限定する。Discord gatewayは
-無効にしている。Hermes に全 run を覆う OS-level lock hook はないため、
-`max_parallel_jobs = 1` と「手編集は pause 後、running worker の終了確認後」という運用で
-single writer にする。checkpoint と commit の短い処理だけ lock で保護する。これは運用上の
-排他であり、root や別プロセスによる書込みを強制的に遮断する sandbox ではない。
-
-Claude Code subscription の Agent SDK 利用枠に達した場合は cron を pause し、枠の回復後に
-resume する。provider は実験的な Hermes 公式 plugin で、別 provider への fallback は設定しない。
-途中の quota/429 が全て自動保留される保証はないため、
-checkpoint は各 scene の境界で更新する。原稿を Claude Code に送る範囲はユーザーが指定した
-scene・指示に限り、送信先 provider の保存や利用規約から原稿を秘匿する構成ではない。
-Discord credentials は設定しない。
-
-## 5. バックアップと復元試験
+## 4. バックアップと復元試験
 
 バックアップが存在することと復元可能であることは別である。初回構築後、以後は
-少なくとも月一回、原稿・Jellyfin・k3s の復元手順を別の安全な検証先で確認する。
+少なくとも月一回、Jellyfin と k3s の復元手順を別の安全な検証先で確認する。
 
-### 5.1 現在自動化済みのもの
+### 現在自動化されていないもの
 
 | 対象 | 現在の状態 | 確認方法 |
 |---|---|---|
-| 原稿の正本 | 日次 03:15、ランダム最大 15 分遅延、14 世代 | `systemctl list-timers writing-backup.timer --all` |
-| 原稿の backup | `/mnt/sdb1/backup/private/writing/<timestamp>/novel` | `sudo systemctl status writing-backup --no-pager` |
-| Hermes state | cron/checkpoint/ledger と非秘密 state を同じ世代へ追加 | `HERMES_HOME` の秘密除外を確認 |
-| Hermes worktree | worktree と branch/common Git の復元情報を追加 | worktree の `.git` 参照先を確認 |
-| 既存 bare Git | 存在する場合だけ原稿 backup 世代へ複製 | 対象 backup 世代の `novel.git` の有無を確認 |
 | Jellyfin `/config` | **未自動化** | 手動バックアップが必要 |
 | k3s embedded etcd | **未自動化** | snapshot と server token を別途保全する |
 
-原稿バックアップは writer と競合しないよう、次の停止順序を backup service が行った
-場合だけ実行する。既存の root timer は維持し、新しい暗号化基盤は追加しない。
-
-1. writer cron を pause する。
-2. execution ledger と restart-safe external worker の終了を待つ。
-3. gateway を正常停止し、state DB/WAL が閉じたことを確認する。
-4. worktree、common Git、非秘密 Hermes state を rsync する。
-5. 元々 gateway が稼働中だった場合だけ再起動し、writer が有効だった場合だけ resume する。
-
-待機には30分の上限を設ける。上限を超えた場合は rsync を開始せず、停止したサービスを
-元の状態へ戻して backup failure とする。`cron status` だけでは実行完了を判定できない。
-`cron runs`、user systemd、worker の状態を合わせて確認する。`cron cancel` は副作用を
-rollback しないため、タイムアウト時の通常処理には使わない。
-
-`auth.json`、`.env`、OAuth/token/credential ファイルは backup から除外し、復元時は OAuth
-device flow で再認証する。live な SQLite/WAL をコピーしない。
-
-手動で backup service の状態を見るには次を使う。
-
-```sh
-sudo systemctl start writing-backup.service
-sudo systemctl status writing-backup.service --no-pager
-```
-
-### 5.2 原稿の復元試験
-
-正本を上書きせず、空の検証用ディレクトリへ一世代をコピーして、ファイルを開ける
-ことと Git 履歴を確認する。以下の `<backup-generation>` は日時ディレクトリ名に
-置き換える。
-
-```sh
-test_root=/mnt/sda1/private/writing-restore-test
-install -d -m 0700 "$test_root"
-rsync -aHn --numeric-ids \
-  "/mnt/sdb1/backup/private/writing/<backup-generation>/novel/" \
-  "$test_root/novel/"
-```
-
-dry-run の出力と destination が正しいことを確認してから `-n` を外す。復元試験後の
-`writing-restore-test` は原稿のコピーを含む。削除は破壊的操作なので、保持不要である
-ことを確認し、対象パスを明示してから本人が実行する。
-
-正本への本番復元では、まず新しい backup 世代を取り、SSH/Zellij/AI の書込みを止める。
-次に別パスへ復元して内容を検証し、正本を置換する必要性・対象・ロールバック方法を
-本人が承認してから行う。既存正本に対する `rsync --delete` は承認なしに実行しない。
-
-Hermes worktree の `.git` は common Git directory への絶対パスを含むファイルなので、
-復元先が変わるとそのままでは使えない。common Git（正本側の Git directory または bare
-Git）を先に復元し、worktree をコピーした後、元の worktree 登録を確認してから次で接続を
-修復する。
-
-```sh
-git -C /mnt/sda1/private/writing/novel/product worktree repair \
-  /mnt/sda1/private/writing/worktrees/hermes
-git -C /mnt/sda1/private/writing/worktrees/hermes rev-parse --git-common-dir
-git -C /mnt/sda1/private/writing/worktrees/hermes branch --show-current
-```
-
-`worktree repair` 後も common Git の実体や branch が一致しない場合は、復元先を削除・
-再初期化せず、正本/common Git と worktree manifest を確認してから人間が再登録する。
-
-このbackupのpause/drainとHermes stateのallowlist処理は外部flakeのbackup packageを使う。
-03:15のtimer、14世代保持、マウント確認、原稿正本の場所はNixOS host側の
-`services.writing`が管理する。外部repoの更新だけでhostの保存先やtimer時刻は変わらない。
-
-### 5.3 Jellyfin のバックアップと復元
+### 4.1 Jellyfin のバックアップと復元
 
 `/config` には SQLite DB を含むため、稼働中にファイルを単純コピーしない。現在は
 自動 backup unit がないため、Jellyfin の更新や設定変更の前に以下の保守手順を使う。
@@ -553,7 +356,7 @@ kubectl -n jellyfin rollout status deployment/jellyfin --timeout=180s
 視聴履歴の確認を一組として実施する。Pod の削除だけで `/config` は消えないが、
 ホストディスクの障害では失われる。
 
-### 5.4 k3s etcd のバックアップと復元
+### 4.2 k3s etcd のバックアップと復元
 
 この NixOS 設定は `clusterInit = true` の embedded etcd を使い、Kubernetes Secret
 の at-rest encryption を有効にしている。etcd snapshot の定期取得と外部へのコピーは
@@ -569,18 +372,18 @@ sudo k3s etcd-snapshot ls
 ```
 
 復元はクラスタの現在状態を snapshot 時点へ戻す破壊的操作である。Pod、PVC、Flux の
-同期状態を巻き戻し得るため、対象 snapshot、token の対応、Jellyfin/原稿 backup、
+同期状態を巻き戻し得るため、対象 snapshot、token の対応、Jellyfin backup、
 サービス停止時間を確認して本人が承認するまで実行しない。実施時は使用中 k3s
 バージョンの [K3s backup and restore](https://docs.k3s.io/datastore/backup-restore)
 に従い、通常は `k3s` 停止、`--cluster-reset --cluster-reset-restore-path` を使う
 復元、再起動、node/Flux の健全性確認という順で行う。
 
-## 6. 日常の状態確認と障害時の切り分け
+## 5. 日常の状態確認と障害時の切り分け
 
-### 6.1 読み取りだけの確認
+### 5.1 読み取りだけの確認
 
 ```sh
-systemctl is-active k3s writing-backup.timer
+systemctl is-active k3s
 kubectl get nodes
 kubectl get pods -A
 flux get kustomizations -A
@@ -607,7 +410,7 @@ kubectl -n jellyfin logs deploy/jellyfin --tail=100
 findmnt /mnt/sda1
 ```
 
-### 6.2 変更の基本順序
+### 5.2 変更の基本順序
 
 1. NixOS の変更は `make nixos-build` で評価する。
 2. Kubernetes manifest は `kubectl kustomize kubernetes/clusters/home` で組み立てる。
@@ -617,7 +420,7 @@ findmnt /mnt/sda1
    確認してから実行する。
 5. 反映後は k3s、Flux、Tailscale Operator、Jellyfin の順で Ready を確認する。
 
-## 7. CI とローカル検証の範囲
+## 6. CI とローカル検証の範囲
 
 現行の GitHub Actions では `nixos/**` の変更は NixOS toplevel build を検証するが、
 `kubernetes/**` 単独の変更で Kustomize 検証を行う workflow はない。したがって
@@ -638,7 +441,6 @@ trigger を追加する。
 ## 参照
 
 - [kubernetes/README.md](../kubernetes/README.md): GitOps ツリーと Operator の Secret 契約
-- [nixos/services/writing/README.md](../nixos/services/writing/README.md): 原稿用 service の詳細
 - [K3s backup and restore](https://docs.k3s.io/datastore/backup-restore)
 - [Flux SOPS guide](https://fluxcd.io/flux/guides/mozilla-sops/)
 - [Tailscale Kubernetes Operator](https://tailscale.com/docs/kubernetes-operator)

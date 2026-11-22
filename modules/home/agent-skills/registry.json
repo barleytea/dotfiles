@@ -4,21 +4,18 @@
             "type": "remote",
             "name": "typesafe-ai",
             "repository": "typesafe-ai/skills",
-            "selector": "typesafe-ai",
-            "hermes": false
+            "selector": "typesafe-ai"
         },
         {
             "type": "remote",
             "name": "yomiyasu",
             "repository": "nanaism/yomiyasu",
-            "selector": "yomiyasu",
-            "hermes": true
+            "selector": "yomiyasu"
         },
         {
             "type": "local",
             "name": "nihongo",
-            "path": "claude/config/skills/nihongo",
-            "hermes": true
+            "path": "claude/config/skills/nihongo"
         }
     ]
 }

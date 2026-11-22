@@ -7,4 +7,4 @@
 
 This directory vendors the upstream `nihongo/` skill directory. Update this copy deliberately and review upstream changes before deployment.
 
-The shared Home Manager module links this skill into Claude's skill directory on macOS and NixOS. The `agent-skills` mise task copies it into `~/.agents/skills/` on both systems. On NixOS, the Hermes Home Manager activation also syncs it into the private Hermes skills directory after checking the mounted filesystem.
+The shared Home Manager module links this skill into Claude's skill directory on macOS and NixOS. The `agent-skills` mise task copies it into `~/.agents/skills/` on both systems.

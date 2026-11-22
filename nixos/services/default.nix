@@ -1,5 +1,5 @@
 # Services configuration
-{ config, pkgs, inputs, ... }:
+{ pkgs, inputs, ... }:
 
 {
   imports = [
@@ -8,23 +8,11 @@
     ./k3s
     ./ollama
     ./tailscale
-    ./writing
     inputs.agent-dangomushi.nixosModules.default
   ];
 
   # System services
   services = {
-    # NixOS 上で完結する AI 小説執筆環境
-    writing = {
-      enable = true;
-      # Hermes の個別リポジトリではなく、執筆データ全体をバックアップする。
-      sourceDir = "/mnt/sda1/private/writing/novel";
-      worktreeDir = config.home-manager.users.miyoshi_s.services.hermes-writing.workingDirectory;
-      hermesHomeDir = config.home-manager.users.miyoshi_s.services.hermes-writing.hermesHome;
-      hermesBackupPackage = inputs.hermes-writing.packages.${pkgs.system}.hermes-writing-backup;
-      hermesPackage = config.home-manager.users.miyoshi_s.services.hermes-agent.package;
-    };
-
     # Automatic updates
     system76-scheduler.enable = true;
 

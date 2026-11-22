@@ -71,7 +71,7 @@ nixos/
 ├── hardware-configuration.nix
 ├── system/                共通システム設定
 ├── desktop/               GNOME / Hyprland / Wofi / Waybar / Dunst
-├── services/              fileserver(Samba/NFS) / gitserver / k3s / ollama / tailscale / writing
+├── services/              fileserver(Samba/NFS) / gitserver / k3s / ollama / tailscale
 ├── storage/               filesystem mounts / directories
 ├── packages/              cursor AppImage 抽出パッケージ等
 └── home-manager/          ユーザ環境（NixOS module 経由で統合）
@@ -82,7 +82,7 @@ flake outputs:
 
 Home Manager は NixOS の `users.miyoshi_s` に `useGlobalPkgs = true` で統合される。`make home-manager-apply` のような独立適用は darwin 側のみの体系。
 
-## 4. Home Kubernetes と執筆環境
+## 4. Home Kubernetes
 
 NixOS ホストが単一ノードの k3s server/worker を実行する。NixOS は k3s 本体、ホスト側の永続ディレクトリ、ファイアウォールを管理し、Kubernetes リソースは [`kubernetes/`](../kubernetes/) 以下を Flux で同期する。
 
@@ -96,56 +96,9 @@ kubernetes/
 
 Jellyfin は `/mnt/sda1/shares/media` を読み取り専用で参照する。設定とキャッシュは `/mnt/sda1/k3s/jellyfin/` に置く。Tailscale Operator が `ingressClassName: tailscale` の Ingress を処理するため、Service は `ClusterIP` のまま外部公開しない。OAuth Secret は chart の既定名 `operator-oauth` と `client_id` / `client_secret` キーを使い、SOPS で暗号化して同じ namespace に投入する。詳細は [`kubernetes/README.md`](../kubernetes/README.md) を参照。
 
-執筆データは Kubernetes から完全に分離する。`services.writing` は `/mnt/sda1/private/writing/novel` を `miyoshi_s` 専用の `0700` で準備し、領域全体の日次世代バックアップを `/mnt/sdb1/backup/private/writing` に保存する。Hermes のGit正本は `/mnt/sda1/private/writing/novel/product`。原稿を SMB/NFS/PVC に公開しないため、Mac は Tailscale 経由の SSH terminal のみを使い、AI CLI・Git・Zellij は NixOS 上で実行する。
-
 `tailscale0` は trusted interface であるため、tailnet 内の利用者・端末を分離する正本は
-Tailscale ACL / grants である。ホスト root 権限を持つ人から原稿を暗号学的に隠す構成
-ではない。運用上の境界、初回適用、Secrets、復旧試験は
-[Home Kubernetes とプライベート執筆環境の運用](home-kubernetes.md) を参照する。
-
-### 4.1 Hermes 執筆エージェント
-
-小説用 [Nous Hermes Agent](https://hermes-agent.nousresearch.com/docs/getting-started/nix-setup) は
-NixOS の `miyoshi_s` に公式 Home Manager user service として導入し、
-gateway を一つだけ起動する。`miyoshi_s` の linger を有効にして SSH logout とホスト再起動
-後も user service を復帰させる。Hermes の状態は原稿 worktree の外に置く。
-
-Hermes固有のHome Manager module、upstream Hermesのversion pin、writer helper、GitHub
-アカウント分離、prompt、テストは外部flake
-`hermes-writing-nix`から
-`inputs.hermes-writing.homeManagerModules.default`として明示的に読み込む。NixOS側には
-`services.hermes-writing`のhost固有値だけを置く。公開repoには原稿、OAuth、Discord環境変数、
-GitHub認証状態を入れない。
-
-NixOSの`hermes-writing` input自体はhostのnixpkgsをfollowする。一方、外部flakeが内包する
-公式Hermes packageは、公式v0.23.1のupstream lockにあるnixpkgsとビルド依存関係を使う。
-hostのnixpkgs更新でHermesのビルドツール世代を暗黙に差し替えないための分離である。
-
-`services.writing`はdotfiles側で管理し、マウント、原稿正本、03:15のbackup timer、14世代保持、
-ユーザーとlingerを所有する。Hermesのpause/drainと非秘密stateのbackup処理は外部flakeの
-packageを使い、backup package自体はhost nixpkgsで評価する。これにより外部moduleの更新と
-NixOS hostのディスク構成を別々にレビューできる。
-
-| 項目 | 正本 |
-|---|---|
-| Hermes | v0.23.1、provider `claude-subscription-directsdk-experimental`、初期 model `sonnet` |
-| `HERMES_HOME` | `/mnt/sda1/private/writing/hermes` |
-| writer worktree | `/mnt/sda1/private/writing/worktrees/hermes` |
-| writer branch | `agent/hermes-writing` |
-| writer | built-in cron 1個、5分間隔、scene単位、checkpoint 継続 |
-
-cron は `allow_agent_scheduling = true`、`max_parallel_jobs = 1`、retry、catch-up を使う。
-目標完了時は checkpoint 更新、commit、自己の job remove の順で終える。Discord gateway は
-無効で、cron delivery は結果未配信として記録される。CLI は目標指定、指示、状態確認、pause/resume
-だけを行い、本文の直接編集や正本への
-自動 merge・push は行わない。全 run を覆う Hermes 公式の OS-level lock hook はないため、
-writer を一つに限定し、手編集は pause と実行中 worker の終了確認後だけ許可する。checkpoint
-と commit の短い操作だけ lock で保護する。
-
-Claude Code subscription の Agent SDK 利用枠に達した場合は cron を pause し、枠の回復後に
-resume する。provider は実験的な Hermes 公式 plugin で、別 provider への fallback は設定しない。
-原稿を Claude Code へ送る範囲はユーザーが指定した作業単位だけで、原稿の秘密性は root 権限や
-provider から暗号学的に保護されない。
+Tailscale ACL / grants である。運用上の境界、初回適用、Secrets、復旧試験は
+[Home Kubernetes の運用](home-kubernetes.md) を参照する。
 
 ## 5. Nixvim
 
@@ -205,7 +158,7 @@ Claude Code の設定は OS 横断で `modules/home/claude/config/` を正典と
 
 `~/.claude/settings.json` は Nix 環境では `modules/home/claude/default.nix` の activation が `merge-settings.sh settings.json` を実行して生成し、WSL（windows-ctf）では `windows-ctf/scripts/setup-claude.sh` がベース + `overlays/windows-ctf.json` をマージして生成する。いずれも実ファイルでありシンボリックリンクではない。
 
-Nix の activation と `windows-ctf/scripts/setup-claude.sh` は `install-plugins.sh` と `install-agent-skills.sh` を実行する。Nix の activation は非対話シェルでも Claude・GitHub CLI・git（marketplace の clone 用）を検出できるよう PATH を補完する。外部 marketplace / Agent Skill のネットワーク導入に失敗した場合は警告を出して Home Manager の activation を継続する。GitHub由来Agent Skillは共通の `~/.agents/skills/` に配備し、Claude、Codex旧形式、Cursorからも使えるよう個別リンクを置く。Codex、Gemini CLI、GitHub Copilotは `~/.agents/skills/` を読む。dotfiles内の `nihongo` は `config/skills/nihongo/` を正本とし、ClaudeにはHome Managerが直接リンクする。Hermesへの導入可否はAgent Skillレジストリの `hermes` 値で個別に選び、NixOSのHermes Home Manager設定が選択済みスキルをprivate skills領域へ同期する。第三者 marketplace や Agent Skill はユーザー権限で実行されるため、導入元を確認したうえで使用する。
+Nix の activation と `windows-ctf/scripts/setup-claude.sh` は `install-plugins.sh` と `install-agent-skills.sh` を実行する。Nix の activation は非対話シェルでも Claude・GitHub CLI・git（marketplace の clone 用）を検出できるよう PATH を補完する。外部 marketplace / Agent Skill のネットワーク導入に失敗した場合は警告を出して Home Manager の activation を継続する。GitHub由来Agent Skillは共通の `~/.agents/skills/` に配備し、Claude、Codex旧形式、Cursorからも使えるよう個別リンクを置く。Codex、Gemini CLI、GitHub Copilotは `~/.agents/skills/` を読む。dotfiles内の `nihongo` は `config/skills/nihongo/` を正本とし、ClaudeにはHome Managerが直接リンクする。第三者 marketplace や Agent Skill はユーザー権限で実行されるため、導入元を確認したうえで使用する。
 
 第三者 Agent Skill の `imozuru`（芋づる式の調べもの）は `modules/home/imozuru/` が `fetchFromGitHub` で commit を固定し、セキュリティレビューで見つけた穴を塞ぐ `hardening.patch` を当ててから配る。ビルド時に上流のテストとパッチで足したテストを実行する。配備先は `~/.agents/skills`（Codex / Gemini CLI / GitHub Copilot）、`~/.claude/skills`、`~/.codex/skills`（Codex 旧互換）、`~/.cursor/skills`。上流を更新するときは `rev` と `hash` を上げ、差分をレビューしてからパッチを作り直す。`.patch` は空のコンテキスト行に末尾空白を含むため、pre-commit の `trailing-whitespace` から除外している。
 

@@ -115,7 +115,7 @@ mise run agent-skills --only nihongo
 gh skill search cloudflare
 ```
 
-同期対象は `modules/home/agent-skills/registry.json` に宣言する。新しいスキルでは `hermes` を `true` / `false` で選び、執筆向けと判断したスキルだけNixOSのHermes private領域にも同期する。`nihongo` の正本は `modules/home/claude/config/skills/nihongo/` にあり、Claude向けにはHome Managerがリンクし、`~/.agents/skills/` へはこのタスクがコピーする。`--only` は指定した skill だけを更新し、他の管理対象を削除しない。`gh` は外部skill用に必要で、Darwin / NixOS では Nix、Windows CTF の WSL では apt で導入する。`gh skill` は GitHub CLI の preview 機能。以前 `npx skills` などで入れたスキルは自動では移行されないため、同期タスクを実行すると宣言済みのスキルが導入される。
+同期対象は `modules/home/agent-skills/registry.json` に宣言する。`nihongo` の正本は `modules/home/claude/config/skills/nihongo/` にあり、Claude向けにはHome Managerがリンクし、`~/.agents/skills/` へはこのタスクがコピーする。`--only` は指定した skill だけを更新し、他の管理対象を削除しない。`gh` は外部skill用に必要で、Darwin / NixOS では Nix、Windows CTF の WSL では apt で導入する。`gh skill` は GitHub CLI の preview 機能。以前 `npx skills` などで入れたスキルは自動では移行されないため、同期タスクを実行すると宣言済みのスキルが導入される。
 
 ## 9. その他ユーティリティ
 
@@ -159,9 +159,7 @@ codex plugin add pstack@pstack-claude
 
 NixOS CI の toplevel と nixvim の確認は、依存関係と設定の評価を目的に `--dry-run` で行う。
 imozuru の skill source は同じ NixOS input で `nix build --no-link` を実行し、checkPhase を含む
-Linux 実ビルドを確認する。Hermes本体のLinux実ビルドとCLI version smoke testは、外部の
-`hermes-writing-nix` 側CIで実行する。
-したがって、dotfiles CIの成功だけではHermesの実ビルド成功までは保証しない。
+Linux 実ビルドを確認する。
 
 GitHub Actions の darwin CI は長時間化を避けるため、`make nix-check-all-ci` は使わず、実適用や `mise install` を伴わないビルド確認に絞る。HM は `homeConfigurations.ci` を使い、GUI アプリなどの大型 `home.packages` をビルド対象から外す。
 
@@ -206,7 +204,7 @@ git diff --check
 ```
 
 Flux bootstrap、SOPS/age、Tailscale OAuth secret は外部状態と秘密情報を扱う。実行前に
-[Home Kubernetes とプライベート執筆環境の運用](home-kubernetes.md) の順序を確認する。
+[Home Kubernetes の運用](home-kubernetes.md) の順序を確認する。
 実際の age 公開鍵と暗号化 OAuth Secret を Git に追加してから bootstrap し、age 秘密鍵
 を含む `sops-age` は bootstrap 後に `flux-system` namespace へ一度だけ作成する。secret
 の内容を表示する `kubectl` コマンドは使わない。
@@ -226,107 +224,3 @@ kubectl get ingress jellyfin -n jellyfin \
 最後に表示される MagicDNS FQDN を Tailscale 接続済み・ACL 許可済みの端末から HTTPS で
 開く。`8096` を直接公開しない。詳細は [`kubernetes/README.md`](../kubernetes/README.md)
 を参照。
-
-## 15. プライベート執筆環境の運用
-
-執筆データ領域は `/mnt/sda1/private/writing/novel`、Hermes のGit正本は
-`/mnt/sda1/private/writing/novel/product`。SMB/NFS/Kubernetes に公開しない。
-Mac は原稿を clone せず、Tailscale 経由の SSH terminal として使う。
-
-```sh
-ssh -t miyoshi_s@<NixOS の Tailscale 名> \
-  'zellij attach --create writing'
-```
-
-日次バックアップの状態確認と手動実行は次の通り。書込み中の原稿と競合しない時刻を
-選ぶ。
-
-```sh
-systemctl list-timers writing-backup.timer --all
-sudo systemctl start writing-backup.service
-sudo systemctl status writing-backup.service --no-pager
-```
-
-原稿移行、復元試験、Jellyfin `/config`、k3s etcd snapshot の手順にはデータを上書きする
-場面がある。対象を確認し本人が承認してから実行する。詳細は
-[Home Kubernetes とプライベート執筆環境の運用](home-kubernetes.md) を参照。
-
-## 16. Hermes 執筆エージェント
-
-Hermes は外部flake `hermes-writing-nix`のHome Manager moduleを通じて、NixOSの
-`miyoshi_s` user serviceとして一つの gatewayを起動する。Macは
-Tailscale SSH で接続する。Discord gateway は無効にしている。原稿 writer は built-in cron の1 jobだけで、`/mnt/sda1/private/writing/worktrees/hermes`
-の `agent/hermes-writing` branch に scene 単位で変更を commit する。正本への merge・push は
-人間が確認してから行う。
-
-主な読み取り確認は次の通り。`cron status` は scheduler の状態であり、実行中 writer の
-完了を単独では保証しない。必要に応じて `cron runs` と user systemd の状態も確認する。
-
-```sh
-hermes cron list
-hermes cron status
-hermes cron runs <writer-job-id> --limit 20
-systemctl --user status hermes-agent --no-pager
-```
-
-writer を止めるときは新規 fire を止めてから、実行中の run と restart-safe external worker
-の終了を確認する。通常の停止は次のコマンドを使う。実行中 run の中断が必要な場合だけ、
-副作用が rollback されないことを確認して `cron cancel` を SSH から実行する。
-
-```sh
-hermes cron pause <writer-job-id>
-hermes cron resume <writer-job-id>
-hermes cron cancel <writer-job-id>
-```
-
-初回の writer 準備は NixOS 上の SSH shell から次の順で行う。Nix activation は storage
-guard が通るまで state を作らない。
-
-```sh
-hermes-writing-init
-claude auth login
-claude auth status
-hermes-writing-ready
-systemctl --user status hermes-agent --no-pager
-# /mnt/sda1/private/writing/worktrees/hermes/progress/goal.md に目標・完了条件を記入
-hermes-writing-start
-```
-
-`hermes-writing-ready` は storage、branch、source/common Git の接続を確認する。
-`hermes-writing-start` は `progress/goal.md` の完了条件を確認し、5分間隔・専用 worktree・
-writer job を重複なく登録する。進捗の確認には `hermes-writing-status`、
-短い checkpoint/commit には `hermes-writing-checkpoint` と `hermes-writing-commit` を使う。
-完了時の job remove は writer 自身が行う。
-gateway は Home Manager 管理の `hermes-agent` user service として起動する。停止中なら
-`systemctl --user start hermes-agent` を使い、`hermes gateway install` は実行しない。
-このhostではDiscord gatewayとcredentialsを無効にしている。writer cronの実行結果と失敗通知は
-`local` に保存し、外部メッセージサービスへ送信しない。進捗は
-`hermes cron runs <writer-job-id> --limit 20` とGit履歴で確認する。
-
-GitHub の認証と commit author は Hermes 専用の執筆用アカウントに分離する。初回だけ SSH shell
-から `hermes-gh auth login --hostname github.com` を実行し、その後
-`hermes-gh-user` が執筆用アカウントを表示することを確認する。親の個人アカウントを switch/logout
-しない。repo 移管・新規 repo 作成・自動 push は行わない。
-
-Home Manager の Git 設定は通常 `barleytea` を使い、`/mnt/sda1/private/writing/` 配下と
-`~/git_repos/github.com/<執筆用アカウント>/` 配下では執筆用アカウントのcommit authorとGitHub usernameに切り替える。
-GitHub HTTPS credentialはremote URL単位で分ける。初回pushでは対象アカウントのcredentialを登録する。
-`git config --show-origin user.name` と `git config --show-origin user.email` で作者を確認できる。
-GitHub usernameはremote URLを指定して確認する。
-
-```sh
-git config --show-origin --get-urlmatch credential.username \
-  'https://github.com/<執筆用アカウント>/hermes-writing-nix.git'
-```
-
-SSH shellではGCMをGPG/`pass`ストアとGitHub device認証で動かす。初回だけ既存のGPG鍵で
-`pass init <GPG fingerprint>`を実行し、credentialを暗号化して保存する。GPG鍵がない場合は、
-鍵を作る前に保存場所とバックアップ方針を決める。
-
-初回 OAuth と GitHub login は手動入力とし、秘密値をリポジトリ・Git・backup
-へ保存しない。復元時は OAuth/GitHub を再認証する。
-
-外部moduleを更新するときは、まず外部repoのlockとテストを確認し、その後このrepoのNixOS
-flakeを`--no-write-lock-file`で評価する。外部repoの公開範囲に原稿、認証情報、runtime stateが
-含まれていないことも確認する。NixOS実機でのapplyは、外部flakeのrevisionとhost側の生成unitを
-確認してから行う。

@@ -87,47 +87,9 @@
 
 ### GitHub 由来の Agent Skills
 
-Agent Skillsの一覧、GitHub由来スキルの導入元、Hermesへの配布設定は [`modules/home/agent-skills/registry.json`](modules/home/agent-skills/registry.json) で管理する。GitHub由来スキルを追加するときは `type`、`name`、`repository`、`selector`、`hermes` を登録し、Claude、Codex、Gemini CLI、GitHub Copilot、Cursorの配布経路を維持する。共通の Home Manager module と mise task がmacOS / NixOSへ反映する。
+Agent Skillsの一覧とGitHub由来スキルの導入元は [`modules/home/agent-skills/registry.json`](modules/home/agent-skills/registry.json) で管理する。GitHub由来スキルを追加するときは `type`、`name`、`repository`、`selector` を登録し、Claude、Codex、Gemini CLI、GitHub Copilot、Cursorの配布経路を維持する。共通の Home Manager module と mise task がmacOS / NixOSへ反映する。
 
 `~/.agents/skills/` はCodex、Gemini CLI、GitHub Copilotで共有する。Claudeの `~/.claude/skills/`、Codex旧形式の `~/.codex/skills/`、Cursorの `~/.cursor/skills/` には共通mise taskがリンクを置く。
-
-HermesはNixOSだけで動かすため、Hermesにも入れるかは各スキルの `hermes` 値で選ぶ。執筆に役立つ場合だけ `true` にし、判断が難しいときはユーザーに確認する。Hermes用コピーは `$HERMES_HOME/skills/writing/` に置き、writing backupの対象にする。
-
-### NixOS の Hermes 執筆エージェント
-
-NixOS 側の小説執筆エージェントは、外部flake
-`hermes-writing-nix`が提供する公式 Nous Hermes Agent v0.23.1 の Home
-Manager user serviceを `miyoshi_s` に統合する。dotfilesのNixOS flakeでは
-`inputs.hermes-writing.homeManagerModules.default`を明示的にimportし、host固有の
-パスとアカウントだけを設定する。gateway は一つだけ起動し、
-`users.users.miyoshi_s.linger = true` で SSH logout や再起動後も user service を
-維持する。設定の正本と運用上の制約は [`docs/home-kubernetes.md`](docs/home-kubernetes.md)、
-サービス固有のパスと初期化手順は [`nixos/services/writing/README.md`](nixos/services/writing/README.md)
-に記載する。
-
-Hermesのmodule、helper、共通prompt、GitHub隔離、upstreamのpinは外部repoが所有する。
-原稿正本、マウント、ユーザー、03:15のbackup timer、14世代保持はこのdotfilesが所有する。
-外部repoへ原稿、OAuth、Discord環境変数、GitHub認証状態を持ち込まない。
-
-- private writing root / backup source: `/mnt/sda1/private/writing/novel`
-- Hermes source repository: `/mnt/sda1/private/writing/novel/product`
-- `HERMES_HOME`: `/mnt/sda1/private/writing/hermes`
-- writer worktree: `/mnt/sda1/private/writing/worktrees/hermes`
-- writer branch: `agent/hermes-writing`
-- Hermes専用の執筆スキルと参照資料: `$HERMES_HOME/skills/writing/`（writing backup に含める）
-  - `nihongo` の正本は `modules/home/claude/config/skills/nihongo/`。共有 Home Manager がmacOSとNixOSのClaudeへリンクし、`mise run agent-skills` が両OSの `~/.agents/skills/` へコピーする
-  - NixOSではHome Manager activationが `/mnt/sda1` のmount/deviceを確認してHermesのprivate領域へも同期する
-  - Hermes 上のコピーを直接編集せず、`nihongo` の変更は dotfiles 側の正本へ反映する
-- provider: Claude Code CLI を使う Hermes 公式 `claude-subscription-directsdk-experimental` plugin v0.3.3（初期 model は `sonnet`）
-- writer cron: scene 単位、checkpoint 継続、`max_parallel_jobs = 1`、完了時に commit → self-remove
-- Git の commit author は執筆領域と `~/git_repos/github.com/<執筆用アカウント>/` で執筆用アカウントにし、GitHub 認証は `hermes-gh` に分離する
-- Discord gateway は無効。完了通知は送らず、writer cron の状態はNixOS上のHermes CLIで確認する
-
-SSH/CLI の Hermes 操作は目標、指示、状態確認、pause/resume に限定する。正本への
-自動 merge・push は行わず、原稿の送信範囲はユーザーが指定した本文だけにする。Hermes
-cron に全 run を覆う OS-level lock はないため、単一 writer と手編集停止確認を運用上の
-排他とし、checkpoint/commit の短い操作だけ lock で保護する。実装変更後は NixOS build
-と review-* を別工程で行う。
 
 ---
 
@@ -188,7 +150,7 @@ cron に全 run を覆う OS-level lock はないため、単一 writer と手�
 |--------------|------|
 | `docs/architecture.md` | Nix 構成 / モジュール責務 / フロー詳細 |
 | `docs/commands.md` | 全 Make ターゲットと CI 想定の使い分け |
-| `docs/home-kubernetes.md` | k3s / Flux / Jellyfin / プライベート執筆の導入・運用・復旧 |
+| `docs/home-kubernetes.md` | k3s / Flux / Jellyfin の導入・運用・復旧 |
 | `modules/home/claude/config/` | Claude Code の正典設定（settings base / overlays / agents / AGENTS.md） |
 | `README.md` | 利用者向けの Quick Start とツール一覧 |
 | `.claude/skills/*/SKILL.md` | 個別トピック（mise / pre-commit / VSCode / 各種サービス etc.） |

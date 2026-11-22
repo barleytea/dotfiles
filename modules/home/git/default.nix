@@ -42,12 +42,6 @@ gitConfig = ''
       helper = !${pkgs.gh}/bin/gh auth git-credential
   '' else ""}
 
-  [includeIf "gitdir:/mnt/sda1/private/writing/**"]
-    path = ~/.config/git/gyokuroo.inc
-
-  [includeIf "gitdir:~/git_repos/github.com/gyokuroo/**"]
-    path = ~/.config/git/gyokuroo.inc
-
   [alias]
 # ---- 基本操作 ----
 # ステータス一覧
@@ -174,20 +168,6 @@ gitIgnore = ''
 
 in {
   home.file.".config/git/config".text = gitConfig;
-  home.file.".config/git/gyokuroo.inc".text = ''
-    [user]
-      name = gyokuroo
-      email = 357243118+gyokuroo@users.noreply.github.com
-
-    [credential "https://github.com"]
-      username = gyokuroo
-
-    ${if pkgs.stdenv.isDarwin then ''
-      [credential "https://github.com"]
-        helper =
-        helper = osxkeychain
-    '' else ""}
-  '';
   home.file.".config/git/ignore".text = gitIgnore;
   home.file.".config/gwq/config.toml" = {
     force = true;

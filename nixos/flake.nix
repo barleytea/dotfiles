@@ -7,11 +7,6 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    hermes-writing = {
-      url = "github:gyokuroo/hermes-writing-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.home-manager.follows = "home-manager";
-    };
     nixvim-config = {
       # Avoid path input escaping flake root during pure evaluation.
       url = "git+file:..?dir=nixvim";
@@ -47,7 +42,6 @@
     self,
     nixpkgs,
     home-manager,
-    hermes-writing,
     nixvim-config,
     dotfiles-shared,
     ai-guardrails,
