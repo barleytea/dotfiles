@@ -6,7 +6,7 @@ uv = "0.13.9"
 awscli = "2.38.3"
 "aqua:atuinsh/atuin" = "18.24.8"
 # Pin npm CLIs so CI remains reproducible and npm min-release-age stays effective.
-"npm:aws-cdk" = "3.0.0"
+"npm:aws-cdk" = "2.1148.1"
 "npm:@redocly/cli" = "2.63.0"
 "npm:corepack" = "0.36.0"
 "npm:@google/gemini-cli" = "0.64.0"

@@ -10,8 +10,8 @@ usage() {
 Usage: scripts/update-mise-npm-tools.sh [--min-age-days DAYS]
 
 Updates pinned npm CLI versions in the Home Manager mise configs.
-The selected version is the newest stable npm release older than the
-configured minimum age threshold.
+The selected version is the newest stable npm release allowed for each tool
+and older than the configured minimum age threshold.
 EOF
 }
 
@@ -68,6 +68,7 @@ current_version() {
 
 eligible_version() {
   local npm_tool="$1"
+  local allowed_major="${2:-}"
   local package_name="${npm_tool#npm:}"
   local versions_json
   local times_json
@@ -76,11 +77,13 @@ eligible_version() {
   times_json="$(npm view "$package_name" time --json)"
 
   PACKAGE_NAME="$package_name" \
+  ALLOWED_MAJOR="$allowed_major" \
   MIN_AGE_DAYS="$MIN_AGE_DAYS" \
   VERSIONS_JSON="$versions_json" \
   TIMES_JSON="$times_json" \
   node <<'EOF'
 const minAgeDays = Number(process.env.MIN_AGE_DAYS);
+const allowedMajor = process.env.ALLOWED_MAJOR;
 const versions = JSON.parse(process.env.VERSIONS_JSON);
 const times = JSON.parse(process.env.TIMES_JSON);
 const cutoff = Date.now() - minAgeDays * 24 * 60 * 60 * 1000;
@@ -109,6 +112,9 @@ function compare(a, b) {
 
 const eligible = versions
   .filter((version) => !version.includes("-"))
+  .filter(
+    (version) => !allowedMajor || parse(version).parts[0] === Number(allowedMajor)
+  )
   .filter((version) => {
     const published = times[version];
     return published && new Date(published).getTime() <= cutoff;
@@ -143,11 +149,16 @@ update_tool_version() {
 process_tool() {
   local file="$1"
   local tool="$2"
+  local allowed_major=""
   local current
   local target
 
+  if [[ "$tool" == "npm:aws-cdk" ]]; then
+    allowed_major="2"
+  fi
+
   current="$(current_version "$file" "$tool")"
-  target="$(eligible_version "$tool")"
+  target="$(eligible_version "$tool" "$allowed_major")"
 
   if [[ "$current" == "$target" ]]; then
     echo "$tool: unchanged at $current"

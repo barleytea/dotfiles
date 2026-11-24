@@ -46,7 +46,7 @@ Renovate の `mise` manager は `config.toml` の `[tools]` セクションを�
 
 ```toml
 [tools]
-"npm:aws-cdk" = "3.0.0"   # → npm registry でバージョンチェック
+"npm:aws-cdk" = "2.1148.1" # → AWS CDK CLI は 2.x に固定
 "npm:@redocly/cli" = "2.63.0"
 go = "1.27.3"                  # → Go リリースでバージョンチェック
 ```

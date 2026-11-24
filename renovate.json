@@ -7,6 +7,11 @@
       "groupName": "mise tools",
       "matchManagers": ["mise"],
       "automerge": false
+    },
+    {
+      "matchPackageNames": ["aws-cdk"],
+      "matchManagers": ["mise"],
+      "allowedVersions": "<3"
     }
   ]
 }
