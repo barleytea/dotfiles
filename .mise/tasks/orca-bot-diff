@@ -1,0 +1,115 @@
+#!/usr/bin/env bash
+#MISE description="Compare tracked Orca bot definitions with a local bot folder"
+set -euo pipefail
+
+if [[ $# != 2 || ! "$1" =~ ^[a-z0-9]+(-[a-z0-9]+)*$ ]]; then
+    echo 'Usage: mise run orca-bot-diff <definition-name> <local-bot-directory>' >&2
+    exit 2
+fi
+
+# macOS標準のルート別名を除き、各要素をたどる前にリンクを拒否する。
+physical_directory() {
+    local remaining="$1" directory=/ component
+    [[ -n "${remaining}" ]] || return 2
+    if [[ "${remaining}" != /* ]]; then
+        remaining="$(pwd -P)/${remaining}"
+    fi
+    while [[ -n "${remaining}" ]]; do
+        component="${remaining%%/*}"
+        remaining="${remaining#"${component}"}"
+        remaining="${remaining#/}"
+        case "${component}" in
+            ''|.) continue ;;
+            ..)
+                directory="${directory%/*}"
+                directory="${directory:-/}"
+                continue
+                ;;
+        esac
+        if [[ "${OSTYPE}" == darwin* && "${directory}" == / ]]; then
+            case "${component}" in
+                tmp|var|etc)
+                    if [[ "$(readlink "/${component}")" == "private/${component}" ]]; then
+                        directory=/private
+                    fi
+                    ;;
+            esac
+        fi
+        directory="${directory%/}/${component}"
+        [[ ! -L "${directory}" && -d "${directory}" ]] || return 2
+    done
+    (cd -P -- "${directory}" && pwd -P)
+}
+
+regular_file() {
+    local file="$1" links
+    [[ ! -L "${file}" && -f "${file}" && -r "${file}" ]] || return 2
+    if [[ "${OSTYPE}" == darwin* ]]; then
+        links="$(stat -f '%l' "${file}")" || return 2
+    else
+        links="$(stat -c '%h' "${file}")" || return 2
+    fi
+    [[ "${links}" == 1 ]]
+}
+
+local_bot="$(physical_directory "$2")" || {
+    echo 'Expected a trusted bot directory without symlink components.' >&2
+    exit 2
+}
+script_dir="$(cd -P -- "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+definition="$(physical_directory "${script_dir}/../../modules/home/orca/bots/$1")" || {
+    echo 'Unknown or invalid bot definition.' >&2
+    exit 2
+}
+
+shopt -s nullglob
+files=(SOUL.md)
+if [[ -L "${definition}/skills" ]]; then
+    echo 'Unsupported definition symlink: skills' >&2
+    exit 2
+fi
+for skill_dir in "${definition}"/skills/*; do
+    if [[ -L "${skill_dir}" ]]; then
+        echo 'Unsupported skill directory symlink.' >&2
+        exit 2
+    fi
+    skill="${skill_dir}/SKILL.md"
+    [[ -e "${skill}" || -L "${skill}" ]] || continue
+    files+=("${skill#"${definition}/"}")
+done
+
+status=0
+for file in "${files[@]}"; do
+    source_file="${definition}/${file}"
+    local_file="${local_bot}/${file}"
+    if ! regular_file "${source_file}"; then
+        echo "Invalid definition file: ${file}" >&2
+        exit 2
+    fi
+    if [[ "${file}" == skills/* ]]; then
+        for directory in "${local_bot}/skills" "${local_file%/*}"; do
+            if [[ -L "${directory}" || ( -e "${directory}" && ! -d "${directory}" ) ]]; then
+                echo "Invalid local skill directory: ${file}" >&2
+                exit 2
+            fi
+        done
+    fi
+    if [[ ! -e "${local_file}" && ! -L "${local_file}" ]]; then
+        echo "Missing: ${file}"
+        status=1
+        continue
+    fi
+    if ! regular_file "${local_file}"; then
+        echo "Expected a readable regular file with one link: ${file}" >&2
+        exit 2
+    fi
+    diff_status=0
+    diff -u -L "local/${file}" -L "dotfiles/${file}" \
+        "${local_file}" "${source_file}" || diff_status=$?
+    case "${diff_status}" in
+        0) ;;
+        1) status=1 ;;
+        *) exit 2 ;;
+    esac
+done
+exit "${status}"

@@ -224,3 +224,7 @@ kubectl get ingress jellyfin -n jellyfin \
 最後に表示される MagicDNS FQDN を Tailscale 接続済み・ACL 許可済みの端末から HTTPS で
 開く。`8096` を直接公開しない。詳細は [`kubernetes/README.md`](../kubernetes/README.md)
 を参照。
+
+## Orcaの設定
+
+`mise run orca-bot-diff <定義名> <Botフォルダ>` で登録済みBotの公開定義との差分を確認する。登録と反映の手順は [Orcaの設定](orca.md) を参照。
