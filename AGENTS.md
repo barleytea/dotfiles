@@ -85,6 +85,8 @@
 
 全 Make ターゲットと使い分け、CI 想定の流れは **`docs/commands.md`** を参照。
 
+Orca IDEとBot定義の再現手順は [docs/orca.md](docs/orca.md) を参照。
+
 ### GitHub 由来の Agent Skills
 
 Agent Skillsの一覧とGitHub由来スキルの導入元は [`modules/home/agent-skills/registry.json`](modules/home/agent-skills/registry.json) で管理する。GitHub由来スキルを追加するときは `type`、`name`、`repository`、`selector` を登録し、Claude、Codex、Gemini CLI、GitHub Copilot、Cursorの配布経路を維持する。共通の Home Manager module と mise task がmacOS / NixOSへ反映する。

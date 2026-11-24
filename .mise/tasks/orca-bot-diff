@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+#MISE description="Compare tracked Orca bot definitions with a local bot folder"
+set -euo pipefail
+
+if [[ $# != 2 || ! "$1" =~ ^[a-z0-9]+(-[a-z0-9]+)*$ || ! -d "$2" || -L "$2" ]]; then
+    echo 'Usage: mise run orca-bot-diff <definition-name> <local-bot-directory>' >&2
+    exit 2
+fi
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+definition="${script_dir}/../../modules/home/orca/bots/$1"
+if [[ ! -f "${definition}/SOUL.md" ]]; then
+    echo 'Unknown bot definition.' >&2
+    exit 2
+fi
+local_bot="$2"
+
+files=(SOUL.md)
+for skill in "${definition}"/skills/*/SKILL.md; do
+    [[ -f "${skill}" ]] || continue
+    files+=("${skill#"${definition}/"}")
+done
+
+status=0
+for file in "${files[@]}"; do
+    local_file="${local_bot}/${file}"
+    if [[ -L "${local_file}" ]] || {
+        [[ "${file}" == skills/* ]] &&
+            [[ -L "${local_bot}/skills" || -L "${local_file%/*}" ]]
+    }; then
+        echo "Unsupported symlink: ${file}" >&2
+        exit 2
+    fi
+    if [[ ! -e "${local_file}" ]]; then
+        echo "Missing: ${file}"
+        status=1
+        continue
+    fi
+    if [[ ! -f "${local_file}" ]]; then
+        echo "Expected a regular file: ${file}" >&2
+        exit 2
+    fi
+    diff_status=0
+    diff -u -L "local/${file}" -L "dotfiles/${file}"         "${local_file}" "${definition}/${file}" || diff_status=$?
+    case "${diff_status}" in
+        0) ;;
+        1) status=1 ;;
+        *) exit 2 ;;
+    esac
+done
+exit "${status}"
