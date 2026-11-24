@@ -85,7 +85,7 @@
 
 全 Make ターゲットと使い分け、CI 想定の流れは **`docs/commands.md`** を参照。
 
-Orca IDEとBot定義の再現手順は [docs/orca.md](docs/orca.md) を参照。
+Orca IDEとPM・Reviewer Bot定義の再現手順は [docs/orca.md](docs/orca.md) を参照。
 
 ### GitHub 由来の Agent Skills
 
