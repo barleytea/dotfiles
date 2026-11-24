@@ -23,11 +23,11 @@
     },
     "ai-guardrails": {
       "locked": {
-        "lastModified": 1789365460,
-        "narHash": "sha256-diyXedVE+qA5ZiU4GO61mCrbSOc/HPMatsBsdeqj8h0=",
+        "lastModified": 1795501725,
+        "narHash": "sha256-g9g5CHd2+4+vQ1UaHR9G9PXvT53GoGHWzHeQCU1TODw=",
         "owner": "barleytea",
         "repo": "ai-guardrails",
-        "rev": "c4574e9d5f34ebe0d72730176f98186df4800963",
+        "rev": "fcaddb1c034d2044409ca9ca4b367121e4b81579",
         "type": "github"
       },
       "original": {
