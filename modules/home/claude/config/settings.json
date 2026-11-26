@@ -58,6 +58,7 @@
       "Read(~/.zshrc_local)",
       "Read(~/.ssh/**)",
       "Read(~/.aws/**)",
+      "Bash(aws *)",
       "Read(/etc/nixos/secrets/**)",
       "Read(**/.env)",
       "Read(**/.env.*)"
@@ -80,6 +81,7 @@
       "Read(~/.zshrc_local)",
       "Read(~/.ssh/**)",
       "Read(~/.aws/**)",
+      "Bash(aws *)",
       "Read(/etc/nixos/secrets/**)",
       "Read(**/.env)",
       "Read(**/.env.*)"
@@ -200,11 +202,7 @@
         "~/.aws",
         "/etc/nixos/secrets"
       ],
-      "allowWrite": [
-        "~/git_repos/github.com/tokyucorp/hachi_cms",
-        "~/git_repos/github.com/tokyucorp/hachi_cms_deployments",
-        "~/git_repos/github.com/tokyucorp/tokyuplus-web-development"
-      ]
+      "allowWrite": []
     },
     "enableWeakerNetworkIsolation": true,
     "excludedCommands": [

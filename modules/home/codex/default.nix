@@ -8,6 +8,26 @@
   # import はビルド評価時にファイルを読むため、実行時のホームディレクトリ文字列
   # ではなく、このファイル自身からの相対 Nix パスで参照する必要がある。
   renderedAgents = import ../claude/config/render-agents.nix {inherit pkgs;};
+  awsReadonlyScripts = import ../aws-readonly/scripts.nix {
+    inherit pkgs;
+    homePath = config.home.homeDirectory;
+    profileMapPath = "${config.xdg.configHome}/aws-readonly/profiles.json";
+  };
+  awsReadonlyHooks = pkgs.writeText "codex-aws-readonly-hooks.json" (builtins.toJSON {
+    hooks.PreToolUse = [
+      {
+        matcher = "Bash";
+        hooks = [
+          {
+            type = "command";
+            command = "${awsReadonlyScripts.awsReadonlyGuard}/bin/aws-readonly-guard";
+            timeout = 5;
+            statusMessage = "Checking AWS CLI policy";
+          }
+        ];
+      }
+    ];
+  });
   codexActivationPath = builtins.concatStringsSep ":" [
     "${pkgs.git}/bin"
     "${pkgs.jq}/bin"
@@ -54,6 +74,9 @@
     default_subagent_model = "gpt-6-luna"
   '';
 in {
+  home.file.".local/bin/aws-readonly".source = "${awsReadonlyScripts.awsReadonly}/bin/aws-readonly";
+  home.file.".codex/rules/aws-readonly.rules".source = ./rules/aws-readonly.rules;
+
   home.activation.configureCodex = lib.hm.dag.entryAfter ["writeBoundary"] ''
     codex_dir="${config.home.homeDirectory}/.codex"
     codex_config="$codex_dir/config.toml"
@@ -88,6 +111,11 @@ in {
     $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir -p "$codex_dir"
     $DRY_RUN_CMD ${pkgs.coreutils}/bin/install -m 600 "$tmp_config" "$codex_config"
     $DRY_RUN_CMD ${pkgs.coreutils}/bin/rm -f "$tmp_config"
+
+    # Orca が管理する hooks.json の他の hook を残して AWS ガードを追加する。
+    $DRY_RUN_CMD ${pkgs.bash}/bin/bash -c '
+      PATH="${pkgs.jq}/bin:$PATH" ${pkgs.bash}/bin/bash "${./merge-hooks.sh}" "$1" "$2"
+    ' _ "$codex_dir/hooks.json" "${awsReadonlyHooks}"
 
     # AGENTS.md は Claude / Gemini と同じ内容（人格・行動原則）を共有する。
     # Codex はこのファイルをグローバル指示として ~/.codex/AGENTS.md から読む。

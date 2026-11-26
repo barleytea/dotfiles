@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/nix/store/fake-aws-readonly-guard/bin/aws-readonly-guard",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}

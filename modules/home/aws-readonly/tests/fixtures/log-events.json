@@ -1,0 +1,17 @@
+{
+  "events": [
+    {
+      "timestamp": 1764000200000,
+      "ingestionTime": 1764000201000,
+      "message": "AWS_ACCESS_KEY_ID=AKIAFAKEACCESSKEY fixture-secret-token Bearer fixture-bearer-value",
+      "eventId": "event-id-that-must-not-be-returned"
+    },
+    {
+      "timestamp": 1764000100000,
+      "ingestionTime": 1764000101000,
+      "message": "password=fixture-secret-token",
+      "eventId": "another-event-id"
+    }
+  ],
+  "nextToken": "next-token-secret"
+}
