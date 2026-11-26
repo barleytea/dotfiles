@@ -1,0 +1,11 @@
+{
+  "forbidden": [
+    ["aws"],
+    ["aws", "s3", "ls"],
+    ["aws", "--version"]
+  ],
+  "not_matched": [
+    ["aws-readonly", "--environment", "example-environment", "--profile", "example-readonly", "sts", "get-caller-identity"],
+    ["~/.local/bin/aws-readonly", "--environment", "example-environment", "--profile", "example-readonly", "sts", "get-caller-identity"]
+  ]
+}

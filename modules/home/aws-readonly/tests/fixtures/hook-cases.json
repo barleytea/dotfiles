@@ -1,0 +1,20 @@
+{
+  "allow": [
+    {"name": "ordinary shell command", "command": "git status --short"},
+    {"name": "dedicated wrapper", "command": "~/.local/bin/aws-readonly --environment dev --profile team-dev-readonly sts get-caller-identity"},
+    {"name": "explicit redacted log messages", "command": "~/.local/bin/aws-readonly --environment example --profile example-readonly logs filter-log-events --log-group-name /ecs/example --start-time 1764000000000 --end-time 1764000300000 --filter-pattern ERROR --messages redacted --limit 20"}
+  ],
+  "deny": [
+    {"name": "direct aws", "command": "aws sts get-caller-identity --profile team-dev-readonly"},
+    {"name": "absolute aws path", "command": "/usr/local/bin/aws sts get-caller-identity --profile team-dev-readonly"},
+    {"name": "command aws", "command": "command aws sts get-caller-identity --profile team-dev-readonly"},
+    {"name": "env profile override", "command": "env AWS_PROFILE=team-dev-readonly aws sts get-caller-identity"},
+    {"name": "inline profile assignment", "command": "AWS_PROFILE=team-dev-readonly aws sts get-caller-identity"},
+    {"name": "profile equals syntax", "command": "aws --profile=team-dev-readonly sts get-caller-identity"},
+    {"name": "compound command", "command": "echo inspect; aws sts get-caller-identity --profile team-dev-readonly"},
+    {"name": "compound wrapper", "command": "~/.local/bin/aws-readonly --environment dev --profile team-dev-readonly sts get-caller-identity && echo done"},
+    {"name": "alternate wrapper invocation", "command": "env ~/.local/bin/aws-readonly --environment dev --profile team-dev-readonly sts get-caller-identity"},
+    {"name": "shell expansion", "command": "~/.local/bin/aws-readonly --environment dev --profile \"$(cat profile)\" sts get-caller-identity"},
+    {"name": "endpoint override", "command": "AWS_ENDPOINT_URL=https://example.invalid aws sts get-caller-identity"}
+  ]
+}

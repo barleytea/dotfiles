@@ -16,6 +16,25 @@ let
     version: 1
     git_protocol: https
   '';
+  awsReadonlyScripts = import ../aws-readonly/scripts.nix {
+    inherit pkgs;
+    homePath = config.home.homeDirectory;
+    profileMapPath = "${config.xdg.configHome}/aws-readonly/profiles.json";
+  };
+  awsReadonlyHookSettings = pkgs.writeText "claude-aws-readonly-hooks.json" (builtins.toJSON {
+    hooks.PreToolUse = [
+      {
+        matcher = "Bash";
+        hooks = [
+          {
+            type = "command";
+            command = "${awsReadonlyScripts.awsReadonlyGuard}/bin/aws-readonly-guard";
+            timeout = 5;
+          }
+        ];
+      }
+    ];
+  });
 
   # AGENTS.md の OS 別レンダリングは Claude / Gemini / Codex / Copilot で共有する。
   renderedAgents = import ./config/render-agents.nix {inherit pkgs;};
@@ -45,6 +64,7 @@ in
     $DRY_RUN_CMD ${pkgs.bash}/bin/bash -c '
       PATH="${pkgs.jq}/bin:$PATH" ${pkgs.bash}/bin/bash "${claudeConfigPath}/merge-settings.sh" \
         "${claudeConfigPath}/settings.json" \
+        "${awsReadonlyHookSettings}" \
         > "${config.home.homeDirectory}/.claude/settings.json.tmp" \
         && ${pkgs.jq}/bin/jq empty "${config.home.homeDirectory}/.claude/settings.json.tmp" \
         && ${pkgs.coreutils}/bin/mv "${config.home.homeDirectory}/.claude/settings.json.tmp" "${config.home.homeDirectory}/.claude/settings.json"

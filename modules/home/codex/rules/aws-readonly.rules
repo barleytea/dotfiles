@@ -1,0 +1,10 @@
+prefix_rule(
+    pattern = ["aws"],
+    decision = "forbidden",
+    justification = "Use ~/.local/bin/aws-readonly with an explicit -readonly profile.",
+    match = ["aws", "aws s3 ls", ["aws", "--version"]],
+    not_match = [
+        "aws-readonly --environment example-environment --profile example-readonly sts get-caller-identity",
+        "~/.local/bin/aws-readonly --environment example-environment --profile example-readonly sts get-caller-identity",
+    ],
+)

@@ -1,0 +1,34 @@
+#!/bin/sh
+
+printf '%s\0' "$@" > "$FAKE_AWS_ARGV_FILE"
+service=
+operation=
+if [ "$#" -ge 4 ] && [ "$1" = "--profile" ]; then
+  service=$3
+  operation=$4
+  printf '%s %s\n' "$service" "$operation" >> "$FAKE_AWS_CALLS_FILE"
+else
+  printf '%s\n' "$*" >> "$FAKE_AWS_CALLS_FILE"
+fi
+if [ "${FAKE_AWS_REQUIRE_ENDPOINT_GUARD:-0}" = 1 ] && [ "${AWS_IGNORE_CONFIGURED_ENDPOINT_URLS:-}" != true ]; then
+  exit 97
+fi
+if [ "${FAKE_AWS_EXIT:-0}" != 0 ]; then
+  exit "$FAKE_AWS_EXIT"
+fi
+if [ "${service} ${operation}" = "${FAKE_AWS_FAIL_OPERATION:-}" ]; then
+  if [ -n "${FAKE_AWS_PARTIAL_STDOUT:-}" ]; then
+    cat "$FAKE_AWS_PARTIAL_STDOUT"
+  fi
+  if [ -n "${FAKE_AWS_STDERR:-}" ]; then
+    printf '%s\n' "$FAKE_AWS_STDERR" >&2
+  fi
+  exit "${FAKE_AWS_FAIL_STATUS:-42}"
+fi
+case "$service $operation" in
+  "sts get-caller-identity") response=$FAKE_AWS_IDENTITY_RESPONSE ;;
+  "logs describe-log-groups") response=$FAKE_AWS_LOG_GROUPS_RESPONSE ;;
+  "logs filter-log-events") response=$FAKE_AWS_LOG_EVENTS_RESPONSE ;;
+  *) response=$FAKE_AWS_RESPONSE ;;
+esac
+cat "$response"
