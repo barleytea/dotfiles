@@ -29,6 +29,40 @@ case "$service $operation" in
   "sts get-caller-identity") response=$FAKE_AWS_IDENTITY_RESPONSE ;;
   "logs describe-log-groups") response=$FAKE_AWS_LOG_GROUPS_RESPONSE ;;
   "logs filter-log-events") response=$FAKE_AWS_LOG_EVENTS_RESPONSE ;;
+  "lambda get-function-configuration") response=$FAKE_AWS_RESPONSE ;;
   *) response=$FAKE_AWS_RESPONSE ;;
 esac
-cat "$response"
+if [ "$service $operation" = "lambda get-function-configuration" ]; then
+  query=
+  expect_query=$FAKE_AWS_EXPECTED_QUERY
+  needs_query=false
+  for argument in "$@"; do
+    if [ "$needs_query" = true ]; then
+      query=$argument
+      needs_query=false
+    elif [ "$argument" = "--query" ]; then
+      needs_query=true
+    fi
+  done
+  if [ -z "$expect_query" ] || [ "$query" != "$expect_query" ]; then
+    printf 'fake aws: Lambda query did not match the safe projection\n' >&2
+    exit 98
+  fi
+  python3 - "$response" <<'PY'
+import json
+import sys
+
+fields = (
+    "FunctionName", "Runtime", "Handler", "CodeSize", "Timeout", "MemorySize",
+    "LastModified", "Version", "State", "LastUpdateStatus", "PackageType", "Architectures",
+)
+with open(sys.argv[1], encoding="utf-8") as response_file:
+    response = json.load(response_file)
+print(json.dumps(
+    {field: response[field] for field in fields if field in response},
+    separators=(",", ":"),
+))
+PY
+else
+  cat "$response"
+fi
