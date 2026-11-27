@@ -1,0 +1,23 @@
+{
+  "FunctionName": "payments-api",
+  "FunctionArn": "arn:aws:lambda:ap-northeast-1:123456789012:function:payments-api",
+  "Runtime": "python3.13",
+  "Handler": "app.handler",
+  "CodeSize": 4096,
+  "Timeout": 30,
+  "MemorySize": 512,
+  "LastModified": "2026-11-27T00:00:00.000+0000",
+  "Version": "7",
+  "State": "Active",
+  "LastUpdateStatus": "Successful",
+  "PackageType": "Zip",
+  "Architectures": ["arm64"],
+  "Environment": {
+    "Variables": {
+      "API_TOKEN": "fixture-lambda-env-secret",
+      "PUBLIC_ENDPOINT": "https://example.invalid"
+    }
+  },
+  "Role": "arn:aws:iam::123456789012:role/example",
+  "Description": "Not part of the safe projection"
+}

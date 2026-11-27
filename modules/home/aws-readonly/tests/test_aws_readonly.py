@@ -34,6 +34,12 @@ DEFAULT_PROFILE_MAP = {
 VALID_PROFILE = "team-dev-readonly"
 START_TIME = "1764000000000"
 END_TIME = "1764003600000"
+LAMBDA_SAFE_QUERY = (
+    "{FunctionName: FunctionName, Runtime: Runtime, Handler: Handler, CodeSize: CodeSize, "
+    "Timeout: Timeout, MemorySize: MemorySize, LastModified: LastModified, Version: Version, "
+    "State: State, LastUpdateStatus: LastUpdateStatus, PackageType: PackageType, "
+    "Architectures: Architectures}"
+)
 
 
 class AwsReadonlyTests(unittest.TestCase):
@@ -97,6 +103,44 @@ class AwsReadonlyTests(unittest.TestCase):
         )
         self.assertEqual(calls, ["sts get-caller-identity", "ec2 describe-instances"])
 
+    def test_lambda_configuration_returns_safe_metadata_only(self):
+        result, args, calls = self.run_wrapper(
+            "--profile",
+            VALID_PROFILE,
+            "lambda",
+            "get-function-configuration",
+            "--function-name",
+            "payments-api",
+            "--qualifier",
+            "live",
+            "--region",
+            "ap-northeast-1",
+            extra_env={
+                "FAKE_AWS_RESPONSE": str(FIXTURES / "lambda-function-configuration.json"),
+                "FAKE_AWS_EXPECTED_QUERY": LAMBDA_SAFE_QUERY,
+            },
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(json.loads(result.stdout), {
+            "FunctionName": "payments-api",
+            "Runtime": "python3.13",
+            "Handler": "app.handler",
+            "CodeSize": 4096,
+            "Timeout": 30,
+            "MemorySize": 512,
+            "LastModified": "2026-11-27T00:00:00.000+0000",
+            "Version": "7",
+            "State": "Active",
+            "LastUpdateStatus": "Successful",
+            "PackageType": "Zip",
+            "Architectures": ["arm64"],
+        })
+        self.assertNotIn("fixture-lambda-env-secret", result.stdout + result.stderr)
+        self.assertNotIn("Environment", result.stdout)
+        self.assertEqual(args[args.index("--query") + 1], LAMBDA_SAFE_QUERY)
+        self.assertNotIn("--max-items", args)
+        self.assertEqual(calls, ["sts get-caller-identity", "lambda get-function-configuration"])
+
     def test_rejected_shapes_never_reach_fake_aws(self):
         rejected = [
             (),
@@ -106,6 +150,27 @@ class AwsReadonlyTests(unittest.TestCase):
             ("--profile", "default-readonly", "sts", "get-caller-identity"),
             ("--profile", "team-admin-readonly", "sts", "get-caller-identity"),
             ("--profile", "team-dev-readonly", "ec2", "run-instances"),
+            ("--profile", "team-dev-readonly", "lambda", "get-function-configuration"),
+            (
+                "--profile", "team-dev-readonly", "lambda", "get-function-configuration",
+                "--function-name", "arn:aws:lambda:us-west-2:123456789012:function:payments-api",
+            ),
+            (
+                "--profile", "team-dev-readonly", "lambda", "get-function",
+                "--function-name", "payments-api",
+            ),
+            (
+                "--profile", "team-dev-readonly", "lambda", "update-function-configuration",
+                "--function-name", "payments-api",
+            ),
+            (
+                "--profile", "team-dev-readonly", "lambda", "get-function-configuration",
+                "--function-name", "payments api",
+            ),
+            (
+                "--profile", "team-dev-readonly", "lambda", "get-function-configuration",
+                "--function-name", "payments-api", "--qualifier", "bad qualifier",
+            ),
             ("--profile", "team-dev-readonly", "aws", "s3", "rm", "s3://example"),
             ("--profile", "team-dev-readonly", "cloudformation", "describe-stacks", "--stack-name", "fixture"),
             ("--profile", "team-dev-readonly", "sts", "get-caller-identity", "--profile", "other-readonly"),

@@ -81,6 +81,9 @@ case "$service $operation" in
   "logs filter-log-events")
     allowed_options=(--region --log-group-name --start-time --end-time --filter-pattern --limit --messages)
     ;;
+  "lambda get-function-configuration")
+    allowed_options=(--region --function-name --qualifier)
+    ;;
   *)
     deny "service and operation are not in the read-only allowlist"
     ;;
@@ -134,6 +137,21 @@ for ((index = 0; index < argument_count; index++)); do
       if [[ ! "$value" =~ ^[a-z0-9-]+$ ]]; then
         deny "region must be a simple AWS region name"
       fi
+      ;;
+    --function-name)
+      if [[ ${#value} -gt 64 || ! "$value" =~ ^[A-Za-z0-9_.-]+$ ]]; then
+        deny "Lambda function name must be a simple name of at most 64 characters"
+      fi
+      ;;
+    --qualifier)
+      case "$value" in
+        '$LATEST'|'$LATEST.PUBLISHED') ;;
+        *)
+          if [[ ${#value} -gt 128 || ! "$value" =~ ^[A-Za-z0-9_-]+$ ]]; then
+            deny "Lambda qualifier must be a version, alias, or supported latest value"
+          fi
+          ;;
+      esac
       ;;
     --log-group-name-prefix|--log-group-name)
       if [[ ${#value} -gt 512 || ! "$value" =~ ^[A-Za-z0-9._/#-]+$ ]]; then
@@ -214,6 +232,9 @@ case "$service $operation" in
       fi
     fi
     ;;
+  "lambda get-function-configuration")
+    option_value --function-name >/dev/null || deny "an exact Lambda function name is required"
+    ;;
 esac
 
 expected_identity=$(python3 "$profile_map_helper" lookup "$profile_map_path" "$home_path" "$environment" "$profile" 2>/dev/null) \
@@ -284,6 +305,12 @@ case "$service $operation" in
     cli_arguments+=("${log_filter_arguments[@]}")
     "$aws_binary" "${cli_arguments[@]}" | python3 "$response_filter" "$response_mode" "$message_limit"
     exit $?
+    ;;
+  "lambda get-function-configuration")
+    lambda_query='{FunctionName: FunctionName, Runtime: Runtime, Handler: Handler, CodeSize: CodeSize,'
+    lambda_query+=' Timeout: Timeout, MemorySize: MemorySize, LastModified: LastModified, Version: Version,'
+    lambda_query+=' State: State, LastUpdateStatus: LastUpdateStatus, PackageType: PackageType, Architectures: Architectures}'
+    cli_arguments+=(--query "$lambda_query")
     ;;
   *) cli_arguments+=(--max-items 100) ;;
 esac

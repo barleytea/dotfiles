@@ -52,14 +52,20 @@ wrapper は依頼文の意味を判定できない。エージェントが依頼
 | RDS | `describe-db-instances` | `--region`、`--db-instance-identifier`、`--filters`、`--max-records`、`--marker` |
 | CloudWatch Logs | `describe-log-groups` | `--region`、`--log-group-name-prefix`。prefix は対象名と完全一致しなければ結果を返さない |
 | CloudWatch Logs | `filter-log-events` | 必須: `--log-group-name`、`--start-time`、`--end-time`。任意: `--region`、`--filter-pattern`、`--limit` (`1` から `100`)、wrapper 専用 `--messages redacted` |
+| Lambda | `get-function-configuration` | 必須: 64文字以内の単純な `--function-name`。任意: `--region`、`--qualifier` |
 
-この範囲は caller identity と小さな inventory を確認するためのもの。他の AWS operation は許可しない。CloudFormation `describe-stacks` は Parameters と Outputs を返し、Parameters は `NoEcho` を指定しても Outputs はマスクされないため除外する。Outputs に secret を含めないよう AWS は勧めているが、wrapper から安全に応答内容を制約できない。[DescribeStacks API](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStacks.html) · [CloudFormation の stack 情報](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/service_code_examples.html)
+この範囲は caller identity、小さな inventory、制限した Lambda 設定 metadata の確認に使う。他の AWS operation は許可しない。CloudFormation `describe-stacks` は Parameters と Outputs を返し、Parameters は `NoEcho` を指定しても Outputs はマスクされないため除外する。Outputs に secret を含めないよう AWS は勧めているが、wrapper から安全に応答内容を制約できない。[DescribeStacks API](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStacks.html) · [CloudFormation の stack 情報](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/service_code_examples.html)
+
+`lambda get-function-configuration` は関数名のみを受け付け、ARN と部分 ARN を拒否する。別名や version は任意の `--qualifier` で指定する。Qualifier は `$LATEST`、`$LATEST.PUBLISHED`、または最大128文字の英数字、underscore、hyphen から成る値を受け付ける。Lambda の API 応答には認証情報を含みうる `Environment.Variables` がある。wrapper は固定の AWS CLI `--query` を渡し、関数名、runtime、handler、code size、timeout、memory size、更新日時、version、state、更新状態、package type、architecture だけを標準出力に返す。
+
+query は `Environment`、role、description、その他のフィールドを出力から除く。これは AWS CLI 内で応答を絞るクライアント側処理であり、Lambda の API 応答そのものを AWS CLI プロセスへ届けないわけではない。wrapper は環境変数の値を agent に返さない。手元の検証では実 AWS 応答を使わず、偽 CLI と架空の環境変数だけで出力を確認する。[AWS CLI get-function-configuration reference](https://docs.aws.amazon.com/cli/latest/reference/lambda/get-function-configuration.html)
 
 policy 文書、secret 値、object 内容、その他の任意データを返す read operation も許可しない。operation を追加する場合は具体的な依頼理由を示し、response と引数を確認する。
 
 ```bash
 ~/.local/bin/aws-readonly --environment <登録済み label> --profile <実際の profile 名> sts get-caller-identity
 ~/.local/bin/aws-readonly --environment <登録済み label> --profile <実際の profile 名> ec2 describe-instances --region <region> --filters 'Name=tag:Environment,Values=<value>'
+~/.local/bin/aws-readonly --environment <登録済み label> --profile <実際の profile 名> lambda get-function-configuration --function-name <function name> --region <region>
 ```
 
 CloudWatch Logs は exact group 名を毎回指定する。`describe-log-groups` は指定名を prefix として `limit=1`、`--no-paginate` で問い合わせ、応答から完全一致する group だけを選ぶ。出力する metadata は group 名、作成時刻、retention 日数、stored bytes、log class に限る。
